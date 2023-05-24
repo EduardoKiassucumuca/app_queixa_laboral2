@@ -1,0 +1,147 @@
+/*.igt-container {
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+}
+
+.main-platforma-queixa {
+    background-color: #282c34;
+    height: 92.5vh;
+}
+
+.igt-nome-plataforma,
+.igt-situacaoMain {
+    color: white;
+}
+
+.igt-situacao {
+    margin-left: 20px;
+}
+
+.igt-conceito {
+    margin-left: 20px;
+}
+
+.igt-queixa-aqui {
+    margin-top: 20px;
+}
+
+.titulo-plataforma,
+.igt-conceito,
+.igt-situacao {
+    color: white;
+}
+
+.titulo-queixar {
+    color: white;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.igt-opt-queixa {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.btn-queixa-trabalhador,
+.btn-queixa-empregador {}
+
+.fazer-queixa {
+    text-align: center;
+}
+
+.myRowMain {
+    margin: auto;
+}*/
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+    color: #333;
+    text-shadow: none;
+    /* Prevent inheritance from `body` */
+}
+
+body {
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+
+.cover-container {
+    max-width: 42em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-masthead .nav-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: rgba(255, 255, 255, .5);
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+    border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+.nav-masthead .nav-link+.nav-link {
+    margin-left: 1rem;
+}
+
+.nav-masthead .active {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+.cover-title-igt {
+    color: #DAA316;
+}
+
+.lead-igt {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.texto-igt {
+    color: #DAA316;
+    font-weight: bold;
+}
+
+.opcao-queixa {
+    font-weight: bold;
+}
+
+.lead-btn {
+    margin-top: 100px;
+    display: inline-block;
+}
+
+.titulo-principal-cover-igt {
+    margin-bottom: 50px;
+}
+
+.my-Buttons-queixa {
+    margin-top: 5em;
+    margin-left: 10px;
+}
+
+.col-opcao-queixa {
+    margin-top: 10px;
+}
+
+.px-3 {
+    margin-top: 126px;
+}
+.h-100
+{
+    height:800px !important;
+}
+.meu-cover{
+    margin-left:auto;
+    margin-right:auto;
+}

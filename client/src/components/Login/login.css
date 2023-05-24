@@ -1,0 +1,17 @@
+body {}
+
+.row-form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5%;
+    background-color: white;
+}
+
+.titulo-form {
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+
+.titulo-form-span {
+    color: #DAA316;
+}

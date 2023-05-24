@@ -1,0 +1,36 @@
+.form-queixa {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    margin-top:20px;
+}
+
+.header h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.btn-enviar,
+.btn-enviar:hover {
+    color: #DAA316;
+}
+
+.btn-enviar {
+    float: right;
+}
+
+.btn-avancar,
+.btn-avancar:hover {
+    float: right;
+    color: #DAA316;
+}
+
+.btn-voltar {
+    border-color: #DAA316;
+    color: #DAA316;
+}
+
+.btn-voltar:hover {
+    background-color: #DAA316;
+    color: black;
+}

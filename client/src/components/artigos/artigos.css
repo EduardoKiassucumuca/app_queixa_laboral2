@@ -1,0 +1,30 @@
+.artigos {
+    justify-content: center;
+    padding: 70px;
+}
+
+.txt-artigos {
+    color: #DAA316;
+}
+
+.ribbon-artigo {
+    position: absolute;
+    top: 10;
+    left: -10px;
+    z-index: 1;
+    cursor: default!important;
+}
+
+.ribbon-artigo:hover {
+    color: black;
+    background-color: #DAA316;
+}
+
+.titulo-artigo {
+    color: black;
+    font-weight: bold;
+}
+
+.detalhes-artigo {
+    color: black;
+}

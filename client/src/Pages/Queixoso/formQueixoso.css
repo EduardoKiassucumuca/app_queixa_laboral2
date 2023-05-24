@@ -1,0 +1,16 @@
+body {}
+
+.queixoso-dados {
+    margin: auto;
+    margin-top: 5%;
+}
+
+.btn-proximo-1 {
+    color: #DAA316;
+    float: right;
+}
+
+.btn-cancelar-1 {
+    color: #DAA316;
+    border-color: #DAA316;
+}
