@@ -18,7 +18,36 @@ const ReviewForm = ({ data, updateFielHndler }) => {
         <div>
             <Form>
                 <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridNomeEmpresa">
+                <Col md={7}>
+                <Form.Group>
+                        <Form.Label>Cargo</Form.Label>
+                        <Form.Control
+                            type="name"
+                            name="cargo"
+                            id="cargo"
+                            placeholder="Qual é o seu cargo na empresa"
+                            value={data.cargo || ""}
+                            onChange={(e) => updateFielHndler("cargo", e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
+                 <Col md={5}>
+                <Form.Group>
+                        <Form.Label>Area ou departamento</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="area_departamento"
+                            id="area_departamento"
+                            placeholder="Em que área/departamento estás na empresa"
+                            value={data.area_departamento || ""}
+                            onChange={(e) => updateFielHndler("area_departamento", e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
+                </Row>
+                <Row className="mb-3">
+                <Col md={7}>
+                    <Form.Group>
                         <Form.Label>Empresa</Form.Label>
                         <Form.Control
                             type="name"
@@ -29,8 +58,9 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                             onChange={(e) => updateFielHndler("empresa", e.target.value)}
                         />
                     </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridEstadoCivil">
+                    </Col>
+                    <Col md={5}>
+                    <Form.Group>
                         <Form.Label>Localização da Empresa</Form.Label>
                         <Form.Select defaultValue="Choose..."
                             name="localizacaoEmp"
@@ -58,9 +88,24 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                             <option>Zaire</option>
                         </Form.Select>
                     </Form.Group>
+                    </Col>
                 </Row>
                 <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridRua">
+                <Col md={4}>
+                    <Form.Group>
+                        <Form.Label>Bairro</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="bairroEmp"
+                            id="bairroEmp"
+                            placeholder="Diga-nos o bairro da empresa"
+                            value={data.bairroEmp || ""}
+                            onChange={(e) => updateFielHndler("bairroEmp", e.target.value)}
+                        />
+                    </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                    <Form.Group>
                         <Form.Label>Rua</Form.Label>
                         <Form.Control
                             type="text"
@@ -71,6 +116,7 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                             onChange={(e) => updateFielHndler("ruaEmp", e.target.value)}
                         />
                     </Form.Group>
+                    </Col>
                     <Form.Group as={Col} controlId="formGridWebsite">
                         <Form.Label>Website</Form.Label>
                         <Form.Control
