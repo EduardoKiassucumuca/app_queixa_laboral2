@@ -23,7 +23,7 @@ const UseForm = ({ data, updateFielHndler }) => {
     return (
         <div>
             <Row className="mb-3">
-            <Col md={6}>
+            <Col md={8}>
                 <Form.Group>
                     <Form.Label>Nome</Form.Label>
                     <Form.Control
@@ -50,9 +50,38 @@ const UseForm = ({ data, updateFielHndler }) => {
                     />
                 </Form.Group>
                 </Col>
+                </Row>
+                <Row className="mb-3">
+                <Col md={6}>
+                <Form.Group>
+                    <Form.Label>Nome do Pai</Form.Label>
+                    <Form.Control
+                        type="name"
+                        placeholder="Digite o nome do seu pai"
+                        id="nomePai"
+                        name="nomePai"
+                        value={data.nomePai || ""}
+                        onChange={(e) => updateFielHndler("nomePai", e.target.value)}
+                    />
+                </Form.Group>
+                </Col>
+                <Col md={6}>
+                <Form.Group>
+                    <Form.Label>Nome da Mãe</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Digite o nome da sua mãe"
+                        id="nomeMae"
+                        name="nomeMae"
+                        value={data.nomeMae || ""}
+                        onChange={(e) => updateFielHndler("nomeMae", e.target.value)}
+                    />
+                </Form.Group>
+                </Col>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} controlId="formGridBairro">
+            <Col md={4}>
+                <Form.Group>
                     <Form.Label>Bairro</Form.Label>
                     <Form.Control
                         type="text"
@@ -63,21 +92,76 @@ const UseForm = ({ data, updateFielHndler }) => {
                         onChange={(e) => updateFielHndler("bairro", e.target.value)}
                     />
                 </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridRua">
-                    <Form.Label>Rua</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Digite a sua Rua"
-                        id="rua"
-                        name="rua"
-                        value={data.rua || ""}
-                        onChange={(e) => updateFielHndler("rua", e.target.value)}
-                    />
-                </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group>
+                        <Form.Label>Rua</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Digite a sua Rua"
+                            id="rua"
+                            name="rua"
+                            value={data.rua || ""}
+                            onChange={(e) => updateFielHndler("rua", e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                <Form.Group>
+                        <Form.Label>Casa ou Edificio</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Casa/Edificio"
+                            id="casaEdificio"
+                            name="casaEdificio"
+                            value={data.casaEdificio || ""}
+                            onChange={(e) => updateFielHndler("casaEdificio", e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} controlId="formGridEstadoCivil">
+                <Col md={4}>
+                <Form.Group>
+                    <Form.Label>BI</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="1234567812LA890"
+                        id="BI"
+                        name="BI"
+                        value={data.BI || ""}
+                        onChange={(e) => updateFielHndler("BI", e.target.value)}
+                    />
+                </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group>
+                    <Form.Label>Emitido em</Form.Label>
+                    <Form.Control
+                        type="date"
+                        id="emitidoEm"
+                        name="emitidoEm"
+                        value={data.emitidoEm || ""}
+                        onChange={(e) => updateFielHndler("emitidoEm", e.target.value)}
+                    />
+                </Form.Group>
+                </Col>
+                <Col md={4}>
+                <Form.Group>
+                    <Form.Label>Valido até</Form.Label>
+                    <Form.Control
+                        type="date"
+                        id="validoAte"
+                        name="validoAte"
+                        value={data.validoAte || ""}
+                        onChange={(e) => updateFielHndler("validoAte", e.target.value)}
+                    />
+                </Form.Group>
+                </Col>
+            </Row>
+            <Row className="mb-3">
+            <Col md={4}>
+                <Form.Group>
                     <Form.Label>Estado Civil</Form.Label>
                     <Form.Select defaultValue="Choose..."
                         id="ecivil"
@@ -90,20 +174,22 @@ const UseForm = ({ data, updateFielHndler }) => {
                         <option>Viuvo</option>
                     </Form.Select>
                 </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridBI">
-                    <Form.Label>BI</Form.Label>
+                </Col>
+                <Col md={4}>
+                <Form.Group>
+                    <Form.Label>Naturalidade</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="1234567812LA890"
-                        id="BI"
-                        name="BI"
-                        value={data.BI || ""}
-                        onChange={(e) => updateFielHndler("BI", e.target.value)}
+                        placeholder="Natural de"
+                        id="naturalidade"
+                        name="naturalidade"
+                        value={data.naturalidade || ""}
+                        onChange={(e) => updateFielHndler("naturalidade", e.target.value)}
                     />
                 </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridDaataNascimento">
+                </Col>
+                <Col md={4}>
+                <Form.Group>
                     <Form.Label>Data de Nascimento</Form.Label>
                     <Form.Control
                         type="date"
@@ -113,8 +199,15 @@ const UseForm = ({ data, updateFielHndler }) => {
                         onChange={(e) => updateFielHndler("dtNascimento", e.target.value)}
                     />
                 </Form.Group>
+                </Col>
             </Row>
-            <Row className="mb-3"  id="ultima-row">
+            <Row className="mb-3">
+                <label for="formFile" class="form-label">Bilhete de Identidade</label>
+                <input class="form-control" type="file" id="formFile"/>
+            </Row>
+
+           <Row className="mb-3"  id="ultima-row">
+
                 <Col md={2}>   
                         <Form.Check
                             type="radio"
