@@ -16,22 +16,34 @@ import "./details_queixa.css";
 
 var submissao_queixa = "";
 export function queixar(){
-  Axios.post("http://localhost:3001/queixar",{
+  Axios.post("http://localhost:3001/guardar_queixa",{
 
-    nome: submissao_queixa.nome,
-    sobrenome: submissao_queixa.sobrenome,
-    bairro: submissao_queixa.bairro,
-    rua: submissao_queixa.rua,
-    estado_civil: submissao_queixa.ecivil,
-    BI: submissao_queixa.BI,
-    data_nascimento: submissao_queixa.dtNascimento,
-    empresa: submissao_queixa.empresa,
-    provincia_empresa: submissao_queixa.localizacaoEmp,
-    rua_empresa: submissao_queixa.ruaEmp,
-    website_empresa: submissao_queixa.websiteEmp,
-    email_empresa: submissao_queixa.emailEmp,
-    descricao_queixa: submissao_queixa.descricao_queixa,
+    _nome: submissao_queixa.nome,
+    _sobrenome: submissao_queixa.sobrenome,
+    _nomePai: submissao_queixa.nomePai,
+    _nomeMae: submissao_queixa.nomeMae,
+    _bairro: submissao_queixa.bairro,
+    _rua: submissao_queixa.rua,
+    _casaEdificio: submissao_queixa.casaEdificio,
+    _estado_civil: submissao_queixa.ecivil,
+    _nBI: submissao_queixa.nBI,
+    _emitidoEm: submissao_queixa.emitidoEm,
+    _validoAte: submissao_queixa.validoAte,
+    _emitidoEm: submissao_queixa.emitidoEm,
+    _naturalidade: submissao_queixa.naturalidade,
+    _data_nascimento: submissao_queixa.dtNascimento,
+    _cargo: submissao_queixa.cargo,
+    _area_departamento: submissao_queixa.area_departamento,
+    _empresa: submissao_queixa.empresa,
+    _provincia_empresa: submissao_queixa.localizacaoEmp,
+    _rua_empresa: submissao_queixa.ruaEmp,
+    _bairroEmp: submissao_queixa.bairroEmp,
+    _website_empresa: submissao_queixa.websiteEmp,
+    _email_empresa: submissao_queixa.emailEmp,
+    _descricao_queixa: submissao_queixa.descricao_queixa,
   }).then((resposta) => {
+    console.log(resposta.data.message);
+  }).catch((resposta) =>{
     console.log(resposta);
   });
 };

@@ -1,6 +1,6 @@
 
 const { Sequelize, DataTypes } = require("sequelize");
-const db = require("../models/UserModel");
+const db = require("../config/conexao.js");
 
 const Pessoa = db.define("Pessoa", {
   id: {
@@ -18,47 +18,64 @@ const Pessoa = db.define("Pessoa", {
     allowNull: false,
     unique: false,
   },
-   bairro: {
+  nome_pai: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
-   descricao_casa: {
+   nome_mae: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
-   rua: {
+   naturalidade: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
-  provincia: {
+   altura: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
-  nbi: {
+   estado_civil: {
     type: DataTypes.STRING,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
   data_nascimento: {
     type: DataTypes.DATE,
-    allowNull: true,
-    unique: false,
+    allowNull: false,
   },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: true,
-    unique: false,
-  },
-   updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: true,
-    unique: false,
-  },
-},{});
+  biID: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'BI',
+          },
+          key: 'id'
+        },
+        allowNull: false
+      },
+    enderecoID: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Endereco',
+          },
+          key: 'id'
+        },
+        allowNull: false
+      },
+});
+
+Pessoa.hasOne(BI,{
+  foreignkey: 'biID',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+Pessoa.hasOne(Endereco,{
+  foreignkey: 'enderecoID',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+BI.belongsTo(Pessoa);
+Endereco.belongsTo(Pessoa);
 
 module.exports = Pessoa;
-console.log(Pessoa === db.models.Pessoa);

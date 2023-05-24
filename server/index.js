@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-const routes = require('./routes/routes.js')
+const QueixaController = require('../controllers/QueixaController');
 
-require('./config/database')
+require('./config/conexao.js')
 
 const { generateKey } = require("crypto");
 
@@ -17,8 +17,10 @@ const { generateKey } = require("crypto");
 })*/
 
 
-app.use(routes);
+app.use(cors());
 app.use(express.json());
+
+app.post('/guardar_queixa', QueixaController.store);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

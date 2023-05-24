@@ -1,11 +1,9 @@
 const Sequelize = require("sequelize");
 
-const dbconfig = require("../config/database.js");
+const dbconfig = require("../config/db.js");
 
 const conexao = new Sequelize(dbconfig);
 
-
-const Pessoa = require('../models/pessoa');
 
 //Pessoa.init(conexao);
 

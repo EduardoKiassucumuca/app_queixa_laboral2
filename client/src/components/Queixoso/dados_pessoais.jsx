@@ -127,10 +127,10 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Control
                         type="text"
                         placeholder="1234567812LA890"
-                        id="BI"
-                        name="BI"
-                        value={data.BI || ""}
-                        onChange={(e) => updateFielHndler("BI", e.target.value)}
+                        id="nBI"
+                        name="nBI"
+                        value={data.nBI || ""}
+                        onChange={(e) => updateFielHndler("nBI", e.target.value)}
                     />
                 </Form.Group>
                 </Col>
