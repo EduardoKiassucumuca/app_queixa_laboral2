@@ -31,18 +31,24 @@ export function queixar(){
     _validoAte: submissao_queixa.validoAte,
     _emitidoEm: submissao_queixa.emitidoEm,
     _naturalidade: submissao_queixa.naturalidade,
+    _provincia: submissao_queixa.provincia,
+    _altura: submissao_queixa.altura,
     _data_nascimento: submissao_queixa.dtNascimento,
     _cargo: submissao_queixa.cargo,
     _area_departamento: submissao_queixa.area_departamento,
     _empresa: submissao_queixa.empresa,
     _provincia_empresa: submissao_queixa.localizacaoEmp,
+    _designacao: submissao_queixa.designacao,
+    _nif: submissao_queixa.nif,
+    _edificio: submissao_queixa.edificio,
     _rua_empresa: submissao_queixa.ruaEmp,
     _bairroEmp: submissao_queixa.bairroEmp,
+    _ruaEmp: submissao_queixa.ruaEmp,
     _website_empresa: submissao_queixa.websiteEmp,
     _email_empresa: submissao_queixa.emailEmp,
     _descricao_queixa: submissao_queixa.descricao_queixa,
   }).then((resposta) => {
-    console.log(resposta.data.message);
+    alert(resposta.data.message);
   }).catch((resposta) =>{
     console.log(resposta);
   });

@@ -5,6 +5,7 @@ import {
     BsFillEmojiNeutralFill,
     BsFillEmojiFrownFill,
 } from "react-icons/bs";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -117,40 +118,86 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                         />
                     </Form.Group>
                     </Col>
-                    <Form.Group as={Col} controlId="formGridWebsite">
-                        <Form.Label>Website</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="websiteEmp"
-                            id="website_empresa"
-                            placeholder="https://kiassusoft.co.ao"
-                            value={data.websiteEmp || ""}
-                            onChange={(e) => updateFielHndler("websiteEmp", e.target.value)}
-                        />
-                    </Form.Group>
+                    <Col md={4}>
+                        <Form.Group>
+                            <Form.Label>Website</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="websiteEmp"
+                                id="website_empresa"
+                                placeholder="https://kiassusoft.co.ao"
+                                value={data.websiteEmp || ""}
+                                onChange={(e) => updateFielHndler("websiteEmp", e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
                 </Row>
                 <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridBI">
-                        <Form.Label>Contacto</Form.Label>
+                    <Col md={4}>
+                        <Form.Group>
+                            <Form.Label>Contacto</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Ex:930340539"
+                                value={data.contactoEmp || ""}
+                                onChange={(e) => updateFielHndler("contactoEmp", e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="emailEmp"
+                                id="email_empresa"
+                                placeholder="Diga-nos o email da empresa"
+                                value={data.emailEmp || ""}
+                                onChange={(e) => updateFielHndler("emailEmp", e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                        <Form.Group>
+                            <Form.Label>Edificio</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="edificio"
+                                id="edificio"
+                                placeholder="Edificio"
+                                value={data.edificio || ""}
+                                onChange={(e) => updateFielHndler("edificio", e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row className="mb-3">
+                    <Col md={8}>
+                    <FloatingLabel
+                        controlId="floatingTextarea"
+                        label="Designação"
+                        className="mb-3"
+                        
+                    >
+                    <Form.Control as="textarea" placeholder="Ramo de actuação da empresa" style={{ height: '80px' }}
+                     value={data.designacao || ""}
+                     onChange={(e) => updateFielHndler("designacao", e.target.value)}
+                    />
+                    </FloatingLabel>
+                    </Col>
+                    <Col md={4}>
+                    <Form.Group>
+                    <Form.Label>NIF</Form.Label>
                         <Form.Control
-                            type="number"
-                            placeholder="Ex:930340539"
-                            value={data.contactoEmp || ""}
-                            onChange={(e) => updateFielHndler("contactoEmp", e.target.value)}
+                            type="text"
+                            name="nif"
+                            id="nif"
+                            placeholder="NIF"
+                            value={data.nif || ""}
+                            onChange={(e) => updateFielHndler("nif", e.target.value)}
                         />
                     </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridDaataNascimento">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            name="emailEmp"
-                            id="email_empresa"
-                            placeholder="Diga-nos o email da empresa"
-                            value={data.emailEmp || ""}
-                            onChange={(e) => updateFielHndler("emailEmp", e.target.value)}
-                        />
-                    </Form.Group>
+                    </Col>
                 </Row>
             </Form>
         </div>

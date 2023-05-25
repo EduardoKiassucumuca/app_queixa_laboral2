@@ -202,8 +202,53 @@ const UseForm = ({ data, updateFielHndler }) => {
                 </Col>
             </Row>
             <Row className="mb-3">
-                <label for="formFile" class="form-label">Bilhete de Identidade</label>
-                <input class="form-control" type="file" id="formFile"/>
+                <Col md={6}>
+                    <label for="formFile" class="form-label">Bilhete de Identidade</label>
+                    <input class="form-control" type="file" id="formFile"/>
+                </Col>
+                <Col md={3}>
+                    <Form.Group>
+                        <Form.Label>Sua Provincia</Form.Label>
+                        <Form.Select defaultValue="Choose..."
+                            name="provincia"
+                            id="provincia"
+                            value={data.provincia || ""}
+                            onChange={(e) => updateFielHndler("provincia", e.target.value)}>
+                            <option>Choose...</option>
+                            <option>Bengo</option>
+                            <option>Benguela</option>
+                            <option>Bié</option>
+                            <option>Cabinda</option>
+                            <option>Cuando-Cubango</option>
+                            <option>Cuanza-Norte</option>
+                            <option>Cuanza-Sul</option>
+                            <option>Cunene</option>
+                            <option>Huambo</option>
+                            <option>Huíla</option>
+                            <option>Luanda</option>
+                            <option>Lunda-Norte</option>
+                            <option>Lunda-Sul</option>
+                            <option>Malanje</option>
+                            <option>Moxíco</option>
+                            <option>Namibe</option>
+                            <option>Uíge</option>
+                            <option>Zaire</option>
+                        </Form.Select>
+                    </Form.Group>
+                    </Col>
+                    <Col md={3}>
+                        <Form.Group>
+                            <Form.Label>Altura</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="1.50"
+                                id="altura"
+                                name="altura"
+                                value={data.altura || ""}
+                                onChange={(e) => updateFielHndler("altura", e.target.value)}
+                            />
+                        </Form.Group>
+                </Col>
             </Row>
 
            <Row className="mb-3"  id="ultima-row">

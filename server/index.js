@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-const QueixaController = require('../controllers/QueixaController');
+const QueixaController = require('./controllers/QueixaController');
 
 require('./config/conexao.js')
 
