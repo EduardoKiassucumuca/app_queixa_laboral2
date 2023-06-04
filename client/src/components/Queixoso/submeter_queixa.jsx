@@ -48,18 +48,17 @@ function Submeter_queixa() {
         <Col md={8} className="form-queixa">
           <div className="form-container">
             <Steps currentStep={currentStep} />
-            <Form onSubmit={(e) => changeStep(currentStep + 1, e)} id='form-dados-pessoais'>
+            <Form onSubmit={(e) => changeStep(currentStep + 1, e)} id='form-dados-pessoai' method='post' enctype="multipart/form-data">
               <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
               <div className="actions">
                 {!isFirstStep && (
                   <button type='button' className='btn fw-bold bg-default btn-voltar' onClick={() => changeStep(currentStep - 1)}>
-
                     <span>Voltar</span>
                   </button>
                 )}
                 {!isLastStep ? (
                   <button type='submit' className='btn fw-bold bg-dark btn-avancar'>
-                    <span>Avançar</span>
+                    <span>Avança</span>
 
                   </button>
                 ) : (

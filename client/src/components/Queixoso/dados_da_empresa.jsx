@@ -17,7 +17,6 @@ import "./dados_da_empresa.css";
 const ReviewForm = ({ data, updateFielHndler }) => {
     return (
         <div>
-            <Form>
                 <Row className="mb-3">
                 <Col md={7}>
                 <Form.Group>
@@ -199,7 +198,6 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                     </Form.Group>
                     </Col>
                 </Row>
-            </Form>
         </div>
     );
 }

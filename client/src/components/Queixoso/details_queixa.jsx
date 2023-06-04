@@ -56,8 +56,8 @@ export function queixar(){
 
 const Thanks = ({ data, updateFielHndler }) => {
   submissao_queixa = data;
+  console.log(data)
   return (
-    <Form>
       <Row className="mb-3">
         <FloatingLabel
           controlId="floatingTextarea2"
@@ -79,11 +79,11 @@ const Thanks = ({ data, updateFielHndler }) => {
             <Form.Label>Anexar Contrato de Trabalho</Form.Label>
             <Form.Control
               type="file"
+              
             />
           </Form.Group>
         </Col>
       </Row>
-    </Form>
   );
 };
 

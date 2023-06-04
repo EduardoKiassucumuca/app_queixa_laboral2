@@ -1,16 +1,24 @@
 import { useState } from "react";
-
+var event = "";
 export function useForm(steps) {
 
     const [currentStep, setCurrentStep] = useState(0);
 
     function changeStep(i, e) {
-        if (e) e.preventDefault();
+        event=e;
+        if (e){ 
+            e.preventDefault();
+            
+        }
 
 
-        if (i < 0 || i >= steps.length) return
+        if (i < 0 || i >= steps.length){
+           
+            return
+        } 
 
         setCurrentStep(i)
+     
     }
     return {
         currentStep,
@@ -18,5 +26,7 @@ export function useForm(steps) {
         changeStep,
         isLastStep: currentStep + 1 === steps.length ? true : false,
         isFirstStep: currentStep === 0 ? true : false,
+        
     }
+   
 }

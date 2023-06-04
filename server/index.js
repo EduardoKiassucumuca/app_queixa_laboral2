@@ -3,10 +3,10 @@ const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 const QueixaController = require('./controllers/QueixaController');
-
 require('./config/conexao.js')
-
 const { generateKey } = require("crypto");
+const multer = require("multer");
+const upload = multer({ dest: './uploads_BI/' })
 
 
 /*const db = mysql.createPool({
@@ -20,7 +20,11 @@ const { generateKey } = require("crypto");
 app.use(cors());
 app.use(express.json());
 
-app.post('/guardar_queixa', QueixaController.store);
+console.log(upload);
+app.post('/guardar_queixa', upload.single('file_BI'), function(req, res) {
+
+    console.log(req.files, req.body);
+});
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

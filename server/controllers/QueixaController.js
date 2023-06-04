@@ -23,6 +23,7 @@ module.exports = {
     },
     async store(req, res) {
         try {
+
             // dados do bilhete de identidade
             const { _emitidoEm } = req.body;
             const { _validoAte } = req.body;

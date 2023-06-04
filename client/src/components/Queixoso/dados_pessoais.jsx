@@ -6,19 +6,27 @@ import { useState } from 'react';
 
 import "./dados_pessoais.css";
 
-function addContacto(){
-    const newInputContacto = document.createElement("input");
-    const newDivCol = document.createElement("div");
-    const last_div_col = document.getElementById("col-input-contacto");
-    const row_dadosPessoais = document.getElementById("ultima-row");
-    row_dadosPessoais.appendChild(last_div_col, newDivCol);
-    /*const container_dados = document.getElementById("container-dados-pessoais");
-    const last_input =  document.getElementById("contacto_trab");
-    container_dados.appendChild(last_input, last_input);*/
+
+
+function fileBI(dados){
+    
 }
 
-
 const UseForm = ({ data, updateFielHndler }) => {
+   
+    const [dataContacto, setdataContacto] = useState([data]);
+
+    const addContacto = ()=>{
+        setdataContacto([...dataContacto, data]);
+    }
+
+   const onchangeRadio = (event) =>{
+        data.checked =event.target.checked;
+        data.sexo = event.target.value;
+        console.log(data);
+
+   };
+   const [show, setShow] = useState(false);
 
     return (
         <div>
@@ -203,8 +211,32 @@ const UseForm = ({ data, updateFielHndler }) => {
             </Row>
             <Row className="mb-3">
                 <Col md={6}>
-                    <label for="formFile" class="form-label">Bilhete de Identidade</label>
-                    <input class="form-control" type="file" id="formFile"/>
+                <Form.Label>Bilhete de Identidade</Form.Label>
+               {!data.file_BI || show ? (
+               
+               <Form.Control
+                     type="file" 
+                     id="file_BI" 
+                     name="file_BI" 
+                     onChange={(e) => updateFielHndler("file_BI", e.target.files[0].name)}
+                     
+                     />
+                  
+               ):(<br></br>)}   
+                {data.file_BI || !show? (
+                     <input
+                     type="text"
+                     className="form-control"
+                     value={data.file_BI}
+                     disabled
+                     />
+                ):(<p></p>)}
+                {data.file_BI || show? (
+                    <button type='button' className='btn fw-bold bg-warning btn-select-file' onClick={()=>setShow(true)}>
+                     <span>Mudar o documento</span>
+                     </button>
+                ):(<p></p>)}
+
                 </Col>
                 <Col md={3}>
                     <Form.Group>
@@ -252,29 +284,86 @@ const UseForm = ({ data, updateFielHndler }) => {
             </Row>
 
            <Row className="mb-3"  id="ultima-row">
-
-                <Col md={2}>   
-                        <Form.Check
-                            type="radio"
-                            label="Masculino"
-                            name="masculino"
-                            id="formHorizontalRadiosMasc"
-                            checked={data.masculino || ""}
-                            onChange={(e) => updateFielHndler("masculino", e.target.value)}
-                        />
-                </Col>
-                <Col md={3}>
-                        <Form.Check
-                            type="radio"
-                            label="Feminino"
-                            name="feminino"
-                            id="formHorizontalRadiosFem"
-                            checked={data.feminino || ""}
-                            onChange={(e) => updateFielHndler("feminino", e.target.value)} />
-                </Col>
+           <Col md={1}>
+           {data.checked && data.sexo == "Masculino"? (
+           <div class="form-check">
+           
+                <input class="form-check-input" type="radio" value="Masculino" name="sexo" id="sexo-masculino"
+                 checked
+                onChange={(e) => onchangeRadio(e)}
                
+           />
+          
+            <label class="form-check-label" for="flexRadioDefault1">
+                Masculino
+            </label>
+            </div>
+            ):(
+                <div class="form-check">
+                <input class="form-check-input" type="radio" value="Masculino" name="sexo" id="sexo-masculino"
+                onChange={(e) => onchangeRadio(e)}
+           />
+          
+            <label class="form-check-label" for="flexRadioDefault1">
+                Masculino
+            </label>
+            </div>
+            )}
+            </Col>
+            <br></br>
+            <Col md={1}>
+            {data.checked && data.sexo == "Feminino"?(
+                <div class="form-check">
+                <input class="form-check-input" type="radio" value="Feminino" name="sexo" id="sexo-feminino"
+                checked
+                onChange={(e) => onchangeRadio(e)}
+                
+            />
+            <label class="form-check-label" for="flexRadioDefault2">
+                Feminino
+            </label>
+            </div> 
+            ):(
+            <div class="form-check">
+                        
+                        <input class="form-check-input" type="radio" value="Feminino" name="sexo" id="sexo-feminino"
+                        onChange={(e) => onchangeRadio(e)}
+                
+                    />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Feminino
+                    </label>
+             </div> 
+            )}   
+            </Col>
+         
+            {
+                dataContacto.map((val,i)=>
+                <Row>
+                        <Col md={3}>
+                            <input 
+                            className="form-control" 
+                            name="contacto"
+                            type="text"
+                                id="contacto"
+                                placeholder="930340539"
+                                value={val.contacto || ""}
+
+                                onChange={(e) => updateFielHndler(e, i)}
+                            />
+                            </Col>
+                            <Col md={1}>
+                            <button type='button'className='btn fw-bold btn-primary btn-addContacto' onClick={addContacto}>+</button>
+                            </Col>
+                </Row>
+                        
+                )
+            }
+          <br></br>
             </Row>
         </div>
     )
+    
 }
-export default UseForm
+
+export default UseForm;

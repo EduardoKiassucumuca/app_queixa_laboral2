@@ -25,8 +25,6 @@ import { queixar } from './details_queixa';
 
 
 const formTemplate = {
-  name: "",
-  email: "",
   review: "",
   comment: "",
 }
@@ -41,7 +39,11 @@ const FormQueixante = () => {
     setData((prev) => {
       return { ...prev, [key]: value };
     });
+    
   };
+
+  
+
   const formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler} />, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
@@ -51,6 +53,7 @@ const FormQueixante = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  
   return (
     <Layout className="layout">
       <Menu/>
@@ -71,7 +74,7 @@ const FormQueixante = () => {
                 <Col md={8} className="form-queixa">
                   <div className="form-container">
                     <Steps currentStep={currentStep} />
-                    <Form onSubmit={(e) => changeStep(currentStep + 1, e)} id='form-dados-pessoais'>
+                    <Form onSubmit={(e) => changeStep(currentStep + 1, e)} id='form-dados-pessoais' method='post' enctype="multipart/form-data">
                       <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
                       <div className="actions">
                         {!isFirstStep && (
