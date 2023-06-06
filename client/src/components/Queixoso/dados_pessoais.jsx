@@ -4,16 +4,15 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 
+
 import "./dados_pessoais.css";
 
 
 
-function fileBI(dados){
-    
-}
 
 const UseForm = ({ data, updateFielHndler }) => {
-   
+
+
     const [dataContacto, setdataContacto] = useState([data]);
 
     const addContacto = ()=>{
@@ -284,7 +283,36 @@ const UseForm = ({ data, updateFielHndler }) => {
             </Row>
 
            <Row className="mb-3"  id="ultima-row">
-           <Col md={1}>
+          
+                <Col md={5}>
+                    <Form.Group>
+                    <Form.Label>Telefone Principal</Form.Label>
+                            <Form.Control
+                                    type="text"
+                                    placeholder="930340539"
+                                    id="contacto"
+                                    name="contacto"
+                                    value={data.contacto1 || ""}
+                                    onChange={(e) => updateFielHndler("contacto", e.target.value)}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={5}>
+                    <Form.Group>
+                    <Form.Label>Alternativo</Form.Label>
+                            <Form.Control
+                                    type="text"
+                                    placeholder="950134233"
+                                    id="contacto"
+                                    name="contacto"
+                                    value={data.contacto2 || ""}
+                                    onChange={(e) => updateFielHndler("contacto", e.target.value)}
+                                />
+                            </Form.Group>
+                        </Col>
+            </Row>
+            <Row className="mb-3">
+            <Col md={1}>
            {data.checked && data.sexo == "Masculino"? (
            <div class="form-check">
            
@@ -336,30 +364,6 @@ const UseForm = ({ data, updateFielHndler }) => {
              </div> 
             )}   
             </Col>
-         
-            {
-                dataContacto.map((val,i)=>
-                <Row>
-                        <Col md={3}>
-                            <input 
-                            className="form-control" 
-                            name="contacto"
-                            type="text"
-                                id="contacto"
-                                placeholder="930340539"
-                                value={val.contacto || ""}
-
-                                onChange={(e) => updateFielHndler(e, i)}
-                            />
-                            </Col>
-                            <Col md={1}>
-                            <button type='button'className='btn fw-bold btn-primary btn-addContacto' onClick={addContacto}>+</button>
-                            </Col>
-                </Row>
-                        
-                )
-            }
-          <br></br>
             </Row>
         </div>
     )

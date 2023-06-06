@@ -11,7 +11,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Axios from 'axios';
-
+import { useState } from 'react';
 import "./details_queixa.css";
 
 var submissao_queixa = "";
@@ -55,6 +55,7 @@ export function queixar(){
 };
 
 const Thanks = ({ data, updateFielHndler }) => {
+  const [show, setShow] = useState(false);
   submissao_queixa = data;
   console.log(data)
   return (
@@ -75,13 +76,31 @@ const Thanks = ({ data, updateFielHndler }) => {
         </FloatingLabel>
         <p></p>
         <Col md={5}>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Anexar Contrato de Trabalho</Form.Label>
-            <Form.Control
-              type="file"
-              
-            />
-          </Form.Group>
+        <Form.Label>Anexar Contrato de Trabalho</Form.Label>
+               {!data.file_contrato || show ? (
+               
+               <Form.Control
+                     type="file" 
+                     id="file_contrato" 
+                     name="file_contrato" 
+                     onChange={(e) => updateFielHndler("file_contrato", e.target.files[0].name)}
+                     
+                     />
+                  
+               ):(<br></br>)}   
+                {data.file_contrato || !show? (
+                     <input
+                     type="text"
+                     className="form-control"
+                     value={data.file_contrato}
+                     disabled
+                     />
+                ):(<p></p>)}
+                {data.file_contrato || show? (
+                    <button type='button' className='btn fw-bold bg-warning btn-select-file' onClick={()=>setShow(true)}>
+                     <span>Mudar o documento</span>
+                     </button>
+                ):(<p></p>)}
         </Col>
       </Row>
   );

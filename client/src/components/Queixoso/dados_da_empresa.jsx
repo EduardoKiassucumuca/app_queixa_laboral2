@@ -134,9 +134,9 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                 <Row className="mb-3">
                     <Col md={4}>
                         <Form.Group>
-                            <Form.Label>Contacto</Form.Label>
+                            <Form.Label>Telefone</Form.Label>
                             <Form.Control
-                                type="number"
+                                type="text"
                                 placeholder="Ex:930340539"
                                 value={data.contactoEmp || ""}
                                 onChange={(e) => updateFielHndler("contactoEmp", e.target.value)}
