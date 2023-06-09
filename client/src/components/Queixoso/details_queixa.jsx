@@ -16,7 +16,15 @@ import "./details_queixa.css";
 
 var submissao_queixa = "";
 export function queixar(){
-  Axios.post("http://localhost:3001/guardar_queixa",{
+
+const formData = new FormData();
+const file_contrato = document.querySelector("#file_contrato");
+const file_BI = document.querySelector("#file_BI");
+
+formData.append("fileContrato", file_contrato.files[0]);
+formData.append("fileBI", file_BI.files[0]);
+
+  Axios.post("http://localhost:3001/guardar_queixa",formData,{
 
     _nome: submissao_queixa.nome,
     _sobrenome: submissao_queixa.sobrenome,
@@ -27,6 +35,7 @@ export function queixar(){
     _casaEdificio: submissao_queixa.casaEdificio,
     _estado_civil: submissao_queixa.ecivil,
     _nBI: submissao_queixa.nBI,
+    _fileBI: submissao_queixa.file_BI,
     _emitidoEm: submissao_queixa.emitidoEm,
     _validoAte: submissao_queixa.validoAte,
     _emitidoEm: submissao_queixa.emitidoEm,
@@ -47,6 +56,10 @@ export function queixar(){
     _website_empresa: submissao_queixa.websiteEmp,
     _email_empresa: submissao_queixa.emailEmp,
     _descricao_queixa: submissao_queixa.descricao_queixa,
+    _fileContrato: submissao_queixa.file_contrato,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      }
   }).then((resposta) => {
     alert(resposta.data.message);
   }).catch((resposta) =>{
@@ -75,32 +88,27 @@ const Thanks = ({ data, updateFielHndler }) => {
           />
         </FloatingLabel>
         <p></p>
-        <Col md={5}>
-        <Form.Label>Anexar Contrato de Trabalho</Form.Label>
-               {!data.file_contrato || show ? (
-               
+        <Col md={6}>
+        <Form.Label>Anexar Contrato de Trabalho</Form.Label> 
                <Form.Control
                      type="file" 
-                     id="file_contrato" 
-                     name="file_contrato" 
-                     onChange={(e) => updateFielHndler("file_contrato", e.target.files[0].name)}
-                     
+                     name="file_contrato"
+                     id="file_contrato"
+                     required
+                     />
+
+        </Col>
+        <Col md={6}>
+        <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
+ 
+               <Form.Control
+                     type="file" 
+                     name="file_BI"
+                     id="file_BI"
+                     required
                      />
                   
-               ):(<br></br>)}   
-                {data.file_contrato || !show? (
-                     <input
-                     type="text"
-                     className="form-control"
-                     value={data.file_contrato}
-                     disabled
-                     />
-                ):(<p></p>)}
-                {data.file_contrato || show? (
-                    <button type='button' className='btn fw-bold bg-warning btn-select-file' onClick={()=>setShow(true)}>
-                     <span>Mudar o documento</span>
-                     </button>
-                ):(<p></p>)}
+              
         </Col>
       </Row>
   );

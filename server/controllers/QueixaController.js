@@ -22,9 +22,18 @@ module.exports = {
 
     },
     async store(req, res) {
-        try {
 
-            // dados do bilhete de identidade
+        console.log(req.file);
+        console.log(req.body);
+
+        const { _fileContrato } = req.body;
+
+        res.json({ _fileContrato });
+
+
+        /*try {
+
+             dados do bilhete de identidade
             const { _emitidoEm } = req.body;
             const { _validoAte } = req.body;
             const _file = "/BI.pdf";
@@ -140,7 +149,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-        }
+        }*/
 
     },
     async update(req, res) {

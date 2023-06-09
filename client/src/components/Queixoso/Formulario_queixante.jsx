@@ -74,7 +74,7 @@ const FormQueixante = () => {
                 <Col md={8} className="form-queixa">
                   <div className="form-container">
                     <Steps currentStep={currentStep} />
-                    <Form onSubmit={(e) => changeStep(currentStep + 1, e)} id='form-dados-pessoais' method='post' enctype="multipart/form-data">
+                    <form onSubmit={(e) => changeStep(currentStep + 1, e)} method="post" enctype="multipart/form-data">
                       <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
                       <div className="actions">
                         {!isFirstStep && (
@@ -97,7 +97,7 @@ const FormQueixante = () => {
                         )}
 
                       </div>
-                    </Form>
+                    </form>
                   </div>
                 </Col>
              </Col>
