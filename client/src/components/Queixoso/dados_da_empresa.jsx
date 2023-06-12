@@ -138,8 +138,8 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                             <Form.Control
                                 type="text"
                                 placeholder="Ex:930340539"
-                                value={data.contactoEmp || ""}
-                                onChange={(e) => updateFielHndler("contactoEmp", e.target.value)}
+                                value={data.contacto_empresa || ""}
+                                onChange={(e) => updateFielHndler("contacto_empresa", e.target.value)}
                             />
                         </Form.Group>
                     </Col>

@@ -23,26 +23,23 @@ module.exports = {
     },
     async store(req, res) {
 
-        console.log(req.file);
-        console.log(req.body);
+        //console.log(req.files['fileContrato'][0].path);
+        //console.log(req.files['fileBI'][0].path);
+        //console.log(req.body);
 
-        const { _fileContrato } = req.body;
+        try {
 
-        res.json({ _fileContrato });
-
-
-        /*try {
-
-             dados do bilhete de identidade
+            //dados do bilhete de identidade
             const { _emitidoEm } = req.body;
+            console.log(_emitidoEm);
             const { _validoAte } = req.body;
-            const _file = "/BI.pdf";
+            const _fileBI = req.files['fileBI'][0].path;
             const { _nBI } = req.body;
 
             const novoBI = await BI.create({
                 emitido_em: _emitidoEm,
                 valido_ate: _validoAte,
-                file: _file,
+                file: _fileBI,
                 numeroBI: _nBI
             });
 
@@ -52,12 +49,16 @@ module.exports = {
             const { _rua } = req.body;
             const { _casaEdificio } = req.body;
             const { _provincia } = req.body;
+            const { _contacto_principal } = req.body;
+            const { _contacto_alternativo } = req.body;
 
             const novoEndereco = await Endereco.create({
                 bairro: _bairro,
                 rua: _rua,
                 casa: _casaEdificio,
-                provincia: _provincia
+                provincia: _provincia,
+                telefone_principal: _contacto_principal,
+                telefone_alternativo: _contacto_alternativo
             });
 
             // dados da pessoa
@@ -70,6 +71,7 @@ module.exports = {
             const { _altura } = req.body;
             const { _estado_civil } = req.body;
             const { _data_nascimento } = req.body;
+            const { _sexo } = req.body;
 
             const novaPessoa = await Pessoa.create({
                 nome: _nome,
@@ -80,6 +82,7 @@ module.exports = {
                 altura: _altura,
                 estado_civil: _estado_civil,
                 data_nascimento: _data_nascimento,
+                sexo: _sexo,
                 biID: novoBI.id,
                 enderecoID: novoEndereco.id
             });
@@ -99,17 +102,20 @@ module.exports = {
                 pessoaID: novaPessoa.id
             });
 
+
             // endereço da empresa
 
             const { _bairroEmp } = req.body;
             const { _ruaEmp } = req.body;
             const { _edificio } = req.body;
+            const { _contacto_empresa } = req.body;
 
             const novoEnderecoEmp = await Endereco.create({
                 bairro: _bairroEmp,
                 rua: _ruaEmp,
                 edificio: _edificio,
-                provincia: _provincia_empresa
+                provincia: _provincia_empresa,
+                telefone_principal: _contacto_empresa
             });
 
             //dados da empresa
@@ -132,6 +138,7 @@ module.exports = {
             const { _descricao_queixa } = req.body;
             const data_queixa = new Date();
             const data_alteracao_queixa = new Date();
+            const _fileContrato = req.files['fileContrato'][0].path;
 
             const novaQueixa = await Queixa.create({
                 facto: _descricao_queixa,
@@ -140,7 +147,8 @@ module.exports = {
                 queixosoID: novoTrabalhador.id,
                 queixanteID: novaEmpresa.id,
                 empresaID: novaEmpresa.id,
-                trabalhadorID: novoTrabalhador.id
+                trabalhadorID: novoTrabalhador.id,
+                url_file_contrato: _fileContrato
             })
             return res.status(200).send({
                 status: 1,
@@ -149,7 +157,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-        }*/
+        }
 
     },
     async update(req, res) {

@@ -83,6 +83,10 @@ const Queixa = db.define("Queixa", {
         },
         allowNull: true
     },
+    url_file_contrato: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
 });
 
 Empresa.hasMany(Queixa, {

@@ -39,6 +39,10 @@ const Pessoa = db.define("Pessoa", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    sexo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     data_nascimento: {
         type: DataTypes.DATE,
         allowNull: false,

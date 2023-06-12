@@ -209,34 +209,6 @@ const UseForm = ({ data, updateFielHndler }) => {
                 </Col>
             </Row>
             <Row className="mb-3">
-                <Col md={6}>
-                <Form.Label>Bilhete de Identidade</Form.Label>
-               {!data.file_BI || show ? (
-               
-               <Form.Control
-                     type="file" 
-                     id="file_BI" 
-                     name="file_BI" 
-                     onChange={(e) => updateFielHndler("file_BI", e.target.files[0].name)}
-                     
-                     />
-                  
-               ):(<br></br>)}   
-                {data.file_BI || !show? (
-                     <input
-                     type="text"
-                     className="form-control"
-                     value={data.file_BI}
-                     disabled
-                     />
-                ):(<p></p>)}
-                {data.file_BI || show? (
-                    <button type='button' className='btn fw-bold bg-warning btn-select-file' onClick={()=>setShow(true)}>
-                     <span>Mudar o documento</span>
-                     </button>
-                ):(<p></p>)}
-
-                </Col>
                 <Col md={3}>
                     <Form.Group>
                         <Form.Label>Sua Provincia</Form.Label>
@@ -287,13 +259,13 @@ const UseForm = ({ data, updateFielHndler }) => {
                 <Col md={5}>
                     <Form.Group>
                     <Form.Label>Telefone Principal</Form.Label>
-                            <Form.Control
+                    <Form.Control
                                     type="text"
                                     placeholder="930340539"
-                                    id="contacto"
-                                    name="contacto"
-                                    value={data.contacto1 || ""}
-                                    onChange={(e) => updateFielHndler("contacto", e.target.value)}
+                                    id="contacto1"
+                                    name="contacto_principal"
+                                    value={data.contacto_principal || ""}
+                                    onChange={(e) => updateFielHndler("contacto_principal", e.target.value)}
                                 />
                             </Form.Group>
                         </Col>
@@ -303,10 +275,10 @@ const UseForm = ({ data, updateFielHndler }) => {
                             <Form.Control
                                     type="text"
                                     placeholder="950134233"
-                                    id="contacto"
-                                    name="contacto"
-                                    value={data.contacto2 || ""}
-                                    onChange={(e) => updateFielHndler("contacto", e.target.value)}
+                                    id="contacto2"
+                                    name="contacto_alternativo"
+                                    value={data.contacto_alternativo || ""}
+                                    onChange={(e) => updateFielHndler("contacto_alternativo", e.target.value)}
                                 />
                             </Form.Group>
                         </Col>

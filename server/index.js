@@ -22,10 +22,7 @@ app.use(express.json());
 
 var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
 
-app.post('/guardar_queixa', cpUpload, (req, res) => {
-    console.log(req.files);
-
-});
+app.post('/guardar_queixa', cpUpload, QueixaController.store);
 
 
 /*app.post('/login', (req, res) => {
