@@ -13,10 +13,10 @@ import Row from "react-bootstrap/Row";
 import Axios from 'axios';
 import { useState } from 'react';
 import "./details_queixa.css";
+import ModalConfirmacao from "../Modal/modalConfirmation";
 
 var submissao_queixa = "";
 export function queixar(){
-
 const formData = new FormData();
 const file_contrato = document.querySelector("#file_contrato");
 const file_BI = document.querySelector("#file_BI");
@@ -61,9 +61,11 @@ formData.append("fileBI", file_BI.files[0]);
       "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
       }
   }).then((resposta) => {
-    alert(resposta.data.message);
-  }).catch((resposta) =>{
+   alert(resposta.data.message);
+   
+ }).catch((resposta) =>{
     console.log(resposta);
+   
   });
 };
 
@@ -72,6 +74,7 @@ const Thanks = ({ data, updateFielHndler }) => {
   submissao_queixa = data;
   console.log(data)
   return (
+   
       <Row className="mb-3">
         <FloatingLabel
           controlId="floatingTextarea2"
