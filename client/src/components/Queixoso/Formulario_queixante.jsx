@@ -12,12 +12,15 @@ import Footer from "../Footer/footer";
 
 import UseForm from './dados_pessoais';
 import ReviewForm from './dados_da_empresa';
+import Empresa from '../Queixante/Empresa';
+import Trabalhador from '../Queixante/Trabalhador';
 import Thanks from './details_queixa';
 import "./submeter_queixa.css";
 
 // Hooks
 import { useForm } from './useForm';
 import Steps from './Steps';
+import StepQueixante from './Step_queixante';
 import { useState } from 'react';
 
 import CompnentMain from '../container/container';
@@ -32,7 +35,7 @@ const formTemplate = {
 const { Header, Content } = Layout;
 
 
-const FormQueixante = () => {
+const FormQueixante = (props) => {
 
   const [data, setData] = useState(formTemplate)
   const updateFielHndler = (key, value) => {
@@ -42,10 +45,16 @@ const FormQueixante = () => {
     
   };
 
-  
+  let formComponents = [];
+  if(props.queixante != "Empregador")
+  {
+    formComponents = [<Empresa data={data} updateFielHndler={updateFielHndler} />,<Trabalhador data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
+  }
+  else if(props.queixante == "Empregador")
+  {
+    formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler}/>, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
 
-  const formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler} />, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
-
+  }
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
 
@@ -73,7 +82,12 @@ const FormQueixante = () => {
               <Col md={12} className="form-queixa">
                 <Col md={8} className="form-queixa">
                   <div className="form-container">
-                    <Steps currentStep={currentStep} />
+                    {props.queixante == "Empregador"?(
+                      <Steps currentStep={currentStep} />
+                    ):(<p></p>)}
+                    {props.queixante != "Empregador"?(
+                      <StepQueixante currentStep={currentStep} />
+                    ):(<p></p>)}
                     <form onSubmit={(e) => changeStep(currentStep + 1, e)} method="post" enctype="multipart/form-data">
                       <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
                       <div className="actions">

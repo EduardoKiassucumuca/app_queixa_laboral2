@@ -1,0 +1,27 @@
+    body {
+        margin-right: auto;
+        margin-left: auto;
+        background-color: #212529;
+    }
+    
+    .text-anonimo {
+        color: #7a7878;
+        text-align: center;
+        margin: 65px;
+    }
+    
+    .form-descricao:focus {
+        background-color: rgb(45, 52, 61);
+    }
+    
+    .form-anonimo {
+        margin-right: auto;
+        margin-left: auto;
+    }
+    
+    .btn-submeter {
+        border: 1px solid rgb(45, 52, 61);
+        float: right;
+        margin: 1%;
+        margin-bottom: 5%;
+    }

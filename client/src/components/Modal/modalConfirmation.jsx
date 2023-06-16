@@ -34,10 +34,10 @@ const toggleShow = () => setCentredModal(!centredModal);
                 </p>
             </MDBModalBody>
             <MDBModalFooter>
-            <Link to="/queixoso"><Button onClick={props.close} className='btn btn-danger'>
+            <Link to="/queixar_empregador"><Button onClick={props.close} variant='light'>
                 Não
               </Button></Link>
-              <Link to="/"><Button>Sim</Button></Link>
+              <Link to="/queixa_anonima"><Button className='btn btn-dark'>Sim</Button></Link>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

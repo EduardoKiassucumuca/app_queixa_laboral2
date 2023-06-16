@@ -5,7 +5,6 @@ export function useForm(steps) {
     const [currentStep, setCurrentStep] = useState(0);
 
     function changeStep(i, e) {
-        event=e;
         if (e){ 
             e.preventDefault();
             

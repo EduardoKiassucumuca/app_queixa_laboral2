@@ -61,8 +61,9 @@ formData.append("fileBI", file_BI.files[0]);
       "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
       }
   }).then((resposta) => {
-   alert(resposta.data.message);
-   
+   //alert(resposta.data.message);
+   const [showModal, setShowModal] = useState(true);
+   <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>
  }).catch((resposta) =>{
     console.log(resposta);
    

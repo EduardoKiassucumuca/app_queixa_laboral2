@@ -19,7 +19,7 @@ const CompnentMain = () =>{
         <p className="lead-igt">A IGT Tem poder para te ajudar nas seguintes situações: <span class="texto-igt">Trabalhador sem salário ou remuneração, Dispedido injustamente e quando O trabalhador recusa prestar trabalho suplementar pedido pelo empregador.</span></p>
           <Row className='my-Buttons-queixa'>
             <Col md={5}>
-              <a href="#" className="btn btn-lg btn-secondary fw-bold bg-warning btn-queixar" id='btn-queixar-trabalhador'>Queixar Trabalhador</a>
+             <Link to='/queixar_trabalhador'><a href="#" className="btn btn-lg btn-secondary fw-bold bg-warning btn-queixar" id='btn-queixar-trabalhador'>Queixar Trabalhador</a></Link> 
             </Col>
             <Col md={1} className="col-opcao-queixa"><span className='opcao-queixa'> OU </span></Col>
             <Col md={5}><button onClick={() => setShowModal(true)} className="btn btn-lg btn-secondary fw-bold border-white bg-white">Queixar Empregador</button></Col>
