@@ -26,6 +26,8 @@ module.exports = {
         //console.log(req.files['fileContrato'][0].path);
         //console.log(req.files['fileBI'][0].path);
         //console.log(req.body);
+        let queixosoID, queixanteID = 0;
+
 
         try {
 
@@ -136,16 +138,25 @@ module.exports = {
 
             // dados da queixa
             const { _descricao_queixa } = req.body;
+            const { queixante } = req.body;
+            const { queixoso } = req.body;
             const data_queixa = new Date();
             const data_alteracao_queixa = new Date();
             const _fileContrato = req.files['fileContrato'][0].path;
 
+            if (queixante === "Trabalhador") {
+                queixanteID = novoTrabalhador.id;
+                queixosoID = novaEmpresa.id;
+            } else if (queixante == "Empregador") {
+                queixanteID = novaEmpresa.id;
+                queixosoID = novoTrabalhador.id;
+            }
             const novaQueixa = await Queixa.create({
                 facto: _descricao_queixa,
                 created_at: data_queixa,
                 updated_at: data_alteracao_queixa,
-                queixosoID: novoTrabalhador.id,
-                queixanteID: novaEmpresa.id,
+                queixosoID: queixosoID,
+                queixanteID: queixanteID,
                 empresaID: novaEmpresa.id,
                 trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato

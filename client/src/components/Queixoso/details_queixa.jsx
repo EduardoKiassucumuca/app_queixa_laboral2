@@ -55,15 +55,17 @@ formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
 formData.append("_fileContrato", submissao_queixa.fileContrato);
 formData.append("fileContrato", file_contrato.files[0]);
 formData.append("fileBI", file_BI.files[0]);
+formData.append("queixante", "Empregador");
+formData.append("queixoso", "Trabalhador");
 
   Axios.post("http://localhost:3001/guardar_queixa",formData,{
     headers: {
       "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
       }
   }).then((resposta) => {
-   //alert(resposta.data.message);
-   const [showModal, setShowModal] = useState(true);
-   <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>
+   alert(resposta.data.message);
+   /*const [showModal, setShowModal] = useState(true);
+   <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
  }).catch((resposta) =>{
     console.log(resposta);
    

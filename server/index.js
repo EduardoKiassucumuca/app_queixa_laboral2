@@ -25,7 +25,7 @@ var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
 app.post('/guardar_queixa', cpUpload, QueixaController.store);
 
 
-/*app.post('/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;
 
@@ -42,7 +42,7 @@ app.post('/guardar_queixa', cpUpload, QueixaController.store);
             }
         }
     })
-})*/
+})
 
 
 

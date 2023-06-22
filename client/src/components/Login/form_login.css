@@ -1,0 +1,16 @@
+body {
+    background-color: var(--bs-body-color)!important;
+}
+
+.text-primary {
+    font-size: 20px;
+    color: #DAA316 !important;
+}
+
+.title-login {
+    color: white !important;
+}
+
+.p-4 {
+    padding: 4.3rem !important;
+}

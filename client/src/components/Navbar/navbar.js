@@ -10,14 +10,14 @@ function Menu() {
     <>
       <Navbar bg="dark" variant="dark" className="menu-igt">
         <Container className="container-igt">
-          <Navbar.Brand href="#home" className="marca-igt">
+          <Navbar.Brand href="/" className="marca-igt">
             IGT <span className="marca">| Queixa Laboral</span>
           </Navbar.Brand>
         
           <Nav className="me-auto sub-menu">
-            <Nav.Link href="#home" className="myHome">Home</Nav.Link>
+            <Nav.Link href="/" className="myHome">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="/Entrar">Login</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

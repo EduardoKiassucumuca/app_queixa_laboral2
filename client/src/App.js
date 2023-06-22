@@ -8,6 +8,7 @@ import Login from './components/Login/form_login';
 import FormQueixante from './components/Queixoso/Formulario_queixante';
 import QueixaAnonima from './components/Queixoso/queixa_modo_privado';
 import { useState } from 'react';
+import FormQueixoso from './components/Queixante/Form_Queixoso';
 
 function App() {
   const [show, setShow] = useState('Empregador')
@@ -15,8 +16,8 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/queixar_empregador' element={<FormQueixante queixante={show}/>}/>
-          <Route path='/queixar_trabalhador' element={<FormQueixante queixante={!show}/>}/>
+          <Route path='/queixar_empregador' element={<FormQueixante/>}/>
+          <Route path='/queixar_trabalhador' element={<FormQueixoso/>}/>
           <Route path='/Entrar' element={<Login/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/queixa_anonima' element={<QueixaAnonima/>}/>
