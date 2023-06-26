@@ -8,6 +8,8 @@ const { generateKey } = require("crypto");
 const multer = require("multer");
 var upload = require("./config/configMulter");
 
+const ContaController = require('./controllers/ContaController');
+
 
 /*const db = mysql.createPool({
     host: "localhost",
@@ -23,6 +25,8 @@ app.use(express.json());
 var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
 
 app.post('/guardar_queixa', cpUpload, QueixaController.store);
+app.post('/registar/conta', ContaController.store);
+app.post('/auth', ContaController.logar);
 
 
 app.post('/login', (req, res) => {
