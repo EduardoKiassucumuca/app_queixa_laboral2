@@ -17,25 +17,25 @@ const Conta = db.define("Conta", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    trabalhadorID: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: {
-                tableName: 'Trabalhador',
-            },
-            key: 'id'
-        },
-        allowNull: false
-    },
+    /* trabalhadorID: {
+         type: Sequelize.INTEGER,
+         references: {
+             model: {
+                 tableName: 'Trabalhador',
+             },
+             key: 'id'
+         },
+         allowNull: false
+     },*/
 });
 
-Conta.hasOne(Trabalhador, {
+/*Conta.hasOne(Trabalhador, {
     foreignkey: 'fk_trabalhador',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Trabalhador.belongsTo(Conta);
-
+*/
 
 module.exports = Conta;

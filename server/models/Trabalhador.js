@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
 const Pessoa = require('./pessoa');
+const Conta = require('./Conta');
 
 const Trabalhador = db.define("Trabalhador", {
     id: {
@@ -22,14 +23,24 @@ const Trabalhador = db.define("Trabalhador", {
         allowNull: false,
     },
     tipo: {
-      type: Sequelize.STRING,
-      allowNull: false,
-  },
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     pessoaID: {
         type: Sequelize.INTEGER,
         references: {
             model: {
                 tableName: 'Pessoa',
+            },
+            key: 'id'
+        },
+        allowNull: false
+    },
+    contaID: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: {
+                tableName: 'Conta',
             },
             key: 'id'
         },
@@ -43,6 +54,13 @@ Trabalhador.hasOne(Pessoa, {
     onUpdate: 'CASCADE'
 });
 
+Trabalhador.hasOne(Conta, {
+    foreignkey: 'contaID',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+Conta.belongsTo(Trabalhador);
 Pessoa.belongsTo(Trabalhador);
 
 module.exports = Trabalhador;

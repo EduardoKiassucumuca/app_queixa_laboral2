@@ -26,27 +26,31 @@ import Footer from "../Footer/footer";
 
 function Login() {
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
-  const [body, setBody] = useState({username: '', senha:''})
+  const [body, setBody] = useState({email: '', senha:''})
   
   const inputChange = ({target}) => {
     const {name, value} = target
     setBody({
       ...body, [name]: value
     })
+   //console.log(body);
   }
-  const logar = () => {
+
+function logar(){
     
-    console.log(body);
-    Axios.post('http://localhost:3001/login', body)
+   // console.log(body);
+    Axios.post('http://localhost:3001/auth',body,{
+     
+    })
     .then(({data})=>{
        console.log("Teste:",data);
        sessionStorage.setItem("user", JSON.stringify(data));
        navigate("/dashboard");
     })
-    .catch(({response}) =>{
-      console.log(response.data)
+    .catch((res) =>{
+      alert(res.response.data.msg);
     })
   }
 
@@ -83,16 +87,16 @@ function Login() {
       <Form>
       <Form.Group className="mb-3" controlId="formGroupEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Control type="email" placeholder="Enter email" name='email' onChange={inputChange} />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formGroupPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
+        <Form.Control type="password" placeholder="Password" name="senha" onChange={inputChange}  />
       </Form.Group>
     </Form>
 
     <div className="d-grid gap-2">
-      <Button variant="warning" size='lg'>Entrar</Button>
+      <Button variant="warning" size='lg' onClick={logar}>Entrar</Button>
     </div>
         <div className="text-center">
 

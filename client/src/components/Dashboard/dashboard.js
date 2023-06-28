@@ -28,10 +28,10 @@ function Dashboard() {
   const [username, setUsername] = useState("")
   
   const savedUser = sessionStorage.getItem("user");
-  const parseUser = JSON.parse(savedUser);
+  const user_logado = JSON.parse(savedUser);
 
-  console.log(parseUser.username)
-
+  console.log(user_logado);
+  const nome_user_logado = user_logado.pessoa.nome + " " + user_logado.pessoa.sobrenome
   return (
      <Layout>
       <Sider width={250} trigger={null} collapsible collapsed={collapsed} className="meu-menu-vertical">
@@ -43,7 +43,7 @@ function Dashboard() {
           className="img-perfil"
          />
         </div>
-        <h5 className="nome-user">Eduardo Kiassucumuca</h5>
+        <h5 className="nome-user">{nome_user_logado}</h5>
         <Menu
           theme="dark"
           mode="inline"
@@ -66,6 +66,7 @@ function Dashboard() {
             },
           ]}
         />
+       
       </Sider>
       <Layout className="site-layout">
         <Header
@@ -93,8 +94,9 @@ function Dashboard() {
             <Avatar shape="square" icon={<UserOutlined />} />
           </Badge>
         </Space>
-        <span className="nome-perfil-user">Eduardo Kiassucumuca</span>
+        <span className="nome-perfil-user">{nome_user_logado}</span>
         </Header>
+        <p className="localizacao"> Inspector - Luanda </p>
         <Content
           style={{
             margin: '24px 16px',
