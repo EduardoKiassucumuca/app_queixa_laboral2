@@ -11,15 +11,28 @@ import React, { useState } from 'react';
 import img_perfil from "../../img/Eduardo.jpg";
 import ApexCharts from 'apexcharts'
 import Button from 'react-bootstrap/Button';
-
+import Axios from "axios";
 const { Header, Sider, Content } = Layout;
+var lista_queixa = {
+  minha_queixa: [],
+}
+Axios.get('http://localhost:3001/queixas').then(({data})=>
+{
+
+  lista_queixa.minha_queixa = data.queixas;
+})
+.catch((res) =>{
+alert(res.response.data.msg);
+})
 
 function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
+ 
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
+ 
   const { Search } = Input;
   const onSearch = (value) => console.log(value);
 
@@ -30,9 +43,16 @@ function Dashboard() {
   const savedUser = sessionStorage.getItem("user");
   const user_logado = JSON.parse(savedUser);
 
-  console.log(user_logado);
+  //console.log(user_logado.pessoa);
   const nome_user_logado = user_logado.pessoa.nome + " " + user_logado.pessoa.sobrenome
+  //const queixas_selecprovincia = '';
+  lista_queixa.minha_queixa.forEach(queixa=> {
+    //console.log(queixa.provincia);
+  });
+  const queixas_selecprovincia = lista_queixa.minha_queixa.filter(queixa => queixa.provincia === user_logado.trabalhador.localizacao_office);
+  console.log(queixas_selecprovincia);
   return (
+   
      <Layout>
       <Sider width={250} trigger={null} collapsible collapsed={collapsed} className="meu-menu-vertical">
         <div className="div-img-perfil">
@@ -96,7 +116,7 @@ function Dashboard() {
         </Space>
         <span className="nome-perfil-user">{nome_user_logado}</span>
         </Header>
-        <p className="localizacao"> Inspector - Luanda </p>
+        <p className="tipo"> {user_logado.igt_funcionario.tipo} - <span className="localizacao">{user_logado.trabalhador.localizacao_office}</span> </p>
         <Content
           style={{
             margin: '24px 16px',
@@ -159,34 +179,24 @@ function Dashboard() {
                 Nova Queixa
             </Button>
         <table class="table table-striped">
-        <caption>List of users</caption>
+        <caption>Lista de queixas</caption>
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Descrição da Queixa</th>
+      <th scope="col">Provincia</th>
     </tr>
   </thead>
   <tbody>
+    {queixas_selecprovincia.map(conflitos =>(
+
+  
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <th scope="row">{conflitos.id}</th>
+      <td>{conflitos.facto}</td>
+      <td>{conflitos.provincia}</td>
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
+  ))}
   </tbody>
         </table>
         </Content>

@@ -4,16 +4,16 @@ const Pessoa = require('../models/pessoa');
 const Trabalhador = require('../models/Trabalhador');
 const Empresa = require('../models/Empresa');
 const Queixa = require('../models/Queixa');
-
+const Conta = require('../models/Conta');
 
 module.exports = {
     async index(req, res) {
 
         try {
-            const pessoas = await Pessoa.findAll({
-                attributes: ['id', 'nome', 'sobrenome', 'bairro', 'descricao_casa', 'rua', 'nbi', 'provincia', 'data_nascimento']
+            const queixas = await Queixa.findAll({
+                attributes: ['id', 'facto', 'provincia']
             });
-            return res.json(pessoas);
+            res.status(200).json({ queixas });
         } catch (error) {
 
             console.log("Error", error);

@@ -3,28 +3,42 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Trabalhador = require('../models/Trabalhador');
 const Pessoa = require('../models/pessoa');
+const funcionarioIGT = require('../models/FuncionarioIGT');
 
 
 module.exports = {
     async logar(req, res) {
         try {
+            var trabalhador = '';
+            var pessoa = '';
+            var igt_funcionario = '';
+
             const { email, senha } = req.body;
 
             const conta = await Conta.findOne({
-                attributes: ['id', 'email', 'senha'],
+                attributes: ['id', 'email', 'senha', 'user_logado'],
                 where: { email: email }
             });
-            console.log(conta.id);
-            const trabalhador = await Trabalhador.findOne({
-                attributes: ['id', 'cargo', 'localizacao_office', 'pessoaID'],
-                where: { contaID: conta.id }
-            });
-            console.log(trabalhador.id);
-            const pessoa = await Pessoa.findOne({
-                attributes: ['id', 'nome', 'sobrenome'],
-                where: { id: trabalhador.pessoaID }
-            });
+            //conta.user_logado = true;
+            //console.log(conta.id);
+            if (conta) {
+                trabalhador = await Trabalhador.findOne({
+                    attributes: ['id', 'cargo', 'localizacao_office', 'pessoaID'],
+                    where: { contaID: conta.id }
+                });
+            }
+            // console.log(trabalhador.id);
+            if (trabalhador) {
+                pessoa = await Pessoa.findOne({
+                    attributes: ['id', 'nome', 'sobrenome'],
+                    where: { id: trabalhador.pessoaID }
+                });
 
+                igt_funcionario = await funcionarioIGT.findOne({
+                    attributes: ['id', 'trabalhadorID', 'tipo'],
+                    where: { trabalhadorID: trabalhador.id }
+                });
+            }
             if (!conta) {
                 return res.status(404).json({ msg: 'Conta não encontrada!' });
             }
@@ -43,7 +57,7 @@ module.exports = {
                 },
                 secret,
             )
-            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa });
+            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario });
         } catch (error) {
             console.log(error),
                 res.status(500).json({ msg: "Aconteceu um erro no servidor, tente novamente mais tarde!" });
