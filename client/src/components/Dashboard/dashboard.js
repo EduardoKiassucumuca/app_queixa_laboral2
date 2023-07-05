@@ -7,28 +7,39 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Image, Layout, Menu, theme, Input,  Avatar, Badge, Space} from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import img_perfil from "../../img/Eduardo.jpg";
 import ApexCharts from 'apexcharts'
 import Button from 'react-bootstrap/Button';
 import Axios from "axios";
+
 const { Header, Sider, Content } = Layout;
 var lista_queixa = {
   minha_queixa: [],
 }
-Axios.get('http://localhost:3001/queixas').then(({data})=>
-{
+function listar_queixas (){
+   
+}
+window.onload = () => {
+  
+};
 
-  lista_queixa.minha_queixa = data.queixas;
-})
-.catch((res) =>{
-alert(res.response.data.msg);
-})
+
 
 function Dashboard() {
+  const [queixas, setQueixas] = useState([])
   const [collapsed, setCollapsed] = useState(false);
- 
 
+  Axios.get('http://localhost:3001/queixas').then(({data})=>
+  {
+ 
+   setQueixas(data.queixas);
+   //console.log(lista_queixa.minha_queixa)
+ })
+ .catch((res) =>{
+ alert(res.response.data.msg);
+ });
+  
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -43,13 +54,15 @@ function Dashboard() {
   const savedUser = sessionStorage.getItem("user");
   const user_logado = JSON.parse(savedUser);
 
-  //console.log(user_logado.pessoa);
+  console.log(queixas);
   const nome_user_logado = user_logado.pessoa.nome + " " + user_logado.pessoa.sobrenome
   //const queixas_selecprovincia = '';
-  lista_queixa.minha_queixa.forEach(queixa=> {
-    //console.log(queixa.provincia);
-  });
-  const queixas_selecprovincia = lista_queixa.minha_queixa.filter(queixa => queixa.provincia === user_logado.trabalhador.localizacao_office);
+ 
+  const queixas_selecprovincia = queixas.filter(queixa => queixa.provincia === user_logado.trabalhador.localizacao_office);
+  const qtd_queixa_aberto = queixas_selecprovincia.filter(queixa => queixa.estado === "aberto").length;
+  const qtd_queixa_encaminhadasChefe = queixas_selecprovincia.filter(queixa => queixa.estado === "Encaminhadas ao Chefe").length;
+  const qtd_queixa_encaminhadasInspector = queixas_selecprovincia.filter(queixa => queixa.estado === "Encaminhadas ao Inspector").length;
+  const qtd_queixa_encaminhadasfechada = queixas_selecprovincia.filter(queixa => queixa.estado === "fechada").length;
   console.log(queixas_selecprovincia);
   return (
    
@@ -72,15 +85,20 @@ function Dashboard() {
             {
               key: '1',
               icon: <UserOutlined />,
-              label: 'Queixas',
+              label: 'Home',
             },
             {
               key: '2',
+              icon: <UserOutlined />,
+              label: 'Queixas',
+            },
+            {
+              key: '3',
               icon: <VideoCameraOutlined />,
               label: 'Encaminhar Queixas',
             },
             {
-              key: '3',
+              key: '4',
               icon: <UploadOutlined />,
               label: 'Outros',
             },
@@ -135,7 +153,7 @@ function Dashboard() {
                   <span class="progress-right">
                       <span class="progress-bar"></span>
                   </span>
-                  <div class="progress-value">90%</div>
+                  <div class="progress-value">{qtd_queixa_aberto}</div>
               </div>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -147,7 +165,7 @@ function Dashboard() {
                   <span class="progress-right">
                       <span class="progress-bar"></span>
                   </span>
-                  <div class="progress-value">90%</div>
+                  <div class="progress-value">{qtd_queixa_encaminhadasChefe}</div>
               </div>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -159,7 +177,7 @@ function Dashboard() {
                   <span class="progress-right">
                       <span class="progress-bar"></span>
                   </span>
-                  <div class="progress-value">90%</div>
+                  <div class="progress-value">{qtd_queixa_encaminhadasInspector}</div>
               </div>
           </div>
           <div class="col-md-3 col-sm-6">
@@ -171,7 +189,7 @@ function Dashboard() {
                   <span class="progress-right">
                       <span class="progress-bar"></span>
                   </span>
-                  <div class="progress-value">90%</div>
+                  <div class="progress-value">{qtd_queixa_encaminhadasfechada}</div>
               </div>
           </div>
         </div>
@@ -185,6 +203,7 @@ function Dashboard() {
       <th scope="col">#</th>
       <th scope="col">Descrição da Queixa</th>
       <th scope="col">Provincia</th>
+      <th scope="col">Estado</th>
     </tr>
   </thead>
   <tbody>
@@ -195,6 +214,7 @@ function Dashboard() {
       <th scope="row">{conflitos.id}</th>
       <td>{conflitos.facto}</td>
       <td>{conflitos.provincia}</td>
+      <td>{conflitos.estado}</td>
     </tr>
   ))}
   </tbody>

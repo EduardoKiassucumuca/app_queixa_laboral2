@@ -11,7 +11,7 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'facto', 'provincia']
+                attributes: ['id', 'facto', 'provincia', 'estado']
             });
             res.status(200).json({ queixas });
         } catch (error) {
