@@ -1,4 +1,4 @@
-import "./dashboard.css";
+
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -6,16 +6,17 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Image, Layout, theme, Input,  Avatar, Badge, Space} from 'antd';
+import { Image, Layout, theme, Input,  Avatar, Badge, Space, Row, Col, Form} from 'antd';
 import React, { useState, useEffect } from 'react';
 import img_perfil from "../../img/Eduardo.jpg";
 import ApexCharts from 'apexcharts'
 import Button from 'react-bootstrap/Button';
 import Axios from "axios";
 import { Link } from 'react-router-dom';
-import MyMenu from "./menu";
-
-
+import MyMenu from '../Dashboard/menu';
+import "./queixas_recepcionista.css";
+import Card from 'react-bootstrap/Card';
+import { MDBIcon } from 'mdb-react-ui-kit';
 const { Header, Sider, Content } = Layout;
 var lista_queixa = {
   minha_queixa: [],
@@ -23,7 +24,7 @@ var lista_queixa = {
 function listar_queixas (){
    
 }
-function Dashboard() {
+function QueixasRecepcionista() {
   const [queixas, setQueixas] = useState([])
   const [collapsed, setCollapsed] = useState(false);
   React.useEffect(() => {
@@ -99,7 +100,7 @@ function Dashboard() {
           
           <Search
           className="pesquisa"
-            placeholder="Pesquisar"
+            placeholder="Pesuisar"
             allowClear
             enterButton="Search"
             onSearch={onSearch}/>
@@ -111,95 +112,45 @@ function Dashboard() {
         <span className="nome-perfil-user">{nome_user_logado}</span>
         </Header>  
         <p className="tipo"> {user_logado.igt_funcionario.tipo} - <span className="localizacao">{user_logado.trabalhador.localizacao_office}</span> </p>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 640,
-            background: colorBgContainer,
-          }}
-        >  
-       <div class="row status-queixa">
-          <div class="col-md-3 col-sm-6">
-            <h5 className="status-qtd-queixas">Em aberto</h5>
-              <div class="progress blue">
-                  <span class="progress-left">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <span class="progress-right">
-                      <span class="progress-bar"></span>
-                  </span>
-                  <div class="progress-value">{qtd_queixa_aberto}</div>
-              </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-          <h5 className="status-qtd-queixas">Encaminhadas ao chefe</h5>
-              <div class="progress blue">
-                  <span class="progress-left">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <span class="progress-right">
-                      <span class="progress-bar"></span>
-                  </span>
-                  <div class="progress-value">{qtd_queixa_encaminhadasChefe}</div>
-              </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-          <h5 className="status-qtd-queixas">Encaminhadas ao Inspector</h5>
-              <div class="progress blue">
-                  <span class="progress-left">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <span class="progress-right">
-                      <span class="progress-bar"></span>
-                  </span>
-                  <div class="progress-value">{qtd_queixa_encaminhadasInspector}</div>
-              </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-          <h5 className="status-qtd-queixas">Finalizadas</h5>
-              <div class="progress blue">
-                  <span class="progress-left">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <span class="progress-right">
-                      <span class="progress-bar"></span>
-                  </span>
-                  <div class="progress-value">{qtd_queixa_encaminhadasfechada}</div>
-              </div>
-          </div>
-        </div>
-        <Button variant="warning" className='fw-bold btn-add-queixa' type="submit">
-                Nova Queixa
-            </Button>
-        <table class="table table-striped">
-        <caption>Lista de queixas</caption>
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Descrição da Queixa</th>
-      <th scope="col">Provincia</th>
-      <th scope="col">Estado</th>
-    </tr>
-  </thead>
-  <tbody>
-    {queixas_selecprovincia.map(conflitos =>(
-
-  
-    <tr>
-      <th scope="row">{conflitos.id}</th>
-      <td>{conflitos.facto}</td>
-      <td>{conflitos.provincia}</td>
-      <td>{conflitos.estado}</td>
-    </tr>
-  ))}
-  </tbody>
-        </table>
-        </Content>
-     
+        <Row className='queixas'>
+          <Col md={22}>
+            
+            <div class="card">
+           
+              
+             
+                <div class="card-body">
+                <Row className=''>
+                <Col md={1}>
+                <Avatar shape="square" className='avatar-queixoso'>EK</Avatar> 
+                  </Col>
+                  <Col md={15}>
+                  <a href='#' className='titulo-queixa'><p class="card-text ">Trabalho sem salário  # 01 </p></a>
+                
+                <p class="card-title queixoso">Eduardo Kiassucumuca  - Criada a um dia atrás - aberta</p>
+                  
+                  </Col>
+                  <Col md={3}>
+                  <select class="form-select select-inspector" aria-label="Default select example">
+                    <option selected>Inspector</option>
+                  
+                  </select>
+                  </Col>
+                  <Col md={2}>
+                  <select class="form-select select-inspector" aria-label="Default select example">
+                    <option selected>Estado</option>
+                  
+                  </select>
+                 </Col>
+              </Row>
+                </div>
+             
+            </div>
+          </Col>
+        </Row>
       </Layout>
     </Layout>
   );
  
 }
-export default Dashboard;
+export default QueixasRecepcionista;

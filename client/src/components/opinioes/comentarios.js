@@ -5,15 +5,13 @@ import "./comentarios.css";
 import img_person from "../../img/Eduardo.jpg";
 
 
-function Opinioes() {
+function Opinioes(){
     return (
         <>
         <Row className='opinioes'>
         <h1 className='txt-opinioes'>Como a plataforma ajudou você</h1>
             {Array.from({length:3}).map((_, opiniao)=>(
                 <Col md={4}>
-                 
-                        <Card.Img className='img-opinioes rounded-circle' height="80" variant="top" src={img_person} />
                         <Card.Body>
                         <Card.Title className='titulo-artigo'>Eduardo Kiassucumuca</Card.Title>
                         <Card.Text className='detalhes-artigo'>

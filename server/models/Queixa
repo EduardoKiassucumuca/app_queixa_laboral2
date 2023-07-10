@@ -87,6 +87,10 @@ const Queixa = db.define("Queixa", {
         type: Sequelize.STRING,
         allowNull: true,
     },
+    provincia: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
 });
 
 Empresa.hasMany(Queixa, {

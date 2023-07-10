@@ -17,16 +17,7 @@ const Conta = db.define("Conta", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    /* trabalhadorID: {
-         type: Sequelize.INTEGER,
-         references: {
-             model: {
-                 tableName: 'Trabalhador',
-             },
-             key: 'id'
-         },
-         allowNull: false
-     },*/
+
 });
 
 /*Conta.hasOne(Trabalhador, {

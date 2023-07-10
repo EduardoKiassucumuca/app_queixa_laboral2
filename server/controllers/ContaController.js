@@ -65,8 +65,8 @@ module.exports = {
     },
     async store(req, res) {
         try {
-            const email = 'cristiano@hotmail.com';
-            const senha = 'cris1226@';
+            const email = 'marcio@igt.ao';
+            const senha = 'marcio@1229';
             console.log(email);
             const userExist = await Conta.findOne({ where: { email: email } })
             console.log(userExist);

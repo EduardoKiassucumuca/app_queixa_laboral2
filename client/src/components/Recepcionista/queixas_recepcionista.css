@@ -1,0 +1,66 @@
+body {}
+
+.queixas {
+    margin-left: 1%;
+    margin-top: 3%;
+}
+
+.meu-menu-vertical {
+    height: 800px;
+}
+
+.queixa-title {
+    background-color: white !important;
+    border: 1px solid #ddd;
+}
+
+.queixa-body {
+    border: 1px solid #ddd;
+}
+
+.rounded-circle {
+    position: absolute;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+}
+
+.queixoso {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.titulo-queixa {
+    text-decoration: none;
+    color: #5c5555;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.btn-notas {}
+
+.h6-inspector,
+.h6-onde,
+.h6-empresa {
+    font-weight: bold;
+    display: inline-block;
+}
+
+.avatar-queixoso {
+    margin-top: 10px;
+    width: 40px;
+    height: 45px;
+    text-align: center;
+    padding-top: 6px;
+    font-size: 19px;
+}
+
+.select-inspector {
+    border: none;
+}
+
+.minha-label {
+    display: inline-block;
+}

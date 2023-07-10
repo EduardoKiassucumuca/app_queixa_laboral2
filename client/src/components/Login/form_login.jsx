@@ -65,11 +65,11 @@ function logar(){
 
     <h1 className="my-5 display-3 fw-bold ls-tight px-3 title-login">
       Plataforma de Gestão de Queixas Laborais <br />
-      <span className="text-primary">Portal Web para trabalhadores da IGT</span>
+      <span className="text-primary">Portal WEB da IGT</span>
     </h1>
 
     <p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
-      Este portal é gerido pela IGT e acessado pelos funcionarios da mesma instituição.
+      Este portal é gerido pela IGT e acessado pelos funcionarios da mesma instituição e por todo cidadão angolano que carece de ajuda no âmbito laboral.
       Esta, serve para que a IGT consiga gerir os conflitos juridico-laboral no nosso pais.
     </p>
 

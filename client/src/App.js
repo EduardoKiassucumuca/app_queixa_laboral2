@@ -9,6 +9,8 @@ import FormQueixante from './components/Queixoso/Formulario_queixante';
 import QueixaAnonima from './components/Queixoso/queixa_modo_privado';
 import { useState } from 'react';
 import FormQueixoso from './components/Queixante/Form_Queixoso';
+import RecepcionistaQueixa from './components/Recepcionista/queixas_recepcionista';
+
 
 function App() {
   const [show, setShow] = useState('Empregador')
@@ -21,6 +23,7 @@ function App() {
           <Route path='/Entrar' element={<Login/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/queixa_anonima' element={<QueixaAnonima/>}/>
+          <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa/>}/>
         </Routes>
       </Router>
   );

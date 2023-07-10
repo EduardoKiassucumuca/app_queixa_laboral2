@@ -5,6 +5,7 @@ const Trabalhador = require('../models/Trabalhador');
 const Empresa = require('../models/Empresa');
 const Queixa = require('../models/Queixa');
 const Conta = require('../models/Conta');
+const ContaController = require('./ContaController');
 
 module.exports = {
     async index(req, res) {
@@ -89,6 +90,14 @@ module.exports = {
                 enderecoID: novoEndereco.id
             });
 
+            // dados da conta
+            const _email = _nome.substring(0, 1) + _sobrenome.toLowerCase() + "@igt.ao";
+            const _senha = _sobrenome.substring(0, 1) + "demo" + 2023;
+
+            const novaConta = await Conta.create({
+                email: _email,
+                senha: _senha
+            });
             //dados do trabalhador
 
             const { _cargo } = req.body;
@@ -101,7 +110,8 @@ module.exports = {
                 area_departamento: _area_departamento,
                 localizacao_office: _provincia_empresa,
                 tipo: _tipo,
-                pessoaID: novaPessoa.id
+                pessoaID: novaPessoa.id,
+                contaID: novaConta.id
             });
 
 
@@ -159,11 +169,12 @@ module.exports = {
                 queixanteID: queixanteID,
                 empresaID: novaEmpresa.id,
                 trabalhadorID: novoTrabalhador.id,
-                url_file_contrato: _fileContrato
+                url_file_contrato: _fileContrato,
+                provincia: _provincia_empresa
             })
             return res.status(200).send({
                 status: 1,
-                message: 'Queixa Registrada com sucesso!',
+                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
                 Queixa
             });
         } catch (error) {

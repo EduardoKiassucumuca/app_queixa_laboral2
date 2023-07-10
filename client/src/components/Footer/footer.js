@@ -11,7 +11,7 @@ function Footer() {
                 <Nav defaultActiveKey="/home" className="flex-column">
                
                 <Nav.Link className='link-sobre' href="/home">Sobre nós</Nav.Link>
-                    <p className='mb-6 mb-6-footer'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti dolorum, sint corporis nostrum, possimus unde eos vitae eius quasi saepe.</p>   
+                    <p className='mb-6 mb-6-footer'>A IGT, Inspecção Geral do Trabalho, é uma instituição pública, dotada de personalidade jurídica, autonomia administrativa, financeira e patrimonial e tem como finalidade assegurar a aplicação e a observância da legislação laboral, informar, orientar, regular e fiscalizar a acção dos sujeitos da relação jurídico-laboral.</p>   
                 </Nav>  
                 </Col>
                 <Col md={3}>
