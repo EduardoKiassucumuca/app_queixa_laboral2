@@ -30,14 +30,14 @@ const toggleShow = () => setCentredModal(!centredModal);
             </MDBModalHeader>
             <MDBModalBody>
               <p className='texto-anonimato'>
-                Pretende que o teu caso seja tratado de forma anônima?
+                Quem pretende queixar?
                 </p>
             </MDBModalBody>
             <MDBModalFooter>
-            <Link to="/queixar_empregador"><Button onClick={props.close} variant='light'>
-                Não
-              </Button></Link>
-              <Link to="/queixa_anonima"><Button className='btn btn-dark'>Sim</Button></Link>
+            <Link to="/queixar_empregador"><Button onClick={props.close} variant='warning'>
+                Empregador
+              </Button></Link>ou 
+              <Link to="/queixar_trabalhador"> <Button className='btn btn-dark'> Trabalhador</Button></Link>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

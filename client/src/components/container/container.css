@@ -69,7 +69,6 @@ body {
     box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
 }
 
-
 .cover-container {
     max-width: 42em;
     margin-left: auto;
@@ -105,6 +104,7 @@ body {
 .lead-igt {
     font-size: 1rem;
     font-weight: 300;
+    color: white;
 }
 
 .texto-igt {
@@ -122,7 +122,7 @@ body {
 }
 
 .titulo-principal-cover-igt {
-    margin-bottom: 50px;
+    color: white;
 }
 
 .my-Buttons-queixa {
@@ -134,14 +134,24 @@ body {
     margin-top: 10px;
 }
 
-.px-3 {
-    margin-top: 126px;
+.meu-cover {
+    margin-left: auto;
+    margin-right: auto;
 }
-.h-100
-{
-    height:800px !important;
+
+.div-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
-.meu-cover{
-    margin-left:auto;
-    margin-right:auto;
+
+.mymainHero {
+    height: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 55rem;
+}
+
+.meuCover {
+    margin-top: 80px;
 }

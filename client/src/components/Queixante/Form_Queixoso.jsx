@@ -14,7 +14,7 @@ import Empresa from '../Queixante/Empresa';
 import Trabalhador from '../Queixante/Trabalhador';
 import Queixa from '../Queixante/Queixa';
 
-
+import "../Queixoso/submeter_queixa.css";
 
 // Hooks
 
@@ -60,6 +60,9 @@ const FormQueixoso = () => {
   return (
     <Layout className="layout">
       <Menu/>
+      <div className='p-5 text-center bg-trabalhador'>
+        <h1 className='mb-3 h1-queixa'>Queixar Trabalhador</h1>
+      </div>
       <Content
         style={{
           padding: '0 10px',

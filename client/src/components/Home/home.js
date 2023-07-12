@@ -10,12 +10,9 @@ import "./home.css";
 function Home() {
   return (
   <>
-    <div className="meu-cover">
-     <div className="cover-container d-flex w-100 h-100 p-3 mx-auto text-white flex-column">
-      <Menu/>
-      <CompnentMain/>
-     </div>
-     </div>
+   
+    <Menu/>
+    <CompnentMain/>
      <Noticias/>
      <Artigos/>
      <Opinioes/>

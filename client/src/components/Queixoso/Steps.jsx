@@ -14,12 +14,12 @@ const Steps = ({currentStep}) => {
         </div> 
         <div className={`step ${currentStep >=1 ? "active":""}`}>
         <BsCircle/> 
-            <p>Dados da Empresa</p>
+            <p>Identificação da Empresa</p>
             <span class="step2">2</span>
         </div> 
         <div className={`step ${currentStep >=2 ? "active":""}`} id="step-queixa">
         <BsCircle/> 
-            <p>Queixa</p>
+            <p>Narração dos factos</p>
             <span class="step3">3</span>
         </div> 
     </div>

@@ -1,8 +1,12 @@
+html {}
+
+body {}
+
 .form-queixa {
     margin-left: auto;
     margin-right: auto;
     background-color: white;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
 .header h2 {
@@ -33,4 +37,12 @@
 .btn-voltar:hover {
     background-color: #DAA316;
     color: black;
+}
+
+.bg-trabalhador {
+    background-color: #BE8E11;
+}
+
+.h1-queixa {
+    font-weight: bold;
 }

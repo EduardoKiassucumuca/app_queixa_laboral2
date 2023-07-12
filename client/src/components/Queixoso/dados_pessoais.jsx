@@ -28,7 +28,7 @@ const UseForm = ({ data, updateFielHndler }) => {
    const [show, setShow] = useState(false);
 
     return (
-        <div>
+        <>
             <Row className="mb-3">
             <Col md={8}>
                 <Form.Group>
@@ -337,7 +337,7 @@ const UseForm = ({ data, updateFielHndler }) => {
             )}   
             </Col>
             </Row>
-        </div>
+        </>
     )
     
 }

@@ -63,9 +63,12 @@ const FormQueixante = () => {
   return (
     <Layout className="layout">
       <Menu/>
+      <div className='p-5 text-center bg-trabalhador'>
+        <h1 className='mb-3 h1-queixa'>Queixar Empregador</h1>
+      </div>
       <Content
         style={{
-          padding: '0 10px',
+          padding: '0',
         }}
       >
         <div
@@ -75,8 +78,8 @@ const FormQueixante = () => {
             
           }}
         >
-          <Row className=''>
-              <Col md={12} className="form-queixa">
+          <Row className='mb-3'>
+              <Col md={11} className="form-queixa">
                 <Col md={8} className="form-queixa">
                   <div className="form-container">
                       <Steps currentStep={currentStep} />

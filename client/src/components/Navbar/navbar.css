@@ -1,17 +1,39 @@
-
-.marca{
+.marca {
     color: #DAA316;
 }
-.marca-igt, .sub-menu
-{
-    margin-right:auto;
-    margin-left:auto;
+
+.marca-igt,
+.sub-menu {
+    justify-content: center;
 }
-.navbar-nav .nav-link.active, .navbar-nav .show > .nav-link{
-     color: #DAA316;
+
+.navbar-nav .nav-link.active,
+.navbar-nav .show>.nav-link {
+    color: #DAA316;
 }
 
 .nav-link {
     color: white;
 }
 
+.marca-igt {
+    color: white !important;
+}
+
+.myHome {
+    color: #DAA316 !important;
+}
+
+.meu-offcanvas {
+    background-color: #0d0a06 !important;
+}
+
+.offcanvas-header {
+    background-color: #DAA316 !important;
+}
+
+.btn-responsivo {
+    background-color: #33383d !important;
+}
+
+.myJustifyContent {}
