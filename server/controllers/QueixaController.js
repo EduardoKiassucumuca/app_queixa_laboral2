@@ -91,13 +91,8 @@ module.exports = {
             });
 
             // dados da conta
-            const _email = _nome.substring(0, 1) + _sobrenome.toLowerCase() + "@igt.ao";
-            const _senha = _sobrenome.substring(0, 1) + "demo" + 2023;
-
-            const novaConta = await Conta.create({
-                email: _email,
-                senha: _senha
-            });
+            const { _contaID } = req.body;
+            console.log(_contaID);
             //dados do trabalhador
 
             const { _cargo } = req.body;
@@ -111,7 +106,7 @@ module.exports = {
                 localizacao_office: _provincia_empresa,
                 tipo: _tipo,
                 pessoaID: novaPessoa.id,
-                contaID: novaConta.id
+                contaID: _contaID
             });
 
 

@@ -12,11 +12,14 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom"
 import "./details_queixa.css";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 
 var submissao_queixa = "";
+let navigate = "";
 export function queixar(){
+
 const formData = new FormData();
 const file_contrato = document.querySelector("#file_contrato");
 const file_BI = document.querySelector("#file_BI");
@@ -58,12 +61,27 @@ formData.append("fileBI", file_BI.files[0]);
 formData.append("queixante", "Empregador");
 formData.append("queixoso", "Trabalhador");
 
+const contaID = []
+
+Axios.post("http://localhost:3001/registar/conta",{
+  email:"teste@hotmail.com",
+}).then((res)=>{
+  submissao_queixa.contaID = res.data.conta.id;
+  sessionStorage.setItem("conta", JSON.stringify(res.data.conta));
+}).catch((error) =>{
+  console.log(error);
+});
+
+console.log(submissao_queixa);
+formData.append("_contaID", submissao_queixa.contaID);
+
   Axios.post("http://localhost:3001/guardar_queixa",formData,{
     headers: {
       "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
       }
   }).then((resposta) => {
    alert(resposta.data.message);
+   navigate("/Entrar");
    /*const [showModal, setShowModal] = useState(true);
    <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
  }).catch((resposta) =>{
@@ -75,6 +93,7 @@ formData.append("queixoso", "Trabalhador");
 const Thanks = ({ data, updateFielHndler }) => {
   const [show, setShow] = useState(false);
   submissao_queixa = data;
+  navigate = useNavigate();
   console.log(data)
   return (
    

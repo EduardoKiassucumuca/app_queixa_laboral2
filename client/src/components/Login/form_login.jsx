@@ -54,6 +54,9 @@ function logar(){
     })
   }
 
+  const savedConta = sessionStorage.getItem("conta");
+  const conta = JSON.parse(savedConta);
+  console.log(conta);
   return (
     <>
       <Menu/>

@@ -65,18 +65,19 @@ module.exports = {
     },
     async store(req, res) {
         try {
-            const email = 'marcio@igt.ao';
-            const senha = 'marcio@1229';
-            console.log(email);
-            const userExist = await Conta.findOne({ where: { email: email } })
+            const { email } = req.body;
+            const senha = Math.random().toString(36).slice(-10);
+
+            /*const userExist = await Conta.findOne({ where: { email: email } });
             console.log(userExist);
             if (userExist) {
                 return res.status(422).json({ msg: 'Por favor, utilize outro email' });
-            }
+            }*/
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(senha, salt);
             const conta = await Conta.create({ email: email, senha: passwordHash });
-            res.status(200).json({ msg: 'Conta criada com sucesso!' })
+            const novaConta = { conta, senha };
+            return res.status(200).json({ msg: 'Conta criada com sucesso!', novaConta })
         } catch (error) {
             console.log(error);
         }
