@@ -252,6 +252,19 @@ const UseForm = ({ data, updateFielHndler }) => {
                             />
                         </Form.Group>
                 </Col>
+                <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Digite o seu email pessoal"
+                                id="email_pessoal"
+                                name="email_pessoal"
+                                value={data.email_pessoal || ""}
+                                onChange={(e) => updateFielHndler("email_pessoal", e.target.value)}
+                            />
+                        </Form.Group>
+                </Col>
             </Row>
 
            <Row className="mb-3"  id="ultima-row">

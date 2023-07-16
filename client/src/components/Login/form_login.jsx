@@ -37,6 +37,7 @@ const navigate = useNavigate();
     })
    //console.log(body);
   }
+  
 
 function logar(){
     
@@ -46,17 +47,34 @@ function logar(){
     })
     .then(({data})=>{
        console.log("Teste:",data);
-       sessionStorage.setItem("user", JSON.stringify(data));
-       navigate("/dashboard");
+       sessionStorage.setItem("data", JSON.stringify(data));
+       if(data.trabalhador.tipo === "Normal")
+       {
+        navigate("/dashboard_queixoso");
+       }else{
+        navigate("/dashboard");
+       }
+      
     })
     .catch((res) =>{
       alert(res.response.data.msg);
     })
   }
+  const email = "";
+  const senha = "";
 
-  const savedConta = sessionStorage.getItem("conta");
-  const conta = JSON.parse(savedConta);
-  console.log(conta);
+  if(sessionStorage.getItem("resposta"))
+  {
+    const savedResposta = sessionStorage.getItem("resposta");
+    const resposta = JSON.parse(savedResposta);
+    console.log(resposta);
+    email = resposta.data.novaConta.conta.email;
+    senha = resposta.data.novaConta.senha;
+    body.email = email;
+    body.senha = senha;
+    console.log(body.senha);
+  }
+  
   return (
     <>
       <Menu/>
@@ -90,11 +108,11 @@ function logar(){
       <Form>
       <Form.Group className="mb-3" controlId="formGroupEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" name='email' onChange={inputChange} required/>
+        <Form.Control type="email" placeholder="Enter email" name='email'  onChange={inputChange} required/>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formGroupPassword">
+      <Form.Group className="mb-3">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" name="senha" onChange={inputChange}  required/>
+        <input className='form-control' type="password" placeholder="Password" name="senha" onChange={inputChange}  required/>
       </Form.Group>
     </Form>
 
@@ -135,5 +153,4 @@ function logar(){
     </>
   );
 }
-
 export default Login;

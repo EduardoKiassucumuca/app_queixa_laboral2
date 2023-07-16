@@ -19,7 +19,7 @@ import { useState } from 'react';
 import Menu from '../Navbar/navbar';
 import Footer from '../Footer/footer';
 import CompnentMain from '../container/container';
-import { queixar } from './details_queixa';
+//import { queixar } from './details_queixa';
 
 
 const formTemplate = {
@@ -62,7 +62,7 @@ function Submeter_queixa() {
 
                   </button>
                 ) : (
-                  <button type='submit' className='btn fw-bold bg-dark btn-enviar' onClick={queixar}>
+                  <button type='submit' className='btn fw-bold bg-dark btn-enviar'>
                     <span>Enviar</span>
                     <FiSend />
                   </button>

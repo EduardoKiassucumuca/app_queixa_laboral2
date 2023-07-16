@@ -4,6 +4,7 @@ import Submeter_queixa from './components/Queixoso/submeter_queixa';
 import Home from './components/Home/home';
 import Queixoso from './Pages/Queixoso/dados_queixoso';
 import Dashboard from './components/Dashboard/dashboard';
+import Dashboard_queixoso from './components/Dashboard/dashboard_queixoso';
 import Login from './components/Login/form_login';
 import FormQueixante from './components/Queixoso/Formulario_queixante';
 import QueixaAnonima from './components/Queixoso/queixa_modo_privado';
@@ -22,6 +23,7 @@ function App() {
           <Route path='/queixar_trabalhador' element={<FormQueixoso/>}/>
           <Route path='/Entrar' element={<Login/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/dashboard_queixoso' element={<Dashboard_queixoso/>}/>
           <Route path='/queixa_anonima' element={<QueixaAnonima/>}/>
           <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa/>}/>
         </Routes>

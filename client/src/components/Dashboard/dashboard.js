@@ -51,13 +51,19 @@ function Dashboard() {
 
   const [username, setUsername] = useState("")
   const [user, setUser] = useState("")
-  const savedUser = sessionStorage.getItem("user");
+  const savedUser = sessionStorage.getItem("data");
   const user_logado = JSON.parse(savedUser);
+  console.log(user_logado);
 
-  console.log(queixas);
+  //console.log(queixas);
   const nome_user_logado = user_logado.pessoa.nome + " " + user_logado.pessoa.sobrenome
   //const queixas_selecprovincia = '';
- 
+let tipo = '';
+ if(user_logado.igt_funcionario){
+  tipo = user_logado.igt_funcionario.tipo;
+ }else{
+  tipo = "Queixoso";
+ }
   const queixas_selecprovincia = queixas.filter(queixa => queixa.provincia === user_logado.trabalhador.localizacao_office);
   const qtd_queixa_aberto = queixas_selecprovincia.filter(queixa => queixa.estado === "aberto").length;
   const qtd_queixa_encaminhadasChefe = queixas_selecprovincia.filter(queixa => queixa.estado === "Encaminhadas ao Chefe").length;
@@ -110,7 +116,7 @@ function Dashboard() {
         </Space>
         <span className="nome-perfil-user">{nome_user_logado}</span>
         </Header>  
-        <p className="tipo"> {user_logado.igt_funcionario.tipo} - <span className="localizacao">{user_logado.trabalhador.localizacao_office}</span> </p>
+        <p className="tipo"> {tipo} - <span className="localizacao">{user_logado.trabalhador.localizacao_office}</span> </p>
         <Content
           style={{
             margin: '24px 16px',

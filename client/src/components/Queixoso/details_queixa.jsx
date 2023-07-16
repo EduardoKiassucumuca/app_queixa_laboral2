@@ -10,91 +10,19 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Axios from 'axios';
+
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom"
+
 import "./details_queixa.css";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 
-var submissao_queixa = "";
-let navigate = "";
-export function queixar(){
 
-const formData = new FormData();
-const file_contrato = document.querySelector("#file_contrato");
-const file_BI = document.querySelector("#file_BI");
 
-formData.append("_nome", submissao_queixa.nome);
-formData.append("_sobrenome", submissao_queixa.sobrenome);
-formData.append("_nomePai", submissao_queixa.nomePai);
-formData.append("_nomeMae", submissao_queixa.nomeMae);
-formData.append("_bairro", submissao_queixa.bairro);
-formData.append("_rua", submissao_queixa.rua);
-formData.append("_casaEdificio", submissao_queixa.casaEdificio);
-formData.append("_estado_civil", submissao_queixa.ecivil);
-formData.append("_nBI", submissao_queixa.nBI);
-formData.append("_sexo", submissao_queixa.sexo);
-formData.append("_validoAte", submissao_queixa.validoAte);
-formData.append("_emitidoEm", submissao_queixa.emitidoEm);
-formData.append("_naturalidade", submissao_queixa.naturalidade);
-formData.append("_provincia", submissao_queixa.provincia);
-formData.append("_altura", submissao_queixa.altura);
-formData.append("_data_nascimento", submissao_queixa.dtNascimento);
-formData.append("_contacto_principal", submissao_queixa.contacto_principal);
-formData.append("_contacto_alternativo", submissao_queixa.contacto_alternativo);
-formData.append("_cargo", submissao_queixa.cargo);
-formData.append("_area_departamento", submissao_queixa.area_departamento);
-formData.append("_empresa", submissao_queixa.empresa);
-formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
-formData.append("_designacao", submissao_queixa.designacao);
-formData.append("_nif", submissao_queixa.nif);
-formData.append("_edificio", submissao_queixa.edificio);
-formData.append("_ruaEmp", submissao_queixa.ruaEmp);
-formData.append("_bairroEmp", submissao_queixa.bairroEmp);
-formData.append("_website_empresa", submissao_queixa.websiteEmp);
-formData.append("_email_empresa", submissao_queixa.emailEmp);
-formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
-formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-formData.append("_fileContrato", submissao_queixa.fileContrato);
-formData.append("fileContrato", file_contrato.files[0]);
-formData.append("fileBI", file_BI.files[0]);
-formData.append("queixante", "Empregador");
-formData.append("queixoso", "Trabalhador");
-
-const contaID = []
-
-Axios.post("http://localhost:3001/registar/conta",{
-  email:"teste@hotmail.com",
-}).then((res)=>{
-  submissao_queixa.contaID = res.data.conta.id;
-  sessionStorage.setItem("conta", JSON.stringify(res.data.conta));
-}).catch((error) =>{
-  console.log(error);
-});
-
-console.log(submissao_queixa);
-formData.append("_contaID", submissao_queixa.contaID);
-
-  Axios.post("http://localhost:3001/guardar_queixa",formData,{
-    headers: {
-      "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-      }
-  }).then((resposta) => {
-   alert(resposta.data.message);
-   navigate("/Entrar");
-   /*const [showModal, setShowModal] = useState(true);
-   <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
- }).catch((resposta) =>{
-    console.log(resposta);
-   
-  });
-};
 
 const Thanks = ({ data, updateFielHndler }) => {
-  const [show, setShow] = useState(false);
-  submissao_queixa = data;
-  navigate = useNavigate();
-  console.log(data)
+
+ 
+  
   return (
    
       <Row className="mb-3">

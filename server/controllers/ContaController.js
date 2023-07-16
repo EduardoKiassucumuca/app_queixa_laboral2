@@ -9,11 +9,12 @@ const funcionarioIGT = require('../models/FuncionarioIGT');
 module.exports = {
     async logar(req, res) {
         try {
-            var trabalhador = '';
-            var pessoa = '';
-            var igt_funcionario = '';
+            let trabalhador = '';
+            let pessoa = '';
+            let igt_funcionario = '';
 
             const { email, senha } = req.body;
+            console.log("email:", email);
 
             const conta = await Conta.findOne({
                 attributes: ['id', 'email', 'senha', 'user_logado'],
@@ -21,13 +22,14 @@ module.exports = {
             });
             //conta.user_logado = true;
             //console.log(conta.id);
+            console.log(conta.id);
             if (conta) {
                 trabalhador = await Trabalhador.findOne({
-                    attributes: ['id', 'cargo', 'localizacao_office', 'pessoaID'],
+                    attributes: ['id', 'cargo', 'localizacao_office', 'tipo', 'pessoaID'],
                     where: { contaID: conta.id }
                 });
             }
-            // console.log(trabalhador.id);
+            console.log(trabalhador);
             if (trabalhador) {
                 pessoa = await Pessoa.findOne({
                     attributes: ['id', 'nome', 'sobrenome'],
@@ -38,6 +40,8 @@ module.exports = {
                     attributes: ['id', 'trabalhadorID', 'tipo'],
                     where: { trabalhadorID: trabalhador.id }
                 });
+                console.log(pessoa);
+                console.log(igt_funcionario)
             }
             if (!conta) {
                 return res.status(404).json({ msg: 'Conta não encontrada!' });

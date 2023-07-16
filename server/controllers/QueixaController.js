@@ -6,6 +6,8 @@ const Empresa = require('../models/Empresa');
 const Queixa = require('../models/Queixa');
 const Conta = require('../models/Conta');
 const ContaController = require('./ContaController');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
     async index(req, res) {
@@ -91,8 +93,19 @@ module.exports = {
             });
 
             // dados da conta
-            const { _contaID } = req.body;
-            console.log(_contaID);
+            const { _email_pessoal } = req.body;
+            //const senha = Math.random().toString(36).slice(-10);
+            const senha = "12345";
+            /*const userExist = await Conta.findOne({ where: { email: email } });
+            console.log(userExist);
+            if (userExist) {
+                return res.status(422).json({ msg: 'Por favor, utilize outro email' });
+            }*/
+            const salt = await bcrypt.genSalt(12);
+            const passwordHash = await bcrypt.hash(senha, salt);
+            const conta = await Conta.create({ email: _email_pessoal, senha: passwordHash });
+            const novaConta = { conta, senha };
+
             //dados do trabalhador
 
             const { _cargo } = req.body;
@@ -106,7 +119,7 @@ module.exports = {
                 localizacao_office: _provincia_empresa,
                 tipo: _tipo,
                 pessoaID: novaPessoa.id,
-                contaID: _contaID
+                contaID: conta.id
             });
 
 
@@ -170,7 +183,8 @@ module.exports = {
             return res.status(200).send({
                 status: 1,
                 message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
-                Queixa
+                Queixa,
+                novaConta
             });
         } catch (error) {
             console.log(error);
