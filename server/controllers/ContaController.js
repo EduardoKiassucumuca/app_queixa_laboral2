@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Trabalhador = require('../models/Trabalhador');
 const Pessoa = require('../models/pessoa');
+const Queixa = require('../models/Queixa');
+
 const funcionarioIGT = require('../models/FuncionarioIGT');
 
 
@@ -40,8 +42,11 @@ module.exports = {
                     attributes: ['id', 'trabalhadorID', 'tipo'],
                     where: { trabalhadorID: trabalhador.id }
                 });
-                console.log(pessoa);
-                console.log(igt_funcionario)
+
+                queixa = await Queixa.findOne({
+                    attributes: ['id', 'facto', 'estado'],
+                    where: { trabalhadorID: trabalhador.id }
+                });
             }
             if (!conta) {
                 return res.status(404).json({ msg: 'Conta não encontrada!' });
@@ -61,7 +66,7 @@ module.exports = {
                 },
                 secret,
             )
-            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario });
+            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, queixa });
         } catch (error) {
             console.log(error),
                 res.status(500).json({ msg: "Aconteceu um erro no servidor, tente novamente mais tarde!" });

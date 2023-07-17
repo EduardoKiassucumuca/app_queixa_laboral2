@@ -28,11 +28,11 @@ function MySideNav(){
                 <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
             </NavIcon>
             <NavText>
-                Charts
+                Queixa
             </NavText>
             <NavItem eventKey="charts/linechart">
                 <NavText>
-                    Line Char
+                    Pedir Conselho
                 </NavText>
             </NavItem>
             <NavItem eventKey="charts/barchart">
