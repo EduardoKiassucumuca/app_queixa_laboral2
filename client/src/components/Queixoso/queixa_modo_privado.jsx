@@ -12,27 +12,27 @@ import Container from 'react-bootstrap/Container';
 
 const QueixaPrivada = () => {
 
-    return(
+    return (
         <>
-          <Menu/>
-          <h3 className="text-anonimo">Bem vindo a área de submissão de queixas anônimas!</h3>
+            <Menu />
+            <h3 className="text-anonimo">Bem vindo a área de submissão de queixas anônimas!</h3>
             <Container className="container">
                 <Row className="justify-content-md-center">
                     <Col md={12}>
-                    <Form.Control
-                        as="textarea"
-                        placeholder="Descreva o que aconteceu "
-                        className="form-descricao bg-dark text-white"
-                        name="descricao"
-                        id="descr-queixa"
-                        style={{ height: "300px", width:"" }}
-                    />
-                    <Button className='btn fw-bold bg-warning btn-submeter text-dark'>Submeter</Button>
+                        <Form.Control
+                            as="textarea"
+                            placeholder="Descreva o que aconteceu "
+                            className="form-descricao bg-dark text-white"
+                            name="descricao"
+                            id="descr-queixa"
+                            style={{ height: "300px", width: "" }}
+                        />
+                        <Button className='btn fw-bold bg-warning btn-submeter text-dark'>Submeter</Button>
                     </Col>
-                    </Row>
-         </Container>
-           
-            <Footer/>
+                </Row>
+            </Container>
+
+            <Footer />
         </>
     );
 };

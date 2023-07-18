@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Trabalhador = require('../models/Trabalhador');
 const Pessoa = require('../models/pessoa');
 const Queixa = require('../models/Queixa');
+const Empresa = require('../models/Empresa');
 
 const funcionarioIGT = require('../models/FuncionarioIGT');
 
@@ -44,8 +45,12 @@ module.exports = {
                 });
 
                 queixa = await Queixa.findOne({
-                    attributes: ['id', 'facto', 'estado'],
+                    attributes: ['id', 'facto', 'estado', 'empresaID'],
                     where: { trabalhadorID: trabalhador.id }
+                });
+                empresa = await Empresa.findOne({
+                    attributes: ['id', 'nome_empresa'],
+                    where: { id: queixa.empresaID }
                 });
             }
             if (!conta) {
@@ -62,11 +67,11 @@ module.exports = {
             const secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
             //console.log(secret);
             const token = jwt.sign({
-                    id: conta._id,
-                },
+                id: conta._id,
+            },
                 secret,
             )
-            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, queixa });
+            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, empresa, queixa });
         } catch (error) {
             console.log(error),
                 res.status(500).json({ msg: "Aconteceu um erro no servidor, tente novamente mais tarde!" });

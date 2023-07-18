@@ -11,23 +11,24 @@ import QueixaAnonima from './components/Queixoso/queixa_modo_privado';
 import { useState } from 'react';
 import FormQueixoso from './components/Queixante/Form_Queixoso';
 import RecepcionistaQueixa from './components/Recepcionista/queixas_recepcionista';
-
+import QueixarMesmaEmpresa from './components/Dashboard/queixar_mesma_empresa';
 
 function App() {
   const [show, setShow] = useState('Empregador')
   return (
-      <Router>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/queixar_empregador' element={<FormQueixante/>}/>
-          <Route path='/queixar_trabalhador' element={<FormQueixoso/>}/>
-          <Route path='/Entrar' element={<Login/>}/>
-          <Route path='/dashboard' element={<Dashboard/>}/>
-          <Route path='/dashboard_queixoso' element={<Dashboard_queixoso/>}/>
-          <Route path='/queixa_anonima' element={<QueixaAnonima/>}/>
-          <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa/>}/>
-        </Routes>
-      </Router>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/queixar_empregador' element={<FormQueixante />} />
+        <Route path='/queixar_trabalhador' element={<FormQueixoso />} />
+        <Route path='/Entrar' element={<Login />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard_queixoso' element={<Dashboard_queixoso />} />
+        <Route path='/queixa_anonima' element={<QueixaAnonima />} />
+        <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa />} />
+        <Route path='/queixar_mesma_empresa' element={<QueixarMesmaEmpresa />} />
+      </Routes>
+    </Router>
   );
 }
 

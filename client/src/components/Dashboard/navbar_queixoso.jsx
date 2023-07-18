@@ -1,15 +1,20 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
-const MyMenu = (props) => {
+const MyMenu = () => {
+  let data = "";
+  if (sessionStorage.getItem("data")) {
+    const savedData = sessionStorage.getItem("data");
+    data = JSON.parse(savedData);
+  }
   return (
-    <Navbar className="bg-body-tertiary" bg="warning" data-bs-theme="warning">
+    <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
       <Container>
         <Navbar.Brand href="#home"> <span className="nome-sede">IGT | </span><span className="nome-servico">Queixa Laboral</span></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            Logado como: <a href="#login">{props.myData.pessoa.nome} {props.myData.pessoa.sobrenome} </a>
+            Logado como: <a href="#login">{data.pessoa.nome} {data.pessoa.sobrenome} </a>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>
