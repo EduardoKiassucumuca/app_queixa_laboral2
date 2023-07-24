@@ -28,7 +28,9 @@ app.post('/guardar_queixa', cpUpload, QueixaController.store);
 app.post('/registar/conta', ContaController.store);
 app.post('/auth', ContaController.logar);
 app.get('/queixas', QueixaController.index);
-
+app.get('/queixas_do_queixoso', QueixaController.queixas_do_queixoso);
+app.post('/queixar_mesma_empresa', QueixaController.queixar_mesma_empresa);
+app.post('/queixar_outra_empresa', QueixaController.queixar_outra_empresa);
 
 app.post('/login', (req, res) => {
     const { username } = req.body;
@@ -36,7 +38,7 @@ app.post('/login', (req, res) => {
 
     console.log(username)
     sql_login = "SELECT * From utilizador where username=? AND senha=?";
-    db.query(sql_login, [username, senha], function(err, result) {
+    db.query(sql_login, [username, senha], function (err, result) {
         if (err) {
             res.status(500).send(err)
         } else {

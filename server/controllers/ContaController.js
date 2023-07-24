@@ -45,7 +45,7 @@ module.exports = {
                 });
 
                 queixa = await Queixa.findOne({
-                    attributes: ['id', 'facto', 'estado', 'empresaID'],
+                    attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],
                     where: { trabalhadorID: trabalhador.id }
                 });
                 empresa = await Empresa.findOne({

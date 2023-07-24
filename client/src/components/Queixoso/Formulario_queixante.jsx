@@ -42,22 +42,23 @@ const FormQueixante = () => {
   const [show, setShow] = useState(false);
   const [contaID, setContaID] = useState(false);
   const [data, setData] = useState(formTemplate)
+
   const updateFielHndler = (key, value) => {
     setData((prev) => {
       return { ...prev, [key]: value };
     });
 
-    
+
     console.log(data);
   };
 
-  function queixar(){
-   console.log("entrou")
+  function queixar() {
+    console.log("entrou")
     const submissao_queixa = data;
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
-    
+
     formData.append("_nome", submissao_queixa.nome);
     formData.append("_sobrenome", submissao_queixa.sobrenome);
     formData.append("_nomePai", submissao_queixa.nomePai);
@@ -95,7 +96,7 @@ const FormQueixante = () => {
     formData.append("queixante", "Empregador");
     formData.append("queixoso", "Trabalhador");
     formData.append("_email_pessoal", submissao_queixa.email_pessoal);
-    
+
     /*Axios.post("http://localhost:3001/registar/conta",{
       email:"teste2@hotmail.com",
     }).then((res)=>{
@@ -108,26 +109,26 @@ const FormQueixante = () => {
     formData.append("_contaID", contaID);
 
     console.log(contaID);*/
-    
-      Axios.post("http://localhost:3001/guardar_queixa",formData,{
-        headers: {
-          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          }
-      }).then((resposta) => {
-       alert(resposta.data.message);
-       sessionStorage.setItem("resposta", JSON.stringify(resposta));
-       navigate("/Entrar");
-       /*const [showModal, setShowModal] = useState(true);
-       <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-     }).catch((resposta) =>{
-        console.log(resposta);
-       
-      });
-    }  
+
+    Axios.post("http://localhost:3001/guardar_queixa", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      }
+    }).then((resposta) => {
+      alert(resposta.data.message);
+      sessionStorage.setItem("resposta", JSON.stringify(resposta));
+      navigate("/Entrar");
+      /*const [showModal, setShowModal] = useState(true);
+      <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
+    }).catch((resposta) => {
+      console.log(resposta);
+
+    });
+  }
 
   let formComponents = [];
-  
-    formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler}/>, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
+
+  formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler} />, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
 
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
@@ -137,10 +138,10 @@ const FormQueixante = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  
+
   return (
     <Layout className="layout">
-      <Menu/>
+      <Menu />
       <div className='p-5 text-center bg-trabalhador'>
         <h1 className='mb-3 h1-queixa'>Queixar Empregador</h1>
       </div>
@@ -153,45 +154,45 @@ const FormQueixante = () => {
           className="site-layout-content"
           style={{
             background: colorBgContainer,
-            
+
           }}
         >
           <Row className='mb-3'>
-              <Col md={11} className="form-queixa">
-                <Col md={8} className="form-queixa">
-                  <div className="form-container">
-                      <Steps currentStep={currentStep} />
-                  
-                    <form onSubmit={(e) => changeStep(currentStep + 1, e)} method="post" enctype="multipart/form-data">
-                      <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
-                      <div className="actions">
+            <Col md={11} className="form-queixa">
+              <Col md={8} className="form-queixa">
+                <div className="form-container">
+                  <Steps currentStep={currentStep} />
+
+                  <form onSubmit={(e) => changeStep(currentStep + 1, e)} method="post" enctype="multipart/form-data">
+                    <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
+                    <div className="actions">
                       {!isFirstStep && (
-                          <button type='button' className='btn fw-bold bg-default btn-voltar' onClick={() => changeStep(currentStep - 1)}>
-                            <span>Voltar</span>
-                          </button>
-                        )}
-                        {!isLastStep ? (
-                          <button type='submit' className='btn fw-bold bg-dark btn-avancar'>
-                            <span>Avançar</span>
+                        <button type='button' className='btn fw-bold bg-default btn-voltar' onClick={() => changeStep(currentStep - 1)}>
+                          <span>Voltar</span>
+                        </button>
+                      )}
+                      {!isLastStep ? (
+                        <button type='submit' className='btn fw-bold bg-dark btn-avancar'>
+                          <span>Avançar</span>
 
-                          </button>
-                         
-                        ) : (
-                          <button type='submit' className='btn fw-bold bg-dark btn-enviar' onClick={queixar}>
-                            <span>Enviar</span>
-                            <FiSend />
-                          </button>
-                        )}
+                        </button>
 
-                      </div>
-                    </form>
-                  </div>
-                </Col>
-             </Col>
-    </Row>
-  </div>
+                      ) : (
+                        <button type='submit' className='btn fw-bold bg-dark btn-enviar' onClick={queixar}>
+                          <span>Enviar</span>
+                          <FiSend />
+                        </button>
+                      )}
+
+                    </div>
+                  </form>
+                </div>
+              </Col>
+            </Col>
+          </Row>
+        </div>
       </Content>
-      <Footer/>
+      <Footer />
     </Layout>
   );
 };

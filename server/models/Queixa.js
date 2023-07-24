@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
-const Empresa = require('../models/Empresa');
+const Empresa = require('./Empresa.js');
 const Trabalhador = require("./Trabalhador.js");
 const Inspector = require("./Inspector.js");
 const Recepcionista = require("./recepcionista.js");

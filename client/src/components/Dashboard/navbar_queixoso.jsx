@@ -10,7 +10,7 @@ const MyMenu = () => {
   return (
     <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
       <Container>
-        <Navbar.Brand href="#home"> <span className="nome-sede">IGT | </span><span className="nome-servico">Queixa Laboral</span></Navbar.Brand>
+        <Navbar.Brand href="/dashboard_queixoso"> <span className="nome-sede">IGT | </span><span className="nome-servico">Queixa Laboral</span></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
