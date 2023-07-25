@@ -53,12 +53,13 @@ const FormQueixante = () => {
   };
 
   function queixar() {
-    console.log("entrou")
+
     const submissao_queixa = data;
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
-
+    const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
+    console.log(modo);
     formData.append("_nome", submissao_queixa.nome);
     formData.append("_sobrenome", submissao_queixa.sobrenome);
     formData.append("_nomePai", submissao_queixa.nomePai);
@@ -89,6 +90,8 @@ const FormQueixante = () => {
     formData.append("_website_empresa", submissao_queixa.websiteEmp);
     formData.append("_email_empresa", submissao_queixa.emailEmp);
     formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
+    formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+    formData.append("_modo", modo);
     formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
     formData.append("_fileContrato", submissao_queixa.fileContrato);
     formData.append("fileContrato", file_contrato.files[0]);
@@ -121,7 +124,7 @@ const FormQueixante = () => {
       /*const [showModal, setShowModal] = useState(true);
       <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
     }).catch((resposta) => {
-      console.log(resposta);
+      console.log("error", resposta);
 
     });
   }
@@ -157,7 +160,10 @@ const FormQueixante = () => {
 
           }}
         >
-          <Row className='mb-3'>
+          <div class="alert alert-warning alert-queixoso" role="alert">
+            <a href='/entrar' className='alert-link'>Não estou aqui pela primeira vez!</a>
+          </div>
+          <Row className='mb-3 row-queixa'>
             <Col md={11} className="form-queixa">
               <Col md={8} className="form-queixa">
                 <div className="form-container">

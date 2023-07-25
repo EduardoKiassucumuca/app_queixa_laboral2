@@ -1,6 +1,7 @@
 .artigos {
     justify-content: center;
     padding: 70px;
+    margin: 0;
 }
 
 .txt-artigos {
@@ -12,7 +13,7 @@
     top: 10;
     left: -10px;
     z-index: 1;
-    cursor: default!important;
+    cursor: default !important;
 }
 
 .ribbon-artigo:hover {

@@ -44,21 +44,21 @@
 
 .step1 {
     position: absolute;
-    top: 1px;
-    left: 40px;
+    top: 4px !important;
+    left: 40px !important;
     color: #DAA316;
 }
 
 .step2 {
     position: absolute;
-    top: 1px;
-    left: 196px;
+    top: 4px !important;
+    left: 196px !important;
     color: #DAA316;
 }
 
 .step3 {
     position: absolute;
-    top: 6px;
-    left: 350px;
+    top: 6px !important;
+    left: 350px !important;
     color: #DAA316;
 }

@@ -13,6 +13,10 @@ const Queixa = db.define("Queixa", {
         autoIncrement: true,
         allowNull: false,
     },
+    assunto: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     facto: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -88,6 +92,10 @@ const Queixa = db.define("Queixa", {
         allowNull: true,
     },
     provincia: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    modo: {
         type: Sequelize.STRING,
         allowNull: false,
     },

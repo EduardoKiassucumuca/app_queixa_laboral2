@@ -1,5 +1,5 @@
 .igt-footer {
-    background-color: #212529!important;
+    background-color: #212529 !important;
 }
 
 .btn-comentar {
@@ -30,6 +30,7 @@
 
 .row-footer {
     justify-content: center;
+    margin: 0;
 }
 
 .btn-conselho {

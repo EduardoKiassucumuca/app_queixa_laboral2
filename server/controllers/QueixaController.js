@@ -172,7 +172,9 @@ module.exports = {
             })
 
             // dados da queixa
+            const { _assunto_queixa } = req.body;
             const { _descricao_queixa } = req.body;
+            const { _modo } = req.body;
             const { queixante } = req.body;
             const { queixoso } = req.body;
             const data_queixa = new Date();
@@ -187,6 +189,7 @@ module.exports = {
                 queixosoID = novoTrabalhador.id;
             }
             const novaQueixa = await Queixa.create({
+                assunto: _assunto_queixa,
                 facto: _descricao_queixa,
                 created_at: data_queixa,
                 updated_at: data_alteracao_queixa,
@@ -195,7 +198,8 @@ module.exports = {
                 empresaID: novaEmpresa.id,
                 trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato,
-                provincia: _provincia_empresa
+                provincia: _provincia_empresa,
+                modo: _modo
             })
             return res.status(200).send({
                 status: 1,
@@ -293,13 +297,15 @@ module.exports = {
         })
 
         // dados da queixa
+        const { assunto_queixa } = req.body;
         const { _descricao_queixa } = req.body;
+        const { modo } = req.body;
         const { queixante } = req.body;
         const { queixoso } = req.body;
         const data_queixa = new Date();
         const data_alteracao_queixa = new Date();
         const _fileContrato = req.files['fileContrato'][0].path;
-
+        console.log(_descricao_queixa);
         if (queixante === "Trabalhador") {
             queixanteID = novoTrabalhador.id;
             queixosoID = novaEmpresa.id;
@@ -310,6 +316,7 @@ module.exports = {
 
 
         const novaQueixa = await Queixa.create({
+
             facto: desc_queixa,
             created_at: data_queixa,
             updated_at: data_alteracao_queixa,
@@ -318,7 +325,8 @@ module.exports = {
             empresaID: empresaID,
             trabalhadorID: trabalhadorID,
             url_file_contrato: url_file_contrato,
-            provincia: localizacao_queixa
+            provincia: localizacao_queixa,
+            modo: _modo
         })
         return res.status(200).send({
             status: 1,

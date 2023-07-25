@@ -2,7 +2,7 @@ import React from "react"
 import { AiOutlineUser, AiOutlineStar } from 'react-icons/ai'
 import { FiSend } from "react-icons/fi";
 import { BsCircle } from "react-icons/bs";
-import "../Queixoso/Steps.css";
+
 
 const StepsDashboard = ({ currentStep }) => {
     return (

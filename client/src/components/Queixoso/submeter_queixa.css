@@ -46,3 +46,12 @@ body {}
 .h1-queixa {
     font-weight: bold;
 }
+
+.row-queixa {
+    margin: 0;
+}
+
+.alert-queixoso {
+    text-align: center;
+    font-size: 18px;
+}

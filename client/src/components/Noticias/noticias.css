@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     padding: 50px;
+    margin: 0;
 }
 
 .img-noticia,
@@ -15,7 +16,7 @@
     position: absolute;
     top: 10;
     z-index: 1;
-    cursor: default!important;
+    cursor: default !important;
 }
 
 .ribbon-noticia:hover {

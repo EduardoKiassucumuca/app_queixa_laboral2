@@ -9,16 +9,16 @@ import Noticias from "../Noticias/noticias";
 import "./home.css";
 function Home() {
   return (
-  <>
-   
-    <Menu/>
-    <CompnentMain/>
-     <Noticias/>
-     <Artigos/>
-     <Opinioes/>
-     <SubComentario/>
-     <Footer/>
-  </>
+    <>
+
+      <Menu />
+      <CompnentMain />
+      <Noticias />
+      <Artigos />
+      <Opinioes />
+      <SubComentario />
+      <Footer />
+    </>
   );
 }
 
