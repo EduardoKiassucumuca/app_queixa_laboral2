@@ -108,9 +108,19 @@ module.exports = {
                 biID: novoBI.id,
                 enderecoID: novoEndereco.id
             });
+            const { queixante } = req.body;
+            const { queixoso } = req.body;
+            let _email = "";
+            if (queixante === "Trabalhador") {
+                const { _email_pessoal } = req.body;
+                _email = _email_pessoal;
+            } else if (queixante === "Empregador") {
+                const { _email_empresa } = req.body;
+                _email = _email_empresa;
 
+            }
             // dados da conta
-            const { _email_pessoal } = req.body;
+
             //const senha = Math.random().toString(36).slice(-10);
             const senha = "12345";
             /*const userExist = await Conta.findOne({ where: { email: email } });
@@ -120,7 +130,7 @@ module.exports = {
             }*/
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(senha, salt);
-            const conta = await Conta.create({ email: _email_pessoal, senha: passwordHash });
+            const conta = await Conta.create({ email: _email, senha: passwordHash });
             const novaConta = { conta, senha };
 
             //dados do trabalhador
@@ -175,8 +185,7 @@ module.exports = {
             const { _assunto_queixa } = req.body;
             const { _descricao_queixa } = req.body;
             const { _modo } = req.body;
-            const { queixante } = req.body;
-            const { queixoso } = req.body;
+
             const data_queixa = new Date();
             const data_alteracao_queixa = new Date();
             const _fileContrato = req.files['fileContrato'][0].path;

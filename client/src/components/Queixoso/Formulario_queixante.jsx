@@ -27,7 +27,7 @@ import { useState } from 'react';
 import CompnentMain from '../container/container';
 import Axios from "axios";
 import { useNavigate } from "react-router-dom"
-
+import Queixei from './queixei';
 
 const formTemplate = {
   review: "",
@@ -59,7 +59,7 @@ const FormQueixante = () => {
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
-    console.log(modo);
+
     formData.append("_nome", submissao_queixa.nome);
     formData.append("_sobrenome", submissao_queixa.sobrenome);
     formData.append("_nomePai", submissao_queixa.nomePai);
@@ -119,13 +119,12 @@ const FormQueixante = () => {
       }
     }).then((resposta) => {
       alert(resposta.data.message);
-      sessionStorage.setItem("resposta", JSON.stringify(resposta));
+      //sessionStorage.setItem("resposta", JSON.stringify(resposta));
       navigate("/Entrar");
       /*const [showModal, setShowModal] = useState(true);
       <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
     }).catch((resposta) => {
       console.log("error", resposta);
-
     });
   }
 
@@ -160,9 +159,7 @@ const FormQueixante = () => {
 
           }}
         >
-          <div class="alert alert-warning alert-queixoso" role="alert">
-            <a href='/entrar' className='alert-link'>Não estou aqui pela primeira vez!</a>
-          </div>
+          <Queixei />
           <Row className='mb-3 row-queixa'>
             <Col md={11} className="form-queixa">
               <Col md={8} className="form-queixa">

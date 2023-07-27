@@ -42,21 +42,21 @@
     fill: #DAA316;
 }
 
-.step1 {
+.stepMain1 {
     position: absolute;
     top: 4px !important;
     left: 40px !important;
     color: #DAA316;
 }
 
-.step2 {
+.stepMain2 {
     position: absolute;
     top: 4px !important;
     left: 196px !important;
     color: #DAA316;
 }
 
-.step3 {
+.stepMain3 {
     position: absolute;
     top: 6px !important;
     left: 350px !important;
