@@ -29,7 +29,7 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'facto', 'provincia', 'estado'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
                 where: { trabalhadorID: trabalhadorID }
             });
             //console.log(queixas);

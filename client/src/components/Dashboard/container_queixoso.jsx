@@ -3,8 +3,11 @@ import "./container_queixoso.css";
 import Button from 'react-bootstrap/Button';
 import ModalQueixoso from "./modal_queixoso";
 import Axios from "axios";
-const { Row, Col } = require("antd");
+import { FaUser } from "react-icons/fa6";
+import { FaCircle } from "react-icons/fa6";
+import Card from 'react-bootstrap/Card';
 
+const { Row, Col } = require("antd");
 
 
 const Container_queixoso = () => {
@@ -14,6 +17,7 @@ const Container_queixoso = () => {
   if (sessionStorage.getItem("data")) {
     const savedData = sessionStorage.getItem("data");
     data = JSON.parse(savedData);
+    console.log(data);
   }
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
@@ -33,13 +37,50 @@ const Container_queixoso = () => {
   console.log(queixas);
   return (
     <>
-      <Row className="row-queixoso">
-        <Button onClick={() => setShowModal(true)} variant="warning" className='fw-bold btn-nova-queixa' type="submit">
-          Nova Queixa
-        </Button>
-        <ModalQueixoso show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
 
-        <table class="table table-striped table-responsive table-dark">
+
+
+      <Button onClick={() => setShowModal(true)} variant="warning" className='fw-bold btn-nova-queixa' type="submit">
+        Nova Queixa
+      </Button>
+      <ModalQueixoso show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
+      {queixas.map(conflito => (
+        <Card bg='dark' border='secondary' text="warning" className='card-queixas-queixoso'>
+          <div class="ribbon"><span>New</span></div>
+          <Card.Body>
+            <Card.Title>{conflito.id} - Card Title</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+            <Card.Text className='text-queixa'>
+              <a href="#" className='link-queixa-queixoso'>
+                {conflito.facto} Some quick example text to build on the card title and make up the
+                bulk of the card's content.
+              </a>
+            </Card.Text>
+
+          </Card.Body>
+          <Card.Footer>
+            <Row>
+              <Col md={8}>
+                <small className="text-muted">Last updated 3 mins ago </small>
+              </Col>
+
+              <Col md={6}>
+                <small className="text-muted"> <FaUser /><span>Inspector: </span> Edmilson Noé</small>
+              </Col>
+              <Col md={6}>
+                <small className="text-muted">{conflito.provincia}</small>
+              </Col>
+              <Col md={3}>
+
+                <small className="text-muted"><FaCircle className='estado' /> {conflito.estado}</small>
+              </Col>
+            </Row>
+          </Card.Footer>
+        </Card>
+      ))}
+
+
+      {/*<table class="table table-striped table-responsive table-dark">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -58,8 +99,8 @@ const Container_queixoso = () => {
               </tr>
             ))}
           </tbody>
-        </table>
-      </Row>
+            </table>*/}
+
     </>
   );
 }

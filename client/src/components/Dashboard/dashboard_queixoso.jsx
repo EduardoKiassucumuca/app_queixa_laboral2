@@ -7,11 +7,11 @@ import { useState } from "react";
 function Dashboard_queixoso() {
 
   return (
-    <div>
+    <>
       <MySideNav />
       <MyMenu />
       <Container_queixoso />
-    </div>
+    </>
   );
 }
 export default Dashboard_queixoso;
