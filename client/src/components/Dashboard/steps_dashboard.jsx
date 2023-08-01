@@ -10,12 +10,12 @@ const StepsDashboard = ({ currentStep }) => {
             <div className="step active">
                 <BsCircle />
                 <p>Identificação da Empresa</p>
-                <span class="step1">1</span>
+                <span class="stepfirst">1</span>
             </div>
             <div className={`step ${currentStep >= 1 ? "active" : ""}`} id="step-queixa">
                 <BsCircle />
                 <p>Narração dos factos</p>
-                <span class="step2">2</span>
+                <span class="steptwo">2</span>
             </div>
         </div>
 

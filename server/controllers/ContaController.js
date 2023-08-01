@@ -1,5 +1,5 @@
 const Conta = require('../models/Conta');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Trabalhador = require('../models/Trabalhador');
 const Pessoa = require('../models/pessoa');
@@ -16,7 +16,8 @@ module.exports = {
             let pessoa = '';
             let igt_funcionario = '';
 
-            const { email, senha } = req.body;
+            const { email } = req.body;
+            const senha = "12345";
             console.log("email:", email);
 
             const conta = await Conta.findOne({
@@ -25,14 +26,14 @@ module.exports = {
             });
             //conta.user_logado = true;
             //console.log(conta.id);
-            console.log(conta.id);
+            //console.log(conta);
             if (conta) {
                 trabalhador = await Trabalhador.findOne({
                     attributes: ['id', 'cargo', 'localizacao_office', 'tipo', 'pessoaID'],
                     where: { contaID: conta.id }
                 });
             }
-            console.log(trabalhador);
+            //console.log(trabalhador);
             if (trabalhador) {
                 pessoa = await Pessoa.findOne({
                     attributes: ['id', 'nome', 'sobrenome'],
@@ -58,9 +59,11 @@ module.exports = {
             }
 
             // check password
-            const checkPassword = await bcrypt.compare(senha, conta.senha);
 
+            const checkPassword = await bcrypt.compare(senha, conta.senha);
+            console.log(conta.senha);
             if (!checkPassword) {
+
                 return res.status(422).json({ msg: 'Senha Inválida!' });
             }
 

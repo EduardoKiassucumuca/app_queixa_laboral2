@@ -29,7 +29,6 @@ function App() {
         <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa />} />
         <Route path='/queixar_mesma_empresa' element={<QueixarMesmaEmpresa />} />
         <Route path='/queixar_outra_empresa' element={<QueixarOutraEmpresa />} />
-
       </Routes>
     </Router>
   );

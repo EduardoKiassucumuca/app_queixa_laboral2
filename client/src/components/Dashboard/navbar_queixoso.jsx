@@ -13,14 +13,20 @@ import {
 
 import { FaRegSun } from "react-icons/fa6";
 import { FaPowerOff } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 
 const MyMenu = () => {
+  const navigate = useNavigate();
   let data = "";
-  if (sessionStorage.getItem("data")) {
-    const savedData = sessionStorage.getItem("data");
+  if (sessionStorage.getItem("dashboard_queixoso")) {
+    const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
   }
+  const logout = () => {
+    sessionStorage.removeItem("dashboard_queixoso");
+    navigate("/Entrar");
+  };
   return (
     <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
       <Container>
@@ -40,7 +46,7 @@ const MyMenu = () => {
             </NavDropdown.Item>
 
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
+            <NavDropdown.Item onClick={logout}>
               <FaPowerOff /> Sair
             </NavDropdown.Item>
           </NavDropdown>

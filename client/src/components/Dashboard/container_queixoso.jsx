@@ -14,14 +14,14 @@ const Container_queixoso = () => {
   const [showModal, setShowModal] = useState(false);
   const [queixas, setQueixas] = useState([]);
   let data = "";
-  if (sessionStorage.getItem("data")) {
-    const savedData = sessionStorage.getItem("data");
+  if (sessionStorage.getItem("dashboard_queixoso")) {
+    const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
-    console.log(data);
+
   }
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
-    console.log("entrou");
+
     Axios.get('http://localhost:3001/queixas_do_queixoso', {
       params: {
         trabalhadorID: data.trabalhador.id
@@ -31,10 +31,23 @@ const Container_queixoso = () => {
       setQueixas(data.queixas);
       //console.log(lista_queixa.minha_queixa)
     }).catch((res) => {
-      alert(res.response.data.msg);
+      console.log(res.response.data.msg);
     });
   }, []);
-  console.log(queixas);
+
+  const detalhes_queixa = () => {
+    Axios.get('http://localhost:3001/detalhes_queixa', {
+      params: {
+        queixaID: data.trabalhador.id
+      }
+    }).then(({ data }) => {
+
+      setQueixas(data.queixas);
+      //console.log(lista_queixa.minha_queixa)
+    }).catch((res) => {
+      console.log(res.response.data.msg);
+    });
+  }
   return (
     <>
 
@@ -51,7 +64,7 @@ const Container_queixoso = () => {
             <Card.Title>{conflito.id} - Card Title</Card.Title>
             <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
             <Card.Text className='text-queixa'>
-              <a href="#" className='link-queixa-queixoso'>
+              <a href="/detalhes_queixa? +{} " className='link-queixa-queixoso'>
                 {conflito.facto} Some quick example text to build on the card title and make up the
                 bulk of the card's content.
               </a>

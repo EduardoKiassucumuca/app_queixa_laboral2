@@ -5,3 +5,8 @@
 .descricao-queixa {
     border: 1px solid #505457 !important;
 }
+
+.assunto-queixa {
+    border: 1px solid #505457 !important;
+    color: white !important;
+}

@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 function QueixarMesmaEmpresa() {
     const navigate = useNavigate();
     const [descricao_queixa, setDescricao_queixa] = useState('');
-    const descricaoChange = ({ target }) => {
+    const [assunto_queixa, setAssunto_queixa] = useState('');
+    const queixaChange = ({ target }) => {
         setDescricao_queixa(target.value);
+        setAssunto_queixa(target.value);
     }
     console.log(descricao_queixa);
     let data = "";
@@ -29,6 +31,7 @@ function QueixarMesmaEmpresa() {
     function queixarMesmaEmpresa() {
         Axios.post("http://localhost:3001/queixar_mesma_empresa", {
             desc_queixa: descricao_queixa,
+            assunto_queixa: assunto_queixa,
             trabalhadorID: data.trabalhador.id,
             empresaID: data.empresa.id,
             localizacao_queixa: data.trabalhador.localizacao_office,
@@ -52,6 +55,24 @@ function QueixarMesmaEmpresa() {
 
             <Form className="form_queixar_mesma_empresa">
                 <FloatingLabel
+                    controlId="floatingTextarea2"
+                    label="Assunto"
+                    className="text-white"
+                >
+                    <Form.Control
+                        placeholder="Queixa"
+                        name="assunto_queixa"
+                        id="assunto-queixa"
+                        className="assunto-queixa bg-dark "
+                        value={data.assunto_queixa || ""}
+                        onChange={queixaChange}
+                        style={{ padding: "2px" }}
+                        bg="dark"
+                        variant="white"
+                    />
+                </FloatingLabel>
+                <p></p>
+                <FloatingLabel
                     className="text-white"
                     controlId="floatingTextarea2"
                     label="Descreva o que aconteceu"
@@ -62,7 +83,7 @@ function QueixarMesmaEmpresa() {
                         placeholder="Queixa"
                         name="descricao"
                         id="descr-queixa"
-                        onChange={descricaoChange}
+                        onChange={queixaChange}
                         style={{ height: "300px" }}
                     />
                 </FloatingLabel>

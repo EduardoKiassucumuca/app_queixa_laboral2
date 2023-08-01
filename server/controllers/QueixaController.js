@@ -6,7 +6,7 @@ const Empresa = require('../models/Empresa');
 const Queixa = require('../models/Queixa');
 const Conta = require('../models/Conta');
 const ContaController = require('./ContaController');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -111,10 +111,11 @@ module.exports = {
             const { queixante } = req.body;
             const { queixoso } = req.body;
             let _email = "";
-            if (queixante === "Trabalhador") {
+            if (queixoso === "Trabalhador") {
                 const { _email_pessoal } = req.body;
                 _email = _email_pessoal;
-            } else if (queixante === "Empregador") {
+                console.log(_email);
+            } else if (queixoso === "Empregador") {
                 const { _email_empresa } = req.body;
                 _email = _email_empresa;
 
@@ -224,6 +225,7 @@ module.exports = {
     async queixar_mesma_empresa(req, res) {
 
         const { desc_queixa } = req.body;
+        const { assunto_queixa } = req.body;
         const { trabalhadorID } = req.body;
         const { empresaID } = req.body;
         const { url_file_contrato } = req.body;
@@ -234,6 +236,7 @@ module.exports = {
         const queixante = empresaID;
 
         const novaQueixa = await Queixa.create({
+            assunto: assunto_queixa,
             facto: desc_queixa,
             created_at: data_queixa,
             updated_at: data_alteracao_queixa,

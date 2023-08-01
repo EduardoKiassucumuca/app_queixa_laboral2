@@ -28,6 +28,24 @@ const NarracaoFactos = ({ data, updateFielHndler }) => {
         <Row className="mb-3">
             <FloatingLabel
                 controlId="floatingTextarea2"
+                label="Assunto"
+
+            >
+                <Form.Control
+                    placeholder="Queixa"
+                    name="assunto_queixa"
+                    id="assunto-queixa"
+                    className=""
+                    value={data.assunto_queixa || ""}
+                    onChange={(e) => updateFielHndler("assunto_queixa", e.target.value)}
+                    style={{ padding: "2px" }}
+                    bg="dark"
+                    variant="white"
+                />
+            </FloatingLabel>
+            <p></p>
+            <FloatingLabel
+                controlId="floatingTextarea2"
                 label="Descreva o que aconteceu"
             >
                 <Form.Control

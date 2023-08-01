@@ -48,7 +48,7 @@ function Login() {
     })
       .then(({ data }) => {
         console.log("Teste:", data);
-        sessionStorage.setItem("data", JSON.stringify(data));
+        sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data));
         if (data.trabalhador.tipo === "Normal") {
           navigate("/dashboard_queixoso");
         } else {
