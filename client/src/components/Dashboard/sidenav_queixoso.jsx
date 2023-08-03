@@ -23,19 +23,7 @@ function MySideNav() {
                         Home
                     </NavText>
                 </NavItem>
-                <NavItem eventKey="charts">
-                    <NavIcon>
-                        <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
-                    </NavIcon>
-                    <NavText>
-                        Queixa
-                    </NavText>
-                    <NavItem eventKey="charts/linechart">
-                        <NavText>
-                            Pedir Conselho
-                        </NavText>
-                    </NavItem>
-                </NavItem>
+
             </SideNav.Nav>
         </SideNav>
     );

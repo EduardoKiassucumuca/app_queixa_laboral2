@@ -6,8 +6,9 @@ import Axios from "axios";
 import { FaUser } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa6";
 import Card from 'react-bootstrap/Card';
-
-const { Row, Col } = require("antd");
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { Link } from "react-router-dom";
 
 
 const Container_queixoso = () => {
@@ -61,26 +62,19 @@ const Container_queixoso = () => {
         <Card bg='dark' border='secondary' text="warning" className='card-queixas-queixoso'>
           <div class="ribbon"><span>New</span></div>
           <Card.Body>
-            <Card.Title>{conflito.id} - Card Title</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-            <Card.Text className='text-queixa'>
-              <a href="/detalhes_queixa? +{} " className='link-queixa-queixoso'>
-                {conflito.facto} Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </a>
-            </Card.Text>
+            <Link className='link-queixa-queixoso' to={`/ler_queixa/${conflito.id}`}><Card.Title>{conflito.id} - {conflito.assunto}</Card.Title></Link>
 
           </Card.Body>
           <Card.Footer>
             <Row>
-              <Col md={8}>
+              <Col md={3}>
                 <small className="text-muted">Last updated 3 mins ago </small>
               </Col>
 
-              <Col md={6}>
-                <small className="text-muted"> <FaUser /><span>Inspector: </span> Edmilson Noé</small>
+              <Col md={3}>
+                <small className="text-muted"> <FaUser /><span>Inspector: </span> Não atribuido</small>
               </Col>
-              <Col md={6}>
+              <Col md={3}>
                 <small className="text-muted">{conflito.provincia}</small>
               </Col>
               <Col md={3}>

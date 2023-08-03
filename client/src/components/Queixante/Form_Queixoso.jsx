@@ -88,8 +88,8 @@ const FormQueixoso = () => {
     formData.append("_fileContrato", submissao_queixa.fileContrato);
     formData.append("fileContrato", file_contrato.files[0]);
     formData.append("fileBI", file_BI.files[0]);
-    formData.append("queixante", "Empregador");
-    formData.append("queixoso", "Trabalhador");
+    formData.append("queixante", "Trabalhador");
+    formData.append("queixoso", "Empregador");
     formData.append("_email_pessoal", submissao_queixa.email_pessoal);
     console.log(submissao_queixa.emailEmp);
     /*Axios.post("http://localhost:3001/registar/conta",{
@@ -112,7 +112,7 @@ const FormQueixoso = () => {
     }).then((resposta) => {
       alert(resposta.data.message);
       //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-      navigate("/Entrar");
+      //navigate("/Entrar");
       /*const [showModal, setShowModal] = useState(true);
       <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
     }).catch((resposta) => {

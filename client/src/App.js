@@ -13,6 +13,7 @@ import FormQueixoso from './components/Queixante/Form_Queixoso';
 import RecepcionistaQueixa from './components/Recepcionista/queixas_recepcionista';
 import QueixarMesmaEmpresa from './components/Dashboard/queixar_mesma_empresa';
 import QueixarOutraEmpresa from './components/Dashboard/queixar_outra_empresa';
+import LerQueixa from './components/Dashboard/ler_queixa';
 
 function App() {
   const [show, setShow] = useState('Empregador')
@@ -29,6 +30,8 @@ function App() {
         <Route path='/queixas_recepcionista' element={<RecepcionistaQueixa />} />
         <Route path='/queixar_mesma_empresa' element={<QueixarMesmaEmpresa />} />
         <Route path='/queixar_outra_empresa' element={<QueixarOutraEmpresa />} />
+        <Route path='/ler_queixa/:id_queixa' element={<LerQueixa />} />
+
       </Routes>
     </Router>
   );

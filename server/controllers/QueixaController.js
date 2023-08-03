@@ -14,7 +14,7 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'facto', 'provincia', 'estado']
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado']
             });
             res.status(200).json({ queixas });
         } catch (error) {
@@ -24,6 +24,7 @@ module.exports = {
         }
 
     },
+
     async queixas_do_queixoso(req, res) {
         const { trabalhadorID } = req.query;
 
@@ -31,6 +32,24 @@ module.exports = {
             const queixas = await Queixa.findAll({
                 attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
                 where: { trabalhadorID: trabalhadorID }
+            });
+            //console.log(queixas);
+            res.status(200).json({ queixas });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async ler_queixa(req, res) {
+        const { id_queixa } = req.query;
+        console.log(id_queixa);
+
+        try {
+            const queixas = await Queixa.findAll({
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
+                where: { id: id_queixa }
             });
             //console.log(queixas);
             res.status(200).json({ queixas });
@@ -118,6 +137,7 @@ module.exports = {
             } else if (queixoso === "Empregador") {
                 const { _email_empresa } = req.body;
                 _email = _email_empresa;
+                console.log(_email);
 
             }
             // dados da conta
