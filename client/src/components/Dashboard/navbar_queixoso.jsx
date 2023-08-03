@@ -19,9 +19,22 @@ import { useNavigate } from "react-router-dom";
 const MyMenu = () => {
   const navigate = useNavigate();
   let data = "";
+  let nome = "";
+  let sobrenome = "";
+  let empresa = "";
+  let perfil = "";
   if (sessionStorage.getItem("dashboard_queixoso")) {
     const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
+    if (data.trabalhador) {
+      nome = data.pessoa.nome;
+      sobrenome = data.pessoa.sobrenome;
+      perfil = nome + " " + sobrenome;
+    }
+    else if (data.empresa) {
+      empresa = data.empresa.nome_empresa;
+      perfil = empresa;
+    }
   }
   const logout = () => {
     sessionStorage.removeItem("dashboard_queixoso");
@@ -36,7 +49,7 @@ const MyMenu = () => {
           <Avatar shape="square" icon={<UserOutlined />} />
           <NavDropdown
             id="nav-dropdown-dark-example"
-            title={data.pessoa.nome + " " + data.pessoa.sobrenome}
+            title={perfil}
             menuVariant="white"
             className='user-logado'
           >

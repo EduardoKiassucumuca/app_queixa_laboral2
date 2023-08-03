@@ -15,7 +15,7 @@ module.exports = {
             let trabalhador = '';
             let pessoa = '';
             let igt_funcionario = '';
-
+            let empresa = '';
             const { email } = req.body;
             const senha = "12345";
             console.log("email:", email);
@@ -32,6 +32,11 @@ module.exports = {
                     attributes: ['id', 'cargo', 'localizacao_office', 'tipo', 'pessoaID'],
                     where: { contaID: conta.id }
                 });
+                empresa = await Empresa.findOne({
+                    attributes: ['id', 'nome_empresa'],
+                    where: { contaID: conta.id }
+                });
+                console.log("entrei1");
             }
             //console.log(trabalhador);
             if (trabalhador) {
@@ -44,15 +49,15 @@ module.exports = {
                     attributes: ['id', 'trabalhadorID', 'tipo'],
                     where: { trabalhadorID: trabalhador.id }
                 });
-
-                queixa = await Queixa.findOne({
+                console.log("entrei2");
+                /*queixa = await Queixa.findOne({
                     attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],
                     where: { trabalhadorID: trabalhador.id }
                 });
                 empresa = await Empresa.findOne({
                     attributes: ['id', 'nome_empresa'],
                     where: { id: queixa.empresaID }
-                });
+                });*/
             }
             if (!conta) {
                 return res.status(404).json({ msg: 'Conta não encontrada!' });
@@ -74,7 +79,7 @@ module.exports = {
             },
                 secret,
             )
-            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, empresa, queixa });
+            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, empresa });
         } catch (error) {
             console.log(error),
                 res.status(500).json({ msg: "Aconteceu um erro no servidor, tente novamente mais tarde!" });

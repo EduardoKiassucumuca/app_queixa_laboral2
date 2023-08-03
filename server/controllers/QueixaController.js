@@ -26,12 +26,12 @@ module.exports = {
     },
 
     async queixas_do_queixoso(req, res) {
-        const { trabalhadorID } = req.query;
+        const { queixosoID } = req.query;
 
         try {
             const queixas = await Queixa.findAll({
                 attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
-                where: { trabalhadorID: trabalhadorID }
+                where: { queixosoID: queixosoID }
             });
             //console.log(queixas);
             res.status(200).json({ queixas });

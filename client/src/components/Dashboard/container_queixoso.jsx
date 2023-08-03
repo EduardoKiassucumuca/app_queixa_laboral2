@@ -15,17 +15,24 @@ const Container_queixoso = () => {
   const [showModal, setShowModal] = useState(false);
   const [queixas, setQueixas] = useState([]);
   let data = "";
+  let id_queixoso = "";
+
   if (sessionStorage.getItem("dashboard_queixoso")) {
     const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
-
+    if (data.trabalhador) {
+      id_queixoso = data.trabalhador.id
+    }
+    if (data.empresa) {
+      id_queixoso = data.empresa.id
+    }
   }
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
 
     Axios.get('http://localhost:3001/queixas_do_queixoso', {
       params: {
-        trabalhadorID: data.trabalhador.id
+        queixosoID: id_queixoso
       }
     }).then(({ data }) => {
 
@@ -37,7 +44,7 @@ const Container_queixoso = () => {
   }, []);
 
   const detalhes_queixa = () => {
-    Axios.get('http://localhost:3001/detalhes_queixa', {
+    /*Axios.get('http://localhost:3001/detalhes_queixa', {
       params: {
         queixaID: data.trabalhador.id
       }
@@ -48,6 +55,7 @@ const Container_queixoso = () => {
     }).catch((res) => {
       console.log(res.response.data.msg);
     });
+  */
   }
   return (
     <>
