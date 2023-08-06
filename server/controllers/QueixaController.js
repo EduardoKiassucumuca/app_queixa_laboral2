@@ -127,49 +127,28 @@ module.exports = {
                 biID: novoBI.id,
                 enderecoID: novoEndereco.id
             });
-            const { queixante } = req.body;
-            const { queixoso } = req.body;
-            let _email = "";
-            if (queixoso === "Trabalhador") {
-                const { _email_pessoal } = req.body;
-                _email = _email_pessoal;
-                console.log(_email);
-            } else if (queixoso === "Empregador") {
-                const { _email_empresa } = req.body;
-                _email = _email_empresa;
-                console.log(_email);
-
-            }
             // dados da conta
 
             //const senha = Math.random().toString(36).slice(-10);
-            const senha = "12345";
+
             /*const userExist = await Conta.findOne({ where: { email: email } });
             console.log(userExist);
             if (userExist) {
                 return res.status(422).json({ msg: 'Por favor, utilize outro email' });
             }*/
-            const salt = await bcrypt.genSalt(12);
-            const passwordHash = await bcrypt.hash(senha, salt);
-            const conta = await Conta.create({ email: _email, senha: passwordHash });
-            const novaConta = { conta, senha };
+
 
             //dados do trabalhador
+
+
+            const { queixante } = req.body;
+            const { queixoso } = req.body;
+            let _email = "";
 
             const { _cargo } = req.body;
             const { _area_departamento } = req.body;
             const { _provincia_empresa } = req.body;
             const _tipo = "Normal";
-
-            const novoTrabalhador = await Trabalhador.create({
-                cargo: _cargo,
-                area_departamento: _area_departamento,
-                localizacao_office: _provincia_empresa,
-                tipo: _tipo,
-                pessoaID: novaPessoa.id,
-                contaID: conta.id
-            });
-
 
             // endereço da empresa
 
@@ -193,14 +172,71 @@ module.exports = {
             const { _email_empresa } = req.body;
             const { _website_empresa } = req.body;
 
-            const novaEmpresa = await Empresa.create({
-                nome_empresa: _empresa,
-                nif: _nif,
-                designacao: _designacao,
-                email: _email_empresa,
-                url_website: _website_empresa,
-                enderecoID: novoEnderecoEmp.id
-            })
+
+            let novoTrabalhador = "";
+            let novaEmpresa = "";
+            let novaConta = "";
+
+            if (queixoso === "Trabalhador") {
+                const { _email_pessoal } = req.body;
+                _email = _email_pessoal;
+                //console.log(_email);
+                const senha = "12345";
+                const salt = await bcrypt.genSalt(12);
+                const passwordHash = await bcrypt.hash(senha, salt);
+                const conta = await Conta.create({ email: _email, senha: passwordHash });
+                novaConta = { conta, senha };
+
+                novoTrabalhador = await Trabalhador.create({
+                    cargo: _cargo,
+                    area_departamento: _area_departamento,
+                    localizacao_office: _provincia_empresa,
+                    tipo: _tipo,
+                    pessoaID: novaPessoa.id,
+                    contaID: conta.id
+                });
+                novaEmpresa = await Empresa.create({
+                    nome_empresa: _empresa,
+                    nif: _nif,
+                    designacao: _designacao,
+                    email: _email_empresa,
+                    url_website: _website_empresa,
+                    enderecoID: novoEnderecoEmp.id,
+                    fk_conta: 0
+                });
+
+            } else if (queixoso === "Empregador") {
+                const { _email_empresa } = req.body;
+                _email = _email_empresa;
+                const senha = "12345";
+                const salt = await bcrypt.genSalt(12);
+                const passwordHash = await bcrypt.hash(senha, salt);
+                const conta = await Conta.create({ email: _email, senha: passwordHash });
+                novaConta = { conta, senha };
+                console.log("conta_empresa: " + conta.id);
+                novoTrabalhador = await Trabalhador.create({
+                    cargo: _cargo,
+                    area_departamento: _area_departamento,
+                    localizacao_office: _provincia_empresa,
+                    tipo: _tipo,
+                    pessoaID: novaPessoa.id,
+                    contaID: 0
+                });
+                novaEmpresa = await Empresa.create({
+                    nome_empresa: _empresa,
+                    nif: _nif,
+                    designacao: _designacao,
+                    email: _email_empresa,
+                    url_website: _website_empresa,
+                    enderecoID: novoEnderecoEmp.id,
+                    fk_conta: conta.id
+                });
+            }
+
+
+
+
+
 
             // dados da queixa
             const { _assunto_queixa } = req.body;

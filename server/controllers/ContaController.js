@@ -34,7 +34,7 @@ module.exports = {
                 });
                 empresa = await Empresa.findOne({
                     attributes: ['id', 'nome_empresa'],
-                    where: { contaID: conta.id }
+                    where: { fk_conta: conta.id }
                 });
                 console.log("entrei1");
             }

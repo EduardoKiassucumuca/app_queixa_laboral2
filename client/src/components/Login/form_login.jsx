@@ -49,18 +49,10 @@ function Login() {
       .then(({ data }) => {
         console.log("Teste:", data);
         sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data));
-        if (data.trabalhador) {
-          if (data.trabalhador.tipo === "Normal") {
-            navigate("/dashboard_queixoso");
-          } else {
-            navigate("/dashboard");
-          }
+        if (data.trabalhador != null || data.empresa != null) {
+          navigate("/dashboard_queixoso");
         } else {
-          if (data.empresa) {
-            navigate("/dashboard_queixoso");
-          } else {
-            navigate("/dashboard");
-          }
+          navigate("/dashboard");
         }
 
       })

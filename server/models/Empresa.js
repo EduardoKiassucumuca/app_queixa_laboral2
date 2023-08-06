@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
 const Endereco = require('../models/endereco');
+const Conta = require("./Conta.js");
 
 const Empresa = db.define("Empresa", {
     id: {
@@ -39,6 +40,16 @@ const Empresa = db.define("Empresa", {
         },
         allowNull: false
     },
+    fk_conta: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: {
+                tableName: 'Conta',
+            },
+            key: 'id'
+        },
+        allowNull: false
+    },
 });
 
 Empresa.hasOne(Endereco, {
@@ -46,7 +57,11 @@ Empresa.hasOne(Endereco, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
-
+Empresa.hasOne(Conta, {
+    foreignkey: 'fk_conta',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
 Endereco.belongsTo(Empresa);
 
 module.exports = Empresa;

@@ -29,7 +29,7 @@ const Container_queixoso = () => {
   }
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
-
+    //console.log("ok");
     Axios.get('http://localhost:3001/queixas_do_queixoso', {
       params: {
         queixosoID: id_queixoso
@@ -37,10 +37,12 @@ const Container_queixoso = () => {
     }).then(({ data }) => {
 
       setQueixas(data.queixas);
+      console.log(id_queixoso);
       //console.log(lista_queixa.minha_queixa)
     }).catch((res) => {
       console.log(res.response.data.msg);
     });
+
   }, []);
 
   const detalhes_queixa = () => {

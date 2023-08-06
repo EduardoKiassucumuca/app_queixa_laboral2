@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 import ModalQueixoso from "./modal_queixoso";
 
 function LerQueixa() {
+
     const { id_queixa } = useParams();
     //console.log(id_queixa)
     const [conflito, setConflito] = useState({});
@@ -32,12 +33,25 @@ function LerQueixa() {
             console.log(res);
         });
     }, []);
+
     let data = "";
+    let nome = "";
+    let sobrenome = "";
+    let empresa = "";
+    let perfil = "";
     if (sessionStorage.getItem("dashboard_queixoso")) {
         const savedData = sessionStorage.getItem("dashboard_queixoso");
         data = JSON.parse(savedData);
+        if (data.trabalhador) {
+            nome = data.pessoa.nome;
+            sobrenome = data.pessoa.sobrenome;
+            perfil = nome + " " + sobrenome;
+        }
+        else if (data.empresa) {
+            empresa = data.empresa.nome_empresa;
+            perfil = empresa;
+        }
     }
-    console.log(conflito);
 
     return (
         <>
@@ -77,7 +91,7 @@ function LerQueixa() {
             </Card>
             <p></p>
             <Alert variant="warning" className="nota-queixa">
-                <Alert.Heading>Hi, {data.pessoa.nome} {data.pessoa.sobrenome}</Alert.Heading>
+                <Alert.Heading>Hi, {perfil}</Alert.Heading>
                 <p>
                     Recebemos a sua queixa e estamos trabalhando para que consigamos resolver. Assim que tivermos mais detalhes iremos informar,
 

@@ -112,7 +112,7 @@ const FormQueixoso = () => {
     }).then((resposta) => {
       alert(resposta.data.message);
       //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-      //navigate("/Entrar");
+      navigate("/Entrar");
       /*const [showModal, setShowModal] = useState(true);
       <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
     }).catch((resposta) => {
