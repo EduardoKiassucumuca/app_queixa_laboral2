@@ -50,7 +50,6 @@ const FormQueixante = () => {
     });
 
 
-    console.log(data);
   };
 
   function queixar() {
@@ -135,11 +134,8 @@ const FormQueixante = () => {
 
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
-
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
-  console.log(novoTrabalhador);
-  data.nome = novoTrabalhador.Pessoa.nome;
 
   const {
     token: { colorBgContainer },

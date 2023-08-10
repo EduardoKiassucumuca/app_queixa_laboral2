@@ -444,6 +444,44 @@ module.exports = {
         }
 
     },
+    async getEmpresas(req, res) {
+
+
+        try {
+
+            const empresas = await Empresa.findAll({
+                attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'email', 'url_website', 'enderecoID'],
+
+            });
+            const endereco_empresas = await Endereco.findAll({
+                attributes: ['id', 'bairro', 'rua', 'edificio', 'casa', 'provincia', 'telefone_principal', 'telefone_alternativo'],
+            });
+            data_empresas = [];
+            const data_empresa = {
+                empresa: "",
+                endereco: ""
+            }
+            empresas.forEach(empresa => {
+                endereco_empresas.forEach(endereco => {
+                    if (empresa.enderecoID == endereco.id) {
+                        data_empresa.empresa = empresa;
+                        data_empresa.endereco = endereco;
+                    }
+
+
+                });
+                data_empresas.push(data_empresa);
+            });
+
+
+            res.status(200).json({ data_empresas });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
     async update(req, res) {
 
         const { nome } = req.params;

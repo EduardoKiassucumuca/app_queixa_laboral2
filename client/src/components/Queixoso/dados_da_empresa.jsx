@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     BsFillEmojiHeartEyesFill,
     BsFillEmojiSmileFill,
@@ -11,12 +11,43 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import "./dados_da_empresa.css";
 
+import Axios from "axios";
 
 
 
 const ReviewForm = ({ data, updateFielHndler }) => {
+
+    const [empresas, setEmpresas] = useState([]);
+    React.useEffect(() => {
+        //console.log("ok");
+        Axios.get('http://localhost:3001/empresas', {
+        }).then(({ data }) => {
+
+            setEmpresas(data.data_empresas);
+
+            //console.log(lista_queixa.minha_queixa)
+        }).catch((res) => {
+            console.log(res.response.data.msg);
+        });
+
+        console.log(empresas)
+
+    }, []);
     return (
         <>
+            <Form.Group>
+                <Form.Label>Empresas</Form.Label>
+                <Form.Select defaultValue="Choose..."
+                    name="localizacaoEmp"
+                    id="provincia_emp"
+                    value={data.localizacaoEmp || ""}
+                    onChange={(e) => updateFielHndler("localizacaoEmp", e.target.value)}>
+
+                    {empresas.map(item => (
+                        <option>{item.empresa.id}</option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
             <div class="card">
                 <div class="card-header">
                     Empresa

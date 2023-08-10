@@ -5,3 +5,12 @@
 .btn-add:hover {
     color: white;
 }
+
+.h3-cTrabalhador {
+    text-align: center;
+    color: #DAA316;
+}
+
+.span-cTrabalhador {
+    color: black;
+}

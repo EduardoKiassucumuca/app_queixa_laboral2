@@ -44,6 +44,8 @@ const ValidacaoTrabalhador = () => {
     }
     const validar_BI = (e) => {
         e.preventDefault();
+        localStorage.clear();
+
         Axios.post('http://localhost:3001/validar_BI', {
 
             nBilhete: BI
