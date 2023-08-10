@@ -28,6 +28,7 @@ import CompnentMain from '../container/container';
 import Axios from "axios";
 import { useNavigate } from "react-router-dom"
 import Queixei from './queixei';
+import ValidacaoQueixoso from './validacao_trabalhador';
 
 const formTemplate = {
   review: "",
@@ -135,7 +136,10 @@ const FormQueixante = () => {
 
   const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
 
-
+  const trabalhador = localStorage.getItem("trabalhador");
+  const novoTrabalhador = JSON.parse(trabalhador);
+  console.log(novoTrabalhador);
+  data.nome = novoTrabalhador.Pessoa.nome;
 
   const {
     token: { colorBgContainer },

@@ -1,0 +1,43 @@
+html {}
+
+body {}
+
+
+
+.header h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.btn-validar,
+.btn-validar:hover {
+    color: #DAA316;
+}
+
+.btn-validar {
+    float: right;
+    margin-top: 1%;
+}
+
+
+.bg-trabalhador {
+    background-color: #BE8E11;
+}
+
+.h1-queixa {
+    font-weight: bold;
+}
+
+.row-queixa {
+    margin: 0;
+}
+
+.alert-queixoso {
+    text-align: center;
+    font-size: 18px;
+}
+
+.row-BI-Validacao {
+    margin: 0;
+    height: 300px;
+}

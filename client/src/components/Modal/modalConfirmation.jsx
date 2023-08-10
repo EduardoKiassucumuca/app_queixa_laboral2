@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 const ModalConfirmacao = (props) => {
   const [centredModal, setCentredModal] = useState(false);
 
-const toggleShow = () => setCentredModal(!centredModal);
+  const toggleShow = () => setCentredModal(!centredModal);
 
   return (
     <>
@@ -31,12 +31,12 @@ const toggleShow = () => setCentredModal(!centredModal);
             <MDBModalBody>
               <p className='texto-anonimato'>
                 Quem pretende queixar?
-                </p>
+              </p>
             </MDBModalBody>
             <MDBModalFooter>
-            <Link to="/queixar_empregador"><Button onClick={props.close} variant='warning'>
+              <Link to="/validacao_trabalhador"><Button onClick={props.close} variant='warning'>
                 Empregador
-              </Button></Link>ou 
+              </Button></Link>ou
               <Link to="/queixar_trabalhador"> <Button className='btn btn-dark'> Trabalhador</Button></Link>
             </MDBModalFooter>
           </MDBModalContent>

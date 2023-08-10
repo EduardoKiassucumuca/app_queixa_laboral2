@@ -403,6 +403,47 @@ module.exports = {
         });
 
     },
+    async validarBI(req, res) {
+        const { nBilhete } = req.body;
+
+
+        try {
+            const checkBI = await BI.findOne({
+                attributes: ['id', 'emitido_em', 'valido_ate', 'file', 'numeroBI'],
+                where: { numeroBI: nBilhete }
+            });
+
+            const checkPessoa = await Pessoa.findOne({
+                attributes: ['id', 'nome', 'sobrenome', 'nome_pai', 'nome_mae', 'naturalidade', 'altura', 'estado_civil', 'sexo', 'data_nascimento', 'biID', 'enderecoID'],
+                where: { biID: checkBI.id }
+            });
+
+            const checkEndereco = await Endereco.findOne({
+                attributes: ['id', 'bairro', 'rua', 'edificio', 'casa', 'provincia', 'telefone_principal', 'telefone_alternativo'],
+                where: { id: checkPessoa.enderecoID }
+            });
+            const checkTrabalhador = await Trabalhador.findOne({
+                attributes: ['id', 'cargo', 'area_departamento', 'localizacao_office', 'pessoaID', 'contaID'],
+                where: { pessoaID: checkPessoa.id }
+            });
+
+            const queixoso = {
+                BI: checkBI,
+                Pessoa: checkPessoa,
+                Endereco: checkEndereco,
+                Trabalhador: checkTrabalhador
+            }
+
+
+            res.status(200).json({ msg: 'Queixoso já existe!', queixoso });
+
+        } catch (error) {
+
+            res.status(404).json({ msg: 'Queixoso não encontrado!' })
+
+        }
+
+    },
     async update(req, res) {
 
         const { nome } = req.params;
