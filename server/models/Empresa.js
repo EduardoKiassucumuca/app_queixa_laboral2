@@ -52,7 +52,7 @@ const Empresa = db.define("Empresa", {
     },
 });
 
-Empresa.hasOne(Endereco, {
+Endereco.hasOne(Empresa, {
     foreignkey: 'enderecoID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -62,6 +62,6 @@ Empresa.hasOne(Conta, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
-Endereco.belongsTo(Empresa);
+Empresa.belongsTo(Endereco);
 
 module.exports = Empresa;

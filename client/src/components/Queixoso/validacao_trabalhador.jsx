@@ -56,7 +56,7 @@ const ValidacaoTrabalhador = () => {
             setShowModal(true);
             setQueixoso(true);
             localStorage.setItem("trabalhador", JSON.stringify(res.data.queixoso));
-            console.log(localStorage.getItem("trabalhador"));
+
             navigate("/queixar_empregador")
         }).catch((res) => {
             //console.log(res.response.data.msg);
@@ -65,7 +65,7 @@ const ValidacaoTrabalhador = () => {
             setQueixoso(false)
         });
     }
-
+    //console.log(localStorage.getItem("trabalhador"));
     let formComponents = [];
 
 

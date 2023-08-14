@@ -28,6 +28,9 @@ const Thanks = ({ data, updateFielHndler }) => {
 
   };
 
+  const trabalhador = localStorage.getItem("trabalhador");
+  const novoTrabalhador = JSON.parse(trabalhador);
+
   return (
 
     <Row className="mb-3">
@@ -70,19 +73,24 @@ const Thanks = ({ data, updateFielHndler }) => {
         />
 
       </Col>
-      <Col md={6}>
-        <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
+      {!novoTrabalhador ? (
+        <Col md={6}>
+          <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
 
-        <Form.Control
-          type="file"
-          name="file_BI"
-          id="file_BI"
-          required
-        />
+          <Form.Control
+            type="file"
+            name="file_BI"
+            id="file_BI"
+            required
+          />
 
 
-      </Col>
-      <p></p>
+        </Col>
+      ) : (
+        <p></p>
+      )}
+
+
       <Col md={6}>
         <Form.Check // prettier-ignore
           type="switch"

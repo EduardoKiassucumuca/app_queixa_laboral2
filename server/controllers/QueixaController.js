@@ -8,6 +8,7 @@ const Conta = require('../models/Conta');
 const ContaController = require('./ContaController');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { where } = require('sequelize');
 
 module.exports = {
     async index(req, res) {
@@ -444,40 +445,87 @@ module.exports = {
         }
 
     },
+    async add_queixa(req, res) {
+
+        const { _assunto_queixa } = req.body;
+        const { _descricao_queixa } = req.body;
+        const { _modo } = req.body;
+        const { queixante } = req.body;
+        const { queixoso } = req.body;
+        const data_queixa = new Date();
+        const data_alteracao_queixa = new Date();
+        const _fileContrato = req.files['fileContrato'][0].path;
+        const { _trabalhadorID } = req.body;
+        const { _empresaID } = req.body;
+        const queixosoID = 0;
+        const queixanteID = 0;
+        if (queixoso === "Trabalhador") {
+            queixosoID = novoTrabalhador.id;
+            queixanteID = novaEmpresa.id;
+        } else if (queixoso === "Empregador") {
+            queixosoID = novaEmpresa.id;
+            queixanteID = novoTrabalhador.id;
+        }
+
+        const novaQueixa = await Queixa.create({
+
+            assunto: _assunto_queixa,
+            facto: _descricao_queixa,
+            created_at: data_queixa,
+            updated_at: data_alteracao_queixa,
+            queixosoID: queixosoID,
+            queixanteID: queixanteID,
+            empresaID: empresaID,
+            trabalhadorID: trabalhadorID,
+            url_file_contrato: url_file_contrato,
+            provincia: localizacao_queixa,
+            modo: _modo
+        })
+        return res.status(200).send({
+            status: 1,
+            message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+            Queixa,
+        });
+
+
+        try {
+
+        } catch (error) {
+
+            res.status(404).json({ msg: 'Queixoso não encontrado!' })
+
+        }
+
+    },
     async getEmpresas(req, res) {
 
 
         try {
 
-            const empresas = await Empresa.findAll({
-                attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'email', 'url_website', 'enderecoID'],
+            Empresa.findAll({
 
-            });
-            const endereco_empresas = await Endereco.findAll({
-                attributes: ['id', 'bairro', 'rua', 'edificio', 'casa', 'provincia', 'telefone_principal', 'telefone_alternativo'],
-            });
-            data_empresas = [];
-            const data_empresa = {
-                empresa: "",
-                endereco: ""
-            }
-            empresas.forEach(empresa => {
-                endereco_empresas.forEach(endereco => {
-                    if (empresa.enderecoID == endereco.id) {
-                        data_empresa.empresa = empresa;
-                        data_empresa.endereco = endereco;
+
+                include: [
+                    {
+                        association: 'Endereco',
+                        required: true,
+                        attributes: ['id', 'bairro', 'rua', 'provincia'],
+
                     }
 
 
-                });
-                data_empresas.push(data_empresa);
+                ],
+
+
+            }).then(empresas => {
+                res.status(200).json({ empresas });
             });
 
 
-            res.status(200).json({ data_empresas });
+
         } catch (error) {
 
-            console.log("Error", error);
+            // console.log("Error", error);
 
         }
 
