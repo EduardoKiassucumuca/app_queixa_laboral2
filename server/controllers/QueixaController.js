@@ -456,15 +456,24 @@ module.exports = {
         const data_alteracao_queixa = new Date();
         const _fileContrato = req.files['fileContrato'][0].path;
         const { _trabalhadorID } = req.body;
-        const { _empresaID } = req.body;
-        const queixosoID = 0;
-        const queixanteID = 0;
+        const { _empresa } = req.body;
+        let queixosoID = 0;
+        let queixanteID = 0;
+        let _nome_empresa = _empresa.split(" ")[0];
+        const empresaEncontrada = await Empresa.findOne({
+            attributes: ['id', 'nome_empresa', 'enderecoID'],
+            where: { nome_empresa: _nome_empresa }
+        });
+        const enderecoEncontrado = await Endereco.findOne({
+            attributes: ['id', 'provincia'],
+            where: { id: empresaEncontrada.enderecoID }
+        });
         if (queixoso === "Trabalhador") {
-            queixosoID = novoTrabalhador.id;
-            queixanteID = novaEmpresa.id;
+            queixosoID = _trabalhadorID;
+            queixanteID = empresaEncontrada.id;
         } else if (queixoso === "Empregador") {
-            queixosoID = novaEmpresa.id;
-            queixanteID = novoTrabalhador.id;
+            queixosoID = empresaEncontrada.id;
+            queixanteID = _trabalhadorID;
         }
 
         const novaQueixa = await Queixa.create({
@@ -475,10 +484,10 @@ module.exports = {
             updated_at: data_alteracao_queixa,
             queixosoID: queixosoID,
             queixanteID: queixanteID,
-            empresaID: empresaID,
-            trabalhadorID: trabalhadorID,
-            url_file_contrato: url_file_contrato,
-            provincia: localizacao_queixa,
+            empresaID: empresaEncontrada.id,
+            trabalhadorID: _trabalhadorID,
+            url_file_contrato: _fileContrato,
+            provincia: enderecoEncontrado.provincia,
             modo: _modo
         })
         return res.status(200).send({

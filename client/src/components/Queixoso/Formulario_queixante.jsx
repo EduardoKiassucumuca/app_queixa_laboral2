@@ -58,24 +58,26 @@ const FormQueixante = () => {
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
 
-  console.log();
+
   function queixar() {
     const submissao_queixa = data;
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
-
+    console.log(novoTrabalhador)
 
     if (trabalhador) {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
       formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
-      formData.append("_empresaID", novoTrabalhador.Empresa.id);
+      formData.append("_empresa", submissao_queixa.empresa2);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Trabalhador");
       formData.append("queixante", "Empresa");
-
+      console.log(formData)
       Axios.post("http://localhost:3001/add_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,

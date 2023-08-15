@@ -29,6 +29,10 @@ const Queixa = db.define("Queixa", {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    provincia: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     queixosoID: {
         type: Sequelize.INTEGER,
         allowNull: false,
