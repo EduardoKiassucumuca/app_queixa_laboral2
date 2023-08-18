@@ -15,7 +15,7 @@ import QueixarMesmaEmpresa from './components/Dashboard/queixar_mesma_empresa';
 import QueixarOutraEmpresa from './components/Dashboard/queixar_outra_empresa';
 import LerQueixa from './components/Dashboard/ler_queixa';
 import ValidacaoQueixoso from './components/Queixoso/validacao_trabalhador';
-
+import ValidacaoEmpregador from './components/Queixante/validacao_empregador';
 function App() {
   const [show, setShow] = useState('Empregador')
   return (
@@ -33,6 +33,8 @@ function App() {
         <Route path='/queixar_outra_empresa' element={<QueixarOutraEmpresa />} />
         <Route path='/ler_queixa/:id_queixa' element={<LerQueixa />} />
         <Route path='/validacao_trabalhador' element={<ValidacaoQueixoso />} />
+        <Route path='/empregador' element={<ValidacaoEmpregador />} />
+
       </Routes>
     </Router>
   );

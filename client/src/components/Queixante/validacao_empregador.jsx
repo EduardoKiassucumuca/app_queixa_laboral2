@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import Footer from "../Footer/footer";
 
 
-import "./validacao_trabalhador.css";
+import "../Queixoso/validacao_trabalhador.css";
 
 // Hooks
 
@@ -31,33 +31,30 @@ const formTemplate = {
 
 const { Header, Content } = Layout;
 
-const ValidacaoTrabalhador = () => {
+const ValidacaoEmpregador = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
-    const [BI, setBI] = useState(false);
+    const [NIF, setNIF] = useState(false);
     const [queixoso, setQueixoso] = useState(false);
     const [alert, setAlert] = useState("");
     const [showModal, setShowModal] = useState(false);
-    function dispararModal() {
-        console.log("disparar")
-        setShowModal(true);
-    }
-    const validar_BI = (e) => {
+
+    const validar_NIF = (e) => {
         e.preventDefault();
         localStorage.clear();
 
-        Axios.post('http://localhost:3001/validar_BI', {
+        Axios.post('http://localhost:3001/validar_NIF', {
 
-            nBilhete: BI
+            nif: NIF
 
         }).then((res) => {
             //console.log(res.data.queixoso)
             setAlert(res.data.msg);
             setShowModal(true);
             setQueixoso(true);
-            localStorage.setItem("trabalhador", JSON.stringify(res.data.queixoso));
+            localStorage.setItem("empregador", JSON.stringify(res.data.queixoso));
 
-            navigate("/queixar_empregador")
+            navigate("/queixar_trabalhador")
         }).catch((res) => {
             //console.log(res.response.data.msg);
             setAlert(res.response.data.msg);
@@ -97,15 +94,15 @@ const ValidacaoTrabalhador = () => {
                         <Col md={11} className="form-queixa">
                             <Col md={6} className="form-queixa">
                                 <div className="form-container">
-                                    <form onSubmit={(e) => validar_BI(e)}>
+                                    <form onSubmit={(e) => validar_NIF(e)}>
                                         <Form.Group>
-                                            <Form.Label>Bilhete de Identidade</Form.Label>
+                                            <Form.Label>NIF</Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                placeholder="1234567812LA890"
-                                                id="nBI"
-                                                name="nBI"
-                                                onChange={(e) => setBI(e.target.value)}
+                                                placeholder="NIF"
+                                                id="nif"
+                                                name="if"
+                                                onChange={(e) => setNIF(e.target.value)}
                                             />
                                             <button type='submit' className='btn fw-bold bg-dark btn-validar'>Validar</button>
                                         </Form.Group>
@@ -121,5 +118,5 @@ const ValidacaoTrabalhador = () => {
         </Layout >
     );
 };
-export default ValidacaoTrabalhador;
+export default ValidacaoEmpregador;
 

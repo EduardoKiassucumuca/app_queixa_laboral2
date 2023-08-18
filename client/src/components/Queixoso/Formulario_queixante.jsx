@@ -67,7 +67,7 @@ const FormQueixante = () => {
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
     console.log(novoTrabalhador)
 
-    if (trabalhador) {
+    if (trabalhador && data.empresa2 != "outra") {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
@@ -92,6 +92,39 @@ const FormQueixante = () => {
         console.log("error", resposta);
       });
 
+    } if (trabalhador && data.empresa2 == "outra") {
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
+      formData.append("nome_empresa", submissao_queixa.empresa);
+      formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
+      formData.append("_designacao", submissao_queixa.designacao);
+      formData.append("_nif", submissao_queixa.nif);
+      formData.append("_edificio", submissao_queixa.edificio);
+      formData.append("_ruaEmp", submissao_queixa.ruaEmp);
+      formData.append("_bairroEmp", submissao_queixa.bairroEmp);
+      formData.append("_website_empresa", submissao_queixa.websiteEmp);
+      formData.append("_email_empresa", submissao_queixa.emailEmp);
+      formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
+      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+      formData.append("_modo", modo);
+      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
+      formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
+      formData.append("_empresa", submissao_queixa.empresa2);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("queixoso", "Trabalhador");
+      formData.append("queixante", "Empresa");
+
+      Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        }
+      }).then((resposta) => {
+        alert(resposta.data.message);
+
+      }).catch((resposta) => {
+        console.log("error", resposta);
+      });
     } else {
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);

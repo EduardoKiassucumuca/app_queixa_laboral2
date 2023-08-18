@@ -445,6 +445,48 @@ module.exports = {
         }
 
     },
+    async validarNIF(req, res) {
+        const { nif } = req.body;
+
+
+        try {
+            const checkNIF = await Empresa.findOne({
+                attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'email', 'url_website', 'enderecoID'],
+                where: { nif: nif }
+            });
+
+            const checkPessoa = await Pessoa.findOne({
+                attributes: ['id', 'nome', 'sobrenome', 'nome_pai', 'nome_mae', 'naturalidade', 'altura', 'estado_civil', 'sexo', 'data_nascimento', 'biID', 'enderecoID'],
+                where: { biID: checkBI.id }
+            });
+
+            const checkEndereco = await Endereco.findOne({
+                attributes: ['id', 'bairro', 'rua', 'edificio', 'casa', 'provincia', 'telefone_principal', 'telefone_alternativo'],
+                where: { id: checkPessoa.enderecoID }
+            });
+            const checkTrabalhador = await Trabalhador.findOne({
+                attributes: ['id', 'cargo', 'area_departamento', 'localizacao_office', 'pessoaID', 'contaID'],
+                where: { pessoaID: checkPessoa.id }
+            });
+
+            const queixoso = {
+                BI: checkBI,
+                Pessoa: checkPessoa,
+                Endereco: checkEndereco,
+                Trabalhador: checkTrabalhador
+            }
+
+
+            res.status(200).json({ msg: 'Queixoso já existe!', queixoso });
+
+        } catch (error) {
+
+            res.status(404).json({ msg: 'Queixoso não encontrado!' })
+
+        }
+
+    },
+
     async add_queixa(req, res) {
 
         const { _assunto_queixa } = req.body;
@@ -505,6 +547,105 @@ module.exports = {
 
         }
 
+    },
+    async add_empresa_queixa(req, res) {
+
+        const { _bairroEmp } = req.body;
+        const { _ruaEmp } = req.body;
+        const { _edificio } = req.body;
+        const { _contacto_empresa } = req.body;
+        const { _provincia_empresa } = req.body
+
+        const novoEnderecoEmp = await Endereco.create({
+            bairro: _bairroEmp,
+            rua: _ruaEmp,
+            edificio: _edificio,
+            provincia: _provincia_empresa,
+            telefone_principal: _contacto_empresa
+        });
+
+        //dados da empresa
+        const { nome_empresa } = req.body;
+        const { _nif } = req.body;
+        const { _designacao } = req.body;
+        const { _email_empresa } = req.body;
+        const { _website_empresa } = req.body;
+
+
+        const { _assunto_queixa } = req.body;
+        const { _descricao_queixa } = req.body;
+        const { _modo } = req.body;
+        const { queixante } = req.body;
+        const { queixoso } = req.body;
+        const data_queixa = new Date();
+        const data_alteracao_queixa = new Date();
+        const _fileContrato = req.files['fileContrato'][0].path;
+        const { _trabalhadorID } = req.body;
+        const { _empresa } = req.body;
+        let queixosoID = 0;
+        let queixanteID = 0;
+        let _nome_empresa = _empresa.split(" ")[0];
+        let conta = 0;
+        let novaEmpresa = ''
+        if (queixoso === "Trabalhador") {
+
+
+            novaEmpresa = await Empresa.create({
+                nome_empresa: nome_empresa,
+                nif: _nif,
+                designacao: _designacao,
+                email: _email_empresa,
+                url_website: _website_empresa,
+                enderecoID: novoEnderecoEmp.id,
+                fk_conta: 0
+            });
+            queixosoID = _trabalhadorID;
+            queixanteID = novaEmpresa.id;
+
+        } else if (queixoso === "Empregador") {
+            queixosoID = novaEmpresa.id;
+            queixanteID = _trabalhadorID;
+            novaEmpresa = await Empresa.create({
+                nome_empresa: nome_empresa,
+                nif: _nif,
+                designacao: _designacao,
+                email: _email_empresa,
+                url_website: _website_empresa,
+                enderecoID: novoEnderecoEmp.id,
+                fk_conta: 0
+            });
+        }
+
+
+
+        const novaQueixa = await Queixa.create({
+
+            assunto: _assunto_queixa,
+            facto: _descricao_queixa,
+            created_at: data_queixa,
+            updated_at: data_alteracao_queixa,
+            queixosoID: queixosoID,
+            queixanteID: queixanteID,
+            empresaID: novaEmpresa.id,
+            trabalhadorID: _trabalhadorID,
+            url_file_contrato: _fileContrato,
+            provincia: _provincia_empresa,
+            modo: _modo
+        })
+        return res.status(200).send({
+            status: 1,
+            message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+            Queixa,
+        });
+
+
+        try {
+
+        } catch (error) {
+
+            res.status(404).json({ msg: 'Queixoso não encontrado!' })
+
+        }
     },
     async getEmpresas(req, res) {
 

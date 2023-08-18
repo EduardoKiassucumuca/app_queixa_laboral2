@@ -37,7 +37,7 @@ const ModalConfirmacao = (props) => {
               <Link to="/validacao_trabalhador"><Button onClick={props.close} variant='warning'>
                 Empregador
               </Button></Link>ou
-              <Link to="/queixar_trabalhador"> <Button className='btn btn-dark'> Trabalhador</Button></Link>
+              <Link to="/empregador"> <Button className='btn btn-dark'> Trabalhador</Button></Link>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
