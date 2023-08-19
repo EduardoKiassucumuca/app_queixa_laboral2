@@ -3,12 +3,26 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
-
+import Axios from "axios";
 
 import "../Queixoso/dados_pessoais.css";
 
 const UseForm = ({ data, updateFielHndler }) => {
+    const [trabalhadores, setTrabalhadores] = useState([]);
+    React.useEffect(() => {
+        //console.log("ok");
+        Axios.get('http://localhost:3001/trabalhadores', {
+        }).then(({ data }) => {
 
+            setTrabalhadores(data.trabalhadores);
+
+            //console.log(lista_queixa.minha_queixa)
+        }).catch((res) => {
+            console.log(res.response.data.msg);
+        });
+
+
+    }, []);
 
     const [dataContacto, setdataContacto] = useState([data]);
 
@@ -23,9 +37,28 @@ const UseForm = ({ data, updateFielHndler }) => {
 
     };
     const [show, setShow] = useState(false);
-
+    const [BI2, setBI2] = useState("");
+    const [checkBI, setcheckBI] = useState(false);
+    const verificaBI = (e) => {
+        console.log(e.target.value)
+        var trabalhador_encontrado = trabalhadores.filter(trabalhador => trabalhador.numeroID == e.target.value)
+        console.log(trabalhador_encontrado);
+    }
     return (
+
+
         <div>
+            <Form.Group>
+                <Form.Label>BI</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="1234567812LA890"
+                    id="nBI"
+                    name="nBI"
+                    value={data.nBI2}
+                    onMouseLeave={(e) => verificaBI(e)}
+                />
+            </Form.Group>
             <div class="card">
                 <div class="card-header">
                     Dados Pessoais do Trabalhador

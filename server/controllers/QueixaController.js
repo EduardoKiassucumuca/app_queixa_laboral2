@@ -446,38 +446,29 @@ module.exports = {
 
     },
     async validarNIF(req, res) {
-        const { nif } = req.body;
+        const { _nif } = req.body;
 
 
         try {
             const checkNIF = await Empresa.findOne({
                 attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'email', 'url_website', 'enderecoID'],
-                where: { nif: nif }
+                where: { nif: _nif }
             });
-
-            const checkPessoa = await Pessoa.findOne({
-                attributes: ['id', 'nome', 'sobrenome', 'nome_pai', 'nome_mae', 'naturalidade', 'altura', 'estado_civil', 'sexo', 'data_nascimento', 'biID', 'enderecoID'],
-                where: { biID: checkBI.id }
-            });
+            //console.log(checkNIF);
 
             const checkEndereco = await Endereco.findOne({
                 attributes: ['id', 'bairro', 'rua', 'edificio', 'casa', 'provincia', 'telefone_principal', 'telefone_alternativo'],
-                where: { id: checkPessoa.enderecoID }
-            });
-            const checkTrabalhador = await Trabalhador.findOne({
-                attributes: ['id', 'cargo', 'area_departamento', 'localizacao_office', 'pessoaID', 'contaID'],
-                where: { pessoaID: checkPessoa.id }
+                where: { id: checkNIF.enderecoID }
             });
 
-            const queixoso = {
-                BI: checkBI,
-                Pessoa: checkPessoa,
-                Endereco: checkEndereco,
-                Trabalhador: checkTrabalhador
+
+            const empregador = {
+                NIF: checkNIF,
+                Endereco: checkEndereco
             }
 
 
-            res.status(200).json({ msg: 'Queixoso já existe!', queixoso });
+            res.status(200).json({ msg: 'Queixoso já existe!', empregador });
 
         } catch (error) {
 
@@ -669,6 +660,38 @@ module.exports = {
 
             }).then(empresas => {
                 res.status(200).json({ empresas });
+            });
+
+
+
+        } catch (error) {
+
+            // console.log("Error", error);
+
+        }
+
+    },
+    async getTrabalhadores(req, res) {
+
+
+        try {
+
+            BI.findAll({
+
+
+                include: [
+                    {
+                        association: 'Pessoa',
+                        required: true,
+                        attributes: [],
+                    }
+
+
+                ],
+
+
+            }).then(trabalhadores => {
+                res.status(200).json({ trabalhadores });
             });
 
 

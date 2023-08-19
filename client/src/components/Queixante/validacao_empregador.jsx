@@ -21,7 +21,7 @@ import { useState } from 'react';
 import CompnentMain from '../container/container';
 import Axios from "axios";
 import { useNavigate } from "react-router-dom"
-import ModalValidacao from '../Modal/modalValidacao';
+import ModalEmpregador from '../Modal/modalEmpregador';
 
 
 const formTemplate = {
@@ -45,19 +45,20 @@ const ValidacaoEmpregador = () => {
 
         Axios.post('http://localhost:3001/validar_NIF', {
 
-            nif: NIF
+            _nif: NIF
 
         }).then((res) => {
             //console.log(res.data.queixoso)
             setAlert(res.data.msg);
             setShowModal(true);
-            setQueixoso(true);
-            localStorage.setItem("empregador", JSON.stringify(res.data.queixoso));
+            setQueixoso(false);
+            localStorage.setItem("empregador", JSON.stringify(res.data.empregador));
 
-            navigate("/queixar_trabalhador")
+            //navigate("/queixar_empregad");
         }).catch((res) => {
             //console.log(res.response.data.msg);
             setAlert(res.response.data.msg);
+
             setShowModal(true);
             setQueixoso(false)
         });
@@ -88,7 +89,7 @@ const ValidacaoEmpregador = () => {
 
                     }}
                 >
-                    <ModalValidacao msg={alert} queixoso={queixoso} show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
+                    <ModalEmpregador msg={alert} queixoso={queixoso} show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
 
                     <Row className='mb-6 row-BI-Validacao'>
                         <Col md={11} className="form-queixa">
@@ -101,7 +102,7 @@ const ValidacaoEmpregador = () => {
                                                 type="text"
                                                 placeholder="NIF"
                                                 id="nif"
-                                                name="if"
+                                                name="nif"
                                                 onChange={(e) => setNIF(e.target.value)}
                                             />
                                             <button type='submit' className='btn fw-bold bg-dark btn-validar'>Validar</button>

@@ -69,7 +69,7 @@ const Pessoa = db.define("Pessoa", {
     },
 });
 
-Pessoa.hasOne(BI, {
+BI.hasOne(Pessoa, {
     foreignkey: 'biID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -80,7 +80,7 @@ Pessoa.hasOne(Endereco, {
     onUpdate: 'CASCADE'
 });
 
-BI.belongsTo(Pessoa);
+Pessoa.belongsTo(BI);
 Endereco.belongsTo(Pessoa);
 
 module.exports = Pessoa;

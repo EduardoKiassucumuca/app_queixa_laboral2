@@ -36,7 +36,8 @@ app.post('/validar_BI', QueixaController.validarBI);
 app.get('/empresas', QueixaController.getEmpresas);
 app.post('/add_queixa', cpUpload, QueixaController.add_queixa);
 app.post('/add_empresa_queixa', cpUpload, QueixaController.add_empresa_queixa);
-
+app.post('/validar_NIF', QueixaController.validarNIF);
+app.get('/trabalhadores', QueixaController.getTrabalhadores);
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;

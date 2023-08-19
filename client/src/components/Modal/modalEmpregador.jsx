@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button';
 import "./modalConfirmation.css";
 import { Link } from 'react-router-dom';
 
-const ModalValidacao = (props) => {
+const ModalEmpregador = (props) => {
     const [centredModal, setCentredModal] = useState(false);
 
     const toggleShow = () => setCentredModal(!centredModal);
@@ -30,16 +30,16 @@ const ModalValidacao = (props) => {
                         </MDBModalHeader>
                         <MDBModalBody>
                             <p className='texto-anonimato'>
-                                {props.msg + props.queixoso}
+                                {props.msg}
                             </p>
                         </MDBModalBody>
                         <MDBModalFooter>
                             {props.queixoso ? (
-                                <Link to="/validacao_queixoso"><Button onClick={props.close} variant='warning'>
+                                <Link to="/empregador"><Button onClick={props.close} variant='warning'>
                                     OK
                                 </Button></Link>
                             ) : (
-                                <Link to="/queixar_empregador"><Button variant='warning'>
+                                <Link to="/queixar_trabalhador"><Button variant='warning'>
                                     ok
                                 </Button></Link>
                             )}
@@ -50,4 +50,4 @@ const ModalValidacao = (props) => {
         </>
     );
 }
-export default ModalValidacao;
+export default ModalEmpregador;
