@@ -49,6 +49,7 @@ const FormQueixoso = () => {
 
   function queixar() {
     const submissao_queixa = data;
+
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");

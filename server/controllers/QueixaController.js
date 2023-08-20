@@ -683,15 +683,16 @@ module.exports = {
                     {
                         association: 'Pessoa',
                         required: true,
-                        attributes: [],
+                        attributes: ["id", "nome", "sobrenome"],
                     }
-
 
                 ],
 
 
+
             }).then(trabalhadores => {
-                res.status(200).json({ trabalhadores });
+
+                res.status(200).json({ trabalhadores, _trabalhador });
             });
 
 
