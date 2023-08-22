@@ -38,10 +38,7 @@ const ValidacaoTrabalhador = () => {
     const [queixoso, setQueixoso] = useState(false);
     const [alert, setAlert] = useState("");
     const [showModal, setShowModal] = useState(false);
-    function dispararModal() {
-        console.log("disparar")
-        setShowModal(true);
-    }
+
     const validar_BI = (e) => {
         e.preventDefault();
         localStorage.clear();

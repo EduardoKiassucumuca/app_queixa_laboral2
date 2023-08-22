@@ -13,11 +13,10 @@ import "../Queixoso/dados_da_empresa.css";
 
 
 
-
 const Empresa = ({ data, updateFielHndler }) => {
     const empregador = localStorage.getItem("empregador");
     const novoEmpregador = JSON.parse(empregador);
-    console.log(novoEmpregador)
+
     return (
         <>
             {

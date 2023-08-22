@@ -48,7 +48,7 @@ const Trabalhador = db.define("Trabalhador", {
     },
 });
 
-Trabalhador.hasOne(Pessoa, {
+Pessoa.hasOne(Trabalhador, {
     foreignkey: 'pessoaID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
@@ -61,6 +61,6 @@ Trabalhador.hasOne(Conta, {
 });
 
 Conta.belongsTo(Trabalhador);
-Pessoa.belongsTo(Trabalhador);
+Trabalhador.belongsTo(Pessoa);
 
 module.exports = Trabalhador;
