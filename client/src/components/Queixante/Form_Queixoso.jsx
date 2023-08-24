@@ -112,12 +112,15 @@ const FormQueixoso = () => {
       formData.append("_data_nascimento", submissao_queixa.dtNascimento);
       formData.append("_contacto_principal", submissao_queixa.contacto_principal);
       formData.append("_contacto_alternativo", submissao_queixa.contacto_alternativo);
+      formData.append("fileBI", file_BI.files[0]);
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
 
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
       formData.append("_empresa", novoEmpregador.NIF.id);
-      formData.append("_provincia", novoEmpregador.Endereco.provincia);
+      formData.append("_provinciaEmp", novoEmpregador.Endereco.provincia);
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
       formData.append("queixante", "Trabalhador");

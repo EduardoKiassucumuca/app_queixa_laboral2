@@ -575,6 +575,7 @@ module.exports = {
             const { queixoso } = req.body;
             const { _provincia } = req.body;
 
+
             if (queixoso === "Trabalhador") {
                 const { _bairroEmp } = req.body;
                 const { _ruaEmp } = req.body;
@@ -645,7 +646,11 @@ module.exports = {
                     message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
                     Queixa,
                 });
+
             } else if (queixoso === "Empregador") {
+                //dados da queixa
+
+                // dados Bilhete de identidade
                 const { _emitidoEm } = req.body;
 
                 const { _validoAte } = req.body;
@@ -658,6 +663,7 @@ module.exports = {
                     file: _fileBI,
                     numeroBI: _nBI
                 });
+
 
                 // Dados da residência do trabalhador
 
@@ -702,28 +708,45 @@ module.exports = {
                     biID: novoBI.id,
                     enderecoID: novoEndereco.id
                 });
+
+                //dados empresarias do trabalhador
+                const { _provinciaEmp } = req.body;
+                const { _cargo } = req.body;
+                const { _area_departamento } = req.body;
+                const _tipo = "Normal";
                 const novoTrabalhador = await Trabalhador.create({
                     cargo: _cargo,
                     area_departamento: _area_departamento,
-                    localizacao_office: _provincia_empresa,
+                    localizacao_office: _provinciaEmp,
                     tipo: _tipo,
                     pessoaID: novaPessoa.id,
-                    contaID: conta.id
+                    contaID: 0
                 });
-                queixosoID = _empresa;
-                queixanteID = _trabalhadorID;
+                // dados da queixa
+                const { _empresa } = req.body;
+                const _fileContrato = req.files['fileContrato'][0].path;
+
+                const { _assunto_queixa } = req.body;
+                const { _descricao_queixa } = req.body;
+                const { _modo } = req.body;
+
+                const data_queixa = new Date();
+                const data_alteracao_queixa = new Date();
+                const _queixosoID = _empresa;
+
+
                 const novaQueixa = await Queixa.create({
 
                     assunto: _assunto_queixa,
                     facto: _descricao_queixa,
                     created_at: data_queixa,
                     updated_at: data_alteracao_queixa,
-                    queixosoID: queixosoID,
-                    queixanteID: queixanteID,
+                    queixosoID: _queixosoID,
+                    queixanteID: novoTrabalhador.id,
                     empresaID: _empresa,
-                    trabalhadorID: _trabalhadorID,
+                    trabalhadorID: novoTrabalhador.id,
                     url_file_contrato: _fileContrato,
-                    provincia: _provincia,
+                    provincia: _provinciaEmp,
                     modo: _modo
                 })
                 return res.status(200).send({
@@ -742,7 +765,7 @@ module.exports = {
 
         } catch (error) {
 
-            res.status(404).json({ msg: 'Queixoso não encontrado!' })
+            res.status(404).json({ msg: 'Queixa não submetida!' })
 
         }
     },
