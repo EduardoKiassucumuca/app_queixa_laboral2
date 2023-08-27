@@ -30,7 +30,7 @@ function Dashboard() {
   const user_logado = JSON.parse(savedUser);
   const data = user_logado;
 
-  console.log(user_logado);
+
   const [queixas, setQueixas] = useState([])
   const [collapsed, setCollapsed] = useState(false);
 

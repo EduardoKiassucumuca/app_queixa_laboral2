@@ -47,17 +47,25 @@ function Login() {
 
     })
       .then(({ data }) => {
-        console.log("Teste:", data);
-        sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data));
-        if (data.trabalhador != null || data.empresa != null) {
+        //console.log("Teste:", data);
+        if (data.trabalhador.tipo === "IGT" && data.igt_funcionario.tipo === "Recepcionista") {
+          sessionStorage.setItem("data_recepcionista", JSON.stringify(data));
+          console.log(data)
+          navigate("/recepcionista");
+
+        }
+        else if (data.trabalhador != null || data.empresa != null) {
+          sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data));
+
           navigate("/dashboard_queixoso");
         } else {
-          navigate("/dashboard");
+
         }
 
       })
       .catch((res) => {
-        alert(res.response.data.msg);
+        console.log(res)
+
       })
   }
   const email = "";

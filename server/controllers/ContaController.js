@@ -49,7 +49,7 @@ module.exports = {
                     attributes: ['id', 'trabalhadorID', 'tipo'],
                     where: { trabalhadorID: trabalhador.id }
                 });
-                console.log("entrei2");
+
                 /*queixa = await Queixa.findOne({
                     attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],
                     where: { trabalhadorID: trabalhador.id }
@@ -66,7 +66,7 @@ module.exports = {
             // check password
 
             const checkPassword = await bcrypt.compare(senha, conta.senha);
-            console.log(conta.senha);
+
             if (!checkPassword) {
 
                 return res.status(422).json({ msg: 'Senha Inválida!' });
@@ -87,9 +87,9 @@ module.exports = {
     },
     async store(req, res) {
         try {
-            const { email } = req.body;
-            const senha = Math.random().toString(36).slice(-10);
-
+            const { email } = req.query;
+            //const senha = Math.random().toString(36).slice(-10);
+            const senha = "12345";
             /*const userExist = await Conta.findOne({ where: { email: email } });
             console.log(userExist);
             if (userExist) {
