@@ -5,9 +5,9 @@ const Trabalhador = require('../models/Trabalhador');
 const Pessoa = require('../models/pessoa');
 const Queixa = require('../models/Queixa');
 const Empresa = require('../models/Empresa');
-
 const funcionarioIGT = require('../models/FuncionarioIGT');
-
+const speakeasy = require('speakeasy');
+var nodemailer = require('nodemailer');
 
 module.exports = {
     async logar(req, res) {
@@ -71,15 +71,55 @@ module.exports = {
 
                 return res.status(422).json({ msg: 'Senha Inválida!' });
             }
+            // Generate a secret key with a length
+            // of 20 characters
+            const secret = speakeasy.generateSecret({ length: 20 });
 
-            const secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
+            // Generate a TOTP code using the secret key
+            const code = speakeasy.totp({
+
+                // Use the Base32 encoding of the secret key
+                secret: secret.base32,
+
+                // Tell Speakeasy to use the Base32 
+                // encoding format for the secret key
+                encoding: 'base32'
+            });
+
+            // Log the secret key and TOTP code
+            // to the console
+            console.log('Secret: ', secret.base32);
+            console.log('Code: ', code);
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'marciocristiano105@gmail.com',
+                    pass: 'opmnzjabkdexosfe'
+                }
+            });
+
+            var mailOptions = {
+                from: 'marciocristiano105@gmail.com',
+                to: 'kiassucristiano@hotmail.com',
+                subject: 'IGT | Queixa laboral',
+                text: 'Olá aqui tens o teu codigo de acesso:' + code
+            };
+
+
+            const _secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
             //console.log(secret);
             const token = jwt.sign({
                 id: conta._id,
             },
-                secret,
+                _secret,
             )
-            res.status(200).json({ msg: "Autenticação realizada com suceeso!", token, conta, trabalhador, pessoa, igt_funcionario, empresa });
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.status(200).json({ msg: "Olá foi enviado um codigo de verificação para o seu email, por favor verifique!", token, conta, code, trabalhador, pessoa, igt_funcionario, empresa });
+                }
+            });
         } catch (error) {
             console.log(error),
                 res.status(500).json({ msg: "Aconteceu um erro no servidor, tente novamente mais tarde!" });
