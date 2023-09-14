@@ -21,12 +21,12 @@ const Inspector = db.define("Inspector", {
     },
 });
 
-Inspector.hasOne(Trabalhador, {
+/*Inspector.hasOne(Trabalhador, {
     foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Trabalhador.belongsTo(Inspector);
-
+*/
 module.exports = Inspector;

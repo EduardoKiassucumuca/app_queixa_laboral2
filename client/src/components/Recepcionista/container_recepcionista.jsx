@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import Search from 'antd/es/transfer/search';
 
 
-const ContainerRecepcionista = () => {
+const ContainerRecepcionista = ({ onSearch }) => {
 
 
     const [showModal, setShowModal] = useState(false);
@@ -25,6 +25,9 @@ const ContainerRecepcionista = () => {
     React.useEffect(() => {
         console.log("ok");
         Axios.get('http://localhost:3001/queixas').then(({ data }) => {
+            // const todas_queixas = data.queixas[0].concat(data.queixas[1])
+
+            console.log(data.queixas);
 
             setQueixas(data.queixas);
 
@@ -40,6 +43,15 @@ const ContainerRecepcionista = () => {
 
     const queixas_selecprovincia = queixas.filter(queixa => queixa.provincia === data.trabalhador.localizacao_office);
     //console.log(queixas_selecprovincia);
+
+    const [busca, setBusca] = useState('');
+    let queixas_pesquisadas = queixas_selecprovincia.filter((queixa_pesquisada) => queixa_pesquisada.Trabalhador.Pessoa.nome.toLowerCase().includes(busca.toLowerCase()));
+
+
+    const [busca2, setBusca2] = useState('');
+    queixas_pesquisadas = queixas_selecprovincia.filter((queixa_pesquisada) => queixa_pesquisada.Empresa.nome_empresa.toLowerCase().includes(busca2.toLowerCase()));
+
+
     return (
         <>
 
@@ -49,11 +61,24 @@ const ContainerRecepcionista = () => {
                         Abrir uma queixa
                     </Button>
                 </Col>
-                <Col md={6}>  <Search
-                    className="pesquisa"
-                    placeholder="Procurar queixa"
-                    allowClear
-                    enterButton="Search" /></Col>
+                <Col md={3}>
+                    <Search
+                        className="pesquisa"
+                        placeholder="Procurar por Trabalhador"
+                        value={busca}
+                        onChange={(e) => setBusca(e.target.value)}
+                    />
+
+                </Col>
+                <Col md={3}>
+                    <Search
+                        className="pesquisa"
+                        placeholder="Procurar por Empregador"
+                        value={busca2}
+                        onChange={(e) => setBusca2(e.target.value)}
+                    />
+
+                </Col>
                 <Col md={2}> <p className='p-localizacao'>Benguela</p></Col>
 
                 <ModalQueixoso show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
@@ -64,15 +89,19 @@ const ContainerRecepcionista = () => {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col"> Trabalhador</th>
+                                <th scope="col"> Empregador</th>
                                 <th scope="col">Queixa</th>
                                 <th scope="col">Provincia</th>
                                 <th scope="col">Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {queixas_selecprovincia.map(conflito => (
+                            {queixas_pesquisadas.map(conflito => (
                                 <tr>
                                     <th scope="row">{conflito.id}</th>
+                                    <th scope="row"> {conflito.Trabalhador.Pessoa.nome}  </th>
+                                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
                                     <td>{conflito.facto}</td>
                                     <td>{conflito.provincia}</td>
                                     <td>{conflito.estado}</td>

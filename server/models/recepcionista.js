@@ -21,12 +21,12 @@ const Recepcionista = db.define("Recepcionista", {
     },
 });
 
-Recepcionista.hasOne(Trabalhador, {
+/*Recepcionista.hasOne(Trabalhador, {
     foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Trabalhador.belongsTo(Recepcionista);
-
+*/
 module.exports = Recepcionista;

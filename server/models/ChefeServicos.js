@@ -21,12 +21,12 @@ const ChefeServicos = db.define("ChefeServicos", {
     },
 });
 
-ChefeServicos.hasOne(Trabalhador, {
+/*ChefeServicos.hasOne(Trabalhador, {
     foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Trabalhador.belongsTo(ChefeServicos);
-
+*/
 module.exports = ChefeServicos;

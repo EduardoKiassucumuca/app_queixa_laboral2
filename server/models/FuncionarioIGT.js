@@ -25,13 +25,13 @@ const funcionarioIGT = db.define("FuncionarioIGT", {
     },
 });
 
-funcionarioIGT.hasOne(Trabalhador, {
+/*funcionarioIGT.hasOne(Trabalhador, {
     foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
-Trabalhador.belongsTo(funcionarioIGT);
+Trabalhador.belongsTo(funcionarioIGT);*/
 
 
 module.exports = funcionarioIGT;

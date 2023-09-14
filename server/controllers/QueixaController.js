@@ -9,13 +9,54 @@ const ContaController = require('./ContaController');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require('sequelize');
-
+const { Op } = require("sequelize");
 module.exports = {
     async index(req, res) {
-
+        let queixas = [];
+        let queixa1 = ""
+        let queixa2 = ""
+        let queixas_emp = [];
+        let queixas_trab = [];
         try {
-            const queixas = await Queixa.findAll({
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado']
+            queixas = await Queixa.findAll({
+
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID'],
+                required: true,
+                include: [
+                    {
+                        association: 'Empresa',
+
+                        required: true
+                    },
+
+                    {
+                        association: 'Trabalhador',
+                        required: true,
+                        where: {
+                            [Op.or]: [{ '$Trabalhador.tipo$': "queixoso" },
+                            { '$Empresa.tipo$': "queixoso" }
+                            ]
+
+                        },
+                        include: [
+                            {
+                                association: 'Pessoa',
+                                include: [{
+                                    association: 'BI',
+                                    required: true
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+
+
+                ],
+
+
             });
             res.status(200).json({ queixas });
         } catch (error) {
