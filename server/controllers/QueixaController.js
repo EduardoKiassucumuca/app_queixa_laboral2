@@ -20,11 +20,12 @@ module.exports = {
         try {
             queixas = await Queixa.findAll({
 
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato'],
                 required: true,
                 include: [
                     {
                         association: 'Empresa',
+                        attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
 
                         required: true
                     },
@@ -58,6 +59,7 @@ module.exports = {
 
 
             });
+
             res.status(200).json({ queixas });
         } catch (error) {
 
