@@ -31,6 +31,8 @@ const ModalRecepcionista = (props) => {
         estado = props.queixa.estado;
         facto = props.queixa.facto;
     }
+    const file_contrato = document.querySelector("#url-contrato-pdf");
+    console.log(file_contrato)
     return (
         <>
 
@@ -65,7 +67,7 @@ const ModalRecepcionista = (props) => {
 
                             </p>
                             <p className='file-Contrato'>
-                                <a href={props.queixa.url_file_contrato} target="_blank"><FaFilePdf className='contrato-pdf' />{props.queixa.url_file_contrato}</a>
+                                <a href={props.queixa.url_file_contrato} target="_blank" id='url-contrato-pdf' ><FaFilePdf className='contrato-pdf' />{props.queixa.url_file_contrato}</a>
                                 <PDFViewer
                                     document={{
                                         url: props.queixa.url_file_contrato,

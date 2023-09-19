@@ -17,6 +17,7 @@ import ValidacaoQueixoso from './components/Queixoso/validacao_trabalhador';
 import ValidacaoEmpregador from './components/Queixante/validacao_empregador';
 import Dashboard_recepcionista from './components/Recepcionista/area_recepcionista';
 import ValidacaoEmail from './components/Login/validacao_email';
+import Dashboard_chefeServicos from './components/Chefe_Servicos/dashboard_chefeServicos';
 
 function App() {
   const [show, setShow] = useState('Empregador')
@@ -37,6 +38,8 @@ function App() {
         <Route path='/empregador' element={<ValidacaoEmpregador />} />
         <Route path='/recepcionista' element={<Dashboard_recepcionista />} />
         <Route path='/validacao' element={<ValidacaoEmail />} />
+        <Route path='/chefe_servicos' element={<Dashboard_chefeServicos />} />
+
       </Routes>
     </Router>
   );

@@ -67,7 +67,7 @@ function ValidacaoEmail() {
             setTipo_msg(true);
         }
         else {
-            console.log("d")
+
             setAlert("Este código não funcionou, por favor tente novamente!");
             setShowModal(true);
             setTipo_msg(false)

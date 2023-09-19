@@ -62,12 +62,12 @@ function Login() {
   if (sessionStorage.getItem("resposta")) {
     const savedResposta = sessionStorage.getItem("resposta");
     const resposta = JSON.parse(savedResposta);
-    console.log(resposta);
+
     email = resposta.data.novaConta.conta.email;
     senha = resposta.data.novaConta.senha;
     body.email = email;
     body.senha = senha;
-    console.log(body.senha);
+
   }
 
   return (

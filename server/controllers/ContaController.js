@@ -58,6 +58,7 @@ module.exports = {
                     attributes: ['id', 'nome_empresa'],
                     where: { id: queixa.empresaID }
                 });*/
+                console.log(trabalhador)
             }
             if (!conta) {
                 return res.status(404).json({ msg: 'Conta não encontrada!' });
@@ -100,7 +101,7 @@ module.exports = {
 
             var mailOptions = {
                 from: 'marciocristiano105@gmail.com',
-                to: 'kiassucristiano@hotmail.com',
+                to: email,
                 subject: 'IGT | Queixa laboral',
                 text: 'Olá aqui tens o teu codigo de acesso:' + code
             };
