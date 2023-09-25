@@ -22,15 +22,13 @@ const AlertAutenticacao = (props) => {
 
     const toggleShow = () => setCentredModal(!centredModal);
     const auth = () => {
-        console.log("to lá")
+
         if (props.tipo) {
 
 
             if (sessionStorage.getItem("data_login")) {
-                console.log("to lá tambem")
                 const savedResposta = sessionStorage.getItem("data_login");
                 const data_login = JSON.parse(savedResposta);
-                console.log(data_login)
                 if (data_login.trabalhador.tipo === "igt" && data_login.igt_funcionario.tipo === "Recepcionista") {
                     sessionStorage.setItem("data_recepcionista", JSON.stringify(data_login));
                     sessionStorage.removeItem("data_login", JSON.stringify(data_login));

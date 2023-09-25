@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
-const Trabalhador = require("./Trabalhador");
+const FuncionarioIGT = require("./FuncionarioIGT");
 
 const Inspector = db.define("Inspector", {
     id: {
@@ -9,11 +9,11 @@ const Inspector = db.define("Inspector", {
         autoIncrement: true,
         allowNull: false,
     },
-    trabalhadorID: {
+    funcionarioIGTID: {
         type: Sequelize.INTEGER,
         references: {
             model: {
-                tableName: 'Trabalhador',
+                tableName: 'funcionarioigt',
             },
             key: 'id'
         },
@@ -21,12 +21,12 @@ const Inspector = db.define("Inspector", {
     },
 });
 
-/*Inspector.hasOne(Trabalhador, {
-    foreignkey: 'trabalhadorID',
+FuncionarioIGT.hasOne(Inspector, {
+    foreignkey: 'funcionarioIGTID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
-Trabalhador.belongsTo(Inspector);
-*/
+Inspector.belongsTo(FuncionarioIGT);
+
 module.exports = Inspector;

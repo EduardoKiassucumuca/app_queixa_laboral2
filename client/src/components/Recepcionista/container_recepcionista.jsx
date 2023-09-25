@@ -51,12 +51,18 @@ const ContainerRecepcionista = ({ onSearch }) => {
     //console.log(queixas_selecprovincia);
 
     const [busca, setBusca] = useState('');
-    let queixas_pesquisadas = queixas_selecprovincia.filter((queixa_pesquisada) => queixa_pesquisada.Trabalhador.Pessoa.nome.toLowerCase().includes(busca.toLowerCase()));
-
-
     const [busca2, setBusca2] = useState('');
-    queixas_pesquisadas = queixas_selecprovincia.filter((queixa_pesquisada) => queixa_pesquisada.Empresa.nome_empresa.toLowerCase().includes(busca2.toLowerCase()));
 
+    let conflitos = "";
+    let queixas_pesquisadas = [];
+    queixas_selecprovincia.forEach(queixa_pesquisada => {
+        if (queixa_pesquisada.Trabalhador.Pessoa.nome.toLowerCase().includes(busca.toLowerCase())) {
+            queixas_pesquisadas.push(queixa_pesquisada);
+        } else if (queixa_pesquisada.Empresa.nome_empresa.toLowerCase().includes(busca2.toLowerCase())) {
+            queixas_pesquisadas.push(queixa_pesquisada);
+        }
+    });
+    conflitos = queixas_pesquisadas;
     function ver_queixa(conflito_selecionado) {
         setDetalhesQueixa(conflito_selecionado);
         setShowModal(true);
@@ -74,7 +80,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 </Col>
                 <Col md={3}>
                     <Search
-                        className="pesquisa"
+                        className="pesquisa1"
                         placeholder="Procurar por Trabalhador"
                         value={busca}
                         onChange={(e) => setBusca(e.target.value)}
@@ -83,7 +89,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 </Col>
                 <Col md={3}>
                     <Search
-                        className="pesquisa"
+                        className="pesquisa2"
                         placeholder="Procurar por Empregador"
                         value={busca2}
                         onChange={(e) => setBusca2(e.target.value)}
@@ -109,7 +115,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {queixas_pesquisadas.map(conflito => (
+                            {conflitos.map(conflito => (
                                 <tr>
                                     <th scope="row">{conflito.id}</th>
                                     <th scope="row" > {conflito.Trabalhador.Pessoa.nome}  </th>

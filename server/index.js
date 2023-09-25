@@ -9,6 +9,7 @@ const multer = require("multer");
 var upload = require("./config/configMulter");
 
 const ContaController = require('./controllers/ContaController');
+const InspectorController = require("./controllers/InspectorController");
 
 
 /*const db = mysql.createPool({
@@ -38,6 +39,8 @@ app.post('/add_queixa', cpUpload, QueixaController.add_queixa);
 app.post('/add_empresa_queixa', cpUpload, QueixaController.add_empresa_queixa);
 app.post('/validar_NIF', QueixaController.validarNIF);
 app.get('/trabalhadores', QueixaController.getTrabalhadores);
+app.get('/inspectores', InspectorController.index);
+app.put('/nomear_inspector', QueixaController.update)
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;

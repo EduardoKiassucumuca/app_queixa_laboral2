@@ -25,23 +25,53 @@ module.exports = {
                 include: [
                     {
                         association: 'Empresa',
+                        required: true,
                         attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
 
-                        required: true
+                    },
+                    {
+                        association: 'Inspector',
+                        required: true,
+                        attributes: ['id', 'funcionarioIGTID'],
+
+                        include: [
+                            {
+                                association: 'funcionarioigt',
+                                attributes: ['id', 'trabalhadorID', 'tipo'],
+                                required: true,
+                                include: [{
+                                    association: 'Trabalhador',
+                                    required: true,
+                                    include: [
+                                        {
+                                            association: 'Pessoa',
+                                            required: true,
+                                            include: [{
+                                                association: 'BI',
+                                                required: true
+                                            }],
+
+                                        },
+
+                                    ],
+
+                                }],
+
+                            },
+
+                        ],
+
+
                     },
 
                     {
                         association: 'Trabalhador',
                         required: true,
-                        where: {
-                            [Op.or]: [{ '$Trabalhador.tipo$': "queixoso" },
-                            { '$Empresa.tipo$': "queixoso" }
-                            ]
 
-                        },
                         include: [
                             {
                                 association: 'Pessoa',
+                                required: true,
                                 include: [{
                                     association: 'BI',
                                     required: true
@@ -57,6 +87,11 @@ module.exports = {
 
                 ],
 
+                where: {
+                    [Op.or]: [{ '$Trabalhador.tipo$': "queixoso" },
+                    { '$Empresa.tipo$': "queixoso" }]
+
+                },
 
             });
 
@@ -883,20 +918,20 @@ module.exports = {
     },
     async update(req, res) {
 
-        const { nome } = req.params;
-        const { sobrenome } = req.params;
+        const { id_inspector } = req.body.params;
+        const { id_queixa } = req.body.params;
+        console.log(id_inspector, id_queixa)
 
-        const { pessoa_id } = req.params;
 
-        await Pessoa.update({ nome: 'Muka', sobrenome: 'Cristiano' }, {
+        await Queixa.update({ inspectorID: id_inspector }, {
             where: {
-                id: pessoa_id
+                id: id_queixa
             }
         });
 
         return res.status(200).send({
             status: 1,
-            message: 'Pessoa atualizada com sucesso!',
+            message: 'Inspector nomeado com sucesso!',
 
         });
 

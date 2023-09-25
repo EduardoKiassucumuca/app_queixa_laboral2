@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
 const Trabalhador = require("./Trabalhador.js");
 
-const funcionarioIGT = db.define("FuncionarioIGT", {
+const funcionarioIGT = db.define("funcionarioigt", {
     id: {
         type: Sequelize.INTEGER.UNSIGNED,
         primaryKey: true,
@@ -25,13 +25,13 @@ const funcionarioIGT = db.define("FuncionarioIGT", {
     },
 });
 
-/*funcionarioIGT.hasOne(Trabalhador, {
+Trabalhador.hasOne(funcionarioIGT, {
     foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
-Trabalhador.belongsTo(funcionarioIGT);*/
+funcionarioIGT.belongsTo(Trabalhador);
 
 
 module.exports = funcionarioIGT;
