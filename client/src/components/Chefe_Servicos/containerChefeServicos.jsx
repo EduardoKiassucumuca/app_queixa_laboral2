@@ -77,6 +77,25 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
 
     }
+    function ver_testemunhas(conflito_selecionado) {
+        setConflitoSelec(conflito_selecionado);
+        Axios.get('http://localhost:3001/inspectores').then(({ data }) => {
+            // const todas_queixas = data.queixas[0].concat(data.queixas[1])
+
+            //console.log("data.queixas");
+
+            console.log(data)
+            setInspectores(data.inspectores);
+            setShowModal(true);
+
+            //console.log(lista_queixa.minha_queixa)
+        }).catch((res) => {
+
+            console.log("res")
+        });
+
+
+    }
 
 
     return (

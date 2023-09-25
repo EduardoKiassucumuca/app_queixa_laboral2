@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalInspectores = (props) => {
+const ModalTestemunhas = (props) => {
     const navigate = useNavigate();
     const [smShow, setSmShow] = useState(false);
     const [centredModal, setCentredModal] = useState(false);
@@ -32,9 +32,9 @@ const ModalInspectores = (props) => {
         inspectores = props.inspector;
     }
     const file_contrato = document.querySelector("#url-contrato-pdf");
-    function nomear_inspector(inspector_nomeado, queixa_selecionada) {
+    function atribuir_testemunha(inspector_nomeado, queixa_selecionada) {
 
-        axios.put('http://localhost:3001/nomear_inspector', {
+        axios.put('http://localhost:3001/atribuir_testemunhas', {
             params: {
                 id_inspector: inspector_nomeado.id,
                 id_queixa: queixa_selecionada.id
@@ -94,7 +94,7 @@ const ModalInspectores = (props) => {
                             ))}
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <Button onClick={(e) => nomear_inspector(inspector_selecionado, queixa)} variant='warning'> Feito</Button>
+                            <Button variant='warning'> Feito</Button>
                         </MDBModalFooter>
 
                     </MDBModalContent>
@@ -103,4 +103,4 @@ const ModalInspectores = (props) => {
         </>
     );
 }
-export default ModalInspectores;
+export default ModalTestemunhas;

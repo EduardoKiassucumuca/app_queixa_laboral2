@@ -41,6 +41,8 @@ app.post('/validar_NIF', QueixaController.validarNIF);
 app.get('/trabalhadores', QueixaController.getTrabalhadores);
 app.get('/inspectores', InspectorController.index);
 app.put('/nomear_inspector', QueixaController.update)
+app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
+
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;

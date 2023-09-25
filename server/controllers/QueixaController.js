@@ -936,6 +936,26 @@ module.exports = {
         });
 
     },
+    async update_testemunha(req, res) {
+
+        const { id_inspector } = req.body.params;
+        const { id_queixa } = req.body.params;
+        console.log(id_inspector, id_queixa)
+
+
+        await Queixa.update({ testemunhaID: id_inspector }, {
+            where: {
+                id: id_queixa
+            }
+        });
+
+        return res.status(200).send({
+            status: 1,
+            message: 'Inspector nomeado com sucesso!',
+
+        });
+
+    },
     async delete(req, res) {
         const { pessoa_id } = req.params;
 
