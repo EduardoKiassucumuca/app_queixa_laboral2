@@ -40,6 +40,7 @@ app.post('/add_empresa_queixa', cpUpload, QueixaController.add_empresa_queixa);
 app.post('/validar_NIF', QueixaController.validarNIF);
 app.get('/trabalhadores', QueixaController.getTrabalhadores);
 app.get('/inspectores', InspectorController.index);
+app.get('/queixas_inspectores', InspectorController.getQueixasInspector);
 app.put('/nomear_inspector', QueixaController.update)
 app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
 

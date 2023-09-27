@@ -1,5 +1,7 @@
 const Inspector = require('../models/Inspector');
-
+const Queixa = require('../models/Queixa');
+const { where } = require('sequelize');
+const { Op } = require("sequelize");
 module.exports = {
     async index(req, res) {
 
@@ -39,6 +41,98 @@ module.exports = {
             });
 
             res.status(200).json({ inspectores });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async getQueixasInspector(req, res) {
+        let queixas = [];
+        let queixa1 = ""
+        let queixa2 = ""
+        let queixas_emp = [];
+        let queixas_trab = [];
+        try {
+            queixas = await Queixa.findAll({
+
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato'],
+                required: true,
+                include: [
+                    {
+                        association: 'Empresa',
+                        required: true,
+                        attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
+
+                    },
+                    {
+                        association: 'Inspector',
+                        required: true,
+                        attributes: ['id', 'funcionarioIGTID'],
+
+                        include: [
+                            {
+                                association: 'funcionarioigt',
+                                attributes: ['id', 'trabalhadorID', 'tipo'],
+                                required: true,
+                                include: [{
+                                    association: 'Trabalhador',
+                                    required: true,
+                                    include: [
+                                        {
+                                            association: 'Pessoa',
+                                            required: true,
+                                            include: [{
+                                                association: 'BI',
+                                                required: true
+                                            }],
+
+                                        },
+
+                                    ],
+
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+
+                    {
+                        association: 'Trabalhador',
+                        required: true,
+
+                        include: [
+                            {
+                                association: 'Pessoa',
+                                required: true,
+                                include: [{
+                                    association: 'BI',
+                                    required: true
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+
+
+                ],
+
+                where: {
+                    [Op.or]: [{ '$Trabalhador.tipo$': "queixoso" },
+                    { '$Empresa.tipo$': "queixoso" }]
+
+                },
+
+            });
+
+            res.status(200).json({ queixas });
         } catch (error) {
 
             console.log("Error", error);

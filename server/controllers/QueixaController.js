@@ -29,40 +29,7 @@ module.exports = {
                         attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
 
                     },
-                    {
-                        association: 'Inspector',
-                        required: true,
-                        attributes: ['id', 'funcionarioIGTID'],
 
-                        include: [
-                            {
-                                association: 'funcionarioigt',
-                                attributes: ['id', 'trabalhadorID', 'tipo'],
-                                required: true,
-                                include: [{
-                                    association: 'Trabalhador',
-                                    required: true,
-                                    include: [
-                                        {
-                                            association: 'Pessoa',
-                                            required: true,
-                                            include: [{
-                                                association: 'BI',
-                                                required: true
-                                            }],
-
-                                        },
-
-                                    ],
-
-                                }],
-
-                            },
-
-                        ],
-
-
-                    },
 
                     {
                         association: 'Trabalhador',
@@ -223,11 +190,13 @@ module.exports = {
             const { queixante } = req.body;
             const { queixoso } = req.body;
             let _email = "";
+            let _tipoE = "";
+            let _tipoT = "";
 
             const { _cargo } = req.body;
             const { _area_departamento } = req.body;
             const { _provincia_empresa } = req.body;
-            const _tipo = "Normal";
+
 
             // endereço da empresa
 
@@ -257,7 +226,8 @@ module.exports = {
             let novaConta = "";
 
             if (queixoso === "Trabalhador") {
-
+                _tipoT = "queixoso";
+                _tipoE = "queixante";
                 const { _email_pessoal } = req.body;
                 _email = _email_pessoal;
                 //console.log(_email);
@@ -271,7 +241,7 @@ module.exports = {
                     cargo: _cargo,
                     area_departamento: _area_departamento,
                     localizacao_office: _provincia_empresa,
-                    tipo: _tipo,
+                    tipo: _tipoT,
                     pessoaID: novaPessoa.id,
                     contaID: conta.id
                 });
@@ -282,10 +252,13 @@ module.exports = {
                     email: _email_empresa,
                     url_website: _website_empresa,
                     enderecoID: novoEnderecoEmp.id,
-                    fk_conta: 0
+                    fk_conta: 0,
+                    tipo: _tipoE,
                 });
 
             } else if (queixoso === "Empregador") {
+                _tipoE = "queixoso";
+                _tipoT = "queixante";
                 const { _email_empresa } = req.body;
                 _email = _email_empresa;
                 const senha = "12345";
@@ -298,7 +271,7 @@ module.exports = {
                     cargo: _cargo,
                     area_departamento: _area_departamento,
                     localizacao_office: _provincia_empresa,
-                    tipo: _tipo,
+                    tipo: _tipoT,
                     pessoaID: novaPessoa.id,
                     contaID: 0
                 });
@@ -309,7 +282,9 @@ module.exports = {
                     email: _email_empresa,
                     url_website: _website_empresa,
                     enderecoID: novoEnderecoEmp.id,
-                    fk_conta: conta.id
+                    fk_conta: conta.id,
+                    tipo: _tipoE,
+                    inspectorID: 3
                 });
             }
 
@@ -345,7 +320,8 @@ module.exports = {
                 trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato,
                 provincia: _provincia_empresa,
-                modo: _modo
+                modo: _modo,
+                inspectorID: 3
             })
             return res.status(200).send({
                 status: 1,
@@ -381,7 +357,8 @@ module.exports = {
             empresaID: empresaID,
             trabalhadorID: trabalhadorID,
             url_file_contrato: url_file_contrato,
-            provincia: localizacao_queixa
+            provincia: localizacao_queixa,
+            inspectorID: 3
         })
         return res.status(200).send({
             status: 1,
@@ -396,10 +373,11 @@ module.exports = {
         //dados do trabalhador
 
         const { _cargo } = req.body;
-        console.log(_cargo);
+
         const { _area_departamento } = req.body;
         const { _localizacaoEmp } = req.body;
-        const _tipo = "Normal";
+        const _tipoT = "queixoso";
+        const _tipoE = "queixante";
         const { contaID } = req.body;
         const { pessoaID } = req.body;
 
@@ -407,7 +385,7 @@ module.exports = {
             cargo: _cargo,
             area_departamento: _area_departamento,
             localizacao_office: _localizacaoEmp,
-            tipo: _tipo,
+            tipo: _tipoT,
             pessoaID: pessoaID,
             contaID: contaID
         });
@@ -441,7 +419,8 @@ module.exports = {
             designacao: _designacao,
             email: _email_empresa,
             url_website: _website_empresa,
-            enderecoID: novoEnderecoEmp.id
+            enderecoID: novoEnderecoEmp.id,
+            tipo: _tipoE
         })
 
         // dados da queixa
@@ -474,7 +453,8 @@ module.exports = {
             trabalhadorID: trabalhadorID,
             url_file_contrato: url_file_contrato,
             provincia: localizacao_queixa,
-            modo: _modo
+            modo: _modo,
+            inspectorID: 3
         })
         return res.status(200).send({
             status: 1,
@@ -506,7 +486,7 @@ module.exports = {
                 attributes: ['id', 'cargo', 'area_departamento', 'localizacao_office', 'pessoaID', 'contaID'],
                 where: { pessoaID: checkPessoa.id }
             });
-
+            console.log(checkTrabalhador)
             const queixoso = {
                 BI: checkBI,
                 Pessoa: checkPessoa,
@@ -599,7 +579,8 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: enderecoEncontrado.provincia,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 3
 
                 })
                 return res.status(200).send({
@@ -624,7 +605,8 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: _provincia,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 3
                 })
                 console.log(novaQueixa)
                 return res.status(200).send({
@@ -660,7 +642,8 @@ module.exports = {
                 const { _edificio } = req.body;
                 const { _contacto_empresa } = req.body;
                 const { _provincia_empresa } = req.body
-
+                let_tipoT = "queixoso";
+                let _tipoE = "queixante";
                 const novoEnderecoEmp = await Endereco.create({
                     bairro: _bairroEmp,
                     rua: _ruaEmp,
@@ -701,7 +684,8 @@ module.exports = {
                     email: _email_empresa,
                     url_website: _website_empresa,
                     enderecoID: novoEnderecoEmp.id,
-                    fk_conta: 0
+                    fk_conta: 0,
+                    tipo: _tipoE
                 });
                 queixosoID = _trabalhadorID;
                 queixanteID = novaEmpresa.id;
@@ -717,7 +701,8 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: _provincia,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 3
                 })
                 return res.status(200).send({
                     status: 1,
@@ -727,7 +712,7 @@ module.exports = {
 
             } else if (queixoso === "Empregador") {
                 //dados da queixa
-
+                _tipoE = "queixoso";
                 // dados Bilhete de identidade
                 const { _emitidoEm } = req.body;
 
@@ -791,12 +776,12 @@ module.exports = {
                 const { _provinciaEmp } = req.body;
                 const { _cargo } = req.body;
                 const { _area_departamento } = req.body;
-                const _tipo = "Normal";
+                const _tipoT = "queixANTE";
                 const novoTrabalhador = await Trabalhador.create({
                     cargo: _cargo,
                     area_departamento: _area_departamento,
                     localizacao_office: _provinciaEmp,
-                    tipo: _tipo,
+                    tipo: _tipoT,
                     pessoaID: novaPessoa.id,
                     contaID: 0
                 });
@@ -825,7 +810,8 @@ module.exports = {
                     trabalhadorID: novoTrabalhador.id,
                     url_file_contrato: _fileContrato,
                     provincia: _provinciaEmp,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 3
                 })
                 return res.status(200).send({
                     status: 1,

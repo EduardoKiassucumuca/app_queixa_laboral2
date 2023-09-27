@@ -30,7 +30,10 @@ const Empresa = db.define("Empresa", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-
+    tipo: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     enderecoID: {
         type: Sequelize.INTEGER,
         references: {

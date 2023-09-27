@@ -32,7 +32,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
     React.useEffect(() => {
 
-        Axios.get('http://localhost:3001/queixas').then(({ data }) => {
+        Axios.get('http://localhost:3001/queixas_inspectores').then(({ data }) => {
             // const todas_queixas = data.queixas[0].concat(data.queixas[1])
 
             //console.log("data.queixas");

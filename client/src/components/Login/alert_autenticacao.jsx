@@ -29,6 +29,7 @@ const AlertAutenticacao = (props) => {
             if (sessionStorage.getItem("data_login")) {
                 const savedResposta = sessionStorage.getItem("data_login");
                 const data_login = JSON.parse(savedResposta);
+                console.log(data_login);
                 if (data_login.trabalhador.tipo === "igt" && data_login.igt_funcionario.tipo === "Recepcionista") {
                     sessionStorage.setItem("data_recepcionista", JSON.stringify(data_login));
                     sessionStorage.removeItem("data_login", JSON.stringify(data_login));
@@ -40,7 +41,7 @@ const AlertAutenticacao = (props) => {
                     sessionStorage.removeItem("data_login", JSON.stringify(data_login));
                     navigate("/chefe_servicos");
 
-                } else if (data_login.trabalhador.tipo != "igt" && data_login.empresa != null) {
+                } else if (data_login.trabalhador.tipo != "igt") {
                     sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data_login));
                     sessionStorage.removeItem("data_login", JSON.stringify(data_login));
                     navigate("/dashboard_queixoso");

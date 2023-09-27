@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col';
 import { Link } from "react-router-dom";
 import Search from 'antd/es/transfer/search';
 import ModalRecepcionista from './modal_recepcionista';
+import ModalConfirmacao from '../Modal/modalConfirmation';
 
 const formTemplate = {
     review: "",
@@ -21,6 +22,8 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
 
     const [showModal, setShowModal] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
+
     const [queixas, setQueixas] = useState([]);
     const [detalhes_queixa, setDetalhesQueixa] = useState({});
     let data = "";
@@ -52,17 +55,10 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
     const [busca, setBusca] = useState('');
     const [busca2, setBusca2] = useState('');
+    const conflitos = queixas_selecprovincia.filter(queixa_pesquisada => queixa_pesquisada.assunto.toLowerCase().includes(busca.toLowerCase()));
 
-    let conflitos = "";
-    let queixas_pesquisadas = [];
-    queixas_selecprovincia.forEach(queixa_pesquisada => {
-        if (queixa_pesquisada.Trabalhador.Pessoa.nome.toLowerCase().includes(busca.toLowerCase())) {
-            queixas_pesquisadas.push(queixa_pesquisada);
-        } else if (queixa_pesquisada.Empresa.nome_empresa.toLowerCase().includes(busca2.toLowerCase())) {
-            queixas_pesquisadas.push(queixa_pesquisada);
-        }
-    });
-    conflitos = queixas_pesquisadas;
+
+
     function ver_queixa(conflito_selecionado) {
         setDetalhesQueixa(conflito_selecionado);
         setShowModal(true);
@@ -74,28 +70,22 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
             <Row className='queixas_recepcionista'>
                 <Col md={3}>
-                    <Button variant="warning" className='fw-bold btn-nova-queixa' type="submit">
+                    <Button variant="warning" onClick={() => setShowModal2(true)} className='fw-bold btn-nova-queixa' type="submit">
                         Abrir uma queixa
                     </Button>
+                    <ModalConfirmacao show={showModal2} setShow={setShowModal2} close={() => setShowModal2(false)} />
+
                 </Col>
-                <Col md={3}>
+                <Col md={6}>
                     <Search
                         className="pesquisa1"
-                        placeholder="Procurar por Trabalhador"
+                        placeholder="Procurar pelo assunto"
                         value={busca}
                         onChange={(e) => setBusca(e.target.value)}
                     />
 
                 </Col>
-                <Col md={3}>
-                    <Search
-                        className="pesquisa2"
-                        placeholder="Procurar por Empregador"
-                        value={busca2}
-                        onChange={(e) => setBusca2(e.target.value)}
-                    />
 
-                </Col>
                 <Col md={2}> <p className='p-localizacao'>Benguela</p></Col>
 
                 <ModalRecepcionista show={showModal} setShow={setShowModal} close={() => setShowModal(false)} queixa={detalhes_queixa} />
@@ -108,6 +98,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                                 <th scope="col">#</th>
                                 <th scope="col"> Trabalhador</th>
                                 <th scope="col"> Empregador</th>
+                                <th scope="col">Assunto</th>
                                 <th scope="col">Queixa</th>
                                 <th scope="col">Provincia</th>
                                 <th scope="col">Estado</th>
@@ -120,6 +111,8 @@ const ContainerRecepcionista = ({ onSearch }) => {
                                     <th scope="row">{conflito.id}</th>
                                     <th scope="row" > {conflito.Trabalhador.Pessoa.nome}  </th>
                                     <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                                    <td>{conflito.assunto}</td>
+
                                     <td>{conflito.facto}</td>
                                     <td>{conflito.provincia}</td>
                                     <td>{conflito.estado}</td>
