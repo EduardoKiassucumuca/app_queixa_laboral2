@@ -261,45 +261,7 @@ const ReviewForm = ({ data, updateFielHndler }) => {
 
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        Trabalhador
-                    </div>
-                    <div class="card-body">
 
-                        <Row className="mb-3">
-                            <Col md={7}>
-                                <Form.Group>
-                                    <Form.Label>Cargo</Form.Label>
-                                    <Form.Control
-                                        type="name"
-                                        name="cargo"
-                                        id="cargo"
-                                        placeholder="Qual é o seu cargo na empresa"
-                                        value={data.cargo || ""}
-                                        onChange={(e) => updateFielHndler("cargo", e.target.value)}
-                                    />
-                                </Form.Group>
-                            </Col>
-                            <Col md={5}>
-                                <Form.Group>
-                                    <Form.Label>Area ou departamento</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="area_departamento"
-                                        id="area_departamento"
-                                        placeholder="Em que área/departamento estás na empresa"
-                                        value={data.area_departamento || ""}
-                                        onChange={(e) => updateFielHndler("area_departamento", e.target.value)}
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-
-
-
-                    </div>
-                </div >
             </div>
             )}
             <>

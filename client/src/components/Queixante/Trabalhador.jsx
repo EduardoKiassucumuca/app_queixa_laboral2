@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Axios from "axios";
 import Alert from 'react-bootstrap/Alert';
 import "../Queixoso/dados_pessoais.css";
+
 const formTemplate = {
     review: "",
     comment: "",
@@ -40,6 +41,7 @@ const UseForm = ({ data, updateFielHndler }) => {
 
 
     };
+    console.log(trabalhadores)
     const [show, setShow] = useState(false);
     const [BI2, setBI2] = useState("");
     const [checkBI, setcheckBI] = useState(false);
@@ -50,23 +52,33 @@ const UseForm = ({ data, updateFielHndler }) => {
     }
     const verificaBI = (e) => {
 
-        localStorage.removeItem("trabalhador_encontrado");
+        //localStorage.removeItem("trabalhador_encontrado");
         try {
 
 
-            setBI2(e.target.value);
-            var trabalhador_encontrado = trabalhadores.filter(trabalhador => trabalhador.Pessoa.BI.numeroBI == e.target.value)
-            console.log(trabalhador_encontrado)
-            if (trabalhador_encontrado[0].Pessoa.BI.numeroBI === e.target.value) {
-                setEmployee(trabalhador_encontrado)
-                setfoundEmployee(true);
+            //setBI2(e.target.value);
+            // const trabalhador_encontrado = trabalhadores.filter(trabalhador => trabalhador.Pessoa.BI.numeroBI === e.target.value)
+            trabalhadores.forEach(trabalhador => {
 
-                localStorage.setItem("trabalhador_encontrado", JSON.stringify(trabalhador_encontrado[0]));
+                if (trabalhador.Pessoa.BI.numeroBI === e.target.value) {
+                    setEmployee(trabalhador);
 
-            }
-            else {
-                setfoundEmployee(false);
-            }
+                } else {
+                    setEmployee(null);
+
+                }
+            });
+
+            /* if (trabalhador_encontrado[0].Pessoa.BI.numeroBI === e.target.value) {
+                 setEmployee(trabalhador_encontrado)
+                 setfoundEmployee(true);
+ 
+                 localStorage.setItem("trabalhador_encontrado", JSON.stringify(trabalhador_encontrado[0]));
+ 
+             }
+             else {
+                 setfoundEmployee(false);
+             }*/
 
             // data.found_employee = true;
 
@@ -77,7 +89,7 @@ const UseForm = ({ data, updateFielHndler }) => {
         } catch (error) {
             setfoundEmployee(false);
             data.found_employee = false;
-            console.log(found_employee)
+
         }
         //console.log(e.target.value)
 
@@ -88,40 +100,30 @@ const UseForm = ({ data, updateFielHndler }) => {
 
 
         <div>
-            {found_employee ? (
+            <Form.Group>
+                <Form.Label>BI</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="1234567812LA890"
+                    id="nBI2"
+                    name="nBI2"
+                    value={data.nBI2}
+                    onChange={(e) => verificaBI(e)}
+                />
+            </Form.Group>
+            {employee ? (
                 <>
-                    <Form.Group>
-                        <Form.Label>BI</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="1234567812LA890"
-                            id="nBI2"
-                            name="nBI2"
-                            value={data.nBI2}
-                            onChange={(e) => verificaBI(e)}
-                        />
-                    </Form.Group>
                     <Alert key="success" variant="success">
-                        Trabalhador
-                        <Alert.Link href="#"> </Alert.Link> Já se encontra registrado!
+                        O Trabalhador
+                        <Alert.Link href="#"> </Alert.Link> Já se encontra registrado, por favor siga o botão avançar.
 
                     </Alert>
                 </>
             ) : (
                 <>
-                    <Form.Group>
-                        <Form.Label>BI</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="1234567812LA890"
-                            id="nBI"
-                            name="nBI"
-                            value={data.nBI2}
-                            onChange={(e) => verificaBI(e)}
-                        />
-                    </Form.Group>
+
                     <Alert key="danger" variant="danger">
-                        Trabalhador não registrado
+                        O Trabalhador ainda não foi registrado
                         <Alert.Link href="#"> Por favor preencha o formulario abaixo!</Alert.Link>.
 
                     </Alert>

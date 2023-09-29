@@ -16,6 +16,10 @@ const Conta = db.define("Conta", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    tentativa: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
 
 });
 

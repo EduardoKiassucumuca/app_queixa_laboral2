@@ -10,6 +10,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require('sequelize');
 const { Op } = require("sequelize");
+const tentativa = 0;
+
 module.exports = {
     async index(req, res) {
         let queixas = [];
@@ -268,7 +270,7 @@ module.exports = {
 
                 const salt = await bcrypt.genSalt(12);
                 const passwordHash = await bcrypt.hash(senha, salt);
-                const conta = await Conta.create({ email: _email, senha: passwordHash });
+                const conta = await Conta.create({ email: _email, senha: passwordHash, tentativa: tentativa });
                 novaConta = { conta, senha };
                 console.log("conta_empresa: " + conta.id);
                 novoTrabalhador = await Trabalhador.create({
@@ -557,7 +559,7 @@ module.exports = {
             let queixanteID = 0;
 
             if (queixoso === "Trabalhador") {
-                console.log(queixoso);
+
                 let _nome_empresa = _empresa.split(" ")[0];
                 const empresaEncontrada = await Empresa.findOne({
                     attributes: ['id', 'nome_empresa', 'enderecoID'],
@@ -632,6 +634,221 @@ module.exports = {
 
     },
     async add_queixoso_queixa(req, res) {
+        let queixosoID, queixanteID = 0;
+
+
+        try {
+
+            //dados do bilhete de identidade
+            const { _emitidoEm } = req.body;
+
+            const { _validoAte } = req.body;
+            const fileBI = req.files['fileBI'][0].path;
+            const { _nBI } = req.body;
+
+            const novoBI = await BI.create({
+                emitido_em: _emitidoEm,
+                valido_ate: _validoAte,
+                file: fileBI,
+                numeroBI: _nBI
+            });
+
+            // Dados da residência do trabalhador
+
+            const { _bairro } = req.body;
+            const { _rua } = req.body;
+            const { _casaEdificio } = req.body;
+            const { _provincia } = req.body;
+            const { _contacto_principal } = req.body;
+            const { _contacto_alternativo } = req.body;
+
+            const novoEndereco = await Endereco.create({
+                bairro: _bairro,
+                rua: _rua,
+                casa: _casaEdificio,
+                provincia: _provincia,
+                telefone_principal: _contacto_principal,
+                telefone_alternativo: _contacto_alternativo
+            });
+
+            // dados da pessoa
+
+            const { _nome } = req.body;
+            const { _sobrenome } = req.body;
+            const { _nomePai } = req.body;
+            const { _nomeMae } = req.body;
+            const { _naturalidade } = req.body;
+            const { _altura } = req.body;
+            const { _estado_civil } = req.body;
+            const { _data_nascimento } = req.body;
+            const { _sexo } = req.body;
+
+            const novaPessoa = await Pessoa.create({
+                nome: _nome,
+                sobrenome: _sobrenome,
+                nome_pai: _nomePai,
+                nome_mae: _nomeMae,
+                naturalidade: _naturalidade,
+                altura: _altura,
+                estado_civil: _estado_civil,
+                data_nascimento: _data_nascimento,
+                sexo: _sexo,
+                biID: novoBI.id,
+                enderecoID: novoEndereco.id
+            });
+            // dados da conta
+
+            //const senha = Math.random().toString(36).slice(-10);
+
+            /*const userExist = await Conta.findOne({ where: { email: email } });
+            console.log(userExist);
+            if (userExist) {
+                return res.status(422).json({ msg: 'Por favor, utilize outro email' });
+            }*/
+
+
+            //dados do trabalhador
+
+
+            const { queixante } = req.body;
+            const { queixoso } = req.body;
+            let _email = "";
+            let _senha = "";
+            let _tipoE = "";
+            let _tipoT = "";
+
+            const { _cargo } = req.body;
+            const { _area_departamento } = req.body;
+            const { _provincia_empresa } = req.body;
+
+
+            // endereço da empresa
+
+
+            //dados da empresa
+            const { _empresa } = req.body;
+
+
+            let novoTrabalhador = "";
+            let _nome_empresa = "";
+            let novaConta = "";
+            let empresaEncontrada = {};
+            let enderecoEncontrado = {};
+
+            if (queixoso === "Trabalhador") {
+                _tipoT = "queixoso";
+                _tipoE = "queixante";
+                const { _email_pessoal } = req.body;
+                const { senha } = req.body;
+
+                _email = _email_pessoal;
+
+                _nome_empresa = _empresa.split(" ")[0];
+                empresaEncontrada = await Empresa.findOne({
+                    attributes: ['id', 'nome_empresa', 'enderecoID'],
+                    where: { nome_empresa: _nome_empresa }
+                });
+                enderecoEncontrado = await Endereco.findOne({
+                    attributes: ['id', 'provincia'],
+                    where: { id: empresaEncontrada.enderecoID }
+                });
+
+
+                //console.log(_email);
+
+                const salt = await bcrypt.genSalt(12);
+                const passwordHash = await bcrypt.hash(senha, salt);
+                const conta = await Conta.create({ email: _email, senha: passwordHash, tentativa: tentativa });
+                novaConta = { conta, senha };
+
+                novoTrabalhador = await Trabalhador.create({
+                    cargo: _cargo,
+                    area_departamento: _area_departamento,
+                    localizacao_office: enderecoEncontrado.provincia,
+                    tipo: _tipoT,
+                    pessoaID: novaPessoa.id,
+                    contaID: conta.id
+                });
+                queixosoID = novoTrabalhador.id;
+                queixanteID = empresaEncontrada.id;
+
+            } else if (queixoso === "Empregador") {
+                _tipoE = "queixoso";
+                _tipoT = "queixante";
+                const { _email_empresa } = req.body;
+                _email = _email_empresa;
+                const { senha } = req.body;
+
+                const salt = await bcrypt.genSalt(12);
+                const passwordHash = await bcrypt.hash(senha, salt);
+                const conta = await Conta.create({ email: _email, senha: passwordHash, tentativa: tentativa });
+                novaConta = { conta, senha };
+                console.log("conta_empresa: " + conta.id);
+                novoTrabalhador = await Trabalhador.create({
+                    cargo: _cargo,
+                    area_departamento: _area_departamento,
+                    localizacao_office: _provincia_empresa,
+                    tipo: _tipoT,
+                    pessoaID: novaPessoa.id,
+                    contaID: 0
+                });
+                novaEmpresa = await Empresa.create({
+                    nome_empresa: _empresa,
+                    nif: _nif,
+                    designacao: _designacao,
+                    email: _email_empresa,
+                    url_website: _website_empresa,
+                    enderecoID: novoEnderecoEmp.id,
+                    fk_conta: conta.id,
+                    tipo: _tipoE
+
+                });
+            }
+
+
+
+
+
+
+            // dados da queixa
+            const { _assunto_queixa } = req.body;
+            const { _descricao_queixa } = req.body;
+            const { _modo } = req.body;
+
+            const data_queixa = new Date();
+            const data_alteracao_queixa = new Date();
+            const _fileContrato = req.files['fileContrato'][0].path;
+
+            if (queixante === "Trabalhador") {
+                queixanteID = novoTrabalhador.id;
+                queixosoID = empresaEncontrada.id;
+            } else if (queixante == "Empregador") {
+                queixanteID = novaEmpresa.id;
+                queixosoID = novoTrabalhador.id;
+            }
+            const novaQueixa = await Queixa.create({
+                assunto: _assunto_queixa,
+                facto: _descricao_queixa,
+                created_at: data_queixa,
+                updated_at: data_alteracao_queixa,
+                queixosoID: queixosoID,
+                queixanteID: queixanteID,
+                empresaID: empresaEncontrada.id,
+                trabalhadorID: novoTrabalhador.id,
+                url_file_contrato: _fileContrato,
+                provincia: enderecoEncontrado.provincia,
+                modo: _modo
+
+            })
+            return res.status(200).send({
+                status: 1,
+                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!',
+                Queixa,
+                novaConta
+            });
+        } catch (error) {
+            console.log(error);
+        }
 
     },
     async add_empresa_queixa(req, res) {

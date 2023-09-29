@@ -21,7 +21,7 @@ module.exports = {
             console.log("email:", email);
 
             const conta = await Conta.findOne({
-                attributes: ['id', 'email', 'senha', 'user_logado'],
+                attributes: ['id', 'email', 'senha', 'user_logado', 'tentativa'],
                 where: { email: email }
             });
             //conta.user_logado = true;

@@ -43,7 +43,7 @@ app.get('/inspectores', InspectorController.index);
 app.get('/queixas_inspectores', InspectorController.getQueixasInspector);
 app.put('/nomear_inspector', QueixaController.update)
 app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
-app.post('/add_queixoso_queixa', QueixaController.add_queixoso_queixa);
+app.post('/add_queixoso_queixa', cpUpload, QueixaController.add_queixoso_queixa);
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;
