@@ -66,13 +66,14 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                             id="provincia_emp"
                             value={data.empresa2 || ""}
                             onChange={(e) => updateFielHndler("empresa2", e.target.value)}>
+                            <option>Seleciona a empresa </option>
 
                             {
                                 empresas.map(item => (
                                     <option selected>{item.nome_empresa} - {item.Endereco.provincia}, {item.Endereco.bairro}</option>
                                 ))
                             }
-                            < option > outra</option>
+                            <option> outra</option>
                         </Form.Select>
                     </Form.Group >
                     {

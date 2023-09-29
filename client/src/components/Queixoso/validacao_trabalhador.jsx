@@ -57,9 +57,12 @@ const ValidacaoTrabalhador = () => {
             navigate("/queixar_empregador")
         }).catch((res) => {
             //console.log(res.response.data.msg);
+            localStorage.setItem("BI", JSON.stringify(BI));
+
             setAlert(res.response.data.msg);
             setShowModal(true);
             setQueixoso(false)
+
         });
     }
     //console.log(localStorage.getItem("trabalhador"));

@@ -28,7 +28,10 @@ const UseForm = ({ data, updateFielHndler }) => {
     const [show, setShow] = useState(false);
     const trabalhador = localStorage.getItem("trabalhador");
     const novoTrabalhador = JSON.parse(trabalhador);
+    const bilhete_identidade = localStorage.getItem("BI");
+    const BI_validado = JSON.parse(bilhete_identidade);
 
+    data.nBI = BI_validado;
     //data.nome = novoTrabalhador.Pessoa.nome;
 
 
@@ -152,6 +155,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                                             placeholder="1234567812LA890"
                                             id="nBI"
                                             name="nBI"
+                                            disabled
                                             value={data.nBI || ""}
                                             onChange={(e) => updateFielHndler("nBI", e.target.value)}
                                         />

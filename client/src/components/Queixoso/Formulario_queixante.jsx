@@ -29,6 +29,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom"
 import Queixei from './queixei';
 import ValidacaoQueixoso from './validacao_trabalhador';
+import ModalConfirmationQueixa from './ModalConfirmationQueixa';
 
 const formTemplate = {
   review: "",
@@ -45,6 +46,8 @@ const FormQueixante = () => {
   const [contaID, setContaID] = useState(false);
   const [data, setData] = useState(formTemplate)
   const [changeForm, setChangeForm] = useState(false);
+  const [alert, setAlert] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const updateFielHndler = (key, value) => {
 
@@ -65,7 +68,7 @@ const FormQueixante = () => {
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
-    console.log(novoTrabalhador)
+
 
     if (trabalhador && data.empresa2 != "outra") {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
@@ -77,13 +80,14 @@ const FormQueixante = () => {
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Trabalhador");
       formData.append("queixante", "Empresa");
-      console.log(formData)
+
       Axios.post("http://localhost:3001/add_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         }
       }).then((resposta) => {
-        alert(resposta.data.message);
+        setAlert(resposta.data.message);
+        setShowModal(true);
         //sessionStorage.setItem("resposta", JSON.stringify(resposta));
         //navigate("/Entrar");
         /*const [showModal, setShowModal] = useState(true);
@@ -109,7 +113,7 @@ const FormQueixante = () => {
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
       formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
-      formData.append("_empresa", submissao_queixa.empresa2);
+      //formData.append("_empresa", submissao_queixa.empresa2);
       formData.append("_fileContrato", submissao_queixa.fileContrato);
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Trabalhador");
@@ -120,11 +124,56 @@ const FormQueixante = () => {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         }
       }).then((resposta) => {
-        alert(resposta.data.message);
+        setAlert(resposta.data.message);
+        setShowModal(true);
 
       }).catch((resposta) => {
         console.log("error", resposta);
       });
+    } else if (!trabalhador && data.empresa2 != "outra") {
+      console.log("entrei sem outra");
+      formData.append("_nome", submissao_queixa.nome);
+      formData.append("_sobrenome", submissao_queixa.sobrenome);
+      formData.append("_nomePai", submissao_queixa.nomePai);
+      formData.append("_nomeMae", submissao_queixa.nomeMae);
+      formData.append("_bairro", submissao_queixa.bairro);
+      formData.append("_rua", submissao_queixa.rua);
+      formData.append("_casaEdificio", submissao_queixa.casaEdificio);
+      formData.append("_estado_civil", submissao_queixa.ecivil);
+      formData.append("_nBI", submissao_queixa.nBI);
+      formData.append("_sexo", submissao_queixa.sexo);
+      formData.append("_validoAte", submissao_queixa.validoAte);
+      formData.append("_emitidoEm", submissao_queixa.emitidoEm);
+      formData.append("_naturalidade", submissao_queixa.naturalidade);
+      formData.append("_provincia", submissao_queixa.provincia);
+      formData.append("_altura", submissao_queixa.altura);
+      formData.append("_data_nascimento", submissao_queixa.dtNascimento);
+      formData.append("_contacto_principal", submissao_queixa.contacto_principal);
+      formData.append("_contacto_alternativo", submissao_queixa.contacto_alternativo);
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
+      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+      formData.append("_modo", modo);
+      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
+      formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
+      formData.append("_empresa", submissao_queixa.empresa2);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("queixoso", "Trabalhador");
+      formData.append("queixante", "Empresa");
+
+      Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        }
+      }).then((resposta) => {
+        setAlert(resposta.data.message);
+        setShowModal(true);
+
+      }).catch((resposta) => {
+        console.log("error", resposta);
+      });
+
     } else {
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
@@ -165,15 +214,17 @@ const FormQueixante = () => {
       formData.append("queixante", "Empregador");
       formData.append("queixoso", "Trabalhador");
       formData.append("_email_pessoal", submissao_queixa.email_pessoal);
+      formData.append("senha", submissao_queixa.password);
 
       Axios.post("http://localhost:3001/guardar_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         }
       }).then((resposta) => {
-        alert(resposta.data.message);
+        setAlert(resposta.data.message);
+        setShowModal(true);
         //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-        navigate("/Entrar");
+
         /*const [showModal, setShowModal] = useState(true);
         <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
       }).catch((resposta) => {
@@ -207,6 +258,8 @@ const FormQueixante = () => {
           padding: '0',
         }}
       >
+        <ModalConfirmationQueixa msg={alert} show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
+
         <div
           className="site-layout-content"
           style={{

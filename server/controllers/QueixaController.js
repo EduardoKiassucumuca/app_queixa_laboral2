@@ -190,6 +190,7 @@ module.exports = {
             const { queixante } = req.body;
             const { queixoso } = req.body;
             let _email = "";
+            let _senha = "";
             let _tipoE = "";
             let _tipoT = "";
 
@@ -229,9 +230,11 @@ module.exports = {
                 _tipoT = "queixoso";
                 _tipoE = "queixante";
                 const { _email_pessoal } = req.body;
+                const { senha } = req.body;
+
                 _email = _email_pessoal;
                 //console.log(_email);
-                const senha = "12345";
+
                 const salt = await bcrypt.genSalt(12);
                 const passwordHash = await bcrypt.hash(senha, salt);
                 const conta = await Conta.create({ email: _email, senha: passwordHash });
@@ -261,7 +264,8 @@ module.exports = {
                 _tipoT = "queixante";
                 const { _email_empresa } = req.body;
                 _email = _email_empresa;
-                const senha = "12345";
+                const { senha } = req.body;
+
                 const salt = await bcrypt.genSalt(12);
                 const passwordHash = await bcrypt.hash(senha, salt);
                 const conta = await Conta.create({ email: _email, senha: passwordHash });
@@ -283,8 +287,8 @@ module.exports = {
                     url_website: _website_empresa,
                     enderecoID: novoEnderecoEmp.id,
                     fk_conta: conta.id,
-                    tipo: _tipoE,
-                    inspectorID: 3
+                    tipo: _tipoE
+
                 });
             }
 
@@ -320,12 +324,12 @@ module.exports = {
                 trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato,
                 provincia: _provincia_empresa,
-                modo: _modo,
-                inspectorID: 3
+                modo: _modo
+
             })
             return res.status(200).send({
                 status: 1,
-                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores clique ok para entrar no nosso portal!',
                 Queixa,
                 novaConta
             });
@@ -357,8 +361,8 @@ module.exports = {
             empresaID: empresaID,
             trabalhadorID: trabalhadorID,
             url_file_contrato: url_file_contrato,
-            provincia: localizacao_queixa,
-            inspectorID: 3
+            provincia: localizacao_queixa
+
         })
         return res.status(200).send({
             status: 1,
@@ -453,8 +457,7 @@ module.exports = {
             trabalhadorID: trabalhadorID,
             url_file_contrato: url_file_contrato,
             provincia: localizacao_queixa,
-            modo: _modo,
-            inspectorID: 3
+            modo: _modo
         })
         return res.status(200).send({
             status: 1,
@@ -579,13 +582,13 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: enderecoEncontrado.provincia,
-                    modo: _modo,
-                    inspectorID: 3
+                    modo: _modo
+
 
                 })
                 return res.status(200).send({
                     status: 1,
-                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!',
                     Queixa,
                 });
             } else if (queixoso === "Empregador") {
@@ -605,8 +608,7 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: _provincia,
-                    modo: _modo,
-                    inspectorID: 3
+                    modo: _modo
                 })
                 console.log(novaQueixa)
                 return res.status(200).send({
@@ -629,11 +631,14 @@ module.exports = {
         }
 
     },
+    async add_queixoso_queixa(req, res) {
+
+    },
     async add_empresa_queixa(req, res) {
         try {
             const { queixante } = req.body;
             const { queixoso } = req.body;
-            const { _provincia } = req.body;
+            //const { _provincia } = req.body;
 
 
             if (queixoso === "Trabalhador") {
@@ -641,7 +646,8 @@ module.exports = {
                 const { _ruaEmp } = req.body;
                 const { _edificio } = req.body;
                 const { _contacto_empresa } = req.body;
-                const { _provincia_empresa } = req.body
+                const { _provincia_empresa } = req.body;
+                //const { _empresa } = req.body;
                 let_tipoT = "queixoso";
                 let _tipoE = "queixante";
                 const novoEnderecoEmp = await Endereco.create({
@@ -668,10 +674,9 @@ module.exports = {
                 const data_alteracao_queixa = new Date();
                 const _fileContrato = req.files['fileContrato'][0].path;
                 const { _trabalhadorID } = req.body;
-                const { _empresa } = req.body;
                 let queixosoID = 0;
                 let queixanteID = 0;
-                let _nome_empresa = _empresa.split(" ")[0];
+                //let _nome_empresa = _empresa.split(" ")[0];
                 let conta = 0;
                 let novaEmpresa = ''
 
@@ -689,6 +694,7 @@ module.exports = {
                 });
                 queixosoID = _trabalhadorID;
                 queixanteID = novaEmpresa.id;
+
                 const novaQueixa = await Queixa.create({
 
                     assunto: _assunto_queixa,
@@ -697,16 +703,16 @@ module.exports = {
                     updated_at: data_alteracao_queixa,
                     queixosoID: queixosoID,
                     queixanteID: queixanteID,
-                    empresaID: _empresa,
+                    empresaID: novaEmpresa.id,
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
-                    provincia: _provincia,
-                    modo: _modo,
-                    inspectorID: 3
+                    provincia: _provincia_empresa,
+                    modo: _modo
+
                 })
                 return res.status(200).send({
                     status: 1,
-                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou acompanhar a queixa no nosso portal!',
                     Queixa,
                 });
 
@@ -810,8 +816,7 @@ module.exports = {
                     trabalhadorID: novoTrabalhador.id,
                     url_file_contrato: _fileContrato,
                     provincia: _provinciaEmp,
-                    modo: _modo,
-                    inspectorID: 3
+                    modo: _modo
                 })
                 return res.status(200).send({
                     status: 1,

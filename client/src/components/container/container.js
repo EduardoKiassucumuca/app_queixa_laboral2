@@ -9,7 +9,7 @@ import ModalConfirmacao from "../Modal/modalConfirmation";
 import { useState } from 'react';
 
 
-const CompnentMain = () =>{
+const CompnentMain = () => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
@@ -29,16 +29,17 @@ const CompnentMain = () =>{
         </div>
          <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>
   </main>*/}
-    <div className='p-5 text-center bg-dark mymainHero'>
-      <div className='meuCover'>
-        <h1 className='mb-3 titulo-principal-cover-igt'>Plataforma de <span className='cover-title-igt'>Queixas Laborais</span></h1>
-        <h4 className='mb-3 lead-igt'>A IGT, Inspecção Geral do Trabalho, é uma instituição pública, dotada de personalidade jurídica, autonomia administrativa, financeira e patrimonial e tem como finalidade assegurar a aplicação e a observância da legislação laboral, informar, orientar, regular e fiscalizar a acção dos sujeitos da relação jurídico-laboral.</h4>
-        <h4 className='mb-3 lead-igt'>Queixa laboral, é um serviço feito pela IGT em todo continente nacional com o obejctivo de resolver os conflitos existentes entre empregador e trabalhador.</h4>
-        <button onClick={() => setShowModal(true)} className="btn btn-lg btn-secondary fw-bold bg-warning btn-queixar">Queixar</button>
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>
-    </div>
-  </div>
-</>
+      <div className='p-5 text-center bg-dark mymainHero'>
+        <div className='meuCover'>
+          <h1 className='mb-3 titulo-principal-cover-igt'>Plataforma de <span className='cover-title-igt'>Queixas Laborais</span></h1>
+          <h4 className='mb-3 lead-igt'>A IGT, Inspecção Geral do Trabalho, é uma instituição pública, dotada de personalidade jurídica, autonomia administrativa, financeira e patrimonial e tem como finalidade assegurar a aplicação e a observância da legislação laboral, informar, orientar, regular e fiscalizar a acção dos sujeitos da relação jurídico-laboral.</h4>
+          <h4 className='mb-3 lead-igt'>Queixa laboral, é um serviço feito pela IGT em todo continente nacional com o obejctivo de resolver os conflitos existentes entre empregador e trabalhador.</h4>
+          <p className='mb-3 lead-igt'>Caso pretender consultar o estado de uma queixa já submetida ou enviada por favor <a href='/Entrar' className='portal-queixa'>Clique aqui</a></p>
+          <button onClick={() => setShowModal(true)} className="btn btn-lg btn-secondary fw-bold bg-warning btn-queixar">Queixar</button>
+          <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
+        </div>
+      </div >
+    </>
 
   );
 }

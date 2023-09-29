@@ -30,7 +30,7 @@ const ModalValidacao = (props) => {
                         </MDBModalHeader>
                         <MDBModalBody>
                             <p className='texto-anonimato'>
-                                {props.msg + props.queixoso}
+                                {props.msg}
                             </p>
                         </MDBModalBody>
                         <MDBModalFooter>
