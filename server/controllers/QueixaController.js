@@ -331,7 +331,7 @@ module.exports = {
             })
             return res.status(200).send({
                 status: 1,
-                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores clique ok para entrar no nosso portal!',
+                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!',
                 Queixa,
                 novaConta
             });
@@ -491,7 +491,6 @@ module.exports = {
                 attributes: ['id', 'cargo', 'area_departamento', 'localizacao_office', 'pessoaID', 'contaID'],
                 where: { pessoaID: checkPessoa.id }
             });
-            console.log(checkTrabalhador)
             const queixoso = {
                 BI: checkBI,
                 Pessoa: checkPessoa,
@@ -615,15 +614,10 @@ module.exports = {
                 console.log(novaQueixa)
                 return res.status(200).send({
                     status: 1,
-                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clicar no botão abaixo para entrar no nosso portal!',
                     Queixa,
                 });
             }
-
-
-
-
-
 
 
         } catch (error) {
@@ -639,11 +633,16 @@ module.exports = {
 
         try {
 
+            const { queixante } = req.body;
+            const { queixoso } = req.body;
+
             //dados do bilhete de identidade
             const { _emitidoEm } = req.body;
 
             const { _validoAte } = req.body;
-            const fileBI = req.files['fileBI'][0].path;
+            if (queixoso === "Trabalhador") {
+                const fileBI = req.files['fileBI'][0].path;
+            }
             const { _nBI } = req.body;
 
             const novoBI = await BI.create({
@@ -710,8 +709,6 @@ module.exports = {
             //dados do trabalhador
 
 
-            const { queixante } = req.body;
-            const { queixoso } = req.body;
             let _email = "";
             let _senha = "";
             let _tipoE = "";
@@ -775,6 +772,7 @@ module.exports = {
             } else if (queixoso === "Empregador") {
                 _tipoE = "queixoso";
                 _tipoT = "queixante";
+                const { _trabalhadorID } = req.body;
                 const { _email_empresa } = req.body;
                 _email = _email_empresa;
                 const { senha } = req.body;
@@ -783,15 +781,21 @@ module.exports = {
                 const passwordHash = await bcrypt.hash(senha, salt);
                 const conta = await Conta.create({ email: _email, senha: passwordHash, tentativa: tentativa });
                 novaConta = { conta, senha };
-                console.log("conta_empresa: " + conta.id);
-                novoTrabalhador = await Trabalhador.create({
-                    cargo: _cargo,
-                    area_departamento: _area_departamento,
-                    localizacao_office: _provincia_empresa,
-                    tipo: _tipoT,
-                    pessoaID: novaPessoa.id,
-                    contaID: 0
+
+                // novo Enderceo empresa
+                const { _bairroEmp } = req.body;
+                const { _ruaEmp } = req.body;
+                const { _edificio } = req.body;
+                const { _contacto_empresa } = req.body;
+
+                const novoEnderecoEmp = await Endereco.create({
+                    bairro: _bairroEmp,
+                    rua: _ruaEmp,
+                    edificio: _edificio,
+                    provincia: _localizacaoEmp,
+                    telefone_principal: _contacto_empresa
                 });
+
                 novaEmpresa = await Empresa.create({
                     nome_empresa: _empresa,
                     nif: _nif,
@@ -808,8 +812,6 @@ module.exports = {
 
 
 
-
-
             // dados da queixa
             const { _assunto_queixa } = req.body;
             const { _descricao_queixa } = req.body;
@@ -820,9 +822,9 @@ module.exports = {
             const _fileContrato = req.files['fileContrato'][0].path;
 
             if (queixante === "Trabalhador") {
-                queixanteID = novoTrabalhador.id;
-                queixosoID = empresaEncontrada.id;
-            } else if (queixante == "Empregador") {
+                queixanteID = _trabalhadorID;
+                queixosoID = novaEmpresa.id;
+            } else if (queixante === "Empregador") {
                 queixanteID = novaEmpresa.id;
                 queixosoID = novoTrabalhador.id;
             }
@@ -833,10 +835,10 @@ module.exports = {
                 updated_at: data_alteracao_queixa,
                 queixosoID: queixosoID,
                 queixanteID: queixanteID,
-                empresaID: empresaEncontrada.id,
-                trabalhadorID: novoTrabalhador.id,
+                empresaID: novaEmpresa.id,
+                trabalhadorID: _trabalhadorID,
                 url_file_contrato: _fileContrato,
-                provincia: enderecoEncontrado.provincia,
+                provincia: novoEnderecoEmp.provincia,
                 modo: _modo
 
             })
@@ -1037,7 +1039,7 @@ module.exports = {
                 })
                 return res.status(200).send({
                     status: 1,
-                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores!',
+                    message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique no botão para entrar no nosso portal!',
                     Queixa,
                 });
             }

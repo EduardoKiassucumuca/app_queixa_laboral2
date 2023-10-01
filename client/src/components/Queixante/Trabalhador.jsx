@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Axios from "axios";
 import Alert from 'react-bootstrap/Alert';
 import "../Queixoso/dados_pessoais.css";
+import Button from "react-bootstrap/esm/Button";
 
 const formTemplate = {
     review: "",
@@ -41,65 +42,48 @@ const UseForm = ({ data, updateFielHndler }) => {
 
 
     };
-    console.log(trabalhadores)
+
     const [show, setShow] = useState(false);
     const [BI2, setBI2] = useState("");
     const [checkBI, setcheckBI] = useState(false);
     const [found_employee, setfoundEmployee] = useState(false);
     const [employee, setEmployee] = useState({});
-    if (BI2 === "") {
-        localStorage.removeItem("trabalhador_encontrado");
-    }
-    const verificaBI = (e) => {
 
-        //localStorage.removeItem("trabalhador_encontrado");
-        try {
+    const verificaBI = () => {
+        localStorage.removeItem("trabalhador")
+        Axios.post('http://localhost:3001/validar_BI', {
 
+            nBilhete: BI2
 
-            //setBI2(e.target.value);
-            // const trabalhador_encontrado = trabalhadores.filter(trabalhador => trabalhador.Pessoa.BI.numeroBI === e.target.value)
-            trabalhadores.forEach(trabalhador => {
+        }).then((res) => {
+            console.log(res.data.queixoso)
 
-                if (trabalhador.Pessoa.BI.numeroBI === e.target.value) {
-                    setEmployee(trabalhador);
-
-                } else {
-                    setEmployee(null);
-
-                }
-            });
-
-            /* if (trabalhador_encontrado[0].Pessoa.BI.numeroBI === e.target.value) {
-                 setEmployee(trabalhador_encontrado)
-                 setfoundEmployee(true);
- 
-                 localStorage.setItem("trabalhador_encontrado", JSON.stringify(trabalhador_encontrado[0]));
- 
-             }
-             else {
-                 setfoundEmployee(false);
-             }*/
-
-            // data.found_employee = true;
-
-            //console.log(trabalhador_encontrado[0]);
-
-            //console.log(trabalhador_encontrado[0].numeroBI);
-            //console.log(found_employee)
-        } catch (error) {
-            setfoundEmployee(false);
-            data.found_employee = false;
-
-        }
-        //console.log(e.target.value)
+            setEmployee(res.data.queixoso)
+            localStorage.setItem("trabalhador", JSON.stringify(res.data.queixoso));
 
 
+        }).catch((res) => {
+            //console.log(res.response.data.msg);
+            setEmployee(null)
+
+        });
 
     }
+    let pessoa = ""
+    if (localStorage.getItem("trabalhador")) {
+        const savedTrabalhador = localStorage.getItem("trabalhador");
+        const trb_encontrado = JSON.parse(savedTrabalhador);
+
+        pessoa = trb_encontrado.Pessoa.nome + " " + trb_encontrado.Pessoa.sobrenome;
+
+    }
+    data.nBI = BI2
     return (
 
 
         <div>
+
+
             <Form.Group>
                 <Form.Label>BI</Form.Label>
                 <Form.Control
@@ -107,15 +91,26 @@ const UseForm = ({ data, updateFielHndler }) => {
                     placeholder="1234567812LA890"
                     id="nBI2"
                     name="nBI2"
-                    value={data.nBI2}
-                    onChange={(e) => verificaBI(e)}
+
+                    onChange={(e) => setBI2(e.target.value)}
+
                 />
             </Form.Group>
+
+
+            <span> <Button type="button" className="btn btn-warning" onClick={verificaBI}>Verificar</Button></span>
+
+
+
             {employee ? (
                 <>
                     <Alert key="success" variant="success">
                         O Trabalhador
-                        <Alert.Link href="#"> </Alert.Link> Já se encontra registrado, por favor siga o botão avançar.
+                        <Alert.Link href="#"> {
+
+                            pessoa
+
+                        }</Alert.Link> Já se encontra registrado, por favor siga o botão avançar.
 
                     </Alert>
                 </>
