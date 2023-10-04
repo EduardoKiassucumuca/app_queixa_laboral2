@@ -853,6 +853,103 @@ module.exports = {
         }
 
     },
+    async add_empregador_queixa(req, res) {
+        let queixosoID, queixanteID = 0;
+        try {
+            console.log(req)
+
+
+            let _email = "";
+            let _senha = "";
+            let _tipoE = "";
+
+            let novoTrabalhador = "";
+            let _nome_empresa = "";
+            let novaConta = "";
+            let empresaEncontrada = {};
+            let enderecoEncontrado = {};
+
+            _tipoE = "queixoso";
+            _tipoT = "queixante";
+            const { trabalhadorID } = req.body;
+            const { email_empresa } = req.body;
+            _email = email_empresa;
+            const { senha } = req.body;
+
+            const salt = await bcrypt.genSalt(12);
+            const passwordHash = await bcrypt.hash(senha, salt);
+            const conta = await Conta.create({ email: _email, senha: passwordHash, tentativa: tentativa });
+            novaConta = { conta, senha };
+
+            // novo Enderceo empresa
+
+            const { _bairroEmp } = req.body;
+            const { _ruaEmp } = req.body;
+            const { _edificio } = req.body;
+            const { _contacto_empresa } = req.body;
+            const { _provincia_empresa } = req.body;
+
+            const novoEnderecoEmp = await Endereco.create({
+                bairro: _bairroEmp,
+                rua: _ruaEmp,
+                edificio: _edificio,
+                provincia: _provincia_empresa,
+                telefone_principal: _contacto_empresa
+            });
+            const { _empresa } = req.body;
+            const { _nif } = req.body;
+            const { _designacao } = req.body;
+            const { _website_empresa } = req.body;
+
+            novaEmpresa = await Empresa.create({
+                nome_empresa: _empresa,
+                nif: _nif,
+                designacao: _designacao,
+                email: email_empresa,
+                url_website: _website_empresa,
+                enderecoID: novoEnderecoEmp.id,
+                fk_conta: conta.id,
+                tipo: _tipoE
+
+            });
+
+            // dados da queixa
+            const { _assunto_queixa } = req.body;
+            const { _descricao_queixa } = req.body;
+            const { _modo } = req.body;
+
+            const data_queixa = new Date();
+            const data_alteracao_queixa = new Date();
+            const _fileContrato = req.files['fileContrato'][0].path;
+
+
+            queixanteID = trabalhadorID;
+            queixosoID = novaEmpresa.id;
+
+            const novaQueixa = await Queixa.create({
+                assunto: _assunto_queixa,
+                facto: _descricao_queixa,
+                created_at: data_queixa,
+                updated_at: data_alteracao_queixa,
+                queixosoID: queixosoID,
+                queixanteID: queixanteID,
+                empresaID: novaEmpresa.id,
+                trabalhadorID: trabalhadorID,
+                url_file_contrato: _fileContrato,
+                provincia: novoEnderecoEmp.provincia,
+                modo: _modo
+
+            })
+            return res.status(200).send({
+                status: 1,
+                message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!',
+                Queixa,
+                novaConta
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
     async add_empresa_queixa(req, res) {
         try {
             const { queixante } = req.body;
@@ -1146,6 +1243,7 @@ module.exports = {
         });
 
     },
+
     async update_testemunha(req, res) {
 
         const { id_inspector } = req.body.params;

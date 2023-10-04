@@ -24,6 +24,7 @@ import {
 }
   from 'mdb-react-ui-kit';
 import Footer from "../Footer/footer";
+import { FaRedo } from "react-icons/fa"
 
 function Login() {
 
@@ -49,7 +50,13 @@ function Login() {
       .then(({ data }) => {
         //console.log("Teste:", data);
         sessionStorage.setItem("data_login", JSON.stringify(data));
-        navigate("/Validacao");
+
+        if (data.conta.tentativa === 0) {
+          navigate("/Validacao");
+        } else if (data.conta.tentativa === 1) {
+          navigate("/dashboard_queixoso");
+        }
+
       })
       .catch((res) => {
         console.log(res)
@@ -111,8 +118,9 @@ function Login() {
                   </Form.Group>
                 </Form>
 
-                <div className="d-grid gap-2">
+                <div className="d-grid gap-2 reload-button">
                   <Button variant="warning" size='lg' onClick={logar}>Entrar</Button>
+                  <FaRedo />
                 </div>
                 <p></p>
                 <div className="text-center">

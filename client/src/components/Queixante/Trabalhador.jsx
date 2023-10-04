@@ -78,13 +78,13 @@ const UseForm = ({ data, updateFielHndler }) => {
 
     }
     data.nBI = BI2
+    console.log(employee)
     return (
 
 
         <div>
 
-
-            <Form.Group>
+            {!BI2 ? (<><Form.Group>
                 <Form.Label>BI</Form.Label>
                 <Form.Control
                     type="text"
@@ -98,11 +98,9 @@ const UseForm = ({ data, updateFielHndler }) => {
             </Form.Group>
 
 
-            <span> <Button type="button" className="btn btn-warning" onClick={verificaBI}>Verificar</Button></span>
-
-
-
-            {employee ? (
+                <span> <Button type="button" className="btn btn-warning" onClick={verificaBI}>Verificar</Button></span>
+            </>) : (<></>)}
+            {pessoa ? (
                 <>
                     <Alert key="success" variant="success">
                         O Trabalhador

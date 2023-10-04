@@ -145,6 +145,24 @@ module.exports = {
             console.log(error);
         }
     },
+    async update_tentativa(req, res) {
+        const { id_conta } = req.body.params;
+
+
+
+
+        await Conta.update({ tentativa: 1 }, {
+            where: {
+                id: id_conta
+            }
+        });
+
+        return res.status(200).send({
+            status: 1,
+            message: 'Alterado com sucesso!',
+
+        });
+    },
     async update(req, res) {
 
 

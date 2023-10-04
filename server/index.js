@@ -24,6 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
+var cpUpload2 = upload.fields([{ name: 'fileContrato' }])
 
 app.post('/guardar_queixa', cpUpload, QueixaController.store);
 app.post('/registar/conta', ContaController.store);
@@ -43,8 +44,8 @@ app.get('/inspectores', InspectorController.index);
 app.get('/queixas_inspectores', InspectorController.getQueixasInspector);
 app.put('/nomear_inspector', QueixaController.update)
 app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
-app.post('/add_queixoso_queixa', cpUpload, QueixaController.add_queixoso_queixa);
-
+app.post('/add_empregador_queixa', cpUpload2, QueixaController.add_empregador_queixa);
+app.put('/atualizarStatusConta', ContaController.update_tentativa)
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;

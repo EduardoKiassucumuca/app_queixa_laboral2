@@ -13,6 +13,25 @@ import Button from 'react-bootstrap/Button';
 import "./alert_autenticacao.css";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"
+import axios from 'axios';
+
+function atualizar_status_conta(conta) {
+    axios.put('http://localhost:3001/atualizarStatusConta', {
+        params: {
+            id_conta: conta.id,
+
+        }
+    })
+        .then(function (response) {
+
+
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+}
 
 
 const AlertAutenticacao = (props) => {
@@ -43,6 +62,7 @@ const AlertAutenticacao = (props) => {
 
                 } else if (data_login.trabalhador.tipo != "igt") {
                     sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data_login));
+                    atualizar_status_conta(data_login.conta)
                     sessionStorage.removeItem("data_login", JSON.stringify(data_login));
                     navigate("/dashboard_queixoso");
                 }

@@ -144,7 +144,7 @@ const FormQueixoso = () => {
       });
 
     } else if (localStorage.getItem("trabalhador") && !localStorage.getItem("empregador")) {
-      console.log("e")
+      console.log(submissao_queixa)
       const trabalhador = localStorage.getItem("trabalhador");
       const trab_encontrado = JSON.parse(trabalhador);
 
@@ -156,7 +156,7 @@ const FormQueixoso = () => {
       formData.append("_ruaEmp", submissao_queixa.ruaEmp);
       formData.append("_bairroEmp", submissao_queixa.bairroEmp);
       formData.append("_website_empresa", submissao_queixa.websiteEmp);
-      formData.append("_email_empresa", submissao_queixa.emailEmp);
+      formData.append("email_empresa", submissao_queixa.emailEmp);
       formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
@@ -167,9 +167,9 @@ const FormQueixoso = () => {
       formData.append("queixoso", "Empregador");
       formData.append("_email_pessoal", submissao_queixa.email_pessoal);
       formData.append("senha", submissao_queixa.password);
-      formData.append("_trabalhadorID", trab_encontrado.Trabalhador.id);
-
-      Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
+      formData.append("trabalhadorID", trab_encontrado.Trabalhador.id);
+      console.log(formData)
+      Axios.post("http://localhost:3001/add_empregador_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         }
