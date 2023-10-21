@@ -1,0 +1,25 @@
+body {}
+
+.MySideNav {
+    background-color: #DAA316 !important;
+}
+
+.btn-nova-queixa {
+    margin-top: 10px;
+}
+
+.nome-sede {
+    color: white;
+}
+
+.logado-como {
+    color: white;
+}
+
+.user-logado {
+    color: #DAA316 !important;
+}
+
+.logo-igt {
+    margin-left: 55px;
+}

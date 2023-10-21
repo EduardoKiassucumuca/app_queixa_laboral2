@@ -21,31 +21,31 @@ const Pessoa = db.define("Pessoa", {
     },
     nome_pai: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     nome_mae: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     naturalidade: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     altura: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     estado_civil: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     sexo: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     data_nascimento: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
     },
     biID: {
         type: Sequelize.INTEGER,
@@ -55,7 +55,7 @@ const Pessoa = db.define("Pessoa", {
             },
             key: 'id'
         },
-        allowNull: false
+        allowNull: true
     },
     enderecoID: {
         type: Sequelize.INTEGER,

@@ -9,11 +9,14 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from "react-router-dom";
+import ModalConfirmacao from '../Modal/modalConfirmation';
 
 
 const Container_queixoso = () => {
   const [showModal, setShowModal] = useState(false);
   const [queixas, setQueixas] = useState([]);
+  const [showModal2, setShowModal2] = useState(false);
+
   let data = "";
   let id_queixoso = "";
 
@@ -64,9 +67,11 @@ const Container_queixoso = () => {
 
 
 
-      <Button onClick={() => setShowModal(true)} variant="warning" className='fw-bold btn-nova-queixa' type="submit">
+      <Button variant="warning" onClick={() => setShowModal2(true)} className='fw-bold btn-nova-queixa' type="submit">
         Nova Queixa
       </Button>
+      <ModalConfirmacao show={showModal2} setShow={setShowModal2} close={() => setShowModal2(false)} />
+
       <ModalQueixoso show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
       {queixas.map(conflito => (
         <Card bg='dark' border='secondary' text="warning" className='card-queixas-queixoso'>

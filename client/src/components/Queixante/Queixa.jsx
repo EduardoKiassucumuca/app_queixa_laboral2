@@ -94,7 +94,6 @@ const Queixa2 = ({ data, updateFielHndler }) => {
         />
       </Col>
     </Row>
-
   );
 };
 

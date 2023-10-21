@@ -10,11 +10,11 @@ const Endereco = db.define("Endereco", {
     },
     bairro: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     rua: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     edificio: {
         type: Sequelize.STRING,
@@ -26,7 +26,7 @@ const Endereco = db.define("Endereco", {
     },
     provincia: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     telefone_principal: {
         type: Sequelize.INTEGER(9),

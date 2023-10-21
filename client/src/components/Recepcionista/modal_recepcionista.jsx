@@ -67,12 +67,10 @@ const ModalRecepcionista = (props) => {
 
                             </p>
                             <p className='file-Contrato'>
-                                <a href={props.queixa.url_file_contrato} target="_blank" id='url-contrato-pdf' ><FaFilePdf className='contrato-pdf' />{props.queixa.url_file_contrato}</a>
-                                <PDFViewer
-                                    document={{
-                                        url: props.queixa.url_file_contrato,
-                                    }}
-                                />
+                                <a href={`./${props.queixa.url_file_contrato}`} target="_blank" id='url-contrato-pdf'>
+                                    <FaFilePdf className='contrato-pdf' />
+                                    {props.queixa.url_file_contrato}
+                                </a>
                             </p>
                         </MDBModalBody>
                         <MDBModalFooter>

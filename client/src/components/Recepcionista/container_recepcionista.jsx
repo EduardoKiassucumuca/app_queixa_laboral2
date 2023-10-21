@@ -71,7 +71,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <Row className='queixas_recepcionista'>
                 <Col md={3}>
                     <Button variant="warning" onClick={() => setShowModal2(true)} className='fw-bold btn-nova-queixa' type="submit">
-                        Abrir uma queixa
+                        Nova Queixa
                     </Button>
                     <ModalConfirmacao show={showModal2} setShow={setShowModal2} close={() => setShowModal2(false)} />
 

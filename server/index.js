@@ -11,6 +11,24 @@ var upload = require("./config/configMulter");
 const ContaController = require('./controllers/ContaController');
 const InspectorController = require("./controllers/InspectorController");
 
+const http = require('http');
+const socketIo = require('socket.io');
+const FuncionarioController = require("./controllers/FuncionarioController");
+
+const server = http.createServer(app);
+const io = socketIo(server,{cors:{origin:'http://localhost:3000'}});
+
+io.on('connection', (socket) => {
+  console.log('A user connected',socket.user);
+
+  socket.on('message', (message) => {
+    io.emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
 
 /*const db = mysql.createPool({
     host: "localhost",
@@ -46,6 +64,12 @@ app.put('/nomear_inspector', QueixaController.update)
 app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
 app.post('/add_empregador_queixa', cpUpload2, QueixaController.add_empregador_queixa);
 app.put('/atualizarStatusConta', ContaController.update_tentativa)
+app.post('/historico_queixa', QueixaController.criar_historico)
+app.put('/editar_queixa', QueixaController.update_queixa)
+app.post('/novo_funcionario', FuncionarioController.store)
+app.get('/funcionarios_igt', FuncionarioController.index);
+app.get('/ver_funcionario', FuncionarioController.get_funcionario);
+
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
     const { senha } = req.body;
@@ -110,6 +134,6 @@ app.put('/atualizarStatusConta', ContaController.update_tentativa)
         console.log(descricao_queixa);
 });*/
 
-app.listen(3001, () => {
+server.listen(3001, () => {
     console.log("Rodando Servidor");
 });

@@ -21,6 +21,11 @@ const Conta = db.define("Conta", {
         allowNull: false,
     },
 
+    privilegio: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+
 });
 
 /*Conta.hasOne(Trabalhador, {

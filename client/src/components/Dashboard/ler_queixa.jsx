@@ -13,32 +13,45 @@ import "./container_queixoso.css";
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ModalQueixoso from "./modal_queixoso";
+import ModalConfirmacao from '../Modal/modalConfirmation';
+import ModalEditaQueixa from "./modal_editar_queixa";
 
-function LerQueixa() {
+
+
+
+const LerQueixa = () => {
 
     const { id_queixa } = useParams();
     //console.log(id_queixa)
     const [conflito, setConflito] = useState({});
-    React.useEffect(() => {
-        Axios.get('http://localhost:3001/ler_queixa', {
+    const [showModal2, setShowModal2] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [serverPath, setServerPath] = useState("");
+    const getQueixa = async () => {
+        await Axios.get('http://localhost:3001/ler_queixa', {
             params: {
                 id_queixa: id_queixa
             }
         }).then(({ data }) => {
-
+    
             setConflito(data.queixas[0]);
+            setServerPath(data.serverPath);
             //console.log(res);
             //console.log(lista_queixa.minha_queixa)
         }).catch(({ res }) => {
             console.log(res);
         });
-    }, []);
+    }
+    React.useEffect(() => {
+        getQueixa();
+    }, [id_queixa]);
 
     let data = "";
     let nome = "";
     let sobrenome = "";
     let empresa = "";
     let perfil = "";
+
     if (sessionStorage.getItem("dashboard_queixoso")) {
         const savedData = sessionStorage.getItem("dashboard_queixoso");
         data = JSON.parse(savedData);
@@ -84,7 +97,7 @@ function LerQueixa() {
                         </Col>
                         <Col md={3}>
 
-                            <small className="text-muted"><FaCircle className='estado' /> {conflito.estado}</small>
+                            <small className="text-muted"><FaCircle className='estado' />{conflito.estado} </small>
                         </Col>
                     </Row>
                 </Card.Footer>
@@ -104,9 +117,15 @@ function LerQueixa() {
             <Button variant="warning" className='fw-bold btn-nova-queixa' type="submit">
                 Pedir update
             </Button>
-            <Button variant="warning" className='fw-bold btn-nova-queixa' type="submit">
-                Nova queixa
+            <Button variant="warning" onClick={() => setShowModal2(true)} className='fw-bold btn-nova-queixa' type="submit">
+                Nova Queixa
             </Button>
+            <ModalConfirmacao show={showModal2} setShow={setShowModal2} close={() => setShowModal2(false)} />
+
+            <Button variant="warning" onClick={() => setShowModal(true)} className='fw-bold btn-nova-queixa' type="submit">
+                Editar queixa
+            </Button>
+            <ModalEditaQueixa show={showModal} setShow={setShowModal} close={() => setShowModal(false)} queixa={conflito} server={serverPath} />
 
         </>
     );

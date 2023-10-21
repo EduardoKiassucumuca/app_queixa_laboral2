@@ -4,12 +4,14 @@ const Pessoa = require('../models/pessoa');
 const Trabalhador = require('../models/Trabalhador');
 const Empresa = require('../models/Empresa');
 const Queixa = require('../models/Queixa');
+const historico_queixa = require('../models/historico_queixa');
 const Conta = require('../models/Conta');
 const ContaController = require('./ContaController');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { where } = require('sequelize');
 const { Op } = require("sequelize");
+const path = require('path');
 const tentativa = 0;
 
 module.exports = {
@@ -96,11 +98,17 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo'],
                 where: { id: id_queixa }
             });
-            //console.log(queixas);
-            res.status(200).json({ queixas });
+
+
+
+            //const serverPath = path.join(__dirname, 'uploads', queixas[0].url_file_contrato);
+            const serverPath = path.resolve(queixas[0].url_file_contrato)
+            //console.log('Server path:', serverPath);
+            //console.log(pathFile);
+            res.status(200).json({ queixas, serverPath });
         } catch (error) {
 
             console.log("Error", error);
@@ -1222,6 +1230,51 @@ module.exports = {
 
         }
 
+    },
+    async criar_historico(req, res) {
+        try {
+            const { id_queixa } = req.body;
+            const { assunto } = req.body;
+            const { facto } = req.body;
+            const {modo} = req.body
+            const data_queixa = new Date();
+
+            const novoHistorico = await historico_queixa.create({
+                id_queixa: id_queixa,
+                assunto: assunto,
+                facto: facto,
+                data: data_queixa,
+                modo: modo
+            })
+            return res.status(200).send({
+                status: 1,
+                message: 'Hi, note que a sua queixa foi editada',
+                novoHistorico
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async update_queixa(req, res) {
+        const { id_queixa } = req.body.params;
+        const { assunto } = req.body.params;
+        const { facto } = req.body.params;
+        const { modo } = req.body.params;
+        await Queixa.update({
+            assunto: assunto,
+            facto: facto,
+            modo:modo
+        }, {
+            where: {
+                id: id_queixa
+            }
+        });
+
+        return res.status(200).send({
+            status: 1,
+            message: 'Queixa editada com sucesso!',
+
+        });
     },
     async update(req, res) {
 
