@@ -69,6 +69,8 @@ app.put('/editar_queixa', QueixaController.update_queixa)
 app.post('/novo_funcionario', FuncionarioController.store)
 app.get('/funcionarios_igt', FuncionarioController.index);
 app.get('/ver_funcionario', FuncionarioController.get_funcionario);
+app.put('/editar_funcionario', FuncionarioController.update)
+app.delete('/apagar_funcionario', FuncionarioController.delete);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

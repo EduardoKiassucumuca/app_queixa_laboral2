@@ -13,7 +13,9 @@ import Button from "react-bootstrap/Button";
 import "./modal_confirmation_queixa.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+function reloadPage() {
+  window.location.reload();
+}
 const ModalConfirmationQueixa = (props) => {
   const navigate = useNavigate();
 
@@ -33,9 +35,15 @@ const ModalConfirmationQueixa = (props) => {
               <p className="texto-anonimato">{props.msg}</p>
             </MDBModalBody>
             <MDBModalFooter>
-              <Link to={props.redirect}>
-                <Button variant="warning">OK</Button>
-              </Link>
+              {props.redirect === window.location.pathname ? (
+                <Button variant="warning" onClick={reloadPage}>
+                  OK
+                </Button>
+              ) : (
+                <Link to={props.redirect}>
+                  <Button variant="warning">OK</Button>
+                </Link>
+              )}
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

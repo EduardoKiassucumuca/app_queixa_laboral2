@@ -3,9 +3,13 @@ import "./container_admin.css";
 import { Button } from "react-bootstrap";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ModalDelete from "../Modal/modal_delete";
 
 function ContainerAdmin(props) {
+  const [showModal, setShowModal] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
+  const [funcionario, setFuncionario] = useState("");
+
   const navigate = useNavigate();
   React.useEffect(() => {
     //console.log("ok");
@@ -22,6 +26,10 @@ function ContainerAdmin(props) {
 
   const novo_funcionario = () => {
     navigate("/registrar_funcionario");
+  };
+  const modal_apagar = (funcionario) => {
+    setFuncionario(funcionario);
+    setShowModal(true);
   };
   return (
     <>
@@ -63,12 +71,23 @@ function ContainerAdmin(props) {
                 </a>
               </td>
               <td>
-                <a className="btn btn-danger">Apagar</a>
+                <a
+                  className="btn btn-danger"
+                  onClick={() => modal_apagar(funcionario)}
+                >
+                  Apagar
+                </a>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <ModalDelete
+        show={showModal}
+        setShow={setShowModal}
+        close={() => setShowModal(false)}
+        funcionario={funcionario}
+      />
     </>
   );
 }

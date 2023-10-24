@@ -37,31 +37,68 @@ const VerFuncionario = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const getFuncionarios = async () => {
-    await Axios.get("http://localhost:3001/ver_funcionario", {
+  useEffect(() => {
+    Axios.get("http://localhost:3001/ver_funcionario", {
       params: {
         id: id_funcionario,
       },
     })
       .then(({ data }) => {
-        setFuncionario(data.funcionarios);
-        setNome(data.funcionarios.Pessoa.nome);
-        setSobrenome(data.funcionarios.Pessoa.sobrenome);
-        setOffice(data.funcionarios.localizacao_office);
-        setTelefone1(data.)
+        setFuncionario(data.funcionarios[0]);
+        setNome(data.funcionarios[0].Pessoa.nome);
+        setSobrenome(data.funcionarios[0].Pessoa.sobrenome);
+        setOffice(data.funcionarios[0].localizacao_office);
+        setTelefone1(data.funcionarios[0].Pessoa.Endereco.telefone_principal);
+        setTelefone2(data.funcionarios[0].Pessoa.Endereco.telefone_alternativo);
+        setCargo(data.funcionarios[0].cargo);
+        setDepartamento(data.funcionarios[0].area_departamento);
 
-        //console.log(res);
+        console.log(data.funcionarios);
         //console.log(lista_queixa.minha_queixa)
       })
       .catch(({ res }) => {
-        console.log(res);
+        console.log("ss", res);
       });
-  };
-  React.useEffect(() => {
-    getFuncionarios();
   }, [id_funcionario]);
 
-  const editar_funcionario = () => {};
+  const editar_funcionario = (
+    funcionarioID,
+    nv_nome,
+    nv_sobrenome,
+    nv_office,
+    nv_telefone1,
+    nv_telefone2,
+    nv_cargo,
+    nv_departamento,
+    e
+  ) => {
+    e.preventDefault();
+    Axios.put("http://localhost:3001/editar_funcionario", {
+      params: {
+        _id_funcionario: id_funcionario,
+        pessoaID: funcionario.Pessoa.id,
+        enderecoID: funcionario.Pessoa.Endereco.id,
+        _nome: nv_nome,
+        _sobrenome: nv_sobrenome,
+        office_location: nv_office,
+        telefone1: nv_telefone1,
+        telefone2: nv_telefone2,
+        _cargo: nv_cargo,
+        _departamento: nv_departamento,
+      },
+    })
+      .then(function (response) {
+        //console.log(response);
+        setAlert(response.data.message);
+        setRedireciona(window.location.pathname);
+        setShowModal(true);
+
+        //window.location.href = '/chefe_servicos';
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -83,7 +120,21 @@ const VerFuncionario = () => {
           <div class="card-header">Dados Pessoais</div>
           <div class="card-body">
             <Col md={12}>
-              <Form onSubmit={(e) => editar_funcionario(e)}>
+              <Form
+                onSubmit={(e) =>
+                  editar_funcionario(
+                    id_funcionario,
+                    nome,
+                    sobrenome,
+                    office,
+                    telefone1,
+                    telefone2,
+                    cargo,
+                    departamento,
+                    e
+                  )
+                }
+              >
                 <Row className="mb-3">
                   <Col md={8}>
                     <Form.Group>
@@ -94,6 +145,7 @@ const VerFuncionario = () => {
                         id="nome"
                         name="nome"
                         required
+                        value={nome}
                         onChange={(e) => setNome(e.target.value)}
                       />
                     </Form.Group>
@@ -107,6 +159,7 @@ const VerFuncionario = () => {
                         placeholder="Digite o seu sobrenome"
                         id="sobrenome"
                         name="sobrenome"
+                        value={sobrenome}
                         onChange={(e) => setSobrenome(e.target.value)}
                       />
                     </Form.Group>
@@ -118,6 +171,7 @@ const VerFuncionario = () => {
                         defaultValue="Choose..."
                         name="provincia"
                         id="provincia"
+                        value={office}
                         onChange={(e) => setOffice(e.target.value)}
                       >
                         <option>Escolha...</option>
@@ -151,6 +205,7 @@ const VerFuncionario = () => {
                         placeholder="930340539"
                         id="contacto1"
                         name="contacto_principal"
+                        value={telefone1}
                         onChange={(e) => setTelefone1(e.target.value)}
                       />
                     </Form.Group>
@@ -162,6 +217,7 @@ const VerFuncionario = () => {
                         type="text"
                         placeholder="950134233"
                         id="contacto2"
+                        value={telefone2}
                         name="contacto_alternativo"
                         onChange={(e) => setTelefone2(e.target.value)}
                       />
@@ -175,6 +231,7 @@ const VerFuncionario = () => {
                         name="cargo"
                         id="cargo"
                         placeholder="Cargo"
+                        value={cargo}
                         onChange={(e) => setCargo(e.target.value)}
                       />
                     </Form.Group>
@@ -187,6 +244,7 @@ const VerFuncionario = () => {
                         name="area_departamento"
                         id="area_departamento"
                         placeholder="Área/departamento"
+                        value={departamento}
                         onChange={(e) => setDepartamento(e.target.value)}
                       />
                     </Form.Group>

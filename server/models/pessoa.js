@@ -74,13 +74,13 @@ BI.hasOne(Pessoa, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
-Pessoa.hasOne(Endereco, {
+Endereco.hasOne(Pessoa, {
     foreignkey: 'enderecoID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
 Pessoa.belongsTo(BI);
-Endereco.belongsTo(Pessoa);
+Pessoa.belongsTo(Endereco);
 
 module.exports = Pessoa;

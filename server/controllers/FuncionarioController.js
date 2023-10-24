@@ -21,7 +21,15 @@ module.exports = {
                             {
                                 association: 'Pessoa',
                                 required: true,
-                                
+                                include: [
+                          
+                                    {
+                                        association: 'Endereco',
+                                        required: true,
+                                        
+                                    },
+                                   
+                                ],
                             },
                            
                         ],
@@ -47,6 +55,15 @@ module.exports = {
                             {
                                 association: 'Pessoa',
                                 required: true,
+                                include: [
+                          
+                                    {
+                                        association: 'Endereco',
+                                        required: true,
+                                        
+                                    },
+                                   
+                                ],
                                 
                             },
                            
@@ -123,35 +140,97 @@ try{
     },
     async update(req, res) {
 
-        const {nome} = req.params;
-        const {sobrenome} = req.params;
-
-        const {pessoa_id} = req.params;
-
-        await Pessoa.update({nome:'Muka', sobrenome:'Cristiano'}, {
+        const {enderecoID} = req.body.params;
+        const {telefone1} = req.body.params;
+        const {telefone2} = req.body.params;
+        
+        const endereco = await Endereco.update({
+            telefone_principal:telefone1,
+            telefone_alternativo:telefone2
+        }, {
             where: {
-                id: pessoa_id
+                id: enderecoID
+            }
+        });
+        const {_nome} = req.body.params;
+        const {_sobrenome} = req.body.params;
+        const {pessoaID} = req.body.params;
+
+        await Pessoa.update({
+            nome:_nome,
+            sobrenome:_sobrenome
+        }, {
+            where: {
+                id: pessoaID
+            }
+        });
+        const {_id_funcionario} = req.body.params;
+        const {office_location} = req.body.params;
+        const {_cargo} = req.body.params;
+        const {_departamento} = req.body.params;
+
+        await Trabalhador.update({
+            cargo:_cargo,
+            area_departamento:_departamento,
+            localizacao_office: office_location
+        }, {
+            where: {
+                id: _id_funcionario
+            }
+        });
+      
+        await funcionarioIGT.update({
+            tipo:_cargo,
+        }, {
+            where: {
+                trabalhadorID: _id_funcionario
             }
         });
 
+
         return res.status(200).send({
             status:1,
-            message: 'Pessoa atualizada com sucesso!',
+            message: 'Dados atualizados com sucesso!',
 
         });
 
     },
     async delete(req, res) {
-        const {pessoa_id} = req.params;
+        const {_id_funcionario} = req.query;
+        const {pessoaID} = req.query;
+        const {enderecoID} = req.query;
 
+        await funcionarioIGT.destroy({
+            where: {
+                trabalhadorID: _id_funcionario
+            }
+        });
+        const trabalhador = await Trabalhador.findOne({ where: { id: _id_funcionario } });
+
+        await Trabalhador.destroy({
+            where: {
+                id: _id_funcionario
+            }
+        });
+        
         await Pessoa.destroy({
             where: {
-                id: pessoa_id
+                id: pessoaID
+            }
+        });
+        await Conta.destroy({
+            where: {
+                id: trabalhador.contaID
+            }
+        });
+        await Endereco.destroy({
+            where: {
+                id: enderecoID
             }
         });
           return res.status(200).send({
             status:1,
-            message: 'Pessoa apagada com sucesso!',
+            message: 'Funcionario apagado com sucesso!',
 
         });
 
