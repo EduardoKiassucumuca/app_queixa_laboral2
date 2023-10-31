@@ -153,13 +153,17 @@ function RegistrarFuncionario(props) {
                   <Col md={7}>
                     <Form.Group>
                       <Form.Label>Cargo</Form.Label>
-                      <Form.Control
-                        type="name"
+                      <Form.Select
+                        defaultValue="Choose..."
                         name="cargo"
                         id="cargo"
-                        placeholder="Cargo"
                         onChange={(e) => setCargo(e.target.value)}
-                      />
+                      >
+                        <option>Escolha...</option>
+                        <option>Inspector</option>
+                        <option>Recepcionista</option>
+                        <option>chefe_servicos</option>
+                      </Form.Select>
                     </Form.Group>
                   </Col>
                   <Col md={5}>

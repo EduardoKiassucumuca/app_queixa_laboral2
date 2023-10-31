@@ -5,6 +5,7 @@ const Trabalhador = require("./Trabalhador.js");
 const Inspector = require("./Inspector.js");
 const Recepcionista = require("./recepcionista.js");
 const ChefeServicos = require("./ChefeServicos.js");
+const Testemunha = require("./testemunha.js");
 
 const Queixa = db.define("Queixa", {
     id: {
@@ -103,6 +104,16 @@ const Queixa = db.define("Queixa", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    testemunhaID: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: {
+                tableName: 'Testemunha',
+            },
+            key: 'id'
+        },
+        allowNull: true
+    },
 });
 
 Empresa.hasMany(Queixa, {
@@ -137,5 +148,6 @@ Queixa.belongsTo(Trabalhador);
 Queixa.belongsTo(Inspector);
 Queixa.belongsTo(Recepcionista);
 Queixa.belongsTo(ChefeServicos);
+Queixa.belongsTo(Testemunha);
 
 module.exports = Queixa;

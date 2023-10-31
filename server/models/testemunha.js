@@ -1,19 +1,19 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
-const Trabalhador = require("./Trabalhador");
+const Inspector = require("./Inspector");
 
-const Inspector = db.define("Inspector", {
+const Testemunha = db.define("Testemunha", {
     id: {
         type: Sequelize.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
     },
-    trabalhadorID: {
+    inspectorID: {
         type: Sequelize.INTEGER,
         references: {
             model: {
-                tableName: 'trabalhador',
+                tableName: 'Inspector',
             },
             key: 'id'
         },
@@ -21,12 +21,12 @@ const Inspector = db.define("Inspector", {
     },
 });
 
-Trabalhador.hasOne(Inspector, {
-    foreignkey: 'trabalhadorID',
+Inspector.hasOne(Testemunha, {
+    foreignkey: 'inspectorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 
-Inspector.belongsTo(Trabalhador);
+Testemunha.belongsTo(Inspector);
 
-module.exports = Inspector;
+module.exports = Testemunha;

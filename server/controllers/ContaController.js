@@ -17,7 +17,7 @@ module.exports = {
             let igt_funcionario = '';
             let empresa = '';
             const { email } = req.body;
-            const senha = "12345";
+            const {senha} = req.body;
             console.log("email:", email);
 
             const conta = await Conta.findOne({
@@ -45,10 +45,7 @@ module.exports = {
                     where: { id: trabalhador.pessoaID }
                 });
 
-                igt_funcionario = await funcionarioIGT.findOne({
-                    attributes: ['id', 'trabalhadorID', 'tipo'],
-                    where: { trabalhadorID: trabalhador.id }
-                });
+               
 
                 /*queixa = await Queixa.findOne({
                     attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],

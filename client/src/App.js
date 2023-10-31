@@ -23,6 +23,8 @@ import JoinAconselhamento from "./components/Join/join";
 import DashboardAdmin from "./components/Dashboard/dashboard_admin";
 import RegistrarFuncionario from "./components/Dashboard/registrar_funcionario";
 import VerFuncionario from "./components/Dashboard/ver_funcionario";
+import DashboardInspector from "./components/Inspector/dashboard_inspector";
+import MaisDetalhes from "./components/Inspector/mais_detalhes";
 
 function App() {
   const [show, setShow] = useState("Empregador");
@@ -61,6 +63,9 @@ function App() {
           path="/ver_funcionario/:id_funcionario"
           element={<VerFuncionario />}
         />
+        <Route path="/mais_detalhes/:id_queixa" element={<MaisDetalhes />} />
+
+        <Route path="/inspector" element={<DashboardInspector />} />
       </Routes>
     </Router>
   );

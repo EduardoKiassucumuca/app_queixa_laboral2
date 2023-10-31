@@ -6,33 +6,25 @@ module.exports = {
     async index(req, res) {
 
         try {
-            inspectores = await Inspector.findAll({
+            const inspectores = await Inspector.findAll({
 
-                attributes: ['id', 'funcionarioIGTID'],
+                attributes: ['id', 'trabalhadorID'],
                 required: true,
 
                 include: [
                     {
-                        association: 'funcionarioigt',
-                        attributes: ['id', 'trabalhadorID', 'tipo'],
-                        required: true,
-                        include: [{
+
                             association: 'Trabalhador',
                             required: true,
                             include: [
                                 {
                                     association: 'Pessoa',
                                     required: true,
-                                    include: [{
-                                        association: 'BI',
-                                        required: true
-                                    }],
-
+                                  
                                 },
 
                             ],
 
-                        }],
 
                     },
 
@@ -41,6 +33,100 @@ module.exports = {
             });
 
             res.status(200).json({ inspectores });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async getQueixasInspector2(req, res) {
+        let queixas = [];
+
+        try {
+            const {fk_inspector} = req.query;
+            queixas = await Queixa.findAll({
+
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID','inspectorID', 'url_file_contrato'],
+                required: true,
+             
+                include: [
+                    {
+                        association: 'Empresa',
+                        required: true,
+                        attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
+
+                    },
+                    {
+                        association: 'Testemunha',
+                        required: true,
+                        attributes: ['id', 'inspectorID'],
+                        include:[{
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+    
+                            include: [
+                                {
+                                  
+                                   
+                                        association: 'Trabalhador',
+                                        required: true,
+                                        include: [
+                                            {
+                                                association: 'Pessoa',
+                                                required: true,
+                                                
+    
+                                            },
+    
+                                        ],
+    
+                                   
+    
+                                },
+    
+                            ],
+                        },],
+
+                    },
+                    {
+                        
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+                    },
+                    {
+                        association: 'Trabalhador',
+                        required: true,
+
+                        include: [
+                            {
+                                association: 'Pessoa',
+                                required: true,
+                                include: [{
+                                    association: 'BI',
+                                    required: true
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+
+                
+                ],
+
+                where: {
+                    '$Inspector.trabalhadorID$': fk_inspector
+                
+                },
+
+            });
+
+            res.status(200).json({ queixas });
         } catch (error) {
 
             console.log("Error", error);
@@ -67,32 +153,60 @@ module.exports = {
 
                     },
                     {
+                        association: 'Testemunha',
+                        required: true,
+                        attributes: ['id', 'inspectorID'],
+                        include:[{
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+    
+                            include: [
+                                {
+                                  
+                                   
+                                        association: 'Trabalhador',
+                                        required: true,
+                                        include: [
+                                            {
+                                                association: 'Pessoa',
+                                                required: true,
+                                                
+    
+                                            },
+    
+                                        ],
+    
+                                   
+    
+                                },
+    
+                            ],
+                        },],
+
+                    },
+                    {
                         association: 'Inspector',
                         required: true,
-                        attributes: ['id', 'funcionarioIGTID'],
+                        attributes: ['id', 'trabalhadorID'],
 
                         include: [
                             {
-                                association: 'funcionarioigt',
-                                attributes: ['id', 'trabalhadorID', 'tipo'],
-                                required: true,
-                                include: [{
+                              
+                               
                                     association: 'Trabalhador',
                                     required: true,
                                     include: [
                                         {
                                             association: 'Pessoa',
                                             required: true,
-                                            include: [{
-                                                association: 'BI',
-                                                required: true
-                                            }],
+                                            
 
                                         },
 
                                     ],
 
-                                }],
+                               
 
                             },
 

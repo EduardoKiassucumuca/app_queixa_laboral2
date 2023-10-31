@@ -24,7 +24,7 @@ module.exports = {
         try {
             queixas = await Queixa.findAll({
 
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato','nota'],
                 required: true,
                 include: [
                     {
@@ -100,6 +100,104 @@ module.exports = {
             const queixas = await Queixa.findAll({
                 attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo'],
                 where: { id: id_queixa }
+            });
+
+
+
+            //const serverPath = path.join(__dirname, 'uploads', queixas[0].url_file_contrato);
+            const serverPath = path.resolve(queixas[0].url_file_contrato)
+            //console.log('Server path:', serverPath);
+            //console.log(pathFile);
+            res.status(200).json({ queixas, serverPath });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async mais_detalhes(req, res) {
+        const { id_queixa } = req.query;
+      
+
+        try {
+            const queixas = await Queixa.findAll({
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo'],
+                where: {
+                    id: id_queixa
+                
+                },
+                include: [
+                    {
+                        association: 'Empresa',
+                        required: true,
+                        attributes: ['id', 'nome_empresa', 'nif', 'designacao', 'url_website', 'email', 'tipo'],
+
+                    },
+                    {
+                        association: 'Testemunha',
+                        required: true,
+                        attributes: ['id', 'inspectorID'],
+                        include:[{
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+    
+                            include: [
+                                {
+                                  
+                                   
+                                        association: 'Trabalhador',
+                                        required: true,
+                                        include: [
+                                            {
+                                                association: 'Pessoa',
+                                                required: true,
+                                                
+    
+                                            },
+    
+                                        ],
+    
+                                   
+    
+                                },
+    
+                            ],
+                        },],
+
+                    },
+                    {
+                        
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+                    },
+                    {
+                        association: 'Trabalhador',
+                        required: true,
+
+                        include: [
+                            {
+                                association: 'Pessoa',
+                                required: true,
+                                include: [{
+                                    association: 'BI',
+                                    required: true
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+
+                
+                ],
+
+            
+
             });
 
 

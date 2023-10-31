@@ -45,7 +45,7 @@ function Login() {
       Axios.post("http://localhost:3001/auth", body, {})
         .then(({ data }) => {
           //console.log("Teste:", data);
-          sessionStorage.setItem("dashboard_queixoso", JSON.stringify(data));
+          sessionStorage.setItem("data_login", JSON.stringify(data));
 
           if (data.conta.tentativa === 0) {
             navigate("/Validacao");
