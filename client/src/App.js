@@ -25,6 +25,7 @@ import RegistrarFuncionario from "./components/Dashboard/registrar_funcionario";
 import VerFuncionario from "./components/Dashboard/ver_funcionario";
 import DashboardInspector from "./components/Inspector/dashboard_inspector";
 import MaisDetalhes from "./components/Inspector/mais_detalhes";
+import NovaReuniao from "./components/Inspector/nova_reuniao";
 
 function App() {
   const [show, setShow] = useState("Empregador");
@@ -66,6 +67,7 @@ function App() {
         <Route path="/mais_detalhes/:id_queixa" element={<MaisDetalhes />} />
 
         <Route path="/inspector" element={<DashboardInspector />} />
+        <Route path="/nova_reuniao" element={<NovaReuniao />} />
       </Routes>
     </Router>
   );

@@ -9,9 +9,11 @@ import Col from "react-bootstrap/Col";
 import { FaUser } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
-import "./container_inspector.css";
+import "./mais_detalhes.css";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
+import { FaFilePdf } from "react-icons/fa";
+import ModalReuniao from "./modal_reuniao";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
@@ -64,92 +66,108 @@ const MaisDetalhes = () => {
       <SideNavInspector />
       <MenuInspector />
 
-      <Card
-        bg="dark"
-        border="secondary"
-        text="warning"
-        className="card-queixas-queixoso"
-      >
-        <div class="ribbon">
-          <span>New</span>
-        </div>
-        <Card.Body className="body-facto-queixa">
-          <Card.Title>
-            {conflito.id} - {conflito.assunto}
-          </Card.Title>
-          <p></p>
-          <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Row>
-            <Col md={3}>
-              <small className="text-muted">Last updated 3 mins ago </small>
-            </Col>
+      <Row className="row-detalhes">
+        <Col md={9}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="warning"
+            className="card-queixas-queixoso"
+          >
+            <div class="ribbon">
+              <span>New</span>
+            </div>
+            <Card.Body className="body-facto-queixa">
+              <Card.Title>
+                {conflito.id} - {conflito.assunto}
+              </Card.Title>
+              <p></p>
+              <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
+            </Card.Body>
+            <Card.Footer>
+              <Row>
+                <Col md={3}>
+                  <small className="text-muted">Last updated 3 mins ago </small>
+                </Col>
 
-            <Col md={3}>
-              <small className="text-muted">
-                {" "}
-                <FaUser />
-                <span>Inspector: </span> Não atribuido{" "}
-              </small>
-            </Col>
-            <Col md={3}>
-              <small className="text-muted">{conflito.provincia}</small>
-            </Col>
-            <Col md={3}>
-              <small className="text-muted">
-                <FaCircle className="estado" />
-                {conflito.estado}{" "}
-              </small>
-            </Col>
-          </Row>
-        </Card.Footer>
-      </Card>
+                <Col md={3}>
+                  <small className="text-muted">
+                    {" "}
+                    <FaUser />
+                    <span>Inspector: </span> Não atribuido{" "}
+                  </small>
+                </Col>
+                <Col md={3}>
+                  <small className="text-muted">{conflito.provincia}</small>
+                </Col>
+                <Col md={3}>
+                  <small className="text-muted">
+                    <FaCircle className="estado" />
+                    {conflito.estado}{" "}
+                  </small>
+                </Col>
+              </Row>
+            </Card.Footer>
+          </Card>
+        </Col>
+        <Col md={3}>
+          <Card
+            bg="dark"
+            border=""
+            text="white"
+            className="card-queixas-queixoso"
+          >
+            <Card.Header style={{ color: "#ffc107" }}>Anexos</Card.Header>
+            <Card.Body>
+              <Card.Title></Card.Title>
+              <Card.Text>
+                <p>
+                  <FaFilePdf style={{ border: "red" }} />
+                  <a
+                    href={conflito.url_file_contrato}
+                    style={{ color: "rgb(220, 195, 119)" }}
+                  >
+                    Meu_contrato.pdf
+                  </a>
+                </p>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
       <p></p>
-      <Alert variant="warning" className="nota-queixa">
-        <Alert.Heading>Hi, {perfil}</Alert.Heading>
-        <p>
-          Recebemos a sua queixa e estamos trabalhando para que consigamos
-          resolver. Assim que tivermos mais detalhes iremos informar,
-          Comprimentos.
-        </p>
-        <hr />
-        <small className="text-muted-footer">
-          <FaPhone className="footer-nota" /> Inspencção geral do trabalho
-        </small>
-      </Alert>
-      <Button
-        variant="warning"
-        className="fw-bold btn-nova-queixa"
-        type="submit"
-      >
-        Adicionar nota
-      </Button>
-      <Button
-        variant="warning"
-        onClick={() => setShowModal2(true)}
-        className="fw-bold btn-nova-queixa"
-        type="submit"
-      >
-        Agendar reunião
-      </Button>
+      <div>
+        <Button
+          variant="warning"
+          className="fw-bold btn-nova-queixa"
+          type="submit"
+          style={{ marginRight: 7 }}
+        >
+          Adicionar nota
+        </Button>
 
-      <Button
-        variant="warning"
-        onClick={() => setShowModal(true)}
-        className="fw-bold btn-nova-queixa"
-        type="submit"
-      >
-        Aplicar Multa
-      </Button>
-      <Button
-        variant="warning"
-        onClick={() => setShowModal(true)}
-        className="fw-bold btn-nova-queixa"
-        type="submit"
-      >
-        Anexar acta
-      </Button>
+        <Button
+          variant="dark"
+          border="secondary"
+          type="button"
+          onClick={() => setShowModal(true)}
+          style={{ borderColor: "#ddd", marginRight: 7 }}
+        >
+          Agendar reunião
+        </Button>
+
+        <Button variant="outline-danger" style={{ marginRight: 7 }}>
+          Aplicar multa
+        </Button>
+
+        <Button variant="outline-warning">Anexar acta</Button>
+      </div>
+      <ModalReuniao
+        show={showModal}
+        setShow={setShowModal}
+        conflito={conflito}
+        close={() => setShowModal(false)}
+      />
     </>
   );
 };

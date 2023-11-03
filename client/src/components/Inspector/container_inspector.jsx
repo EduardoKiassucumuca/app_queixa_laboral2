@@ -203,6 +203,7 @@ const ContainerInspector = ({ onSearch }) => {
           <p className="p-localizacao"></p>
         </Col>
       </Row>
+
       {conflitos.map((conflito) => (
         <Card
           bg="dark"
@@ -214,7 +215,10 @@ const ContainerInspector = ({ onSearch }) => {
             <span>New</span>
           </div>
           <Card.Body>
-            <Link className="link-queixa" to={`/mais_detalhes/${conflito.id}`}>
+            <Link
+              className="link-queixa-queixoso"
+              to={`/mais_detalhes/${conflito.id}`}
+            >
               <Card.Title>
                 {conflito.id} - {conflito.assunto}
               </Card.Title>

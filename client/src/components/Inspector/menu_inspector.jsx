@@ -37,7 +37,7 @@ const MenuInspector = () => {
   return (
     <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
       <Container>
-        <Navbar.Brand className="logo-igt" href="/recepcionista">
+        <Navbar.Brand className="logo-igt" href="#">
           {" "}
           <span className="nome-sede">IGT | </span>
           <span className="nome-servico">Queixa Laboral</span>
