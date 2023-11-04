@@ -15,8 +15,9 @@ import { Link } from "react-router-dom";
 
 const ModalReuniao = (props) => {
   const [centredModal, setCentredModal] = useState(false);
-
+  console.log(props.conflito);
   const toggleShow = () => setCentredModal(!centredModal);
+  localStorage.setItem("data_queixa", JSON.stringify(props.conflito));
 
   return (
     <>

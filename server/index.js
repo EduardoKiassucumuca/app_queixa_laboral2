@@ -14,6 +14,7 @@ const InspectorController = require("./controllers/InspectorController");
 const http = require('http');
 const socketIo = require('socket.io');
 const FuncionarioController = require("./controllers/FuncionarioController");
+const ReuniaoController = require("./controllers/ReuniaoController.js");
 
 const server = http.createServer(app);
 const io = socketIo(server,{cors:{origin:'http://localhost:3000'}});
@@ -73,6 +74,10 @@ app.put('/editar_funcionario', FuncionarioController.update)
 app.delete('/apagar_funcionario', FuncionarioController.delete);
 app.get('/queixas_inspectores2', InspectorController.getQueixasInspector2);
 app.get('/mais_detalhes', QueixaController.mais_detalhes);
+app.post('/nova_reuniao', ReuniaoController.store);
+app.post('/nova_reuniao_empregador', ReuniaoController.nova_reuniao_empregador);
+app.get('/reunioes_empregados', ReuniaoController.index);
+
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

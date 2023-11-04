@@ -9,7 +9,7 @@ import SideNavInspector from "./SideNavInspector";
 import MenuInspector from "./menu_inspector";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 
-function NovaReuniao(props) {
+function NovaReuniaoEmpregador(props) {
   const [assunto, setAssunto] = useState("");
   const [local, setLocal] = useState("");
   const [date, setDate] = useState("");
@@ -26,14 +26,14 @@ function NovaReuniao(props) {
   }
   const agendar_reuniao = (e) => {
     e.preventDefault();
-    Axios.post("http://localhost:3001/nova_reuniao", {
+    Axios.post("http://localhost:3001/nova_reuniao_empregador", {
       _assunto: assunto,
       _local: local,
       _data: date,
       _hora: hora,
       _obs: obs,
       fk_queixa: data.id,
-      fk_trabalhador: data.Trabalhador.id,
+      fk_empregador: data.Empresa.id,
     })
       .then((resposta) => {
         setAlert(resposta.data.message);
@@ -58,7 +58,7 @@ function NovaReuniao(props) {
 
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
-          <h3 className="mb-3 h1-queixa">Agendar reunião com o Trabalhador</h3>
+          <h3 className="mb-3 h1-queixa">Agendar reunião com o Empregador</h3>
         </div>
         <div class="card">
           <div class="card-header">Nova Reunião</div>
@@ -89,19 +89,15 @@ function NovaReuniao(props) {
                 <Col md={6}>
                   <FloatingLabel
                     controlId="floatingTextarea2"
-                    label="Trabalhador"
+                    label="Empregador"
                   >
                     <Form.Control
-                      placeholder="Trbalhador"
+                      placeholder="Empregador"
                       name="trabalhador_reuniao"
                       id="trabalhador"
                       style={{ padding: "2px" }}
                       disabled
-                      value={
-                        data.Trabalhador.Pessoa.nome +
-                        " " +
-                        data.Trabalhador.Pessoa.sobrenome
-                      }
+                      value={data.Empresa.nome_empresa}
                     />
                   </FloatingLabel>
                 </Col>
@@ -153,4 +149,4 @@ function NovaReuniao(props) {
   );
 }
 
-export default NovaReuniao;
+export default NovaReuniaoEmpregador;
