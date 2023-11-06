@@ -24,7 +24,9 @@ function SideNavInspector() {
           <NavIcon>
             <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
           </NavIcon>
-          <NavText>Home</NavText>
+          <NavText>
+            <a href="">Home</a>
+          </NavText>
         </NavItem>
         <NavItem eventKey="Reuniões">
           <NavIcon>
@@ -41,7 +43,7 @@ function SideNavInspector() {
           </NavItem>
           <NavItem eventKey="Reuniões">
             <NavText>
-              <Link to="">Empregadores </Link>
+              <a href="/reunioes_empregadores">Empregadores</a>
             </NavText>
           </NavItem>
         </NavItem>

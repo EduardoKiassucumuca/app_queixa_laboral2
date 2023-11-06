@@ -10,7 +10,7 @@ import MenuInspector from "./menu_inspector";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Search from "antd/es/transfer/search";
 
-function ReunioesEmpregados(props) {
+function ReunioesEmpregadores(props) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [conflitos, setConflitos] = useState([]);
@@ -28,7 +28,7 @@ function ReunioesEmpregados(props) {
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
   React.useEffect(() => {
-    Axios.get("http://localhost:3001/reunioes_empregados", {
+    Axios.get("http://localhost:3001/reunioes_empregadores", {
       params: {
         fk_inspector: data2.trabalhador.id,
       },
@@ -89,12 +89,12 @@ function ReunioesEmpregados(props) {
         setShow={setShowModal}
         close={() => setShowModal(false)}
       />
-
+      <p></p>
       <Row className="queixas_recepcionista">
         <Col md={6}>
-          <h4 style={{ color: "ffc107" }}>Reuniões com os empregados</h4>
+          <h4 style={{ color: "#ffc107" }}>Reuniões com os empregadores</h4>
         </Col>
-
+        <p></p>
         <Col md={2}>
           {" "}
           <p className="p-localizacao"></p>
@@ -126,10 +126,7 @@ function ReunioesEmpregados(props) {
                   <td>{reuniao.assunto}</td>
                   <td>{reuniao.local}</td>
 
-                  <td>
-                    {reuniao.Trabalhador.Pessoa.nome}{" "}
-                    {reuniao.Trabalhador.Pessoa.sobrenome}
-                  </td>
+                  <td>{reuniao.Empresa.nome_empresa} </td>
                   <td>{reuniao.estado}</td>
                   <td>
                     <Button
@@ -151,4 +148,4 @@ function ReunioesEmpregados(props) {
   );
 }
 
-export default ReunioesEmpregados;
+export default ReunioesEmpregadores;

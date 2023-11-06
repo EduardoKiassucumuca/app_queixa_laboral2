@@ -43,7 +43,7 @@ const Reuniao = db.define("reuniao", {
         },
         allowNull: true
     },
-    fk_trabalhador: {
+    trabalhadorID: {
         type: Sequelize.INTEGER,
         references: {
             model: {
@@ -53,7 +53,7 @@ const Reuniao = db.define("reuniao", {
         },
         allowNull: true
     },
-    fk_empregador: {
+    empresaID: {
         type: Sequelize.INTEGER,
         references: {
             model: {
@@ -72,12 +72,12 @@ Queixa.hasOne(Reuniao, {
 });
 
 Trabalhador.hasOne(Reuniao, {
-    foreignkey: 'fk_trabalhador',
+    foreignkey: 'trabalhadorID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });
 Empresa.hasOne(Reuniao, {
-    foreignkey: 'fk_empregador',
+    foreignkey: 'empresaID',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 });

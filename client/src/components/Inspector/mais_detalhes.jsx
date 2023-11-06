@@ -14,14 +14,21 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
+import { Form } from "react-bootstrap";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
   //console.log(id_queixa)
   const [conflito, setConflito] = useState({});
+
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [serverPath, setServerPath] = useState("");
+  const [isComponentAdded, setIsComponentAdded] = useState(false);
+  const [nota, setNota] = useState([]);
+  const [notas, setNotas] = useState("");
+
+  const [inputFields, setInputFields] = useState([{ value: "" }]);
   const getQueixa = async () => {
     await Axios.get("http://localhost:3001/mais_detalhes", {
       params: {
@@ -38,10 +45,54 @@ const MaisDetalhes = () => {
         console.log(res);
       });
   };
+  const getNotas = async () => {
+    await Axios.get("http://localhost:3001/listar_notas", {
+      params: {
+        fk_queixa: id_queixa,
+      },
+    })
+      .then(({ data }) => {
+        setNotas(data);
+        console.log(data);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+  };
+  function addComponent() {
+    setIsComponentAdded(true);
+  }
+  const handleAddField = () => {
+    setInputFields([...inputFields, { value: "" }]);
+    addComponent();
+  };
+
+  const handleInputChange = (index, event) => {
+    const newInputFields = [...inputFields];
+    newInputFields[index].value = event.target.value;
+    setNota(event.target.value);
+    setInputFields(newInputFields);
+  };
+
+  const salvar_nota = () => {
+    Axios.post("http://localhost:3001/salvar_nota", {
+      _nota: nota,
+      fk_queixa: id_queixa,
+    })
+      .then((resposta) => {
+        getNotas();
+        //setRedireciona("/dashboard_admin");
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  };
   React.useEffect(() => {
     getQueixa();
+    getNotas();
   }, [id_queixa]);
-
+  console.log(notas);
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -136,16 +187,77 @@ const MaisDetalhes = () => {
         </Col>
       </Row>
       <p></p>
+
       <div>
+        {notas.map((my_note) => (
+          <Alert
+            variant="warning"
+            className="nota-queixa"
+            style={{ marginLeft: "5%" }}
+          >
+            <Alert.Heading>Nota</Alert.Heading>
+            <p>{my_note.nota}</p>
+
+            <hr />
+            <small className="text-muted-footer">
+              <FaPhone className="footer-nota" /> Inspencção geral do trabalho
+            </small>
+          </Alert>
+        ))}
+        ;<p></p>
+        {inputFields.map((inputField, index) => (
+          <div key={index} style={{ marginLeft: "1%" }}>
+            {isComponentAdded ? (
+              <>
+                <Alert variant="warning" className="nota-queixa">
+                  <Alert.Heading>Nota</Alert.Heading>
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Escreva aqui as suas notas"
+                    name="nota"
+                    style={{
+                      height: "100px",
+                      backgroundColor: "#fff3cd",
+                      border: "1px solid #664d03",
+                    }}
+                    value={inputField.value}
+                    onChange={(e) => handleInputChange(index, e)}
+                  />
+
+                  <hr />
+                  <small className="text-muted-footer">
+                    <FaPhone className="footer-nota" /> Inspencção geral do
+                    trabalho
+                    <Button
+                      variant="dark"
+                      border="secondary"
+                      type="button"
+                      onClick={salvar_nota}
+                      style={{
+                        borderColor: "#ddd",
+                        marginRight: 7,
+                        float: "right",
+                      }}
+                    >
+                      Salvar nota
+                    </Button>
+                  </small>
+                </Alert>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        ))}
         <Button
           variant="warning"
           className="fw-bold btn-nova-queixa"
           type="submit"
           style={{ marginRight: 7 }}
+          onClick={handleAddField}
         >
           Adicionar nota
         </Button>
-
         <Button
           variant="dark"
           border="secondary"
@@ -155,11 +267,9 @@ const MaisDetalhes = () => {
         >
           Agendar reunião
         </Button>
-
         <Button variant="outline-danger" style={{ marginRight: 7 }}>
           Aplicar multa
         </Button>
-
         <Button variant="outline-warning">Anexar acta</Button>
       </div>
       <ModalReuniao

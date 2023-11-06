@@ -15,6 +15,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const FuncionarioController = require("./controllers/FuncionarioController");
 const ReuniaoController = require("./controllers/ReuniaoController.js");
+const NotaController = require("./controllers/NotaController.js");
 
 const server = http.createServer(app);
 const io = socketIo(server,{cors:{origin:'http://localhost:3000'}});
@@ -77,6 +78,9 @@ app.get('/mais_detalhes', QueixaController.mais_detalhes);
 app.post('/nova_reuniao', ReuniaoController.store);
 app.post('/nova_reuniao_empregador', ReuniaoController.nova_reuniao_empregador);
 app.get('/reunioes_empregados', ReuniaoController.index);
+app.get('/reunioes_empregadores', ReuniaoController.getReuniaoEmpregadores);
+app.post('/salvar_nota', NotaController.store);
+app.get('/listar_notas', NotaController.index);
 
 
 /*app.post('/login', (req, res) => {

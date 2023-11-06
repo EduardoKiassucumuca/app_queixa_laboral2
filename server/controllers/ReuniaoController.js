@@ -8,8 +8,8 @@ module.exports = {
             const {fk_inspector} = req.query;
             const reunioes = await Reuniao.findAll({
 
-                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'queixaID', 'fk_trabalhador','fk_empregador', 'obs'],
-                required: true,
+                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'queixaID', 'trabalhadorID', 'obs'],
+               
              
                 include: [
                     {
@@ -37,24 +37,98 @@ module.exports = {
     
                                         ],
     
+                                },
+    
+                            ],
+                        },],
+
+                    },
+                    {
+                        association: 'Trabalhador',
+                        required: true,
+
+                        include: [
+                            {
+                                association: 'Pessoa',
+                                required: true,
+                                include: [{
+                                    association: 'BI',
+                                    required: true
+                                }],
+
+                            },
+
+                        ],
+
+
+                    },
+                
+                ],
+          
+                where: {
+                    '$Queixa.Inspector.trabalhadorID$': fk_inspector,
+                  },
+            });
+            res.status(200).json({ reunioes });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async getReuniaoEmpregadores(req, res) {
+
+        try {
+            const {fk_inspector} = req.query;
+            const reunioes = await Reuniao.findAll({
+
+                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'queixaID', 'empresaID', 'obs'],
+               
+             
+                include: [
+                    {
+                        association: 'Queixa',
+                        required: true,
+                        attributes: ['id', 'inspectorID'],
+                        include:[{
+                            association: 'Inspector',
+                            required: true,
+                            attributes: ['id', 'trabalhadorID'],
+                         
+                            include: [
+                                {
+                                  
                                    
+                                        association: 'Trabalhador',
+                                        required: true,
+                                        include: [
+                                            {
+                                                association: 'Pessoa',
+                                                required: true,
+                                                
+    
+                                            },
+    
+                                        ],
     
                                 },
     
                             ],
                         },],
 
+                    },
+                    {
+                        association: 'Empresa',
+                        required: true,
 
                     },
-              
-
                 
                 ],
           
                 where: {
-                    '$Inspector.trabalhadorID$': fk_inspector
-                
-                },
+                    '$Queixa.Inspector.trabalhadorID$': fk_inspector,
+                  },
             });
             res.status(200).json({ reunioes });
         } catch (error) {
@@ -81,7 +155,7 @@ module.exports = {
            hora:_hora,
            obs:_obs,
            queixaID: fk_queixa,
-           fk_trabalhador: fk_trabalhador
+           trabalhadorID: fk_trabalhador
         });
         return res.status(200).send({
             status: 1,
@@ -105,7 +179,7 @@ module.exports = {
            hora:_hora,
            obs:_obs,
            queixaID: fk_queixa,
-           fk_empregador: fk_empregador
+           empresaID: fk_empregador
         });
         return res.status(200).send({
             status: 1,
