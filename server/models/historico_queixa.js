@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../config/conexao.js");
-
+const Queixa = require("./Queixa.js");
+const moment = require('moment');
 
 const historico_queixa = db.define("historico_queixa", {
     id: {
@@ -9,10 +10,7 @@ const historico_queixa = db.define("historico_queixa", {
         autoIncrement: true,
         allowNull: false,
     },
-    id_queixa: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        allowNull: false,
-    },
+ 
     assunto: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -26,9 +24,30 @@ const historico_queixa = db.define("historico_queixa", {
         allowNull: false,
     },
     data: {
-        type: Sequelize.DATE,
-        allowNull: false,
+        type: Sequelize.DATEONLY,
+        get: function() {
+            return moment.utc(this.getDataValue('data')).format('YYYY-MM-DD H:M');
+          }
+        
+    },
+    queixaID: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: {
+                tableName: 'Queixa',
+            },
+            key: 'id'
+        },
+        allowNull: true
     },
 });
+
+Queixa.hasOne(historico_queixa, {
+    foreignkey: 'queixaID',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+
+historico_queixa.belongsTo(Queixa);
 
 module.exports = historico_queixa;

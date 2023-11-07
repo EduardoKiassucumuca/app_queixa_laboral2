@@ -81,6 +81,8 @@ app.get('/reunioes_empregados', ReuniaoController.index);
 app.get('/reunioes_empregadores', ReuniaoController.getReuniaoEmpregadores);
 app.post('/salvar_nota', NotaController.store);
 app.get('/listar_notas', NotaController.index);
+app.get('/mudancas_queixas', QueixaController.getHistorico);
+
 
 
 /*app.post('/login', (req, res) => {

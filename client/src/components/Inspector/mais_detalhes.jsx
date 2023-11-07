@@ -26,7 +26,8 @@ const MaisDetalhes = () => {
   const [serverPath, setServerPath] = useState("");
   const [isComponentAdded, setIsComponentAdded] = useState(false);
   const [nota, setNota] = useState([]);
-  const [notas, setNotas] = useState("");
+  const [notas, setNotas] = useState([]);
+  const [historicos, setHistorico] = useState([]);
 
   const [inputFields, setInputFields] = useState([{ value: "" }]);
   const getQueixa = async () => {
@@ -60,12 +61,27 @@ const MaisDetalhes = () => {
         console.log(res);
       });
   };
+  const getMudancas = async () => {
+    await Axios.get("http://localhost:3001/mudancas_queixas", {
+      params: {
+        fk_queixa: id_queixa,
+      },
+    })
+      .then(({ data }) => {
+        setHistorico(data.historico);
+        console.log(data);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+  };
   function addComponent() {
     setIsComponentAdded(true);
   }
   const handleAddField = () => {
-    setInputFields([...inputFields, { value: "" }]);
     addComponent();
+    setInputFields([...inputFields, { value: "" }]);
   };
 
   const handleInputChange = (index, event) => {
@@ -82,6 +98,7 @@ const MaisDetalhes = () => {
     })
       .then((resposta) => {
         getNotas();
+        setNota(" ");
         //setRedireciona("/dashboard_admin");
       })
       .catch((resposta) => {
@@ -91,8 +108,8 @@ const MaisDetalhes = () => {
   React.useEffect(() => {
     getQueixa();
     getNotas();
+    getMudancas();
   }, [id_queixa]);
-  console.log(notas);
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -118,7 +135,7 @@ const MaisDetalhes = () => {
       <MenuInspector />
 
       <Row className="row-detalhes">
-        <Col md={9}>
+        <Col md={7}>
           <Card
             bg="dark"
             border="secondary"
@@ -161,7 +178,7 @@ const MaisDetalhes = () => {
             </Card.Footer>
           </Card>
         </Col>
-        <Col md={3}>
+        <Col md={4}>
           <Card
             bg="dark"
             border=""
@@ -188,28 +205,36 @@ const MaisDetalhes = () => {
       </Row>
       <p></p>
 
-      <div>
-        {notas.map((my_note) => (
-          <Alert
-            variant="warning"
-            className="nota-queixa"
-            style={{ marginLeft: "5%" }}
-          >
-            <Alert.Heading>Nota</Alert.Heading>
-            <p>{my_note.nota}</p>
+      <Row className="notas">
+        <Col md={7} style={{ marginLeft: "1%" }}>
+          {notas.map((my_note) => (
+            <>
+              <Alert
+                variant="warning"
+                className="nota-queixa"
+                style={{ marginLeft: "5%" }}
+              >
+                <Alert.Heading>Nota</Alert.Heading>
+                <p>{my_note.nota}</p>
 
-            <hr />
-            <small className="text-muted-footer">
-              <FaPhone className="footer-nota" /> Inspencção geral do trabalho
-            </small>
-          </Alert>
-        ))}
-        ;<p></p>
-        {inputFields.map((inputField, index) => (
-          <div key={index} style={{ marginLeft: "1%" }}>
-            {isComponentAdded ? (
+                <hr />
+                <small className="text-muted-footer">
+                  <FaPhone className="footer-nota" /> Inspencção geral do
+                  trabalho
+                </small>
+              </Alert>
+              <p></p>
+            </>
+          ))}
+          ;
+          {inputFields.map((inputField, index) => (
+            <div key={index} style={{}}>
               <>
-                <Alert variant="warning" className="nota-queixa">
+                <Alert
+                  style={{ marginLeft: "5%" }}
+                  variant="warning"
+                  className="nota-queixa"
+                >
                   <Alert.Heading>Nota</Alert.Heading>
                   <Form.Control
                     as="textarea"
@@ -220,7 +245,7 @@ const MaisDetalhes = () => {
                       backgroundColor: "#fff3cd",
                       border: "1px solid #664d03",
                     }}
-                    value={inputField.value}
+                    value={nota}
                     onChange={(e) => handleInputChange(index, e)}
                   />
 
@@ -243,35 +268,66 @@ const MaisDetalhes = () => {
                     </Button>
                   </small>
                 </Alert>
+                <p></p>
               </>
-            ) : (
-              <></>
-            )}
-          </div>
-        ))}
-        <Button
-          variant="warning"
-          className="fw-bold btn-nova-queixa"
-          type="submit"
-          style={{ marginRight: 7 }}
-          onClick={handleAddField}
-        >
-          Adicionar nota
-        </Button>
-        <Button
-          variant="dark"
-          border="secondary"
-          type="button"
-          onClick={() => setShowModal(true)}
-          style={{ borderColor: "#ddd", marginRight: 7 }}
-        >
-          Agendar reunião
-        </Button>
-        <Button variant="outline-danger" style={{ marginRight: 7 }}>
-          Aplicar multa
-        </Button>
-        <Button variant="outline-warning">Anexar acta</Button>
-      </div>
+            </div>
+          ))}
+          <Button
+            variant="dark"
+            border="secondary"
+            type="button"
+            onClick={() => setShowModal(true)}
+            style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
+          >
+            Agendar reunião
+          </Button>
+          <Button variant="outline-danger" style={{ marginRight: 7 }}>
+            Aplicar multa
+          </Button>
+          <Button variant="outline-warning">Anexar acta</Button>
+        </Col>
+        <Col md={4}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="white"
+            className="card-queixas-queixoso"
+          >
+            <Card.Header style={{ color: "#ffc107" }}>
+              Historico das queixas
+            </Card.Header>
+            <Card.Body>
+              {historicos.map((historico) => (
+                <>
+                  <Card.Title>
+                    {" "}
+                    <small>
+                      {historico.Queixa.Trabalhador.Pessoa.nome +
+                        " " +
+                        historico.Queixa.Trabalhador.Pessoa.sobrenome}
+                      <span style={{ float: "right", color: "#ffc107" }}>
+                        {historico.data}
+                      </span>
+                    </small>
+                    <p></p>
+                  </Card.Title>
+                  <Card.Text>
+                    {" "}
+                    <p
+                      className="text-muted"
+                      style={{ color: "#cdd9e5 !important" }}
+                    >
+                      {historico.facto}
+                    </p>
+                    <hr />
+                  </Card.Text>
+                </>
+              ))}
+              ;
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
       <ModalReuniao
         show={showModal}
         setShow={setShowModal}

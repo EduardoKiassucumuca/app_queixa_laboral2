@@ -74,6 +74,46 @@ module.exports = {
         }
 
     },
+    async getHistorico(req, res) {
+
+        try {
+            const {fk_queixa} = req.query;
+            const historico = await historico_queixa.findAll({
+
+                attributes: ['id','queixaID', 'assunto', 'facto', 'data', 'modo', 'url_file_contrato'],
+               where:{queixaID: fk_queixa},
+             
+                include: [
+                    {
+                        association: 'Queixa',
+                        attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato','nota'],
+                        required: true,
+                        include:[{
+  
+                            association: 'Trabalhador',
+                            required: true,
+                            include: [
+                                    {
+                                    association: 'Pessoa',
+                                    required: true,
+                                     },],
+                        },],
+
+                    },
+                    
+                
+                ],
+          
+        
+            });
+            res.status(200).json({ historico });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
 
     async queixas_do_queixoso(req, res) {
         const { queixosoID } = req.query;
@@ -92,6 +132,7 @@ module.exports = {
         }
 
     },
+    
     async ler_queixa(req, res) {
         const { id_queixa } = req.query;
         console.log(id_queixa);
