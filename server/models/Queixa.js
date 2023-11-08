@@ -143,6 +143,11 @@ ChefeServicos.hasMany(Queixa, {
     onUpdate: 'CASCADE'
 });
 
+Testemunha.hasMany(Queixa, {
+    foreignkey: 'testemunhaID',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
 Queixa.belongsTo(Empresa);
 Queixa.belongsTo(Trabalhador);
 Queixa.belongsTo(Inspector);

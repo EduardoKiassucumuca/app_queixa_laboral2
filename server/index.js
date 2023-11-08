@@ -47,6 +47,8 @@ var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
 var cpUpload2 = upload.fields([{ name: 'fileContrato' }])
 
 app.post('/guardar_queixa', cpUpload, QueixaController.store);
+app.post('/add_queixoso_queixa', cpUpload, QueixaController.add_queixoso_queixa);
+
 app.post('/registar/conta', ContaController.store);
 app.post('/auth', ContaController.logar);
 app.get('/queixas', QueixaController.index);

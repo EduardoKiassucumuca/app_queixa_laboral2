@@ -1,3 +1,4 @@
+const funcionarioIGT = require('../models/FuncionarioIGT');
 const Inspector = require('../models/Inspector');
 const Queixa = require('../models/Queixa');
 const { where } = require('sequelize');
@@ -6,14 +7,14 @@ module.exports = {
     async index(req, res) {
 
         try {
-            const inspectores = await Inspector.findAll({
+            const inspectores = await funcionarioIGT.findAll({
 
-                attributes: ['id', 'trabalhadorID'],
+                attributes: ['id', 'trabalhadorID','tipo'],
                 required: true,
-
+                where:{tipo:"Inspector"},
                 include: [
                     {
-
+                        
                             association: 'Trabalhador',
                             required: true,
                             include: [
@@ -143,7 +144,7 @@ module.exports = {
         try {
             queixas = await Queixa.findAll({
 
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID', 'url_file_contrato'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID','inspectorID','testemunhaID', 'url_file_contrato'],
                 required: true,
                 include: [
                     {

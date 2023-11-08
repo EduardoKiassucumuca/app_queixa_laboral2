@@ -1,66 +1,62 @@
-import { Layout, theme } from 'antd';
+import { Layout, theme } from "antd";
 import Menu from "../Navbar/navbar";
 
-import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
-import { FiSend } from 'react-icons/fi';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { FiSend } from "react-icons/fi";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
 import Footer from "../Footer/footer";
 
-import UseForm from './dados_pessoais';
-import ReviewForm from './dados_da_empresa';
-import Empresa from '../Queixante/Empresa';
-import Trabalhador from '../Queixante/Trabalhador';
-import Queixa from '../Queixante/Queixa';
-import Thanks from './details_queixa';
+import UseForm from "./dados_pessoais";
+import ReviewForm from "./dados_da_empresa";
+import Empresa from "../Queixante/Empresa";
+import Trabalhador from "../Queixante/Trabalhador";
+import Queixa from "../Queixante/Queixa";
+import Thanks from "./details_queixa";
 import "./submeter_queixa.css";
 
 // Hooks
-import { useForm } from './useForm';
-import Steps from './Steps';
+import { useForm } from "./useForm";
+import Steps from "./Steps";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import CompnentMain from '../container/container';
+import CompnentMain from "../container/container";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom"
-import Queixei from './queixei';
-import ValidacaoQueixoso from './validacao_trabalhador';
-import ModalConfirmationQueixa from './ModalConfirmationQueixa';
+import { useNavigate } from "react-router-dom";
+import Queixei from "./queixei";
+import ValidacaoQueixoso from "./validacao_trabalhador";
+import ModalConfirmationQueixa from "./ModalConfirmationQueixa";
 
 const formTemplate = {
   review: "",
   comment: "",
-}
+};
 
 const { Header, Content } = Layout;
-
-
 
 const FormQueixante = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [contaID, setContaID] = useState(false);
-  const [data, setData] = useState(formTemplate)
+  const [data, setData] = useState(formTemplate);
   const [changeForm, setChangeForm] = useState(false);
   const [alert, setAlert] = useState("");
+  const [redirect, setRedirect] = useState("");
+
   const [showModal, setShowModal] = useState(false);
 
   const updateFielHndler = (key, value) => {
-
     setData((prev) => {
       return { ...prev, [key]: value };
     });
-
-
   };
 
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
-
 
   function queixar() {
     const submissao_queixa = data;
@@ -68,7 +64,6 @@ const FormQueixante = () => {
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
-
 
     if (trabalhador && data.empresa2 != "outra") {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
@@ -84,19 +79,23 @@ const FormQueixante = () => {
       Axios.post("http://localhost:3001/add_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        }
-      }).then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
-        //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-        //navigate("/Entrar");
-        /*const [showModal, setShowModal] = useState(true);
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-      }).catch((resposta) => {
-        console.log("error", resposta);
-      });
+        },
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          setRedirect("/Entrar");
 
-    } if (trabalhador && data.empresa2 == "outra") {
+          setShowModal(true);
+          //sessionStorage.setItem("resposta", JSON.stringify(resposta));
+          //navigate("/Entrar");
+          /*const [showModal, setShowModal] = useState(true);
+        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    }
+    if (trabalhador && data.empresa2 == "outra") {
       formData.append("_cargo", submissao_queixa.cargo);
       formData.append("_area_departamento", submissao_queixa.area_departamento);
       formData.append("nome_empresa", submissao_queixa.empresa);
@@ -122,14 +121,17 @@ const FormQueixante = () => {
       Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        }
-      }).then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
+        },
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          setRedirect("/Entrar");
 
-      }).catch((resposta) => {
-        console.log("error", resposta);
-      });
+          setShowModal(true);
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
     } else if (!trabalhador && data.empresa2 != "outra") {
       console.log("entrei sem outra");
       formData.append("_nome", submissao_queixa.nome);
@@ -148,8 +150,14 @@ const FormQueixante = () => {
       formData.append("_provincia", submissao_queixa.provincia);
       formData.append("_altura", submissao_queixa.altura);
       formData.append("_data_nascimento", submissao_queixa.dtNascimento);
-      formData.append("_contacto_principal", submissao_queixa.contacto_principal);
-      formData.append("_contacto_alternativo", submissao_queixa.contacto_alternativo);
+      formData.append(
+        "_contacto_principal",
+        submissao_queixa.contacto_principal
+      );
+      formData.append(
+        "_contacto_alternativo",
+        submissao_queixa.contacto_alternativo
+      );
       formData.append("_cargo", submissao_queixa.cargo);
       formData.append("_area_departamento", submissao_queixa.area_departamento);
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
@@ -167,15 +175,16 @@ const FormQueixante = () => {
       Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        }
-      }).then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
-
-      }).catch((resposta) => {
-        console.log("error", resposta);
-      });
-
+        },
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          setRedirect("/Entrar");
+          setShowModal(true);
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
     } else {
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
@@ -193,8 +202,14 @@ const FormQueixante = () => {
       formData.append("_provincia", submissao_queixa.provincia);
       formData.append("_altura", submissao_queixa.altura);
       formData.append("_data_nascimento", submissao_queixa.dtNascimento);
-      formData.append("_contacto_principal", submissao_queixa.contacto_principal);
-      formData.append("_contacto_alternativo", submissao_queixa.contacto_alternativo);
+      formData.append(
+        "_contacto_principal",
+        submissao_queixa.contacto_principal
+      );
+      formData.append(
+        "_contacto_alternativo",
+        submissao_queixa.contacto_alternativo
+      );
       formData.append("_cargo", submissao_queixa.cargo);
       formData.append("_area_departamento", submissao_queixa.area_departamento);
       formData.append("_empresa", submissao_queixa.empresa);
@@ -221,29 +236,33 @@ const FormQueixante = () => {
       Axios.post("http://localhost:3001/guardar_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        }
-      }).then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
-        //sessionStorage.setItem("resposta", JSON.stringify(resposta));
+        },
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          setRedirect("/Entrar");
+          setShowModal(true);
+          //sessionStorage.setItem("resposta", JSON.stringify(resposta));
 
-        /*const [showModal, setShowModal] = useState(true);
+          /*const [showModal, setShowModal] = useState(true);
         <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-      }).catch((resposta) => {
-        console.log("error", resposta);
-      });
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
     }
-
-
   }
 
   let formComponents = [];
 
-  formComponents = [<UseForm data={data} updateFielHndler={updateFielHndler} />, <ReviewForm data={data} updateFielHndler={updateFielHndler} />, <Thanks data={data} updateFielHndler={updateFielHndler} />]
+  formComponents = [
+    <UseForm data={data} updateFielHndler={updateFielHndler} />,
+    <ReviewForm data={data} updateFielHndler={updateFielHndler} />,
+    <Thanks data={data} updateFielHndler={updateFielHndler} />,
+  ];
 
-
-  const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } = useForm(formComponents)
-
+  const { currentStep, currentComponent, changeStep, isLastStep, isFirstStep } =
+    useForm(formComponents);
 
   const {
     token: { colorBgContainer },
@@ -252,51 +271,73 @@ const FormQueixante = () => {
   return (
     <Layout className="layout">
       <Menu />
-      <div className='p-5 text-center bg-trabalhador'>
-        <h1 className='mb-3 h1-queixa'>Queixar Empregador</h1>
+      <div className="p-5 text-center bg-trabalhador">
+        <h1 className="mb-3 h1-queixa">Queixar Empregador</h1>
       </div>
       <Content
         style={{
-          padding: '0',
+          padding: "0",
         }}
       >
-        <ModalConfirmationQueixa msg={alert} show={showModal} setShow={setShowModal} close={() => setShowModal(false)} />
+        <ModalConfirmationQueixa
+          msg={alert}
+          show={showModal}
+          setShow={setShowModal}
+          redirect={redirect}
+          close={() => setShowModal(false)}
+        />
 
         <div
           className="site-layout-content"
           style={{
             background: colorBgContainer,
-
           }}
         >
           <Queixei />
-          <Row className='mb-3 row-queixa'>
+          <Row className="mb-3 row-queixa">
             <Col md={11} className="form-queixa">
               <Col md={8} className="form-queixa">
                 <div className="form-container">
                   <Steps currentStep={currentStep} />
 
-                  <form onSubmit={(e) => changeStep(currentStep + 1, e)} method="post" enctype="multipart/form-data">
-                    <div className="inputs-container" id='container-dados-pessoais'>{currentComponent}</div>
+                  <form
+                    onSubmit={(e) => changeStep(currentStep + 1, e)}
+                    method="post"
+                    enctype="multipart/form-data"
+                  >
+                    <div
+                      className="inputs-container"
+                      id="container-dados-pessoais"
+                    >
+                      {currentComponent}
+                    </div>
                     <div className="actions">
                       {!isFirstStep && (
-                        <button type='button' className='btn fw-bold bg-default btn-voltar' onClick={() => changeStep(currentStep - 1)}>
+                        <button
+                          type="button"
+                          className="btn fw-bold bg-default btn-voltar"
+                          onClick={() => changeStep(currentStep - 1)}
+                        >
                           <span>Voltar</span>
                         </button>
                       )}
                       {!isLastStep ? (
-                        <button type='submit' className='btn fw-bold bg-dark btn-avancar'>
+                        <button
+                          type="submit"
+                          className="btn fw-bold bg-dark btn-avancar"
+                        >
                           <span>Avançar</span>
-
                         </button>
-
                       ) : (
-                        <button type='submit' className='btn fw-bold bg-dark btn-enviar' onClick={queixar}>
+                        <button
+                          type="submit"
+                          className="btn fw-bold bg-dark btn-enviar"
+                          onClick={queixar}
+                        >
                           <span>Enviar</span>
                           <FiSend />
                         </button>
                       )}
-
                     </div>
                   </form>
                 </div>
@@ -310,4 +351,3 @@ const FormQueixante = () => {
   );
 };
 export default FormQueixante;
-

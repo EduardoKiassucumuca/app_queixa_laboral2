@@ -18,7 +18,7 @@ const Conta = db.define("Conta", {
     },
     tentativa: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
 
     privilegio: {

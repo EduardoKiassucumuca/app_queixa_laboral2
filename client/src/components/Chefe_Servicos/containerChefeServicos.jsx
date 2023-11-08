@@ -248,14 +248,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
                     >
                       Nomear Inspector
                     </Button>
-                    <Button
-                      onClick={() => ver_testemunhas(conflito)}
-                      variant="warning"
-                      className="fw-bold btn-nova-queixa"
-                      type="submit"
-                    >
-                      Nomear Testemunha
-                    </Button>
                   </td>
                 </tr>
               ))}

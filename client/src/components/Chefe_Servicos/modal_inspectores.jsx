@@ -34,12 +34,14 @@ const ModalInspectores = (props) => {
     queixa = props.queixa;
     inspectores = props.inspector;
   }
+  console.log(props);
   const file_contrato = document.querySelector("#url-contrato-pdf");
   function nomear_inspector(inspector_nomeado, queixa_selecionada) {
     axios
       .put("http://localhost:3001/nomear_inspector", {
         params: {
           id_inspector: inspector_nomeado.id,
+          id_trabalhador: inspector_nomeado.trabalhadorID,
           id_queixa: queixa_selecionada.id,
         },
       })

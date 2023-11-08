@@ -12,6 +12,8 @@ const jwt = require("jsonwebtoken");
 const { where } = require('sequelize');
 const { Op } = require("sequelize");
 const path = require('path');
+const Inspector = require('../models/Inspector');
+const Testemunha = require('../models/testemunha');
 const tentativa = 0;
 
 module.exports = {
@@ -473,7 +475,9 @@ module.exports = {
                 trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato,
                 provincia: _provincia_empresa,
-                modo: _modo
+                modo: _modo,
+                inspectorID: 14,
+                testemunhaID:4,
 
             })
             return res.status(200).send({
@@ -730,7 +734,9 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: enderecoEncontrado.provincia,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 14,
+                    testemunhaID:4,
 
 
                 })
@@ -785,10 +791,10 @@ module.exports = {
 
             //dados do bilhete de identidade
             const { _emitidoEm } = req.body;
-
+            let fileBI ="";
             const { _validoAte } = req.body;
             if (queixoso === "Trabalhador") {
-                const fileBI = req.files['fileBI'][0].path;
+                 fileBI = req.files['fileBI'][0].path;
             }
             const { _nBI } = req.body;
 
@@ -982,11 +988,14 @@ module.exports = {
                 updated_at: data_alteracao_queixa,
                 queixosoID: queixosoID,
                 queixanteID: queixanteID,
-                empresaID: novaEmpresa.id,
-                trabalhadorID: _trabalhadorID,
+                empresaID: empresaEncontrada.id,
+                trabalhadorID: novoTrabalhador.id,
                 url_file_contrato: _fileContrato,
-                provincia: novoEnderecoEmp.provincia,
-                modo: _modo
+                provincia: enderecoEncontrado.provincia,
+                modo: _modo,
+                inspectorID: 14,
+                testemunhaID:4,
+
 
             })
             return res.status(200).send({
@@ -1084,7 +1093,9 @@ module.exports = {
                 trabalhadorID: trabalhadorID,
                 url_file_contrato: _fileContrato,
                 provincia: novoEnderecoEmp.provincia,
-                modo: _modo
+                modo: _modo,
+                inspectorID:14,
+                testemunhaID:4
 
             })
             return res.status(200).send({
@@ -1170,7 +1181,9 @@ module.exports = {
                     trabalhadorID: _trabalhadorID,
                     url_file_contrato: _fileContrato,
                     provincia: _provincia_empresa,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID: 14,
+                    testemunhaID:4,
 
                 })
                 return res.status(200).send({
@@ -1186,13 +1199,13 @@ module.exports = {
                 const { _emitidoEm } = req.body;
 
                 const { _validoAte } = req.body;
-                const _fileBI = req.files['fileBI'][0].path;
+                const fileBI = req.files['fileBI'][0].path;
                 const { _nBI } = req.body;
 
                 const novoBI = await BI.create({
                     emitido_em: _emitidoEm,
                     valido_ate: _validoAte,
-                    file: _fileBI,
+                    file: fileBI,
                     numeroBI: _nBI
                 });
 
@@ -1279,7 +1292,9 @@ module.exports = {
                     trabalhadorID: novoTrabalhador.id,
                     url_file_contrato: _fileContrato,
                     provincia: _provinciaEmp,
-                    modo: _modo
+                    modo: _modo,
+                    inspectorID:14,
+                    testemunhaID:4
                 })
                 return res.status(200).send({
                     status: 1,
@@ -1419,10 +1434,13 @@ module.exports = {
 
         const { id_inspector } = req.body.params;
         const { id_queixa } = req.body.params;
-        console.log(id_inspector, id_queixa)
+        const {id_trabalhador} = req.body.params;
 
+       const inspector= await Inspector.create({
+           trabalhadorID: id_trabalhador
+        });
 
-        await Queixa.update({ inspectorID: id_inspector }, {
+        await Queixa.update({ inspectorID: inspector.id }, {
             where: {
                 id: id_queixa
             }
@@ -1442,7 +1460,9 @@ module.exports = {
         const { id_queixa } = req.body.params;
         console.log(id_inspector, id_queixa)
 
-
+        const testemunha= await Testemunha.create({
+            trabalhadorID: id_trabalhador
+         });
         await Queixa.update({ testemunhaID: id_inspector }, {
             where: {
                 id: id_queixa
