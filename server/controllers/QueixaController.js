@@ -165,7 +165,7 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo','url_file_acta'],
                 where: {
                     id: id_queixa
                 
@@ -491,6 +491,7 @@ module.exports = {
         }
 
     },
+
     async queixar_mesma_empresa(req, res) {
 
         const { desc_queixa } = req.body;
@@ -1409,6 +1410,31 @@ module.exports = {
             console.log(error);
         }
     },
+    async anexa_acta(req, res) {
+   
+
+       try{
+            const _fileActa = req.files['fileActa'][0].path;
+            const {id_queixa} = req.body;
+
+
+            const novo_anexo = await Queixa.update({
+                url_file_acta: _fileActa,
+               }, {
+                where: {
+                    id: id_queixa
+                }
+            });
+            return res.status(200).send({
+            status: 1,
+            message: 'Acta anexada com sucesso!',
+
+        });
+            }catch{
+            console.log("Error!");
+            }
+
+    },
     async update_queixa(req, res) {
         const { id_queixa } = req.body.params;
         const { assunto } = req.body.params;
@@ -1422,7 +1448,7 @@ module.exports = {
             where: {
                 id: id_queixa
             }
-        });
+        })
 
         return res.status(200).send({
             status: 1,
@@ -1431,49 +1457,71 @@ module.exports = {
         });
     },
     async update(req, res) {
-
+try{
         const { id_inspector } = req.body.params;
         const { id_queixa } = req.body.params;
-        const {id_trabalhador} = req.body.params;
 
-       const inspector= await Inspector.create({
-           trabalhadorID: id_trabalhador
-        });
-
-        await Queixa.update({ inspectorID: inspector.id }, {
-            where: {
-                id: id_queixa
-            }
-        });
-
-        return res.status(200).send({
+        
+           const updated_queixa = await Queixa.update({ inspectorID: id_inspector},
+             {
+                where: {
+                    id: id_queixa
+                }
+            })
+  
+         return res.status(200).send({
             status: 1,
             message: 'Inspector nomeado com sucesso!',
-
+            updated_queixa
         });
+
+    } catch (error) {
+        console.log(error);
+    }
 
     },
 
     async update_testemunha(req, res) {
 
+  
         const { id_inspector } = req.body.params;
         const { id_queixa } = req.body.params;
-        console.log(id_inspector, id_queixa)
+        const {id_trabalhador} = req.body.params;
 
-        const testemunha= await Testemunha.create({
-            trabalhadorID: id_trabalhador
-         });
-        await Queixa.update({ testemunhaID: id_inspector }, {
-            where: {
-                id: id_queixa
-            }
+        const find_testemunha = await Testemunha.findOne({
+            attributes: ['id', 'inspectorID'],
+            where: { inspectorID: id_inspector }
         });
+   
+        let inspector = "";
+        if(!find_testemunha)
+        {
+        
+            const testemunha = await Testemunha.create({
+                inspectorID: id_inspector
+             });
+            await Queixa.update({ testemunhaID: testemunha.id }, {
+                where: {
+                    id: id_queixa
+                }
+            });
+        }else{
+            await Queixa.update({ testemunhaID: find_testemunha.id }, {
+                where: {
+                    id: id_queixa
+                }
+            });
+        
+        }
+       
 
         return res.status(200).send({
             status: 1,
-            message: 'Inspector nomeado com sucesso!',
+            message: 'Testemunha nomeada com sucesso!',
 
         });
+      
+       
 
     },
     async delete(req, res) {

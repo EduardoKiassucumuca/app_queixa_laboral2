@@ -12,20 +12,67 @@ import {
 import Button from "react-bootstrap/Button";
 import "./modal_reuniao.css";
 import { Link } from "react-router-dom";
+import { Form } from "react-bootstrap";
+import Axios from "axios";
+import Modal from "react-bootstrap/Modal";
 
-const ModalReuniao = (props) => {
+const ModalActa = (props) => {
   const [centredModal, setCentredModal] = useState(false);
-  console.log(props.conflito);
+  const [smShow, setSmShow] = useState(false);
+
   const toggleShow = () => setCentredModal(!centredModal);
   localStorage.setItem("data_queixa", JSON.stringify(props.conflito));
+  const formData = new FormData();
+  const file_acta = document.querySelector("#file_acta");
 
+  const anexar_acta = (e, queixa) => {
+    e.preventDefault();
+
+    formData.append("fileActa", file_acta.files[0]);
+    formData.append("id_queixa", queixa.id);
+
+    Axios.post("http://localhost:3001/anexa_acta", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then((resposta) => {
+        props.setShow(false);
+        setSmShow(true);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  };
+  function update_view() {
+    window.location.reload(false);
+  }
   return (
     <>
+      <Modal
+        size="sm"
+        show={smShow}
+        onHide={() => setSmShow(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-sm">
+            Confirmação
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Acta anexada com sucesso</Modal.Body>
+        <Modal.Footer>
+          <Button onClick={(e) => update_view()} variant="warning">
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <MDBModal tabIndex="-1" show={props.show} setShow={props.setShow}>
         <MDBModalDialog centered>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Reunião</MDBModalTitle>
+              <MDBModalTitle>Upload acta</MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"
@@ -33,21 +80,28 @@ const ModalReuniao = (props) => {
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <p className="texto-anonimato">Agendar reunião com?</p>
+              <Form
+                onSubmit={(e) => anexar_acta(e, props.conflito)}
+                method="post"
+                enctype="multipart/form-data"
+              >
+                <Form.Label>Anexar uma acta</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="file_acta"
+                  id="file_acta"
+                  required
+                />
+
+                <Button type="submit" className="btn btn-warning">
+                  Anexar
+                </Button>
+              </Form>
             </MDBModalBody>
-            <MDBModalFooter>
-              <Link to="/nova_reuniao_empregador">
-                <Button variant="warning">Empregador</Button>
-              </Link>
-              ou
-              <Link to="/nova_reuniao">
-                <Button className="btn btn-dark"> Trabalhador</Button>
-              </Link>
-            </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
     </>
   );
 };
-export default ModalReuniao;
+export default ModalActa;

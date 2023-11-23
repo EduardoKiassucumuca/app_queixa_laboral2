@@ -7,11 +7,11 @@ module.exports = {
     async index(req, res) {
 
         try {
-            const inspectores = await funcionarioIGT.findAll({
+            const inspectores = await Inspector.findAll({
 
-                attributes: ['id', 'trabalhadorID','tipo'],
+                attributes: ['id', 'trabalhadorID'],
                 required: true,
-                where:{tipo:"Inspector"},
+
                 include: [
                     {
                         
@@ -48,7 +48,7 @@ module.exports = {
             const {fk_inspector} = req.query;
             queixas = await Queixa.findAll({
 
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID','inspectorID', 'url_file_contrato'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'empresaID', 'trabalhadorID','inspectorID', 'url_file_contrato','url_file_acta'],
                 required: true,
              
                 include: [

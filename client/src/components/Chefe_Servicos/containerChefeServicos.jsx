@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Search from "antd/es/transfer/search";
 import ModalInspectores from "./modal_inspectores";
 import ModalConfirmacao from "../Modal/modalConfirmation";
+import ModalTestemunhas from "./modal_testemunhas";
 
 const formTemplate = {
   review: "",
@@ -21,7 +22,7 @@ const formTemplate = {
 const ContainerChefeServicos = ({ onSearch }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
-
+  const [showModal3, setShowModal3] = useState(false);
   const [queixas, setQueixas] = useState([]);
   const [inspectores, setInspectores] = useState([]);
   const [conflitos, setConflitos] = useState([]);
@@ -133,7 +134,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
         console.log(data);
         setInspectores(data.inspectores);
-        setShowModal(true);
+        setShowModal3(true);
 
         //console.log(lista_queixa.minha_queixa)
       })
@@ -141,7 +142,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
         console.log("res");
       });
   }
-  console.log(conflitos);
+  console.log(inspectores);
 
   return (
     <>
@@ -206,6 +207,13 @@ const ContainerChefeServicos = ({ onSearch }) => {
           inspector={inspectores}
         />
 
+        <ModalTestemunhas
+          show={showModal3}
+          setShow={setShowModal3}
+          close={() => setShowModal3(false)}
+          queixa={conflito_selec}
+          inspector={inspectores}
+        />
         <Col md={12}>
           <table class="table table-striped table-responsive table-dark">
             <thead>
@@ -244,9 +252,17 @@ const ContainerChefeServicos = ({ onSearch }) => {
                       onClick={() => ver_inspectores(conflito)}
                       variant="warning"
                       className="fw-bold btn-nova-queixa"
-                      type="submit"
+                      type="button"
                     >
                       Nomear Inspector
+                    </Button>
+                    <Button
+                      onClick={() => ver_testemunhas(conflito)}
+                      variant="warning"
+                      className="fw-bold btn-nova-queixa"
+                      type="button"
+                    >
+                      Atribuir testemunhas
                     </Button>
                   </td>
                 </tr>

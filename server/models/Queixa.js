@@ -104,6 +104,10 @@ const Queixa = db.define("Queixa", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    url_file_acta: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     testemunhaID: {
         type: Sequelize.INTEGER,
         references: {

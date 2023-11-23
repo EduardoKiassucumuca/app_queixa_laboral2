@@ -45,9 +45,11 @@ app.use(express.json());
 
 var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
 var cpUpload2 = upload.fields([{ name: 'fileContrato' }])
+var upload_file_acta = upload.fields([{ name: 'fileActa' }])
 
 app.post('/guardar_queixa', cpUpload, QueixaController.store);
 app.post('/add_queixoso_queixa', cpUpload, QueixaController.add_queixoso_queixa);
+app.post('/anexa_acta', upload_file_acta, QueixaController.anexa_acta);
 
 app.post('/registar/conta', ContaController.store);
 app.post('/auth', ContaController.logar);

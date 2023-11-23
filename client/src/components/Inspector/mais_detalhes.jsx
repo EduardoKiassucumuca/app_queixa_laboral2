@@ -15,6 +15,7 @@ import Button from "react-bootstrap/Button";
 import { FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
 import { Form } from "react-bootstrap";
+import ModalActa from "./modal_acta";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
@@ -28,6 +29,7 @@ const MaisDetalhes = () => {
   const [nota, setNota] = useState([]);
   const [notas, setNotas] = useState([]);
   const [historicos, setHistorico] = useState([]);
+  const [showModalActa, setShowModalActa] = useState(false);
 
   const [inputFields, setInputFields] = useState([{ value: "" }]);
   const getQueixa = async () => {
@@ -198,6 +200,15 @@ const MaisDetalhes = () => {
                     Meu_contrato.pdf
                   </a>
                 </p>
+                <p>
+                  <FaFilePdf style={{ border: "red" }} />
+                  <a
+                    href={conflito.url_file_acta}
+                    style={{ color: "rgb(220, 195, 119)" }}
+                  >
+                    Acta001.pdf
+                  </a>
+                </p>
               </Card.Text>
             </Card.Body>
           </Card>
@@ -284,7 +295,12 @@ const MaisDetalhes = () => {
           <Button variant="outline-danger" style={{ marginRight: 7 }}>
             Aplicar multa
           </Button>
-          <Button variant="outline-warning">Anexar acta</Button>
+          <Button
+            variant="outline-warning"
+            onClick={() => setShowModalActa(true)}
+          >
+            Anexar acta
+          </Button>
         </Col>
         <Col md={4}>
           <Card
@@ -333,6 +349,12 @@ const MaisDetalhes = () => {
         setShow={setShowModal}
         conflito={conflito}
         close={() => setShowModal(false)}
+      />
+      <ModalActa
+        show={showModalActa}
+        setShow={setShowModalActa}
+        conflito={conflito}
+        close={() => setShowModalActa(false)}
       />
     </>
   );

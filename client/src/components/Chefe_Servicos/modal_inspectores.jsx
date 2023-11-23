@@ -17,7 +17,7 @@ import PDFViewer from "pdf-viewer-reactjs";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
-
+import Alert from "react-bootstrap/Alert";
 const ModalInspectores = (props) => {
   const navigate = useNavigate();
   const [smShow, setSmShow] = useState(false);
@@ -33,10 +33,10 @@ const ModalInspectores = (props) => {
   } else {
     queixa = props.queixa;
     inspectores = props.inspector;
+    console.log(inspectores);
   }
-  console.log(props);
   const file_contrato = document.querySelector("#url-contrato-pdf");
-  function nomear_inspector(inspector_nomeado, queixa_selecionada) {
+  const nomear_inspector = (inspector_nomeado, queixa_selecionada) => {
     axios
       .put("http://localhost:3001/nomear_inspector", {
         params: {
@@ -54,7 +54,7 @@ const ModalInspectores = (props) => {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
   function update_view() {
     window.location.href = "/chefe_servicos";
   }
@@ -78,6 +78,7 @@ const ModalInspectores = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <MDBModal tabIndex="-1" show={props.show} setShow={props.setShow}>
         <MDBModalDialog centered>
           <MDBModalContent>
@@ -102,6 +103,7 @@ const ModalInspectores = (props) => {
                   />
 
                   <label class="form-check-label" for="flexRadioDefault1">
+                    {" "}
                     {inspector.Trabalhador.Pessoa.nome}{" "}
                     {inspector.Trabalhador.Pessoa.sobrenome}
                   </label>
@@ -110,8 +112,8 @@ const ModalInspectores = (props) => {
             </MDBModalBody>
             <MDBModalFooter>
               <Button
-                onClick={(e) => nomear_inspector(inspector_selecionado, queixa)}
                 variant="warning"
+                onClick={(e) => nomear_inspector(inspector_selecionado, queixa)}
               >
                 {" "}
                 Feito

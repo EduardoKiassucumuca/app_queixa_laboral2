@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { password } = require('../config/db');
 const funcionarioIGT = require('../models/FuncionarioIGT');
+const Inspector = require('../models/Inspector');
 
 module.exports = {
     async index(req, res) {
@@ -127,6 +128,13 @@ try{
                   trabalhadorID: novoTrabalhador.id,
                   tipo:_cargo
               });
+              if(_cargo === "Inspector")
+              {
+                const novoInspector = await Inspector.create({
+                    trabalhadorID: novoTrabalhador.id,
+                   
+                });
+              }
 
          
         return res.status(200).send({
