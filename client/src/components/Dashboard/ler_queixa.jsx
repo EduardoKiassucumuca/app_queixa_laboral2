@@ -15,6 +15,8 @@ import Button from "react-bootstrap/Button";
 import ModalQueixoso from "./modal_queixoso";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalEditaQueixa from "./modal_editar_queixa";
+import { FaFilePdf } from "react-icons/fa";
+import FileDownload from "js-file-download";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -23,6 +25,23 @@ const LerQueixa = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [serverPath, setServerPath] = useState("");
+
+  const handleDownload = async (url_file) => {
+    console.log(url_file);
+    const filename = url_file.split("\\").pop();
+
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
   const getQueixa = async () => {
     await Axios.get("http://localhost:3001/ler_queixa", {
       params: {
@@ -31,7 +50,7 @@ const LerQueixa = () => {
     })
       .then(({ data }) => {
         setConflito(data.queixas[0]);
-        setServerPath(data.serverPath);
+        setServerPath(data.normalizePath);
         //console.log(res);
         //console.log(lista_queixa.minha_queixa)
       })
@@ -66,48 +85,77 @@ const LerQueixa = () => {
     <>
       <MySideNav />
       <MyMenu />
+      <Row className="ler-queixa">
+        <Col md={7}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="warning"
+            className="card-queixas-queixoso"
+          >
+            <div class="ribbon">
+              <span>New</span>
+            </div>
+            <Card.Body className="body-facto-queixa">
+              <Card.Title>
+                {conflito.id} - {conflito.assunto}
+              </Card.Title>
+              <p></p>
+              <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
+            </Card.Body>
+            <Card.Footer>
+              <Row>
+                <Col md={3}>
+                  <small className="text-muted">Last updated 3 mins ago </small>
+                </Col>
 
-      <Card
-        bg="dark"
-        border="secondary"
-        text="warning"
-        className="card-queixas-queixoso"
-      >
-        <div class="ribbon">
-          <span>New</span>
-        </div>
-        <Card.Body className="body-facto-queixa">
-          <Card.Title>
-            {conflito.id} - {conflito.assunto}
-          </Card.Title>
-          <p></p>
-          <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Row>
-            <Col md={3}>
-              <small className="text-muted">Last updated 3 mins ago </small>
-            </Col>
+                <Col md={3}>
+                  <small className="text-muted">
+                    {" "}
+                    <FaUser />
+                    <span>Inspector: </span> Não atribuido{" "}
+                  </small>
+                </Col>
+                <Col md={3}>
+                  <small className="text-muted">{conflito.provincia}</small>
+                </Col>
+                <Col md={3}>
+                  <small className="text-muted">
+                    <FaCircle className="estado" />
+                    {conflito.estado}{" "}
+                  </small>
+                </Col>
+              </Row>
+            </Card.Footer>
+          </Card>
+        </Col>
 
-            <Col md={3}>
-              <small className="text-muted">
-                {" "}
-                <FaUser />
-                <span>Inspector: </span> Não atribuido{" "}
-              </small>
-            </Col>
-            <Col md={3}>
-              <small className="text-muted">{conflito.provincia}</small>
-            </Col>
-            <Col md={3}>
-              <small className="text-muted">
-                <FaCircle className="estado" />
-                {conflito.estado}{" "}
-              </small>
-            </Col>
-          </Row>
-        </Card.Footer>
-      </Card>
+        <Col md={4}>
+          <Card
+            bg="dark"
+            border=""
+            text="white"
+            className="card-queixas-queixoso"
+          >
+            <Card.Header style={{ color: "#ffc107" }}>Anexos</Card.Header>
+            <Card.Body>
+              <Card.Title></Card.Title>
+              <Card.Text>
+                <p>
+                  <FaFilePdf style={{ border: "red" }} />
+                  <a
+                    href="#"
+                    onClick={(e) => handleDownload(conflito.url_file_contrato)}
+                    style={{ color: "rgb(220, 195, 119)" }}
+                  >
+                    {conflito.url_file_contrato.split("\\").pop()}
+                  </a>
+                </p>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
       <p></p>
       <Alert variant="warning" className="nota-queixa">
         <Alert.Heading>Hi, {perfil}</Alert.Heading>

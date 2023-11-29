@@ -60,7 +60,7 @@ app.post('/queixar_outra_empresa', QueixaController.queixar_outra_empresa);
 app.get('/ler_queixa', QueixaController.ler_queixa);
 app.post('/validar_BI', QueixaController.validarBI);
 app.get('/empresas', QueixaController.getEmpresas);
-app.post('/add_queixa', cpUpload, QueixaController.add_queixa);
+app.post('/add_queixa', cpUpload2, QueixaController.add_queixa);
 app.post('/add_empresa_queixa', cpUpload, QueixaController.add_empresa_queixa);
 app.post('/validar_NIF', QueixaController.validarNIF);
 app.get('/trabalhadores', QueixaController.getTrabalhadores);
@@ -86,6 +86,7 @@ app.get('/reunioes_empregadores', ReuniaoController.getReuniaoEmpregadores);
 app.post('/salvar_nota', NotaController.store);
 app.get('/listar_notas', NotaController.index);
 app.get('/mudancas_queixas', QueixaController.getHistorico);
+app.get('/download_contrato', QueixaController.download_contrato);
 
 
 

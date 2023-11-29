@@ -65,7 +65,8 @@ const FormQueixante = () => {
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
 
-    if (trabalhador && data.empresa2 != "outra") {
+    if (trabalhador && data.empresa2 !== "outra") {
+      console.log("aqui");
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
@@ -95,7 +96,7 @@ const FormQueixante = () => {
           console.log("error", resposta);
         });
     }
-    if (trabalhador && data.empresa2 == "outra") {
+    if (trabalhador && data.empresa2 === "outra") {
       formData.append("_cargo", submissao_queixa.cargo);
       formData.append("_area_departamento", submissao_queixa.area_departamento);
       formData.append("nome_empresa", submissao_queixa.empresa);
@@ -132,7 +133,7 @@ const FormQueixante = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
-    } else if (!trabalhador && data.empresa2 != "outra") {
+    } else if (!trabalhador && data.empresa2 !== "outra") {
       console.log("entrei sem outra");
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
@@ -185,7 +186,7 @@ const FormQueixante = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
-    } else {
+    } else if (!trabalhador && data.empresa2 === "outra") {
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
       formData.append("_nomePai", submissao_queixa.nomePai);

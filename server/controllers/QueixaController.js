@@ -150,8 +150,9 @@ module.exports = {
             //const serverPath = path.join(__dirname, 'uploads', queixas[0].url_file_contrato);
             const serverPath = path.resolve(queixas[0].url_file_contrato)
             //console.log('Server path:', serverPath);
-            //console.log(pathFile);
-            res.status(200).json({ queixas, serverPath });
+            const normalizePath = path.normalize(serverPath)
+            console.log(normalizePath);
+            res.status(200).json({ queixas, normalizePath });
         } catch (error) {
 
             console.log("Error", error);
@@ -765,7 +766,7 @@ module.exports = {
                     provincia: _provincia,
                     modo: _modo
                 })
-                console.log(novaQueixa)
+                //console.log(novaQueixa)
                 return res.status(200).send({
                     status: 1,
                     message: 'Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clicar no botão abaixo para entrar no nosso portal!',
@@ -1523,6 +1524,21 @@ try{
       
        
 
+    },
+    async download_contrato(req,res){
+        const {_filenameContrato} = req.query;
+        const filePath = path.resolve( _filenameContrato)
+
+        //const filePath = path.join(__dirname, 'uploads');
+        console.log(filePath)
+       res.download(filePath,function (erro) {
+            if(erro)
+            console.log(erro)
+            else
+            console.log("good")
+        });
+
+  
     },
     async delete(req, res) {
         const { pessoa_id } = req.params;
