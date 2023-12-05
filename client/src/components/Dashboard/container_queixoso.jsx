@@ -39,7 +39,7 @@ const Container_queixoso = () => {
     })
       .then(({ data }) => {
         setQueixas(data.queixas);
-        console.log(id_queixoso);
+        console.log(data.queixas);
         //console.log(lista_queixa.minha_queixa)
       })
       .catch((res) => {

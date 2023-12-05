@@ -50,6 +50,7 @@ const LerQueixa = () => {
     })
       .then(({ data }) => {
         setConflito(data.queixas[0]);
+        console.log(data);
         setServerPath(data.normalizePath);
         //console.log(res);
         //console.log(lista_queixa.minha_queixa)
@@ -59,8 +60,11 @@ const LerQueixa = () => {
       });
   };
   React.useEffect(() => {
+    console.log("iii");
     getQueixa();
   }, [id_queixa]);
+
+  console.log(conflito);
 
   let data = "";
   let nome = "";
@@ -148,7 +152,7 @@ const LerQueixa = () => {
                     onClick={(e) => handleDownload(conflito.url_file_contrato)}
                     style={{ color: "rgb(220, 195, 119)" }}
                   >
-                    {conflito.url_file_contrato.split("\\").pop()}
+                    {conflito.url_file_contrato}
                   </a>
                 </p>
               </Card.Text>

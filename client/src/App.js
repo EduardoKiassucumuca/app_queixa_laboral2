@@ -29,6 +29,7 @@ import NovaReuniao from "./components/Inspector/nova_reuniao";
 import NovaReuniaoEmpregador from "./components/Inspector/nova_reuniao_empregador";
 import ReunioesEmpregados from "./components/Inspector/reunioes_empregados";
 import ReunioesEmpregadores from "./components/Inspector/reunioes_empregadores";
+import ReunioesQueixoso from "./components/Queixoso/reuniao_queixoso";
 
 function App() {
   const [show, setShow] = useState("Empregador");
@@ -80,6 +81,7 @@ function App() {
           path="/reunioes_empregadores"
           element={<ReunioesEmpregadores />}
         />
+        <Route path="/reunioes_queixoso" element={<ReunioesQueixoso/>}/>
       </Routes>
     </Router>
   );

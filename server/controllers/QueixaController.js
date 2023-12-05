@@ -122,7 +122,7 @@ module.exports = {
 
         try {
             const queixas = await Queixa.findAll({
-                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado'],
+                attributes: ['id', 'assunto', 'facto', 'provincia', 'estado','url_file_contrato'],
                 where: { queixosoID: queixosoID }
             });
             //console.log(queixas);
@@ -136,10 +136,11 @@ module.exports = {
     },
     
     async ler_queixa(req, res) {
-        const { id_queixa } = req.query;
-        console.log(id_queixa);
-
         try {
+        const { id_queixa } = req.query;
+        console.log("id_queixa");
+
+       
             const queixas = await Queixa.findAll({
                 attributes: ['id', 'assunto', 'facto', 'provincia', 'estado', 'url_file_contrato','modo'],
                 where: { id: id_queixa }
