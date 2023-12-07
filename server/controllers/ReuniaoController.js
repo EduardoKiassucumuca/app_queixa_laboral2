@@ -1,6 +1,7 @@
 const Pessoa = require('../models/pessoa');
 const Reuniao = require('../models/reuniao');
-
+const { where } = require('sequelize');
+const { Op } = require("sequelize");
 module.exports = {
     async index(req, res) {
 
@@ -129,6 +130,23 @@ module.exports = {
                 where: {
                     '$Queixa.Inspector.trabalhadorID$': fk_inspector,
                   },
+            });
+            res.status(200).json({ reunioes });
+        } catch (error) {
+
+            console.log("Error", error);
+
+        }
+
+    },
+    async getReuniaoQueixoso(req, res) {
+
+        try {
+            const {_queixosoID} = req.query;
+            const reunioes = await Reuniao.findAll({
+
+                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'estado','queixaID','queixosoID', 'obs'],
+                where:{queixosoID:_queixosoID}
             });
             res.status(200).json({ reunioes });
         } catch (error) {

@@ -17,14 +17,38 @@ function ReunioesQueixoso(props) {
   const [queixas_selecprovincia, setQueixaSelecProv] = useState([]);
   const [reunioes, setReunioes] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
-
+  let data = "";
+  let id_queixoso = 0;
   //console.log(data.trabalhador.id);
-
+  if (sessionStorage.getItem("dashboard_queixoso")) {
+    const savedData = sessionStorage.getItem("dashboard_queixoso");
+    data = JSON.parse(savedData);
+    if (data.trabalhador) {
+      id_queixoso = data.trabalhador.id;
+    }
+    if (data.empresa) {
+      id_queixoso = data.empresa.id;
+    }
+  }
   //console.log(queixas_selecprovincia);
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    Axios.get("http://localhost:3001/reuniao_queixoso", {
+      params: {
+        _queixosoID: id_queixoso,
+      },
+    })
+      .then(({ data }) => {
+        setReunioes(data.reunioes);
+        console.log(data.reunioes);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch((res) => {
+        console.log(res.response.data.msg);
+      });
+  }, []);
   function buscaBI(bi_pesquisado) {
     setBI(bi_pesquisado);
     console.log(BI);
@@ -93,7 +117,6 @@ function ReunioesQueixoso(props) {
                 <th scope="col"> Data</th>
                 <th scope="col"> Hora</th>
                 <th scope="col">Local</th>
-                <th scope="col">Opção</th>
               </tr>
             </thead>
             <tbody>
@@ -102,20 +125,9 @@ function ReunioesQueixoso(props) {
                   <th scope="row">{reuniao.id}</th>
                   <th scope="row">{reuniao.assunto}</th>
 
-                  <th scope="row"> {reuniao.data} </th>
+                  <th scope="row">{reuniao.data} </th>
                   <th scope="row">{reuniao.hora}</th>
                   <td>{reuniao.local}</td>
-
-                  <td>
-                    <Button
-                      onClick={() => ver_queixa(reuniao)}
-                      variant="warning"
-                      className="fw-bold btn-nova-queixa"
-                      type="submit"
-                    >
-                      Mais detalhes
-                    </Button>
-                  </td>
                 </tr>
               ))}
             </tbody>

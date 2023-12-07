@@ -87,6 +87,7 @@ app.post('/salvar_nota', NotaController.store);
 app.get('/listar_notas', NotaController.index);
 app.get('/mudancas_queixas', QueixaController.getHistorico);
 app.get('/download_contrato', QueixaController.download_contrato);
+app.get('/reuniao_queixoso', ReuniaoController.getReuniaoQueixoso);
 
 
 
