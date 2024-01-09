@@ -23,6 +23,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Axios from "axios";
 
+import FileDownload from "js-file-download";
+
 function pathToUrl(filePath) {
   // Convert a file path to a URL by adding the 'file://' protocol
   return `file://${filePath}`;
@@ -44,8 +46,7 @@ const ModalEditaQueixa = (props) => {
     setDescricao(props.queixa.facto);
     setmodo(props.queixa.modo);
   }, [props.queixa.assunto]);
-  console.log(props.queixa.assunto);
-  const file_contrato = document.querySelector("#url-contrato-pdf");
+
   function atribuir_testemunha(inspector_nomeado, queixa_selecionada) {}
   function update_view() {
     window.location.reload();
@@ -57,17 +58,15 @@ const ModalEditaQueixa = (props) => {
       props.queixa.modo = "normal";
     }
   };
-
+  let file_contrato = "";
   const [values, setValues] = useState(props.queixa);
-  //console.log(props.queixa)
-  function editar_queixa(id, novo_assunto, novo_facto, novo_modo) {
+
+  function editar_queixa(id, novo_assunto, novo_facto, novo_modo, formData) {
+    console.log(formData);
     axios
-      .put("http://localhost:3001/editar_queixa", {
-        params: {
-          id_queixa: id,
-          assunto: novo_assunto,
-          facto: novo_facto,
-          modo: novo_modo,
+      .put("http://localhost:3001/editar_queixa", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       })
       .then(function (response) {
@@ -80,24 +79,50 @@ const ModalEditaQueixa = (props) => {
         console.log(error);
       });
   }
+  function criar_historico(e) {
+    e.preventDefault();
+    const formData = new FormData();
 
-  function criar_historico() {
-    Axios.post("http://localhost:3001/historico_queixa", {
-      id_queixa: props.queixa.id,
-      assunto: props.queixa.assunto,
-      facto: props.queixa.facto,
-      modo: props.queixa.modo,
+    if (document.querySelector("#file_contrato")) {
+      file_contrato = document.querySelector("#file_contrato");
+      formData.append("fileContrato", file_contrato.files[0]);
+      console.log("passei fales", formData);
+    }
+    //const file_BI = document.querySelector("#file_BI");
+
+    formData.append("id_queixa", props.queixa.id);
+    formData.append("_modo", props.queixa.modo);
+    formData.append("assunto", props.queixa.assunto);
+    formData.append("facto", props.queixa.facto);
+    console.log(formData);
+
+    Axios.post("http://localhost:3001/historico_queixa", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     })
       .then((resposta) => {
-        editar_queixa(props.queixa.id, assunto, descricao, modo);
+        editar_queixa(props.queixa.id, assunto, descricao, modo, formData);
       })
       .catch((resposta) => {
         console.log("error", resposta);
       });
   }
-  const handleClick = (event) => {
-    event.preventDefault();
-    window.location = `file://${props.server}`;
+  const handleDownload = async (url_file) => {
+    console.log(url_file);
+    const filename = url_file.split("\\").pop();
+
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
   };
   return (
     <>
@@ -131,69 +156,82 @@ const ModalEditaQueixa = (props) => {
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <Row className="mb-3">
-                <FloatingLabel controlId="floatingTextarea2" label="Assunto">
-                  <Form.Control
-                    placeholder="Queixa"
-                    name="assunto_queixa"
-                    id="assunto-queixa"
-                    value={assunto}
-                    onChange={(e) => setAssunto(e.target.value)}
-                    style={{ padding: "2px" }}
-                  />
-                </FloatingLabel>
-                <p></p>
-                <FloatingLabel
-                  controlId="floatingTextarea2"
-                  label="Descreva o que aconteceu"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Queixa"
-                    name="descricao"
-                    id="descr-queixa"
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
-                    style={{ height: "100px" }}
-                  />
-                </FloatingLabel>
-                <p></p>
-
-                <a href={props.server} id="url-contrato-pdf">
-                  meu_contrato.pdf
-                </a>
-
-                <Col md={6}>
-                  <Form.Label>Editar Contrato de Trabalho</Form.Label>
-                  <Form.Control
-                    type="file"
-                    name="file_contrato"
-                    id="file_contrato"
-                    required
-                  />
-                </Col>
-              </Row>
-              <Form.Label>Modo</Form.Label>
-
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => setmodo(e.target.value)}
+              <form
+                onSubmit={(e) => criar_historico(e)}
+                method="post"
+                enctype="multipart/form-data"
               >
-                <option value={modo}>{modo}</option>
+                <Row className="mb-3">
+                  <FloatingLabel controlId="floatingTextarea2" label="Assunto">
+                    <Form.Control
+                      placeholder="Queixa"
+                      name="assunto_queixa"
+                      id="assunto-queixa"
+                      value={assunto}
+                      onChange={(e) => setAssunto(e.target.value)}
+                      style={{ padding: "2px" }}
+                    />
+                  </FloatingLabel>
+                  <p></p>
+                  <FloatingLabel
+                    controlId="floatingTextarea2"
+                    label="Descreva o que aconteceu"
+                  >
+                    <Form.Control
+                      as="textarea"
+                      placeholder="Queixa"
+                      name="descricao"
+                      id="descr-queixa"
+                      value={descricao}
+                      onChange={(e) => setDescricao(e.target.value)}
+                      style={{ height: "100px" }}
+                    />
+                  </FloatingLabel>
+                  <p>
+                    <FaFilePdf style={{ border: "red" }} />
+                    <a
+                      href="#"
+                      onClick={(e) =>
+                        handleDownload(props.queixa.url_file_contrato)
+                      }
+                      style={{ color: "rgb(220, 195, 119)" }}
+                    >
+                      {props.queixa.url_file_contrato}
+                    </a>
+                  </p>
 
-                {modo === "normal" ? (
-                  <option value="anonimo">anonimo</option>
-                ) : (
-                  <option value="normal">normal</option>
-                )}
-              </Form.Select>
+                  <Col md={6}>
+                    <Form.Label>Editar Contrato de Trabalho</Form.Label>
+                    <Form.Control
+                      type="file"
+                      name="file_contrato"
+                      id="file_contrato"
+                      required
+                    />
+                  </Col>
+                </Row>
+                <Form.Label>Modo</Form.Label>
+
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setmodo(e.target.value)}
+                >
+                  <option value={modo}>{modo}</option>
+
+                  {modo === "normal" ? (
+                    <option value="anonimo">anonimo</option>
+                  ) : (
+                    <option value="normal">normal</option>
+                  )}
+                </Form.Select>
+                <MDBModalFooter>
+                  <Button variant="warning" type="submit">
+                    {" "}
+                    Editar
+                  </Button>
+                </MDBModalFooter>
+              </form>
             </MDBModalBody>
-            <MDBModalFooter>
-              <Button variant="warning" onClick={criar_historico}>
-                {" "}
-                Editar
-              </Button>
-            </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>

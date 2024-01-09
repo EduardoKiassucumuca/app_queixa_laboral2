@@ -74,7 +74,6 @@ const FormQueixoso = () => {
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
       formData.append("queixante", "Trabalhador");
-      console.log(formData);
 
       Axios.post("http://localhost:3001/add_queixa", formData, {
         headers: {

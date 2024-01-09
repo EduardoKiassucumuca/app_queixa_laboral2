@@ -64,8 +64,6 @@ const LerQueixa = () => {
     getQueixa();
   }, [id_queixa]);
 
-  console.log(conflito);
-
   let data = "";
   let nome = "";
   let sobrenome = "";

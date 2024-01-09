@@ -1393,15 +1393,19 @@ module.exports = {
             const { id_queixa } = req.body;
             const { assunto } = req.body;
             const { facto } = req.body;
-            const {modo} = req.body
+            const {_modo} = req.body
             const data_queixa = new Date();
+            const fileContrato = req.files['fileContrato'][0].path;
+            const filename = fileContrato.split("\\").pop();
+
 
             const novoHistorico = await historico_queixa.create({
-                id_queixa: id_queixa,
+                queixaID: id_queixa,
                 assunto: assunto,
                 facto: facto,
                 data: data_queixa,
-                modo: modo
+                modo: _modo,
+                url_file_contrato:filename
             })
             return res.status(200).send({
                 status: 1,
@@ -1438,14 +1442,19 @@ module.exports = {
 
     },
     async update_queixa(req, res) {
-        const { id_queixa } = req.body.params;
-        const { assunto } = req.body.params;
-        const { facto } = req.body.params;
-        const { modo } = req.body.params;
+        const { id_queixa } = req.body;
+        const { assunto } = req.body;
+        const { facto } = req.body;
+        const { _modo } = req.body;
+        const fileContrato = req.files['fileContrato'][0].path;
+        const filename = fileContrato.split("\\").pop();
+
+
         await Queixa.update({
             assunto: assunto,
             facto: facto,
-            modo:modo
+            modo:_modo,
+            url_file_contrato:filename
         }, {
             where: {
                 id: id_queixa
@@ -1528,7 +1537,8 @@ try{
     },
     async download_contrato(req,res){
         const {_filenameContrato} = req.query;
-        const filePath = path.resolve( _filenameContrato)
+        
+        const filePath = path.resolve("uploads", _filenameContrato)
 
         //const filePath = path.join(__dirname, 'uploads');
         console.log(filePath)

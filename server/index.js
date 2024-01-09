@@ -70,8 +70,8 @@ app.put('/nomear_inspector', QueixaController.update)
 app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
 app.post('/add_empregador_queixa', cpUpload2, QueixaController.add_empregador_queixa);
 app.put('/atualizarStatusConta', ContaController.update_tentativa)
-app.post('/historico_queixa', QueixaController.criar_historico)
-app.put('/editar_queixa', QueixaController.update_queixa)
+app.post('/historico_queixa',cpUpload2, QueixaController.criar_historico)
+app.put('/editar_queixa',cpUpload2, QueixaController.update_queixa)
 app.post('/novo_funcionario', FuncionarioController.store)
 app.get('/funcionarios_igt', FuncionarioController.index);
 app.get('/ver_funcionario', FuncionarioController.get_funcionario);
