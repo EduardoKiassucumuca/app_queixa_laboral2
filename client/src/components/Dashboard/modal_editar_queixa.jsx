@@ -39,6 +39,7 @@ const ModalEditaQueixa = (props) => {
   const [descricao, setDescricao] = useState("");
   const [modo, setmodo] = useState("");
   const toggleShow = () => setCentredModal(!centredModal);
+  const [showModal, setShowModal] = useState(true);
   let inspectores = [];
   let queixa = {};
   React.useEffect(() => {
@@ -46,6 +47,7 @@ const ModalEditaQueixa = (props) => {
     setDescricao(props.queixa.facto);
     setmodo(props.queixa.modo);
   }, [props.queixa.assunto]);
+  console.log(showModal);
 
   function atribuir_testemunha(inspector_nomeado, queixa_selecionada) {}
   function update_view() {
@@ -144,15 +146,15 @@ const ModalEditaQueixa = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <MDBModal tabIndex="-1" show={props.show} setShow={props.setShow}>
+      <MDBModal tabIndex="-1" show={true}>
         <MDBModalDialog centered>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle> Editar queixa {props.queixa.id}</MDBModalTitle>
+              <MDBModalTitle> Editar queixa {props?.queixa.id}</MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"
-                onClick={props.close}
+                onClick={props?.close}
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>

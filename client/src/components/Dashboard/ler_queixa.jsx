@@ -17,6 +17,7 @@ import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalEditaQueixa from "./modal_editar_queixa";
 import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
+import Modal from "react-bootstrap/Modal";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -25,6 +26,10 @@ const LerQueixa = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [serverPath, setServerPath] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleDownload = async (url_file) => {
     console.log(url_file);
@@ -60,7 +65,6 @@ const LerQueixa = () => {
       });
   };
   React.useEffect(() => {
-    console.log("iii");
     getQueixa();
   }, [id_queixa]);
 
@@ -180,27 +184,80 @@ const LerQueixa = () => {
       >
         Nova Queixa
       </Button>
-      <ModalConfirmacao
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Launch demo modal
+      </button>
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Modal title
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">...</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*<ModalConfirmacao
         show={showModal2}
         setShow={setShowModal2}
         close={() => setShowModal2(false)}
-      />
+  />*/}
 
       <Button
         variant="warning"
-        onClick={() => setShowModal(true)}
+        onClick={handleShow}
         className="fw-bold btn-nova-queixa"
-        type="submit"
+        type="button"
       >
         Editar queixa
       </Button>
-      <ModalEditaQueixa
-        show={showModal}
-        setShow={setShowModal}
-        close={() => setShowModal(false)}
-        queixa={conflito}
-        server={serverPath}
-      />
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/*<ModalEditaQueixa show={false} queixa={conflito} server={serverPath} />*/}
     </>
   );
 };

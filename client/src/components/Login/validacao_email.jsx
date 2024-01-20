@@ -22,7 +22,20 @@ import {
 } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
 import AlertAutenticacao from "./alert_autenticacao";
+import axios from "axios";
 
+function atualizar_status_conta(conta) {
+  axios
+    .put("http://localhost:3001/atualizarStatusConta", {
+      params: {
+        id_conta: conta.id,
+      },
+    })
+    .then(function (response) {})
+    .catch(function (error) {
+      console.log(error);
+    });
+}
 function ValidacaoEmail() {
   const [alert, setAlert] = useState("");
   const [tipo_msg, setTipo_msg] = useState(true);
@@ -49,7 +62,6 @@ function ValidacaoEmail() {
   if (sessionStorage.getItem("data_login")) {
     const savedResposta = sessionStorage.getItem("data_login");
     const data_login = JSON.parse(savedResposta);
-    console.log(data_login);
     email = data_login.conta.email;
     code = data_login.code;
 
@@ -60,7 +72,51 @@ function ValidacaoEmail() {
   function Validar() {
     if (body.code === code) {
       setAlert("Autenticação realizada com sucesso!");
-      setShowModal(true);
+      //setShowModal(true);
+      if (sessionStorage.getItem("data_login")) {
+        const savedResposta = sessionStorage.getItem("data_login");
+        const data_login = JSON.parse(savedResposta);
+        if (
+          data_login.trabalhador.tipo === "igt" &&
+          data_login.trabalhador.cargo === "Recepcionista"
+        ) {
+          sessionStorage.setItem(
+            "data_recepcionista",
+            JSON.stringify(data_login)
+          );
+          sessionStorage.removeItem("data_login", JSON.stringify(data_login));
+
+          navigate("/recepcionista");
+        } else if (
+          data_login.trabalhador.tipo === "igt" &&
+          data_login.trabalhador.cargo === "chefe_servicos"
+        ) {
+          sessionStorage.setItem(
+            "data_chefeServicos",
+            JSON.stringify(data_login)
+          );
+          sessionStorage.removeItem("data_login", JSON.stringify(data_login));
+          navigate("/chefe_servicos");
+        } else if (
+          data_login.trabalhador.tipo === "igt" &&
+          data_login.trabalhador.cargo === "Inspector"
+        ) {
+          sessionStorage.setItem("data_inspector", JSON.stringify(data_login));
+          sessionStorage.removeItem("data_login", JSON.stringify(data_login));
+          navigate("/inspector");
+        } else if (data_login.trabalhador.tipo === "queixoso") {
+          console.log("aquiiii");
+          sessionStorage.setItem(
+            "dashboard_queixoso",
+            JSON.stringify(data_login)
+          );
+          atualizar_status_conta(data_login.conta);
+          sessionStorage.removeItem("data_login", JSON.stringify(data_login));
+          navigate("/dashboard_queixoso");
+        }
+      } else if (!sessionStorage.getItem("data_login")) {
+        navigate("/entrar");
+      }
       setTipo_msg(true);
     } else {
       setAlert("Este código não funcionou, por favor tente novamente!");
@@ -118,7 +174,12 @@ function ValidacaoEmail() {
                 </Form>
 
                 <div className="d-grid gap-2">
-                  <Button variant="warning" size="lg" onClick={Validar}>
+                  <Button
+                    variant="warning"
+                    href="#"
+                    size="lg"
+                    onClick={Validar}
+                  >
                     Verificar
                   </Button>
                 </div>
