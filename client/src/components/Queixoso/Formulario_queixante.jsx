@@ -17,6 +17,7 @@ import Trabalhador from "../Queixante/Trabalhador";
 import Queixa from "../Queixante/Queixa";
 import Thanks from "./details_queixa";
 import "./submeter_queixa.css";
+import { Link } from "react-router-dom";
 
 // Hooks
 import { useForm } from "./useForm";
@@ -30,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import Queixei from "./queixei";
 import ValidacaoQueixoso from "./validacao_trabalhador";
 import ModalConfirmationQueixa from "./ModalConfirmationQueixa";
+import { FaCreativeCommonsPd } from "react-icons/fa6";
 
 const formTemplate = {
   review: "",
@@ -46,6 +48,7 @@ const FormQueixante = () => {
   const [changeForm, setChangeForm] = useState(false);
   const [alert, setAlert] = useState("");
   const [redirect, setRedirect] = useState("");
+  const [displayStyle, setDisplayStyle] = useState("none");
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,7 +57,12 @@ const FormQueixante = () => {
       return { ...prev, [key]: value };
     });
   };
-
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
 
@@ -84,6 +92,8 @@ const FormQueixante = () => {
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
+          toggleDisplay();
+
           setRedirect("/Entrar");
 
           setShowModal(true);
@@ -126,9 +136,9 @@ const FormQueixante = () => {
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
-          setRedirect("/Entrar");
+          toggleDisplay();
 
-          setShowModal(true);
+          setRedirect("/Entrar");
         })
         .catch((resposta) => {
           console.log("error", resposta);
@@ -180,8 +190,8 @@ const FormQueixante = () => {
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
+          toggleDisplay();
           setRedirect("/Entrar");
-          setShowModal(true);
         })
         .catch((resposta) => {
           console.log("error", resposta);
@@ -241,8 +251,9 @@ const FormQueixante = () => {
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
+          toggleDisplay();
           setRedirect("/Entrar");
-          setShowModal(true);
+          //setShowModal(true);
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
 
           /*const [showModal, setShowModal] = useState(true);
@@ -280,14 +291,6 @@ const FormQueixante = () => {
           padding: "0",
         }}
       >
-        <ModalConfirmationQueixa
-          msg={alert}
-          show={showModal}
-          setShow={setShowModal}
-          redirect={redirect}
-          close={() => setShowModal(false)}
-        />
-
         <div
           className="site-layout-content"
           style={{
@@ -295,6 +298,17 @@ const FormQueixante = () => {
           }}
         >
           <Queixei />
+          <div id="myModal" class="modal" style={{ display: displayStyle }}>
+            <div class="modal-content">
+              <p>{alert}</p>
+              <p></p>
+              <div class="modal-footer">
+                <Link to="/Entrar">
+                  <Button variant="warning">OK</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
           <Row className="mb-3 row-queixa">
             <Col md={11} className="form-queixa">
               <Col md={8} className="form-queixa">

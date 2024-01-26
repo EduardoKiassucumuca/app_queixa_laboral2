@@ -21,13 +21,12 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
-import { FaRedo } from "react-icons/fa";
-
+import Spinner from "react-bootstrap/Spinner";
 function Login() {
   const navigate = useNavigate();
 
   const [body, setBody] = useState({ email: "", senha: "" });
-
+  const [loading, setLoading] = useState(false);
   const inputChange = ({ target }) => {
     const { name, value } = target;
     setBody({
@@ -38,6 +37,7 @@ function Login() {
   };
 
   function logar() {
+    setLoading(true);
     if (body.email === "admin@igt.ao" && body.senha === "123@igt") {
       navigate("/dashboard_admin");
     } else {
@@ -55,6 +55,9 @@ function Login() {
         })
         .catch((res) => {
           console.log(res);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }
@@ -129,10 +132,22 @@ function Login() {
                 </Form>
 
                 <div className="d-grid gap-2 reload-button">
-                  <Button variant="warning" size="lg" onClick={logar}>
-                    Entrar
-                  </Button>
-                  <FaRedo />
+                  {loading ? (
+                    <Button variant="warning" disabled>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      <span className="visually-hidden">Loading...</span>
+                    </Button>
+                  ) : (
+                    <Button variant="warning" size="lg" onClick={logar}>
+                      Entrar
+                    </Button>
+                  )}{" "}
                 </div>
                 <p></p>
                 <div className="text-center">
