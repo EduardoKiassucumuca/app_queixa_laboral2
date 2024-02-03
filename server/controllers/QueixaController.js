@@ -1376,10 +1376,13 @@ module.exports = {
       const { assunto } = req.body;
       const { facto } = req.body;
       const { _modo } = req.body;
+      const { fileContrato } = req.body;
+      const filename = fileContrato.toString().split("/")[1];
       const data_queixa = new Date();
-      const fileContrato = req.files["fileContrato"][0].path;
-      const filename = fileContrato.split("\\").pop();
+      //const filename = path.basename(fileContrato);
 
+      //const fileContrato2 = req.files["fileContrato"][0].path;
+      console.log(assunto);
       const novoHistorico = await historico_queixa.create({
         queixaID: id_queixa,
         assunto: assunto,
@@ -1425,15 +1428,40 @@ module.exports = {
     const { assunto } = req.body;
     const { facto } = req.body;
     const { _modo } = req.body;
-    const fileContrato = req.files["fileContrato"][0].path;
-    const filename = fileContrato.split("\\").pop();
+    const fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+    console.log(fileContrato, assunto, facto);
+    await Queixa.update(
+      {
+        assunto: assunto,
+        facto: facto,
+        modo: _modo,
+        url_file_contrato: fileContrato,
+      },
+      {
+        where: {
+          id: id_queixa,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      status: 1,
+      message: "Queixa editada com sucesso!",
+    });
+  },
+  async update_queixa2(req, res) {
+    const { id_queixa } = req.body;
+    const { assunto } = req.body;
+    const { facto } = req.body;
+    const { _modo } = req.body;
+    const { fileContrato } = req.body;
 
     await Queixa.update(
       {
         assunto: assunto,
         facto: facto,
         modo: _modo,
-        url_file_contrato: filename,
+        url_file_contrato: fileContrato,
       },
       {
         where: {

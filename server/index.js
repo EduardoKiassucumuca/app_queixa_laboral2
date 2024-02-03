@@ -2,33 +2,33 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-const QueixaController = require('./controllers/QueixaController');
-require('./config/conexao.js')
+const QueixaController = require("./controllers/QueixaController");
+require("./config/conexao.js");
 const { generateKey } = require("crypto");
 const multer = require("multer");
 var upload = require("./config/configMulter");
 
-const ContaController = require('./controllers/ContaController');
+const ContaController = require("./controllers/ContaController");
 const InspectorController = require("./controllers/InspectorController");
 
-const http = require('http');
-const socketIo = require('socket.io');
+const http = require("http");
+const socketIo = require("socket.io");
 const FuncionarioController = require("./controllers/FuncionarioController");
 const ReuniaoController = require("./controllers/ReuniaoController.js");
 const NotaController = require("./controllers/NotaController.js");
 
 const server = http.createServer(app);
-const io = socketIo(server,{cors:{origin:'http://localhost:3000'}});
+const io = socketIo(server, { cors: { origin: "http://localhost:3000" } });
 
-io.on('connection', (socket) => {
-  console.log('A user connected',socket.user);
+io.on("connection", (socket) => {
+  console.log("A user connected", socket.user);
 
-  socket.on('message', (message) => {
-    io.emit('message', message);
+  socket.on("message", (message) => {
+    io.emit("message", message);
   });
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
   });
 });
 
@@ -39,57 +39,64 @@ io.on('connection', (socket) => {
     database: "bd_queixa_laboral",
 })*/
 
-
 app.use(cors());
 app.use(express.json());
 
-var cpUpload = upload.fields([{ name: 'fileContrato' }, { name: 'fileBI' }])
-var cpUpload2 = upload.fields([{ name: 'fileContrato' }])
-var upload_file_acta = upload.fields([{ name: 'fileActa' }])
+var cpUpload = upload.fields([{ name: "fileContrato" }, { name: "fileBI" }]);
+var cpUpload2 = upload.fields([{ name: "fileContrato" }]);
+var upload_file_acta = upload.fields([{ name: "fileActa" }]);
 
-app.post('/guardar_queixa', cpUpload, QueixaController.store);
-app.post('/add_queixoso_queixa', cpUpload, QueixaController.add_queixoso_queixa);
-app.post('/anexa_acta', upload_file_acta, QueixaController.anexa_acta);
+app.post("/guardar_queixa", cpUpload, QueixaController.store);
+app.post(
+  "/add_queixoso_queixa",
+  cpUpload,
+  QueixaController.add_queixoso_queixa
+);
+app.post("/anexa_acta", upload_file_acta, QueixaController.anexa_acta);
 
-app.post('/registar/conta', ContaController.store);
-app.post('/auth', ContaController.logar);
-app.get('/queixas', QueixaController.index);
-app.get('/queixas_do_queixoso', QueixaController.queixas_do_queixoso);
-app.post('/queixar_mesma_empresa', QueixaController.queixar_mesma_empresa);
-app.post('/queixar_outra_empresa', QueixaController.queixar_outra_empresa);
-app.get('/ler_queixa', QueixaController.ler_queixa);
-app.post('/validar_BI', QueixaController.validarBI);
-app.get('/empresas', QueixaController.getEmpresas);
-app.post('/add_queixa', cpUpload2, QueixaController.add_queixa);
-app.post('/add_empresa_queixa', cpUpload, QueixaController.add_empresa_queixa);
-app.post('/validar_NIF', QueixaController.validarNIF);
-app.get('/trabalhadores', QueixaController.getTrabalhadores);
-app.get('/inspectores', InspectorController.index);
-app.get('/queixas_inspectores', InspectorController.getQueixasInspector);
-app.put('/nomear_inspector', QueixaController.update)
-app.put('/atribuir_testemunhas', QueixaController.update_testemunha);
-app.post('/add_empregador_queixa', cpUpload2, QueixaController.add_empregador_queixa);
-app.put('/atualizarStatusConta', ContaController.update_tentativa)
-app.post('/historico_queixa',cpUpload2, QueixaController.criar_historico)
-app.put('/editar_queixa',cpUpload2, QueixaController.update_queixa)
-app.post('/novo_funcionario', FuncionarioController.store)
-app.get('/funcionarios_igt', FuncionarioController.index);
-app.get('/ver_funcionario', FuncionarioController.get_funcionario);
-app.put('/editar_funcionario', FuncionarioController.update)
-app.delete('/apagar_funcionario', FuncionarioController.delete);
-app.get('/queixas_inspectores2', InspectorController.getQueixasInspector2);
-app.get('/mais_detalhes', QueixaController.mais_detalhes);
-app.post('/nova_reuniao', ReuniaoController.store);
-app.post('/nova_reuniao_empregador', ReuniaoController.nova_reuniao_empregador);
-app.get('/reunioes_empregados', ReuniaoController.index);
-app.get('/reunioes_empregadores', ReuniaoController.getReuniaoEmpregadores);
-app.post('/salvar_nota', NotaController.store);
-app.get('/listar_notas', NotaController.index);
-app.get('/mudancas_queixas', QueixaController.getHistorico);
-app.get('/download_contrato', QueixaController.download_contrato);
-app.get('/reuniao_queixoso', ReuniaoController.getReuniaoQueixoso);
+app.post("/registar/conta", ContaController.store);
+app.post("/auth", ContaController.logar);
+app.get("/queixas", QueixaController.index);
+app.get("/queixas_do_queixoso", QueixaController.queixas_do_queixoso);
+app.post("/queixar_mesma_empresa", QueixaController.queixar_mesma_empresa);
+app.post("/queixar_outra_empresa", QueixaController.queixar_outra_empresa);
+app.get("/ler_queixa", QueixaController.ler_queixa);
+app.post("/validar_BI", QueixaController.validarBI);
+app.get("/empresas", QueixaController.getEmpresas);
+app.post("/add_queixa", cpUpload2, QueixaController.add_queixa);
+app.post("/add_empresa_queixa", cpUpload, QueixaController.add_empresa_queixa);
+app.post("/validar_NIF", QueixaController.validarNIF);
+app.get("/trabalhadores", QueixaController.getTrabalhadores);
+app.get("/inspectores", InspectorController.index);
+app.get("/queixas_inspectores", InspectorController.getQueixasInspector);
+app.put("/nomear_inspector", QueixaController.update);
+app.put("/atribuir_testemunhas", QueixaController.update_testemunha);
+app.post(
+  "/add_empregador_queixa",
+  cpUpload2,
+  QueixaController.add_empregador_queixa
+);
+app.put("/atualizarStatusConta", ContaController.update_tentativa);
+app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
+app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
+app.put("/editar_queixa2", QueixaController.update_queixa2);
 
-
+app.post("/novo_funcionario", FuncionarioController.store);
+app.get("/funcionarios_igt", FuncionarioController.index);
+app.get("/ver_funcionario", FuncionarioController.get_funcionario);
+app.put("/editar_funcionario", FuncionarioController.update);
+app.delete("/apagar_funcionario", FuncionarioController.delete);
+app.get("/queixas_inspectores2", InspectorController.getQueixasInspector2);
+app.get("/mais_detalhes", QueixaController.mais_detalhes);
+app.post("/nova_reuniao", ReuniaoController.store);
+app.post("/nova_reuniao_empregador", ReuniaoController.nova_reuniao_empregador);
+app.get("/reunioes_empregados", ReuniaoController.index);
+app.get("/reunioes_empregadores", ReuniaoController.getReuniaoEmpregadores);
+app.post("/salvar_nota", NotaController.store);
+app.get("/listar_notas", NotaController.index);
+app.get("/mudancas_queixas", QueixaController.getHistorico);
+app.get("/download_contrato", QueixaController.download_contrato);
+app.get("/reuniao_queixoso", ReuniaoController.getReuniaoQueixoso);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
@@ -156,5 +163,5 @@ app.get('/reuniao_queixoso', ReuniaoController.getReuniaoQueixoso);
 });*/
 
 server.listen(3001, () => {
-    console.log("Rodando Servidor");
+  console.log("Rodando Servidor");
 });

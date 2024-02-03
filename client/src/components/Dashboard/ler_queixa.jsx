@@ -14,10 +14,13 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import ModalQueixoso from "./modal_queixoso";
 import ModalConfirmacao from "../Modal/modalConfirmation";
-import ModalEditaQueixa from "./modal_editar_queixa";
+import Form from "react-bootstrap/Form";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+
 import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
 import Modal from "react-bootstrap/Modal";
+import { right } from "@popperjs/core";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -27,14 +30,78 @@ const LerQueixa = () => {
   const [showModal, setShowModal] = useState(false);
   const [serverPath, setServerPath] = useState("");
   const [show, setShow] = useState(false);
+  const [queixa_antiga, setqueixa_antiga] = useState();
+  const [assunto, setAssunto] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [modo, setmodo] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle2, setDisplayStyle2] = useState("none");
 
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay2 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  let file_contrato = "";
+
+  function editar_queixa(id) {
+    const formData = new FormData();
+    file_contrato = document.querySelector("#file_contrato");
+    if (file_contrato.files[0]) {
+      console.log("aaaa");
+
+      formData.append("id_queixa", conflito.id);
+      formData.append("_modo", modo);
+      formData.append("assunto", assunto);
+      formData.append("facto", descricao);
+      formData.append("fileContrato", file_contrato.files[0]);
+      Axios.put("http://localhost:3001/editar_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          //console.log(response);
+          toggleDisplay2();
+          //window.location.href = '/chefe_servicos';
+          console.log(response);
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    } else {
+      Axios.put("http://localhost:3001/editar_queixa2", {
+        id_queixa: conflito.id,
+        assunto: assunto,
+        facto: descricao,
+        _modo: modo,
+        fileContrato: conflito.url_file_contrato,
+      })
+        .then(function (response) {
+          //console.log(response);
+          toggleDisplay2();
+          //window.location.href = '/chefe_servicos';
+          console.log(response);
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    }
+  }
   const handleDownload = async (url_file) => {
-    console.log(url_file);
     const filename = url_file.split("\\").pop();
-
     const response = await Axios({
       url: "http://localhost:3001/download_contrato",
       method: "Get",
@@ -47,6 +114,25 @@ const LerQueixa = () => {
       FileDownload(res.data, filename);
     });
   };
+  function criar_historico(e) {
+    e.preventDefault();
+
+    //const file_BI = document.querySelector("#file_BI");
+
+    Axios.post("http://localhost:3001/historico_queixa", {
+      id_queixa: conflito.id,
+      assunto: conflito.assunto,
+      facto: conflito.facto,
+      _modo: conflito.modo,
+      fileContrato: conflito.url_file_contrato,
+    })
+      .then((resposta) => {
+        editar_queixa(conflito.id);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  }
   const getQueixa = async () => {
     await Axios.get("http://localhost:3001/ler_queixa", {
       params: {
@@ -55,7 +141,10 @@ const LerQueixa = () => {
     })
       .then(({ data }) => {
         setConflito(data.queixas[0]);
-        console.log(data);
+        setAssunto(data.queixas[0].assunto);
+        setDescricao(data.queixas[0].facto);
+        setmodo(data.queixas[0].modo);
+
         setServerPath(data.normalizePath);
         //console.log(res);
         //console.log(lista_queixa.minha_queixa)
@@ -63,6 +152,9 @@ const LerQueixa = () => {
       .catch(({ res }) => {
         console.log(res);
       });
+  };
+  const reload = () => {
+    window.location.reload();
   };
   React.useEffect(() => {
     getQueixa();
@@ -184,80 +276,109 @@ const LerQueixa = () => {
       >
         Nova Queixa
       </Button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Launch demo modal
-      </button>
+      <div id="myModal" class="modal" style={{ display: displayStyle }}>
+        <div class="modal-content">
+          <span
+            class="close"
+            style={{ textAlign: "right" }}
+            onClick={toggleDisplay}
+          >
+            &times;
+          </span>
 
-      <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Modal title
-              </h1>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">...</div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
+          <form
+            onSubmit={(e) => criar_historico(e)}
+            enctype="multipart/form-data"
+          >
+            <Row className="mb-3">
+              <FloatingLabel controlId="floatingTextarea2" label="Assunto">
+                <Form.Control
+                  placeholder="Queixa"
+                  name="assunto_queixa"
+                  id="assunto-queixa"
+                  value={assunto}
+                  onChange={(e) => setAssunto(e.target.value)}
+                  style={{ padding: "2px" }}
+                />
+              </FloatingLabel>
+              <p></p>
+              <p></p>
+              <FloatingLabel
+                controlId="floatingTextarea2"
+                label="Descreva o que aconteceu"
               >
-                Close
-              </button>
-              <button type="button" class="btn btn-primary">
-                Save changes
-              </button>
+                <Form.Control
+                  as="textarea"
+                  placeholder="Queixa"
+                  name="descricao"
+                  id="descr-queixa"
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  style={{ height: "100px" }}
+                />
+              </FloatingLabel>
+              <p>
+                <FaFilePdf style={{ border: "red" }} />
+                <a
+                  href="#"
+                  onClick={(e) => handleDownload(conflito.url_file_contrato)}
+                  style={{ color: "rgb(220, 195, 119)" }}
+                >
+                  {conflito.url_file_contrato}
+                </a>
+              </p>
+
+              <Col md={6}>
+                <Form.Label>Editar Contrato de Trabalho</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="file_contrato"
+                  id="file_contrato"
+                />
+              </Col>
+            </Row>
+            <Form.Label>Modo</Form.Label>
+
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) => setmodo(e.target.value)}
+            >
+              <option value={modo}>{modo}</option>
+
+              {conflito.modo === "normal" ? (
+                <option value="anonimo">anonimo</option>
+              ) : (
+                <option value="normal">normal</option>
+              )}
+            </Form.Select>
+            <div class="modal-footer">
+              <Button variant="warning" type="submit">
+                {" "}
+                Editar
+              </Button>
             </div>
+          </form>
+        </div>
+      </div>
+      <div id="myModal" class="modal" style={{ display: displayStyle2 }}>
+        <div class="modal-content">
+          <p>{alert}</p>
+          <p></p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={reload}>
+              OK
+            </Button>
           </div>
         </div>
       </div>
-      {/*<ModalConfirmacao
-        show={showModal2}
-        setShow={setShowModal2}
-        close={() => setShowModal2(false)}
-  />*/}
-
       <Button
         variant="warning"
-        onClick={handleShow}
+        onClick={toggleDisplay}
         className="fw-bold btn-nova-queixa"
         type="button"
       >
         Editar queixa
       </Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      {/*<ModalEditaQueixa show={false} queixa={conflito} server={serverPath} />*/}
     </>
   );
 };
