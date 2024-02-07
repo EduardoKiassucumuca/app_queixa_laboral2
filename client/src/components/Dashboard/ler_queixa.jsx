@@ -21,6 +21,8 @@ import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
 import Modal from "react-bootstrap/Modal";
 import { right } from "@popperjs/core";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -39,7 +41,7 @@ const LerQueixa = () => {
   const handleShow = () => setShow(true);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
-
+  const navigate = useNavigate();
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
@@ -54,6 +56,23 @@ const LerQueixa = () => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const popover = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Queixa</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>Quem pretendes queixar?</strong>
+        <hr style={{ backgroundColor: "rgb(50 43 43)" }} />
+        <Link to="/validacao_trabalhador">
+          <Button variant="warning">Empregador</Button>
+        </Link>{" "}
+        ou
+        <Link to="/empregador">
+          {" "}
+          <Button className="btn btn-dark"> Trabalhador</Button>
+        </Link>
+      </Popover.Body>
+    </Popover>
+  );
   let file_contrato = "";
 
   function editar_queixa(id) {
@@ -165,7 +184,7 @@ const LerQueixa = () => {
   let sobrenome = "";
   let empresa = "";
   let perfil = "";
-
+  let tipo = "";
   if (sessionStorage.getItem("dashboard_queixoso")) {
     const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
@@ -173,12 +192,20 @@ const LerQueixa = () => {
       nome = data.pessoa.nome;
       sobrenome = data.pessoa.sobrenome;
       perfil = nome + " " + sobrenome;
+      tipo = "trabalhador";
     } else if (data.empresa) {
       empresa = data.empresa.nome_empresa;
       perfil = empresa;
+      tipo = "empresa";
     }
   }
-
+  function queixar() {
+    if (tipo === "trabalhador") {
+      navigate("/queixar_empregador");
+    } else {
+      navigate("/queixar_trabalhador");
+    }
+  }
   return (
     <>
       <MySideNav />
@@ -270,12 +297,13 @@ const LerQueixa = () => {
 
       <Button
         variant="warning"
-        onClick={() => setShowModal2(true)}
+        onClick={queixar}
         className="fw-bold btn-nova-queixa"
         type="submit"
       >
         Nova Queixa
       </Button>
+
       <div id="myModal" class="modal" style={{ display: displayStyle }}>
         <div class="modal-content">
           <span
