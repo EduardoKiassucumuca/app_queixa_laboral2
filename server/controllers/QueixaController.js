@@ -1275,7 +1275,7 @@ module.exports = {
         const { _provinciaEmp } = req.body;
         const { _cargo } = req.body;
         const { _area_departamento } = req.body;
-        const _tipoT = "queixANTE";
+        const _tipoT = "queixante";
         const novoTrabalhador = await Trabalhador.create({
           cargo: _cargo,
           area_departamento: _area_departamento,

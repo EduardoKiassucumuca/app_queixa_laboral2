@@ -13,7 +13,7 @@ import "../Queixoso/validacao_trabalhador.css";
 
 // Hooks
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 import CompnentMain from "../container/container";
 import Axios from "axios";
@@ -36,6 +36,8 @@ const ValidacaoEmpregador = () => {
   const [alert, setAlert] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [myData, setMyData] = useState({});
+  const [desabilita, setDesabilita] = useState(false);
 
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
@@ -43,29 +45,48 @@ const ValidacaoEmpregador = () => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  React.useEffect(() => {
+    if (sessionStorage.getItem("dashboard_queixoso")) {
+      const savedData = sessionStorage.getItem("dashboard_queixoso");
+      setMyData(JSON.parse(savedData));
+      console.log(myData);
+      //localStorage.setItem("empregador", JSON.stringify(data));
+      //navigate("/queixar_trabalhador");
+      setDesabilita(true);
+    }
+  }, []);
   const validar_NIF = (e) => {
     e.preventDefault();
     localStorage.clear();
+    if (myData.empresa.nif !== undefined) {
+      localStorage.setItem("empregador", JSON.stringify(myData));
+      console.log(myData);
 
-    Axios.post("http://localhost:3001/validar_NIF", {
-      _nif: NIF,
-    })
-      .then((res) => {
-        //console.log(res.data.queixoso)
-        setAlert(res.data.msg);
-        toggleDisplay();
-        setQueixoso(true);
-        localStorage.setItem("empregador", JSON.stringify(res.data.empregador));
-
-        //navigate("/queixar_empregad");
+      navigate("/queixar_trabalhador");
+    } else {
+      Axios.post("http://localhost:3001/validar_NIF", {
+        _nif: NIF,
       })
-      .catch((res) => {
-        //console.log(res.response.data.msg);
-        setAlert(res.response.data.msg);
+        .then((res) => {
+          //console.log(res.data.queixoso)
+          setAlert(res.data.msg);
+          toggleDisplay();
+          setQueixoso(true);
+          localStorage.setItem(
+            "empregador",
+            JSON.stringify(res.data.empregador)
+          );
 
-        toggleDisplay();
-        setQueixoso(false);
-      });
+          //navigate("/queixar_empregad");
+        })
+        .catch((res) => {
+          //console.log(res.response.data.msg);
+          setAlert(res.response.data.msg);
+
+          toggleDisplay();
+          setQueixoso(false);
+        });
+    }
   };
   //console.log(localStorage.getItem("trabalhador"));
   let formComponents = [];
@@ -117,13 +138,25 @@ const ValidacaoEmpregador = () => {
                   <form onSubmit={(e) => validar_NIF(e)}>
                     <Form.Group>
                       <Form.Label>NIF</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="NIF"
-                        id="nif"
-                        name="nif"
-                        onChange={(e) => setNIF(e.target.value)}
-                      />
+                      {desabilita ? (
+                        <Form.Control
+                          type="text"
+                          placeholder="NIF"
+                          id="nif"
+                          name="nif"
+                          disabled
+                          value={myData.empresa.nif}
+                          onChange={(e) => setNIF(e.target.value)}
+                        />
+                      ) : (
+                        <Form.Control
+                          type="text"
+                          placeholder="NIF"
+                          id="nif"
+                          name="nif"
+                          onChange={(e) => setNIF(e.target.value)}
+                        />
+                      )}
                       <button
                         type="submit"
                         className="btn fw-bold bg-dark btn-validar"

@@ -1,6 +1,7 @@
 import { Layout, theme } from "antd";
 import Menu from "../Navbar/navbar";
 import { Link } from "react-router-dom";
+import React from "react";
 
 import { FiSend } from "react-icons/fi";
 import Button from "react-bootstrap/Button";
@@ -34,41 +35,63 @@ const { Header, Content } = Layout;
 const ValidacaoTrabalhador = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const [BI, setBI] = useState(false);
+  const [BI, setBI] = useState("");
   const [queixoso, setQueixoso] = useState(false);
   const [alert, setAlert] = useState("");
   const [showPopover, setshowPopover] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [desabilita, setDesabilita] = useState(false);
+  const [myData, setMyData] = useState({});
+
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  let data = "";
+  React.useEffect(() => {
+    if (sessionStorage.getItem("dashboard_queixoso")) {
+      const savedData = sessionStorage.getItem("dashboard_queixoso");
+      setMyData(JSON.parse(savedData));
+      setDesabilita(true);
+    }
+  }, []);
   const validar_BI = (e) => {
     e.preventDefault();
     localStorage.clear();
+    if (myData.bi !== undefined) {
+      localStorage.setItem("trabalhador", JSON.stringify(myData));
+      console.log(myData.bi);
 
-    Axios.post("http://localhost:3001/validar_BI", {
-      nBilhete: BI,
-    })
-      .then((res) => {
-        //console.log(res.data.queixoso)
-        setAlert(res.data.msg);
-        setQueixoso(true);
-        localStorage.setItem("trabalhador", JSON.stringify(res.data.queixoso));
-
-        navigate("/queixar_empregador");
+      navigate("/queixar_empregador");
+    } else {
+      console.log(BI);
+      Axios.post("http://localhost:3001/validar_BI", {
+        nBilhete: BI,
       })
-      .catch((res) => {
-        //console.log(res.response.data.msg);
-        localStorage.setItem("BI", JSON.stringify(BI));
+        .then((res) => {
+          //console.log(res.data.queixoso)
+          setAlert(res.data.msg);
+          setQueixoso(true);
+          localStorage.setItem(
+            "trabalhador",
+            JSON.stringify(res.data.queixoso)
+          );
+          console.log(res);
 
-        setAlert(res.response.data.msg);
-        toggleDisplay();
-        //setShowModal(true);
-        //setShow(true);
-      });
+          navigate("/queixar_empregador");
+        })
+        .catch((res) => {
+          //console.log(res.response.data.msg);
+          localStorage.setItem("BI", JSON.stringify(BI));
+
+          setAlert(res.response.data.msg);
+          toggleDisplay();
+          //setShowModal(true);
+          //setShow(true);
+        });
+    }
   };
   //console.log(localStorage.getItem("trabalhador"));
   let formComponents = [];
@@ -120,13 +143,25 @@ const ValidacaoTrabalhador = () => {
                   <form onSubmit={(e) => validar_BI(e)}>
                     <Form.Group>
                       <Form.Label>Bilhete de Identidade</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="1234567812LA890"
-                        id="nBI"
-                        name="nBI"
-                        onChange={(e) => setBI(e.target.value)}
-                      />
+                      {desabilita ? (
+                        <Form.Control
+                          type="text"
+                          placeholder="1234567812LA890"
+                          id="nBI"
+                          name="nBI"
+                          value={myData.bi.numeroBI}
+                          disabled
+                          onChange={(e) => setBI(myData.bi.numeroBI)}
+                        />
+                      ) : (
+                        <Form.Control
+                          type="text"
+                          placeholder="1234567812LA890"
+                          id="nBI"
+                          name="nBI"
+                          onChange={(e) => setBI(e.target.value)}
+                        />
+                      )}
 
                       <Button
                         type="submit"

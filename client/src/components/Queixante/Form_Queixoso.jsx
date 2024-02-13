@@ -21,7 +21,7 @@ import "../Queixoso/submeter_queixa.css";
 
 import StepQueixante from "../Queixante/Step_queixante";
 import { useForm } from "../Queixoso/useForm";
-import { useState } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CompnentMain from "../container/container";
@@ -55,6 +55,8 @@ const FormQueixoso = () => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const [logged, setLogged] = useState(false);
+
   function queixar() {
     const submissao_queixa = data;
 
@@ -71,13 +73,18 @@ const FormQueixoso = () => {
       const trab_encontrado = JSON.parse(trabalhador);
       const empregador = localStorage.getItem("empregador");
       const novoEmpregador = JSON.parse(empregador);
-
+      console.log(novoEmpregador);
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
       formData.append("_trabalhadorID", trab_encontrado.Trabalhador.id);
-      formData.append("_empresa", novoEmpregador.NIF.id);
-      formData.append("_provincia", novoEmpregador.Endereco.provincia);
+      if (novoEmpregador.empresa) {
+        formData.append("_empresa", novoEmpregador.empresa.id);
+        formData.append("_provincia", novoEmpregador.endereco.provincia);
+      } else {
+        formData.append("_empresa", novoEmpregador.NIF.id);
+        formData.append("_provincia", novoEmpregador.Endereco.provincia);
+      }
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
       formData.append("queixante", "Trabalhador");
@@ -88,9 +95,15 @@ const FormQueixoso = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            setRedirect("/Entrar");
+          }
 
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
           //navigate("/Entrar");
@@ -139,8 +152,13 @@ const FormQueixoso = () => {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      formData.append("_empresa", novoEmpregador.NIF.id);
-      formData.append("_provinciaEmp", novoEmpregador.Endereco.provincia);
+      if (novoEmpregador.empresa) {
+        formData.append("_empresa", novoEmpregador.empresa.id);
+        formData.append("_provinciaEmp", novoEmpregador.endereco.provincia);
+      } else {
+        formData.append("_empresa", novoEmpregador.NIF.id);
+        formData.append("_provinciaEmp", novoEmpregador.Endereco.provincia);
+      }
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
       formData.append("queixante", "Trabalhador");
@@ -151,9 +169,15 @@ const FormQueixoso = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            setRedirect("/Entrar");
+          }
 
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
 
@@ -198,9 +222,15 @@ const FormQueixoso = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            setRedirect("/Entrar");
+          }
 
           /*const [showModal, setShowModal] = useState(true);
         <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
@@ -275,9 +305,15 @@ const FormQueixoso = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            setRedirect("/Entrar");
+          }
 
           /*const [showModal, setShowModal] = useState(true);
         <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
@@ -287,6 +323,11 @@ const FormQueixoso = () => {
         });
     }
   }
+  React.useEffect(() => {
+    if (sessionStorage.getItem("dashboard_queixoso")) {
+      setLogged(true);
+    }
+  }, []);
   let formComponents = [];
 
   formComponents = [
@@ -325,9 +366,15 @@ const FormQueixoso = () => {
               <p>{alert}</p>
               <p></p>
               <div class="modal-footer">
-                <Link to="/Entrar">
-                  <Button variant="warning">OK</Button>
-                </Link>
+                {logged ? (
+                  <Link to="/dashboard_queixoso">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                ) : (
+                  <Link to="/Entrar">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

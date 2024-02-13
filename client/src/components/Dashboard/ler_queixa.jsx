@@ -201,9 +201,9 @@ const LerQueixa = () => {
   }
   function queixar() {
     if (tipo === "trabalhador") {
-      navigate("/queixar_empregador");
+      navigate("/validacao_trabalhador");
     } else {
-      navigate("/queixar_trabalhador");
+      navigate("/empregador");
     }
   }
   return (

@@ -19,53 +19,40 @@ const UseForm = ({ data, updateFielHndler }) => {
     console.log(data);
   };
   const [show, setShow] = useState(false);
-  const [userLoggedT, setUserLoggedT] = useState();
-  const [userLoggedE, setUserLoggedE] = useState({});
   const [novoTrabalhador, setNovoTrabalhador] = useState({});
-
-  if (sessionStorage.getItem("dashboard_queixoso")) {
-    const savedData = sessionStorage.getItem("dashboard_queixoso");
-    const dataUser = JSON.parse(savedData);
-    if (dataUser) {
-      if (dataUser.trabalhador) {
-        setUserLoggedT(dataUser);
-        console.log(userLoggedT);
-      } else {
-        setUserLoggedE(dataUser);
-      }
+  let novoTrabalhador2 = {};
+  React.useEffect(() => {
+    if (localStorage.getItem("trabalhador")) {
+      const trabalhador = localStorage.getItem("trabalhador");
+      const novoTrabalhador2 = JSON.parse(trabalhador);
+      console.log(novoTrabalhador2);
+      setNovoTrabalhador(novoTrabalhador2);
+      const bilhete_identidade = localStorage.getItem("BI");
+      const BI_validado = JSON.parse(bilhete_identidade);
+      console.log(novoTrabalhador);
+      data.nBI = BI_validado;
+      //data.nome = novoTrabalhador.Pessoa.nome;
     }
-  } else {
-    const trabalhador = localStorage.getItem("trabalhador");
-    setNovoTrabalhador(JSON.parse(trabalhador));
-    const bilhete_identidade = localStorage.getItem("BI");
-    const BI_validado = JSON.parse(bilhete_identidade);
-    console.log("me");
-    data.nBI = BI_validado;
-    //data.nome = novoTrabalhador.Pessoa.nome;
-  }
+  }, []);
+
   return (
     <>
-      {userLoggedT ? (
-        <h3 className="h3-cTrabalhador">
-          Olá,{" "}
-          <span className="span-cTrabalhador">
-            {userLoggedT.pessoa.nome + " " + userLoggedT.pessoa.sobrenome}
-          </span>
-        </h3>
-      ) : userLoggedE ? (
-        <h3 className="h3-cTrabalhador">
-          Olá,{" "}
-          <span className="span-cTrabalhador">
-            {userLoggedE.empresa.nome_empresa}
-          </span>
-        </h3>
-      ) : novoTrabalhador ? (
+      {novoTrabalhador.Pessoa ? (
         <h3 className="h3-cTrabalhador">
           Olá,{" "}
           <span className="span-cTrabalhador">
             {novoTrabalhador.Pessoa.nome +
               " " +
               novoTrabalhador.Pessoa.sobrenome}
+          </span>
+        </h3>
+      ) : novoTrabalhador.pessoa ? (
+        <h3 className="h3-cTrabalhador">
+          Olá,{" "}
+          <span className="span-cTrabalhador">
+            {novoTrabalhador.pessoa.nome +
+              " " +
+              novoTrabalhador.pessoa.sobrenome}
           </span>
         </h3>
       ) : (

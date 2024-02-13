@@ -10,23 +10,35 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import ModalConfirmacao from "../Modal/modalConfirmation";
+import { useNavigate } from "react-router-dom";
 
 const Container_queixoso = () => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [queixas, setQueixas] = useState([]);
   const [showModal2, setShowModal2] = useState(false);
 
   let data = "";
   let id_queixoso = "";
-
+  let tipo = "";
   if (sessionStorage.getItem("dashboard_queixoso")) {
     const savedData = sessionStorage.getItem("dashboard_queixoso");
     data = JSON.parse(savedData);
+
     if (data.trabalhador) {
       id_queixoso = data.trabalhador.id;
+      tipo = "trabalhador";
     }
     if (data.empresa) {
       id_queixoso = data.empresa.id;
+      tipo = "empresa";
+    }
+  }
+  function queixar() {
+    if (tipo === "trabalhador") {
+      navigate("/validacao_trabalhador");
+    } else {
+      navigate("/empregador");
     }
   }
   //console.log(data.trabalhador.id);
@@ -65,9 +77,9 @@ const Container_queixoso = () => {
     <>
       <Button
         variant="warning"
-        onClick={() => setShowModal2(true)}
+        onClick={queixar}
         className="fw-bold btn-nova-queixa"
-        type="submit"
+        type="button"
       >
         Nova Queixa
       </Button>

@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "./useForm";
 import Steps from "./Steps";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 import CompnentMain from "../container/container";
 import Axios from "axios";
@@ -49,7 +49,7 @@ const FormQueixante = () => {
   const [alert, setAlert] = useState("");
   const [redirect, setRedirect] = useState("");
   const [displayStyle, setDisplayStyle] = useState("none");
-
+  const [logged, setLogged] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const updateFielHndler = (key, value) => {
@@ -66,6 +66,11 @@ const FormQueixante = () => {
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
 
+  React.useEffect(() => {
+    if (sessionStorage.getItem("dashboard_queixoso")) {
+      setLogged(true);
+    }
+  }, []);
   function queixar() {
     const submissao_queixa = data;
     const formData = new FormData();
@@ -78,7 +83,12 @@ const FormQueixante = () => {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
+      if (novoTrabalhador.trabalhador) {
+        formData.append("_trabalhadorID", novoTrabalhador.trabalhador.id);
+      } else {
+        formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
+      }
+
       formData.append("_empresa", submissao_queixa.empresa2);
       formData.append("_fileContrato", submissao_queixa.fileContrato);
       formData.append("fileContrato", file_contrato.files[0]);
@@ -91,12 +101,17 @@ const FormQueixante = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            //setRedirect("/Entrar");
+            //setShowModal(true);
+          }
 
-          setRedirect("/Entrar");
-
-          setShowModal(true);
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
           //navigate("/Entrar");
           /*const [showModal, setShowModal] = useState(true);
@@ -122,8 +137,11 @@ const FormQueixante = () => {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
-      //formData.append("_empresa", submissao_queixa.empresa2);
+      if (novoTrabalhador.trabalhador) {
+        formData.append("_trabalhadorID", novoTrabalhador.trabalhador.id);
+      } else {
+        formData.append("_trabalhadorID", novoTrabalhador.Trabalhador.id);
+      } //formData.append("_empresa", submissao_queixa.empresa2);
       formData.append("_fileContrato", submissao_queixa.fileContrato);
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Trabalhador");
@@ -135,10 +153,15 @@ const FormQueixante = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            //setRedirect("/Entrar");
+          }
         })
         .catch((resposta) => {
           console.log("error", resposta);
@@ -189,9 +212,15 @@ const FormQueixante = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            //setRedirect("/Entrar");
+          }
         })
         .catch((resposta) => {
           console.log("error", resposta);
@@ -250,9 +279,15 @@ const FormQueixante = () => {
         },
       })
         .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          setRedirect("/Entrar");
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+            //setRedirect("/Entrar");
+          }
           //setShowModal(true);
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
 
@@ -303,9 +338,15 @@ const FormQueixante = () => {
               <p>{alert}</p>
               <p></p>
               <div class="modal-footer">
-                <Link to="/Entrar">
-                  <Button variant="warning">OK</Button>
-                </Link>
+                {logged ? (
+                  <Link to="/dashboard_queixoso">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                ) : (
+                  <Link to="/Entrar">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

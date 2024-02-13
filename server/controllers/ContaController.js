@@ -8,6 +8,8 @@ const Empresa = require("../models/Empresa");
 const funcionarioIGT = require("../models/FuncionarioIGT");
 const speakeasy = require("speakeasy");
 var nodemailer = require("nodemailer");
+const BI = require("../models/bi");
+const Endereco = require("../models/endereco");
 
 module.exports = {
   async logar(req, res) {
@@ -16,6 +18,8 @@ module.exports = {
       let pessoa = "";
       let igt_funcionario = "";
       let empresa = "";
+      let bi = "";
+      let endereco = "";
       const { email } = req.body;
       const { senha } = req.body;
       console.log("email:", email);
@@ -33,18 +37,24 @@ module.exports = {
           where: { contaID: conta.id },
         });
         empresa = await Empresa.findOne({
-          attributes: ["id", "nome_empresa", "tipo"],
+          attributes: ["id", "nome_empresa", "tipo", "nif", "enderecoID"],
           where: { fk_conta: conta.id },
         });
-        console.log("entrei1");
+        endereco = await Endereco.findOne({
+          attributes: ["id", "provincia", "bairro", "rua"],
+          where: { id: empresa.enderecoID },
+        });
       }
       //console.log(trabalhador);
       if (trabalhador) {
         pessoa = await Pessoa.findOne({
-          attributes: ["id", "nome", "sobrenome"],
+          attributes: ["id", "nome", "sobrenome", "biID"],
           where: { id: trabalhador.pessoaID },
         });
-
+        bi = await BI.findOne({
+          attributes: ["id", "numeroBI"],
+          where: { id: pessoa.biID },
+        });
         /*queixa = await Queixa.findOne({
                     attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],
                     where: { trabalhadorID: trabalhador.id }
@@ -111,27 +121,25 @@ module.exports = {
         if (error) {
           console.log(error);
         } else {
-          res
-            .status(200)
-            .json({
-              msg: "Olá foi enviado um codigo de verificação para o seu email, por favor verifique!",
-              token,
-              conta,
-              code,
-              trabalhador,
-              pessoa,
-              igt_funcionario,
-              empresa,
-            });
+          res.status(200).json({
+            msg: "Olá foi enviado um codigo de verificação para o seu email, por favor verifique!",
+            token,
+            conta,
+            code,
+            trabalhador,
+            pessoa,
+            endereco,
+            bi,
+            igt_funcionario,
+            empresa,
+          });
         }
       });
     } catch (error) {
       console.log(error),
-        res
-          .status(500)
-          .json({
-            msg: "Aconteceu um erro no servidor, tente novamente mais tarde!",
-          });
+        res.status(500).json({
+          msg: "Aconteceu um erro no servidor, tente novamente mais tarde!",
+        });
     }
   },
   async store(req, res) {
