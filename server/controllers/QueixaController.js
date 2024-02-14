@@ -527,6 +527,8 @@ module.exports = {
       trabalhadorID: trabalhadorID,
       url_file_contrato: url_file_contrato,
       provincia: localizacao_queixa,
+      inspectorID: 14,
+      testemunhaID: 4,
     });
     return res.status(200).send({
       status: 1,
@@ -617,6 +619,8 @@ module.exports = {
       url_file_contrato: url_file_contrato,
       provincia: localizacao_queixa,
       modo: _modo,
+      inspectorID: 14,
+      testemunhaID: 4,
     });
     return res.status(200).send({
       status: 1,
@@ -796,6 +800,8 @@ module.exports = {
           url_file_contrato: _fileContrato,
           provincia: _provincia,
           modo: _modo,
+          inspectorID: 14,
+          testemunhaID: 4,
         });
         //console.log(novaQueixa)
         return res.status(200).send({

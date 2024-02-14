@@ -49,7 +49,7 @@ const FormQueixante = () => {
   const [alert, setAlert] = useState("");
   const [redirect, setRedirect] = useState("");
   const [displayStyle, setDisplayStyle] = useState("none");
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   const updateFielHndler = (key, value) => {
@@ -68,7 +68,9 @@ const FormQueixante = () => {
 
   React.useEffect(() => {
     if (sessionStorage.getItem("dashboard_queixoso")) {
-      setLogged(true);
+      setLogged(1);
+    } else if (sessionStorage.getItem("data_recepcionista")) {
+      setLogged(2);
     }
   }, []);
   function queixar() {
@@ -338,8 +340,12 @@ const FormQueixante = () => {
               <p>{alert}</p>
               <p></p>
               <div class="modal-footer">
-                {logged ? (
+                {logged === 1 ? (
                   <Link to="/dashboard_queixoso">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                ) : logged === 2 ? (
+                  <Link to="/recepcionista">
                     <Button variant="warning">OK</Button>
                   </Link>
                 ) : (

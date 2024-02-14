@@ -55,7 +55,7 @@ const FormQueixoso = () => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(0);
 
   function queixar() {
     const submissao_queixa = data;
@@ -325,7 +325,9 @@ const FormQueixoso = () => {
   }
   React.useEffect(() => {
     if (sessionStorage.getItem("dashboard_queixoso")) {
-      setLogged(true);
+      setLogged(1);
+    } else if (sessionStorage.getItem("data_recepcionista")) {
+      setLogged(2);
     }
   }, []);
   let formComponents = [];
@@ -366,8 +368,12 @@ const FormQueixoso = () => {
               <p>{alert}</p>
               <p></p>
               <div class="modal-footer">
-                {logged ? (
+                {logged === 1 ? (
                   <Link to="/dashboard_queixoso">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                ) : logged === 2 ? (
+                  <Link to="/recepcionista">
                     <Button variant="warning">OK</Button>
                   </Link>
                 ) : (

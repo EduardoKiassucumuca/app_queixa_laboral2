@@ -24,6 +24,14 @@ const ModalInspectores = (props) => {
   const [centredModal, setCentredModal] = useState(false);
   const [inspector_selecionado, setInspectorSelec] = useState({});
   const toggleShow = () => setCentredModal(!centredModal);
+  const [displayStyle, setDisplayStyle] = useState("none");
+
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   let inspectores = [];
   let queixa = {};
   if (
@@ -47,8 +55,8 @@ const ModalInspectores = (props) => {
       })
       .then(function (response) {
         //console.log(response);
-        props.setShow(false);
-        setSmShow(true);
+        //props.setShow(false);
+        //setSmShow(true);
         //window.location.href = '/chefe_servicos';
       })
       .catch(function (error) {
@@ -60,68 +68,39 @@ const ModalInspectores = (props) => {
   }
   return (
     <>
-      <Modal
-        size="sm"
-        show={smShow}
-        onHide={() => setSmShow(false)}
-        aria-labelledby="example-modal-sizes-title-sm"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-sm">
-            Confirmação
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Inspector nomeado com sucesso</Modal.Body>
-        <Modal.Footer>
-          <Button onClick={(e) => update_view()} variant="warning">
-            OK
+      <div id="myModal" class="modal" style={{ display: displayStyle }}>
+        <div class="modal-content">
+          <p>{alert}</p>
+          <p></p>
+          <div class="modal-footer">
+            {inspectores.map((inspector) => (
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="Masculino"
+                  name="sexo"
+                  id="sexo-masculino"
+                  onChange={(e) => setInspectorSelec(inspector)}
+                />
+
+                <label class="form-check-label" for="flexRadioDefault1">
+                  {" "}
+                  {inspector.Trabalhador.Pessoa.nome}{" "}
+                  {inspector.Trabalhador.Pessoa.sobrenome}
+                </label>
+              </div>
+            ))}
+          </div>
+          <Button
+            variant="warning"
+            onClick={(e) => nomear_inspector(inspector_selecionado, queixa)}
+          >
+            {" "}
+            Feito
           </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <MDBModal tabIndex="-1" show={props.show} setShow={props.setShow}>
-        <MDBModalDialog centered>
-          <MDBModalContent>
-            <MDBModalHeader>
-              <MDBModalTitle>Inspectores</MDBModalTitle>
-              <MDBBtn
-                className="btn-close"
-                color="none"
-                onClick={props.close}
-              ></MDBBtn>
-            </MDBModalHeader>
-            <MDBModalBody>
-              {inspectores.map((inspector) => (
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    value="Masculino"
-                    name="sexo"
-                    id="sexo-masculino"
-                    onChange={(e) => setInspectorSelec(inspector)}
-                  />
-
-                  <label class="form-check-label" for="flexRadioDefault1">
-                    {" "}
-                    {inspector.Trabalhador.Pessoa.nome}{" "}
-                    {inspector.Trabalhador.Pessoa.sobrenome}
-                  </label>
-                </div>
-              ))}
-            </MDBModalBody>
-            <MDBModalFooter>
-              <Button
-                variant="warning"
-                onClick={(e) => nomear_inspector(inspector_selecionado, queixa)}
-              >
-                {" "}
-                Feito
-              </Button>
-            </MDBModalFooter>
-          </MDBModalContent>
-        </MDBModalDialog>
-      </MDBModal>
+        </div>
+      </div>
     </>
   );
 };

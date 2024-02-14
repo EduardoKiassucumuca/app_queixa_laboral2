@@ -40,10 +40,12 @@ module.exports = {
           attributes: ["id", "nome_empresa", "tipo", "nif", "enderecoID"],
           where: { fk_conta: conta.id },
         });
-        endereco = await Endereco.findOne({
-          attributes: ["id", "provincia", "bairro", "rua"],
-          where: { id: empresa.enderecoID },
-        });
+        if (empresa) {
+          endereco = await Endereco.findOne({
+            attributes: ["id", "provincia", "bairro", "rua"],
+            where: { id: empresa.enderecoID },
+          });
+        }
       }
       //console.log(trabalhador);
       if (trabalhador) {

@@ -13,6 +13,7 @@ import Search from "antd/es/transfer/search";
 import ModalInspectores from "./modal_inspectores";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalTestemunhas from "./modal_testemunhas";
+import axios from "axios";
 
 const formTemplate = {
   review: "",
@@ -31,11 +32,38 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
+  const [inspector_selecionado, setInspectorSelec] = useState({});
+
   let data2 = "";
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_chefeServicos");
   data2 = JSON.parse(savedData);
-
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const nomear_inspector = (inspector_nomeado, queixa_selecionada) => {
+    axios
+      .put("http://localhost:3001/nomear_inspector", {
+        params: {
+          id_inspector: inspector_nomeado.id,
+          id_trabalhador: inspector_nomeado.trabalhadorID,
+          id_queixa: queixa_selecionada.id,
+        },
+      })
+      .then(function (response) {
+        //console.log(response);
+        //props.setShow(false);
+        //setSmShow(true);
+        //window.location.href = '/chefe_servicos';
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
@@ -116,14 +144,14 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
         console.log(data);
         setInspectores(data.inspectores);
-        setShowModal(true);
-
+        toggleDisplay();
         //console.log(lista_queixa.minha_queixa)
       })
       .catch((res) => {
         console.log("res");
       });
   }
+
   function ver_testemunhas(conflito_selecionado) {
     setConflitoSelec(conflito_selecionado);
     Axios.get("http://localhost:3001/inspectores")
@@ -199,14 +227,45 @@ const ContainerChefeServicos = ({ onSearch }) => {
           <p className="p-localizacao"></p>
         </Col>
 
-        <ModalInspectores
-          show={showModal}
-          setShow={setShowModal}
-          close={() => setShowModal(false)}
-          queixa={conflito_selec}
-          inspector={inspectores}
-        />
+        <ModalInspectores queixa={conflito_selec} inspector={inspectores} />
+        <div id="myModal" class="modal" style={{ display: displayStyle }}>
+          <div class="modal-content">
+            <p>{alert}</p>
+            <p>Inspectores</p>
 
+            <div class="modal-footer">
+              {inspectores.map((inspector) => (
+                <p>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="Masculino"
+                      name="sexo"
+                      id="sexo-masculino"
+                      onChange={(e) => setInspectorSelec(inspector)}
+                    />
+
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      {" "}
+                      {inspector.Trabalhador.Pessoa.nome}{" "}
+                      {inspector.Trabalhador.Pessoa.sobrenome}
+                    </label>
+                  </div>
+                </p>
+              ))}
+            </div>
+            <Button
+              variant="warning"
+              onClick={(e) =>
+                nomear_inspector(inspector_selecionado, conflito_selec)
+              }
+            >
+              {" "}
+              Feito
+            </Button>
+          </div>
+        </div>
         <ModalTestemunhas
           show={showModal3}
           setShow={setShowModal3}

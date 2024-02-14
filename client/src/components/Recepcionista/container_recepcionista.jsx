@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import Search from "antd/es/transfer/search";
 import ModalRecepcionista from "./modal_recepcionista";
 import ModalConfirmacao from "../Modal/modalConfirmation";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 
 const formTemplate = {
   review: "",
@@ -29,7 +31,23 @@ const ContainerRecepcionista = ({ onSearch }) => {
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_recepcionista");
   data2 = JSON.parse(savedData);
-
+  const popover = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Queixa</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>Quem pretendes queixar?</strong>
+        <hr style={{ backgroundColor: "rgb(50 43 43)" }} />
+        <Link to="/validacao_trabalhador">
+          <Button variant="warning">Empregador</Button>
+        </Link>{" "}
+        ou
+        <Link to="/empregador">
+          {" "}
+          <Button className="btn btn-dark"> Trabalhador</Button>
+        </Link>
+      </Popover.Body>
+    </Popover>
+  );
   //console.log(data.trabalhador.id);
 
   //console.log(queixas_selecprovincia);
@@ -101,14 +119,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
       />
       <Row className="queixas_recepcionista">
         <Col md={2}>
-          <Button
-            variant="warning"
-            onClick={() => setShowModal2(true)}
-            className="fw-bold btn-nova-queixa"
-            type="submit"
+          <OverlayTrigger
+            trigger="click"
+            placement="bottom"
+            overlay={popover}
+            rootClose
           >
-            Nova Queixa
-          </Button>
+            <Button variant="warning">Nova Queixa</Button>
+          </OverlayTrigger>
         </Col>
         <Col md={2}>
           <Search
