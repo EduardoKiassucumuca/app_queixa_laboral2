@@ -16,6 +16,7 @@ import { FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
 import { Form } from "react-bootstrap";
 import ModalActa from "./modal_acta";
+import FileDownload from "js-file-download";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
@@ -107,6 +108,20 @@ const MaisDetalhes = () => {
         console.log("error", resposta);
       });
   };
+  const handleDownload = async (url_file) => {
+    const filename = url_file.split("\\").pop();
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
   React.useEffect(() => {
     getQueixa();
     getNotas();
@@ -194,10 +209,11 @@ const MaisDetalhes = () => {
                 <p>
                   <FaFilePdf style={{ border: "red" }} />
                   <a
-                    href={conflito.url_file_contrato}
+                    href="#"
+                    onClick={(e) => handleDownload(conflito.url_file_contrato)}
                     style={{ color: "rgb(220, 195, 119)" }}
                   >
-                    Meu_contrato.pdf
+                    {conflito.url_file_contrato}
                   </a>
                 </p>
                 <p>
