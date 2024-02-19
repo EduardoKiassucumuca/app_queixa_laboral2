@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for macos13 (x86_64)
 --
--- Host: 127.0.0.1    Database: bd_queixa_laboral2
+-- Host: localhost    Database: bd_queixa_laboral2
 -- ------------------------------------------------------
--- Server version	8.0.31
+-- Server version	8.2.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,7 +29,7 @@ CREATE TABLE `bi` (
   `file` varchar(255) NOT NULL,
   `numeroBI` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=298 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `bi` (
 
 LOCK TABLES `bi` WRITE;
 /*!40000 ALTER TABLE `bi` DISABLE KEYS */;
-INSERT INTO `bi` VALUES (277,'2022-08-27 00:00:00','2023-08-27 00:00:00','uploads\\1695941137701-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','123456LA092'),(285,'2019-07-26 00:00:00','2022-08-28 00:00:00','uploads\\1696018021088-CARDIO â VOL 2 InsuficiÃªncia CardÃ­aca e HipertensÃ£o Arterial.pdf','09987LA213'),(286,'2022-08-28 00:00:00','2022-07-28 00:00:00','uploads\\1696019352004-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','teste1'),(287,'2022-08-29 00:00:00','2022-08-29 00:00:00','uploads\\1696028743696-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','tt'),(297,'2022-08-29 00:00:00','2021-08-29 00:00:00','uploads\\1696109054361-CIRURG â VOL 1 Trauma.pdf','233456LA022');
+INSERT INTO `bi` VALUES (300,'2018-10-06 00:00:00','2023-10-06 00:00:00','uploads\\1699396286533-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','123456LA092'),(301,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398612223-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(302,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398719086-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(303,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398808191-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(304,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398839276-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(305,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699399496878-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','1234567LA543'),(306,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699399996799-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','193456LA092'),(307,'2022-10-06 00:00:00','2021-10-07 00:00:00','uploads\\1699400509293-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','29301LA123'),(308,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699400727783-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(309,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699401238518-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(310,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699401448714-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(311,'2021-10-10 00:00:00','2024-10-11 00:00:00','uploads\\1700039147380-CARDIO â VOL 2 InsuficiÃªncia CardÃ­aca e HipertensÃ£o Arterial.pdf','0922121LA234'),(312,'2022-10-14 00:00:00','2022-10-14 00:00:00','uploads\\1700041118350-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','3'),(313,'2022-12-31 00:00:00','2024-12-31 00:00:00','uploads/lauriÌssea Campos  2024(1).pdf','kjhhj'),(314,'2024-01-24 00:00:00','2024-01-18 00:00:00','uploads/laurÃ­ssea Campos  2024(1).pdf','102091LA123'),(315,'2024-01-02 00:00:00','2024-01-10 00:00:00','uploads/laurÃ­ssea Campos  2024(1).pdf','0922121LA232');
 /*!40000 ALTER TABLE `bi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +117,7 @@ CREATE TABLE `conta` (
   `tentativa` int DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +126,7 @@ CREATE TABLE `conta` (
 
 LOCK TABLES `conta` WRITE;
 /*!40000 ALTER TABLE `conta` DISABLE KEYS */;
-INSERT INTO `conta` VALUES (111,'kiassucristiano@hotmail.com','$2a$12$/jPOLgOz9kFZW86TNgjxMe.Vj0bafHZoXmX9qaiMbh3PZzinUCihi',NULL,NULL,1),(114,'kero@xpto.ao','$2a$12$0jhLt8rlJEyl1NFc.0Nl5eH4lCHvzHjHScu3IWApu/hYFHhmnfxxO',NULL,NULL,0),(117,'b@xpto.ao','$2a$12$ZcOxBDmPgyk6wz04HnDZr.T8Xbmr3GZKK4zcPy7FFSYFUysy0DaXi',NULL,NULL,0),(118,'d@ss.zp','$2a$12$FO8KrgMh/QZVf722PlMll.qu8LwyxuOIg2UHi3wnSw.glvzmT5BWW',NULL,NULL,0),(119,'unitel@xpto.ao','$2a$12$D6or/KYPg9ywqGqr2aAlkeigf4mxj8FHXoIrT.i9XFi9FCY.QQmve',NULL,NULL,0),(126,'a@xpto.ao','$2a$12$xmkfEEbUHpNMWnFWR4H.wOcndCcgZZFaBLf0degXzjgin.8B4r2K2',NULL,NULL,0),(133,'b@xpto.ao','$2a$12$2x/oP3kZdvkKK1/QIdeU8.AH7WYbwGyCijjvyRwlacl6csyzKhybG',NULL,'admin',0),(141,'20171226@isptec.co.ao','$2a$12$36csQBJvF0VomiSxgdLFWeONNTOPKLcHvk/EQEQ.Zhzb4lgz9TaWC',NULL,'user',0),(143,'nelo4902@gmail.com','$2a$12$YlgnaTBVGupKEnV1DuDVI.u2xKeUf6H57Uyo9D0S4cJw5YLPw7goW',NULL,'user',0);
+INSERT INTO `conta` VALUES (133,'b@xpto.ao','$2a$12$2x/oP3kZdvkKK1/QIdeU8.AH7WYbwGyCijjvyRwlacl6csyzKhybG',NULL,'admin',0),(144,'20171226@isptec.co.ao','$2a$12$VKlZocjT5BIYaXDWUy0/m.GB7x5XUdsHwW/x/qwNtjb2wj73mqfMu',NULL,'user',0),(145,'nelo4902@gmail.com','$2a$12$VoM6F87Zk/tMW61ZY.UVp.vrMmM9jCGekbVazIhzADDEwvKKGZq2C',NULL,'user',0),(146,'nelsoneduardo33@outlook.com','$2a$12$Jajowq6UpVbutauKqpZDfeY2namT87.pV1S1n2Q1xX0VL0nxWBSUa',NULL,'user',0),(147,'lucykiassy@hotmail.com','$2a$12$63I3AgYrr2O5fJnKj6uyf.lfj64.XZAVDGWYtPg7lPbb6Qx4flhBO',NULL,'user',0),(148,'fernandokiassucumuca@hotmail.com','$2a$12$BH0RikAhRpl/IA6nm5Z5vurf7HbrPZAOi49fnUO4jBav3hq0Wdvsa',NULL,'user',0),(150,'torrinhoandersonkiole@gmail.com','$2a$12$haltIPzNerJeyj.7N1VnterJSIxfu42K/UloVUK7.3LZAZfP1UNAG',NULL,'user',0),(152,'kiassucristiano@hotmail.com','$2a$12$sfZB5dZY2z0LneXzgfIaHueQrGTVRTyBzXZhf/snrxpugnLDRSUr6',NULL,NULL,1),(157,'marciocristiano105@gmail.com','$2a$12$JihMfH9AHoIgzZ1F6K0gnOJOlnRkasOAxBdtHeCqocibzeqe1lXWq',NULL,NULL,0),(163,'ange.kiass@hotmail.com','$2a$12$UxZcFM1KN4GAM378EhM9j.gv.qJkwt24FVxO./dERcGi.ZAi6iIFG',NULL,NULL,0),(164,'guikiassucumuca@hotmail.com','$2a$12$CRjePt2zLNmIzLJtMsdwt.NSdzxuN5hLoS3ii3Rb49i63gLdpcxVO',NULL,NULL,0);
 /*!40000 ALTER TABLE `conta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +235,7 @@ CREATE TABLE `empresa` (
   KEY `fk_conta_idx` (`fk_conta`),
   KEY `empresa_ibfk_1` (`enderecoID`),
   CONSTRAINT `empresa_ibfk_1` FOREIGN KEY (`enderecoID`) REFERENCES `endereco` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `empresa` (
 
 LOCK TABLES `empresa` WRITE;
 /*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
-INSERT INTO `empresa` VALUES (124,'Africell','432LA999','Designação','kero@xpto.ao','www.kero.co.ao',429,0,'queixante'),(131,'Angomart','12390LA098','Dsigna','angomart@xpto.ao','www.angomart.ao',439,0,'queixante'),(136,'Unitel','12839LA232','Designation','unitel@xpto.ao','www.unitel.co.ao',464,120,'queixoso'),(139,'a','678LA','a','a@xpto.ao','a.co.ao',473,126,'queixoso');
+INSERT INTO `empresa` VALUES (141,'Kero','12839LA232','kkk','meu@kero.ao','www.kero.co.ao',504,0,'queixante'),(142,'ISPTEC','12839LA230','ççl','dti@isptec.ao','www.isptec.co.ao',505,0,'queixante'),(143,'Movicel','1234LA903','fff','nao2@xpto.ao','www.d.co.ao',511,0,'queixante'),(144,'a','678LA','ff','guikiassucumuca@hotmail.com','a.co.ao',513,158,'queixoso'),(145,'sdf','Bati','kkkkk','guikiassucumuca@hotmail.com','www.isptec.co.ao',515,159,'queixoso'),(146,'AngoReal','1334LA913','ffffff','angoreal@outlook.com','angoreal.co.ao',520,0,'queixante'),(147,'xpto','132','dfd','artur.miguel@isptec.co.ao','xpto.com',522,161,'queixoso'),(148,'teste1','teste1','teste1','teste1@hotmail.com','teste1',524,0,'queixante'),(149,'teste2','teste2','teste2','teste2@hotmail.com','teste2',526,0,'queixante'),(150,'outra1','outra1','outra1','outra1@hotmail.com','outra1',527,0,'queixante'),(151,'novaM1','0093920','novaM1','guikiassucumuca@hotmail.com','novaM1',529,164,'queixoso');
 /*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +265,7 @@ CREATE TABLE `endereco` (
   `telefone_principal` varchar(255) NOT NULL,
   `telefone_alternativo` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=492 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=530 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +274,7 @@ CREATE TABLE `endereco` (
 
 LOCK TABLES `endereco` WRITE;
 /*!40000 ALTER TABLE `endereco` DISABLE KEYS */;
-INSERT INTO `endereco` VALUES (428,'Valodia','Combatentes',NULL,'10','Luanda','930340539',959553137),(429,'Talatona','Belas','122',NULL,'Luanda','992333444',NULL),(439,'Viana','Viana','11',NULL,'Luanda','932332233',NULL),(463,'b','b',NULL,'b','Luanda','932332211',959553137),(464,'Valódia','Zé pirão','11',NULL,'Luanda','923443322',NULL),(465,'o','o',NULL,'o','Luanda','932332211',959887777),(466,'o','o',NULL,'o','Luanda','932332211',959887777),(467,'o','o',NULL,'o','Luanda','932332211',959887777),(468,'o','o',NULL,'o','Luanda','932332211',959887777),(469,'o','o',NULL,'o','Luanda','932332211',959887777),(470,'a','a','a',NULL,'Uíge','923445566',NULL),(471,'a','a','a',NULL,'Uíge','923445566',NULL),(472,'a','a','a',NULL,'Uíge','923445566',NULL),(473,'a','a','a',NULL,'Uíge','923445566',NULL),(480,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(481,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(489,NULL,NULL,NULL,NULL,'Luanda','923334454',959553137),(491,NULL,NULL,NULL,NULL,NULL,'923334454',921223445);
+INSERT INTO `endereco` VALUES (428,'Valodia','Combatentes',NULL,'10','Luanda','930340539',959553137),(429,'Talatona','Belas','122',NULL,'Luanda','992333444',NULL),(439,'Viana','Viana','11',NULL,'Luanda','932332233',NULL),(463,'b','b',NULL,'b','Luanda','932332211',959553137),(464,'Valódia','Zé pirão','11',NULL,'Luanda','923443322',NULL),(465,'o','o',NULL,'o','Luanda','932332211',959887777),(466,'o','o',NULL,'o','Luanda','932332211',959887777),(467,'o','o',NULL,'o','Luanda','932332211',959887777),(468,'o','o',NULL,'o','Luanda','932332211',959887777),(469,'o','o',NULL,'o','Luanda','932332211',959887777),(470,'a','a','a',NULL,'Uíge','923445566',NULL),(471,'a','a','a',NULL,'Uíge','923445566',NULL),(472,'a','a','a',NULL,'Uíge','923445566',NULL),(473,'a','a','a',NULL,'Uíge','923445566',NULL),(480,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(481,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(489,NULL,NULL,NULL,NULL,'Luanda','923334454',959553137),(491,NULL,NULL,NULL,NULL,NULL,'923334454',921223445),(492,NULL,NULL,NULL,NULL,NULL,'930340539',959553137),(493,NULL,NULL,NULL,NULL,NULL,'943556677',921223445),(494,NULL,NULL,NULL,NULL,NULL,'923334454',921223445),(495,NULL,NULL,NULL,NULL,NULL,'923334454',959887777),(496,NULL,NULL,NULL,NULL,NULL,'912002200',932778899),(498,NULL,NULL,NULL,NULL,NULL,'923334454',959887777),(499,'Valodia','Combatentes',NULL,'vamo3','Luanda','930340539',921223445),(500,'Marçal','Belas','Kings Tower',NULL,'Benguela','932332233',NULL),(501,'Valodia','Combatentes',NULL,'vamo3','Luanda','930340539',921223445),(502,'Marçal','Belas','Kings Tower',NULL,'Benguela','932332233',NULL),(503,'Cazenga','lulul',NULL,'b','Luanda','930340539',921223445),(504,'Nova2','a','226',NULL,'Luanda','921234433',NULL),(505,'j','d','111',NULL,'Luanda','945556677',NULL),(506,'b','B',NULL,'105','Benguela','923334454',921223445),(507,'b','B',NULL,'105','Benguela','923334454',921223445),(508,'b','B',NULL,'105','Benguela','923334454',921223445),(509,'b','B',NULL,'105','Benguela','923334454',921223445),(510,'o','o',NULL,'o','Benguela','923334454',959553137),(511,'d','NovaEmpresa','111',NULL,'Benguela','932332212',NULL),(512,'B','df',NULL,'12','Benguela','923334454',959553137),(513,'tt','j','111',NULL,'Benguela','998998888',NULL),(514,'Rocha','teste1',NULL,'teste1','Benguela','923334454',921223445),(515,'a','Zé pirão','111',NULL,'Benguela','956789900',NULL),(516,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(517,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(518,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(519,'t','t',NULL,'t','Luanda','932332211',921223445),(520,'d','d','wd',NULL,'Luanda','923443322',NULL),(521,'t','t',NULL,'t','Luanda','943556678',932778899),(522,'NovaEmpresa','Belas','111',NULL,'Luanda','922122233',NULL),(523,'teste1','teste1',NULL,'teste1','Luanda','934556655',995445555),(524,'teste1','teste1','teste1',NULL,'Luanda','934554433',NULL),(525,'teste2','teste2',NULL,'teste2','Luanda','934443322',943221122),(526,'teste2','teste2','teste2',NULL,'Luanda','998887766',NULL),(527,'outra1','outra1','outra1',NULL,'Luanda','932223344',NULL),(528,'mais','mais',NULL,'mais','Luanda','993223344',998443344),(529,'novaM1','novaM1','novaM1',NULL,'Benguela','2449854433',NULL);
 /*!40000 ALTER TABLE `endereco` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,7 +321,7 @@ CREATE TABLE `funcionarioigt` (
   PRIMARY KEY (`id`),
   KEY `trabalhadorID_idx` (`trabalhadorID`),
   CONSTRAINT `trabalhadorID` FOREIGN KEY (`trabalhadorID`) REFERENCES `trabalhador` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +330,7 @@ CREATE TABLE `funcionarioigt` (
 
 LOCK TABLES `funcionarioigt` WRITE;
 /*!40000 ALTER TABLE `funcionarioigt` DISABLE KEYS */;
-INSERT INTO `funcionarioigt` VALUES (8,146,'Inspector'),(9,147,'Inspector'),(17,155,'Recepcionista'),(19,157,'Inspector');
+INSERT INTO `funcionarioigt` VALUES (9,147,'Inspector'),(20,158,'Inspector'),(21,159,'Inspector'),(22,160,'Recepcionista'),(23,161,'Recepcionista'),(24,162,'chefe_servicos'),(26,164,'chefe_servicos');
 /*!40000 ALTER TABLE `funcionarioigt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -343,7 +343,7 @@ DROP TABLE IF EXISTS `historico_queixa`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historico_queixa` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `id_queixa` int DEFAULT NULL,
+  `queixaID` int DEFAULT NULL,
   `facto` varchar(1500) DEFAULT NULL,
   `data` datetime DEFAULT NULL,
   `assunto` varchar(145) DEFAULT NULL,
@@ -351,9 +351,9 @@ CREATE TABLE `historico_queixa` (
   `url_file_contrato` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `id_queixa_idx` (`id_queixa`),
-  CONSTRAINT `id_queixa` FOREIGN KEY (`id_queixa`) REFERENCES `queixa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `id_queixa_idx` (`queixaID`),
+  CONSTRAINT `queixaID` FOREIGN KEY (`queixaID`) REFERENCES `queixa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +362,7 @@ CREATE TABLE `historico_queixa` (
 
 LOCK TABLES `historico_queixa` WRITE;
 /*!40000 ALTER TABLE `historico_queixa` DISABLE KEYS */;
-INSERT INTO `historico_queixa` VALUES (18,101,'Não sou reconpensado pelo que faço eu acho que trabalho. Faço mais tarefas daquilo que estava definido no contrato, ','2023-10-07 17:04:27','Trabalho intensivo',NULL,NULL),(19,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\r\n\r\nPor favor preciso da vossa ajuda.','2023-10-16 22:36:12','Cortes no Salario','anonimo',NULL),(20,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\r\n\r\nPor favor preciso da vossa ajuda.','2023-10-16 22:36:51','Cortes no Salario','anonimo',NULL),(21,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-16 22:52:40','Cortes no Salario34','normal',NULL),(22,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:06:57','Cortes no Salario34','anonimo',NULL),(23,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:07:24','Cortes no Salario345','anonimo',NULL),(24,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:08:31','Cortes no Salario345','anonimo',NULL),(25,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:08:59','Cortes no Salario345','anonimo',NULL),(26,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:10:26','Cortes no Salario345','anonimo',NULL),(27,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:10:41','Cortes no Salario3','anonimo',NULL),(28,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:13:51','Cortes no Salario34','anonimo',NULL),(29,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:14:28','Cortes no Salario34','anonimo',NULL),(30,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:17:47','Cortes no Salario342','anonimo',NULL),(31,104,'Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-10-17 19:18:59','Cortes no Salario3','anonimo',NULL);
+INSERT INTO `historico_queixa` VALUES (32,NULL,'Bom dia, podem por favor ajudar nesta questão. O salario combinado no contraro não é o que recebo.','2023-11-07 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(33,NULL,'Boa tarde, sempre que tiro ferias não consigo gozar por completo os meus direitos, sou sempreimpedido.','2023-11-07 00:00:00','Ferias no trabalho','anonimo',NULL),(34,NULL,'sasssss','2023-11-07 00:00:00','Mais1','anonimo',NULL),(35,NULL,'wsdsdsdsd','2023-11-08 00:00:00','Vamos ver1','normal',NULL),(42,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(43,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(44,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(45,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(46,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(47,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(48,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(49,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(50,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(51,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(52,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(53,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(54,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(55,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(56,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(57,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(58,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(59,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(60,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(61,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(62,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(63,145,'ssss09','2024-02-01 00:00:00','sods01','anonimo',NULL),(64,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(65,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(66,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(67,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(68,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(69,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(70,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(71,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(72,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(73,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(74,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(75,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(76,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(77,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(78,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(79,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(80,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(81,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(82,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(83,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(84,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(85,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(86,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(87,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(88,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(89,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(90,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(91,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(92,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(93,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(94,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(95,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(96,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(97,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(98,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(99,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(100,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(101,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(102,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(103,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(104,145,'ssss091','2024-02-03 00:00:00','sods015','anonimo',NULL),(105,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(106,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(107,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(108,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(109,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(110,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(111,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(112,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(113,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(114,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL);
 /*!40000 ALTER TABLE `historico_queixa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,12 +375,9 @@ DROP TABLE IF EXISTS `inspector`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inspector` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `funcionarioIGTID` int NOT NULL,
-  `fk_funcionarioIGT` int DEFAULT NULL,
   `trabalhadorID` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_funcionarioIGT` FOREIGN KEY (`id`) REFERENCES `funcionarioigt` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -389,7 +386,7 @@ CREATE TABLE `inspector` (
 
 LOCK TABLES `inspector` WRITE;
 /*!40000 ALTER TABLE `inspector` DISABLE KEYS */;
-INSERT INTO `inspector` VALUES (8,7,7,146),(9,1,2,155);
+INSERT INTO `inspector` VALUES (14,147),(16,158),(17,159);
 /*!40000 ALTER TABLE `inspector` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -406,7 +403,7 @@ CREATE TABLE `nota` (
   `nota` varchar(1045) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -415,7 +412,7 @@ CREATE TABLE `nota` (
 
 LOCK TABLES `nota` WRITE;
 /*!40000 ALTER TABLE `nota` DISABLE KEYS */;
-INSERT INTO `nota` VALUES (1,104,'nota1'),(2,104,'nota2'),(3,104,'nota3');
+INSERT INTO `nota` VALUES (1,104,'nota1'),(2,104,'nota2'),(3,104,'nota3'),(4,104,'no'),(5,104,'2'),(6,104,'26'),(7,104,'263'),(8,104,' 99'),(9,104,'a');
 /*!40000 ALTER TABLE `nota` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,7 +437,7 @@ CREATE TABLE `pessoa` (
   `estado_civil` varchar(255) DEFAULT NULL,
   `data_nascimento` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,7 +446,7 @@ CREATE TABLE `pessoa` (
 
 LOCK TABLES `pessoa` WRITE;
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
-INSERT INTO `pessoa` VALUES (208,'Eduardo','Kiassucumuca','Eduardo Da Silva','Cristina Guilherme','Angola','undefined','2.8',277,428,'Solteiro','1999-03-06 00:00:00'),(209,'dada','vamo3','lulul','Cristina Guilherme','NovaEmpresa2','Masculino','1.23',278,441,'Casado','2022-08-28 00:00:00'),(210,'dada','vamo3','lulul','Cristina Guilherme','NovaEmpresa2','Masculino','1.23',279,443,'Casado','2022-08-28 00:00:00'),(211,'dada','vamo3','lulul','Cristina Guilherme','NovaEmpresa2','Masculino','1.23',280,445,'Casado','2022-08-28 00:00:00'),(212,'B','B','B','B','Angola','Masculino','1.20',281,447,'Casado','2022-08-28 00:00:00'),(213,'B','B','B','B','Angola','Masculino','1.20',282,448,'Casado','2022-08-28 00:00:00'),(214,'B','B','B','B','Angola','Masculino','1.20',283,449,'Casado','2022-08-28 00:00:00'),(215,'B','B','B','B','Angola','Masculino','1.20',284,450,'Casado','2022-08-28 00:00:00'),(216,'B','B','B','B','Angola','Masculino','1.20',285,451,'Casado','2022-08-28 00:00:00'),(217,'teste1','teste1','teste1','teste1','Angola','Feminino','1.1',286,452,'Solteiro','2022-08-28 00:00:00'),(218,'tt','tt','tt','undefined','Angola','Feminino','1.70',287,453,'Casado','2022-08-29 00:00:00'),(219,'Belmiro','Bebo','b','b','Angola','Masculino','1.2',288,455,'Solteiro','2022-08-29 00:00:00'),(220,'Belmiro','Bebo','b','b','Angola','Masculino','1.2',289,457,'Solteiro','2022-08-29 00:00:00'),(221,'Belmiro','Bebo','b','b','Angola','Masculino','1.2',290,459,'Solteiro','2022-08-29 00:00:00'),(222,'Belmiro','Bebo','b','b','Angola','Masculino','1.2',291,461,'Solteiro','2022-08-29 00:00:00'),(223,'Belmiro','Bebo','b','b','Angola','Masculino','1.2',292,463,'Solteiro','2022-08-29 00:00:00'),(224,'o','o','o','o','Angola','Masculino','1.20',293,465,'Solteiro','2022-08-29 00:00:00'),(225,'o','o','o','o','Angola','Masculino','1.20',294,466,'Solteiro','2022-08-29 00:00:00'),(226,'o','o','o','o','Angola','Masculino','1.20',295,467,'Solteiro','2022-08-29 00:00:00'),(227,'o','o','o','o','Angola','Masculino','1.20',296,468,'Solteiro','2022-08-29 00:00:00'),(228,'o','o','o','o','Angola','Masculino','1.20',297,469,'Solteiro','2022-08-29 00:00:00'),(234,'Silva','Silvano',NULL,NULL,NULL,NULL,NULL,NULL,480,NULL,NULL),(235,'Nenhum','Nenhum',NULL,NULL,NULL,NULL,NULL,NULL,481,NULL,NULL),(243,'Marcia ','Magalhaes',NULL,NULL,NULL,NULL,NULL,NULL,489,NULL,NULL),(245,'Manuel','Gomes',NULL,NULL,NULL,NULL,NULL,NULL,491,NULL,NULL);
+INSERT INTO `pessoa` VALUES (235,'Nenhum','Nenhum',NULL,NULL,NULL,NULL,NULL,NULL,481,NULL,NULL),(246,'Eduardo ','Kiassucmuca',NULL,NULL,NULL,NULL,NULL,NULL,492,NULL,NULL),(247,'Manuel','Gomes',NULL,NULL,NULL,NULL,NULL,NULL,493,NULL,NULL),(248,'Nelson','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,494,NULL,NULL),(249,'Lucy','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,495,NULL,NULL),(250,'Fernando','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,496,NULL,NULL),(252,'Anderson Matilde','Kiole',NULL,NULL,NULL,NULL,NULL,NULL,498,NULL,NULL),(255,'Marcio Cristiano','Da Silva','df','lulul','Angola','Masculino','1.23',300,503,'Solteiro','Invalid date'),(259,'Silva','Silvano','b','NovaEmpresa2','c2','Feminino','1.87',304,509,'Solteiro','2022-10-07 00:00:00'),(260,'Cris','iu','o','B','Angola','Masculino','1.23',305,510,'Solteiro','2022-10-07 00:00:00'),(261,'Levanta','Kiole','Gomes','dd','Angola','Feminino','1.23',306,512,'Viuvo','2022-10-07 00:00:00'),(262,'Manuel','iu','vamo3','vamo3','vamo3','Masculino','1.87',307,514,'Solteiro','2021-10-07 00:00:00'),(263,'lll','lklk','B','Engracia','Angola','Masculino','1.23',308,516,'Solteiro','2014-10-07 00:00:00'),(264,'lll','lklk','B','Engracia','Angola','Masculino','1.23',309,517,'Solteiro','2014-10-07 00:00:00'),(265,'lll','lklk','B','Engracia','Angola','Masculino','1.23',310,518,'Solteiro','2014-10-07 00:00:00'),(266,'João','Costa','t','t','Angola','Masculino','1.23',311,519,'Casado','2006-10-14 00:00:00'),(267,'t','t','t','t','Luanda','Masculino','1.23',312,521,'Casado','2022-09-14 00:00:00'),(268,'teste1','teste1','teste1','teste1','teste1','Masculino','1.2',313,523,'Solteiro','1996-12-30 00:00:00'),(269,'teste2','teste2','teste2','teste2','teste2','Masculino','1.26',314,525,'Solteiro','2024-01-17 00:00:00'),(270,'mais','mais','mais','mais','mais','Feminino','2.3',315,528,'Solteiro','2024-01-05 00:00:00');
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -512,6 +509,7 @@ CREATE TABLE `queixa` (
   `estado` varchar(45) DEFAULT 'Aberto',
   `testemunhaID` int DEFAULT NULL,
   `nota` varchar(1045) DEFAULT NULL,
+  `url_file_acta` varchar(1045) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `recepcionistaID` (`recepcionistaID`),
   KEY `chefeServicosID` (`chefeServicosID`),
@@ -521,7 +519,7 @@ CREATE TABLE `queixa` (
   CONSTRAINT `queixa_ibfk_2` FOREIGN KEY (`trabalhadorID`) REFERENCES `trabalhador` (`id`),
   CONSTRAINT `queixa_ibfk_3` FOREIGN KEY (`recepcionistaID`) REFERENCES `recepcionista` (`id`),
   CONSTRAINT `queixa_ibfk_5` FOREIGN KEY (`chefeServicosID`) REFERENCES `chefeservicos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +528,7 @@ CREATE TABLE `queixa` (
 
 LOCK TABLES `queixa` WRITE;
 /*!40000 ALTER TABLE `queixa` DISABLE KEYS */;
-INSERT INTO `queixa` VALUES (101,'Trabalho intensivoooo','Não sou reconpensado pelo que faço eu acho que trabalho. Faço mais tarefas daquilo que estava definido no contrato, mais','2023-09-28 22:45:40','2023-09-28 22:45:40','130','124',124,130,NULL,8,NULL,'1695941136145-CARDIO â VOL 1 Arritmias CardÃ­acas e Morte SÃºbita.pdf','Luanda','normal','aberto',4,NULL),(104,'Cortes no Salario34','Boa tarde Prezado, gostaria de fazer a minha queixa sobre os cortes efectuados no meu salario. O valor do recibo não condiz com o valor recebido. Já informei a empresa mas não se resolve.\n\nPor favor preciso da vossa ajuda.43','2023-09-28 23:42:15','2023-09-28 23:42:15','130','131',131,130,NULL,9,NULL,'uploads\\1695944534732-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','anonimo','aberto',4,NULL),(109,'ja','ja','2023-09-29 00:27:53','2023-09-29 00:27:53','130','131',136,130,NULL,9,NULL,'uploads\\1695947273194-ENDOCR â VOL 1 DoenÃ§as da Tireoide.pdf','Luanda','normal','aberto',4,NULL),(113,'b','b','2023-09-29 20:07:02','2023-09-29 20:07:02','135','124',139,135,NULL,9,NULL,'uploads\\1696018020797-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','Luanda','normal','aberto',NULL,NULL),(114,'we','we','2023-09-29 20:29:13','2023-09-29 20:29:13','136','131',124,136,NULL,9,NULL,'uploads\\1696019351802-ENDOCR â VOL 1 DoenÃ§as da Tireoide.pdf','Luanda','normal','aberto',NULL,NULL),(115,'b','b','2023-09-30 20:55:46','2023-09-30 20:55:46','136','137',131,137,NULL,9,NULL,'uploads\\1696107307099-CIRURG â VOL 1 Trauma.pdf','Luanda','normal','aberto',NULL,NULL),(116,'O','O','2023-09-30 21:16:38','2023-09-30 21:16:38','136','138',136,138,NULL,9,NULL,'uploads\\1696108597458-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','normal','aberto',NULL,NULL),(117,'O','O','2023-09-30 21:18:49','2023-09-30 21:18:49','136','139',139,139,NULL,9,NULL,'uploads\\1696108728607-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','normal','aberto',NULL,NULL),(118,'O','O','2023-09-30 21:20:05','2023-09-30 21:20:05','136','140',124,140,NULL,9,NULL,'uploads\\1696108801021-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','normal','aberto',NULL,NULL),(119,'O','O','2023-09-30 21:22:24','2023-09-30 21:22:25','136','141',131,141,NULL,9,NULL,'uploads\\1696108880240-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','normal','aberto',NULL,NULL),(120,'O','O','2023-09-30 21:24:15','2023-09-30 21:24:15','136','142',136,142,NULL,9,NULL,'uploads\\1696109054631-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Luanda','normal','aberto',NULL,NULL),(121,'uiu','uiu','2023-10-01 00:07:06','2023-10-01 00:07:06','136','135',139,135,NULL,9,NULL,'uploads\\1696118826403-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','normal','aberto',NULL,NULL),(122,'uiu','uiu','2023-10-01 00:08:27','2023-10-01 00:08:27','136','135',124,135,NULL,9,NULL,'uploads\\1696118907512-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','normal','aberto',NULL,NULL),(123,'a','a','2023-10-03 05:03:59','2023-10-03 05:03:59','139','130',131,130,NULL,9,NULL,'uploads\\1696309438555-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Uíge','normal','aberto',NULL,NULL);
+INSERT INTO `queixa` VALUES (125,'Salario não corresponde ao combinado','Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2023-11-07 22:31:28','2023-11-07 22:31:28','166','141',141,166,NULL,14,NULL,'l2.pdf','Luanda','anonimo','Aberto',4,NULL,NULL),(126,'Ferias no trabalho','Boa tarde, sempre que tiro ferias não consigo gozar por completo os meus direitos, sou sempre impedido.','2023-11-07 22:47:29','2023-11-07 22:47:29','166','141',141,166,NULL,14,NULL,'uploads\\1699397249136-CIRURG â VOL 1 Trauma.pdf','Luanda','anonimo','Aberto',4,NULL,NULL),(128,'Mais1','sasssss3','2023-11-07 22:53:23','2023-11-07 22:53:23','166','142',142,166,NULL,14,NULL,'uploads\\1699397603264-ENDOCR â VOL 2 DoenÃ§as da Suprarrenal_ DoenÃ§as da Paratireoide_ DoenÃ§as da HipÃ³fise e HipotÃ¡lamo.pdf','Luanda','normal','Aberto',4,NULL,NULL),(129,'Mais2','kjhhh','2023-11-07 23:14:00','2023-11-07 23:14:00','170','142',142,170,NULL,14,NULL,'uploads\\1699398839128-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','normal','Aberto',4,NULL,NULL),(130,'Vamos ver10','wsdsdsdsd','2023-11-07 23:24:58','2023-11-07 23:24:58','171','143',143,171,NULL,16,NULL,'uploads\\1699399496622-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Benguela','normal','Aberto',8,NULL,'uploads\\1700777869685-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf'),(131,'b','kugg','2023-11-07 23:33:18','2023-11-07 23:33:18','144','172',144,172,NULL,16,NULL,'uploads\\1699399996526-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','Benguela','normal','Aberto',8,NULL,'uploads\\1700777173973-CIRURG â VOL 1 Trauma.pdf'),(132,'Meu assunto11','sdsdsd','2023-11-07 23:41:51','2023-11-07 23:41:51','145','173',145,173,NULL,17,NULL,'uploads\\1699400508534-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Benguela','normal','Aberto',9,NULL,NULL),(133,'dd','ddddd','2023-11-07 23:57:31','2023-11-07 23:57:31','141','176',141,176,NULL,14,NULL,'uploads\\1699401448891-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','Luanda','normal','Aberto',4,NULL,NULL),(134,'Sem Subsidio de ferias','','2023-11-15 09:05:49','2023-11-15 09:05:49','177','146',146,177,NULL,14,NULL,'uploads\\1700039147182-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','anonimo','Aberto',4,NULL,NULL),(135,'xpto','xpto','2023-11-15 09:38:39','2023-11-15 09:38:39','147','178',147,178,NULL,14,NULL,'uploads\\1700041118049-CIRURG â VOL 1 Trauma.pdf','Luanda','normal','Aberto',4,NULL,NULL),(136,'novinho','novinho1','2023-11-29 22:00:12','2023-11-29 22:00:12','166','141',141,166,NULL,14,NULL,'uploads\\gonorreia.pdf','Luanda','normal','Aberto',4,NULL,NULL),(137,'teste1','teste1','2024-01-22 19:49:32','2024-01-22 19:49:32','179','148',148,179,NULL,14,NULL,'uploads/Hernania Ferreira  2024(1).pdf','Luanda','anonimo','Aberto',4,NULL,NULL),(138,'teste2','teste2','2024-01-24 22:17:32','2024-01-24 22:17:32','180','149',149,180,NULL,14,NULL,'uploads/Hernania Ferreira  2024(1).pdf','Luanda','normal','Aberto',4,NULL,NULL),(139,'outra1','outra1','2024-01-25 19:20:51','2024-01-25 19:20:51','180','150',150,180,NULL,14,NULL,'uploads/laurÃ­ssea Campos  2024(1).pdf','Luanda','anonimo','Aberto',4,NULL,NULL),(140,'outra2','outra2','2024-01-25 19:32:35','2024-01-25 19:32:35','180','150',150,180,NULL,14,NULL,'uploads/Selton Barros 2023 (1).docx','Luanda','normal','Aberto',4,NULL,NULL),(141,'mais','mais','2024-01-25 21:30:53','2024-01-25 21:30:53','151','181',151,181,NULL,14,NULL,'uploads/l2.pdf','Benguela','normal','Aberto',4,NULL,NULL),(142,'jjk','kjjk','2024-01-26 22:27:50','2024-01-26 22:27:50','179','143',143,179,NULL,14,NULL,'uploads/Manual de OrientaÃ§Ã£o - VD.pdf','Benguela','normal','Aberto',4,NULL,NULL),(143,'jj','j','2024-01-26 22:30:47','2024-01-26 22:30:47','179','144',144,179,NULL,14,NULL,'uploads/l2.pdf','Benguela','normal','Aberto',4,NULL,NULL),(144,'teste3','rf','2024-01-26 22:32:24','2024-01-26 22:32:24','179','145',145,179,NULL,14,NULL,'l2.pdf','Benguela','normal','Aberto',4,NULL,NULL),(145,'sods0159','ssss0918','2024-01-26 22:38:47','2024-01-26 22:38:47','180','144',144,180,NULL,14,NULL,'Angola Effective currency value.xlsx','Benguela','anonimo','Aberto',4,NULL,NULL),(146,'jaj',',Jill','2024-02-12 22:36:12','2024-02-12 22:36:12','180','142',142,180,NULL,14,NULL,'l2.pdf','Luanda','normal','Aberto',4,NULL,NULL),(147,'df','df','2024-02-12 22:38:52','2024-02-12 22:38:52','180','141',141,180,NULL,14,NULL,'Acta numero1 da primeira reuniÃ£o do corpo directivo.docx','Luanda','normal','Aberto',4,NULL,NULL),(148,'sods','sdsd','2024-02-12 22:47:49','2024-02-12 22:47:49','180','142',142,180,NULL,14,NULL,'Hernania Ferreira  2024(1).pdf','Luanda','normal','Aberto',4,NULL,NULL),(149,'hkjk','obj','2024-02-14 19:00:35','2024-02-14 19:00:35','151','181',151,181,NULL,14,NULL,'Acta numero1 da primeira reuniÃ£o do corpo directivo.docx','Benguela','normal','Aberto',4,NULL,NULL);
 /*!40000 ALTER TABLE `queixa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -599,9 +597,10 @@ CREATE TABLE `reuniao` (
   `queixaID` int DEFAULT NULL,
   `trabalhadorID` int DEFAULT NULL,
   `empresaID` int DEFAULT NULL,
+  `queixosoID` int DEFAULT NULL,
   `obs` varchar(1045) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -610,7 +609,7 @@ CREATE TABLE `reuniao` (
 
 LOCK TABLES `reuniao` WRITE;
 /*!40000 ALTER TABLE `reuniao` DISABLE KEYS */;
-INSERT INTO `reuniao` VALUES (3,'assunto2','Online','2023-09-01','11:11:00',NULL,104,NULL,131,'no'),(4,'assunto3','Online','2023-10-02','01:01:00',NULL,104,130,NULL,'AA');
+INSERT INTO `reuniao` VALUES (5,'teste','teste','2023-12-12','12:12:00','agendada',125,NULL,NULL,166,'nenhuma'),(6,'teste2','teste2','2023-12-24','13:13:00','agndada',125,NULL,NULL,167,'nenhuma');
 /*!40000 ALTER TABLE `reuniao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -672,7 +671,7 @@ DROP TABLE IF EXISTS `sequelizemeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -699,7 +698,7 @@ CREATE TABLE `testemunha` (
   `id` int NOT NULL AUTO_INCREMENT,
   `inspectorID` int NOT NULL,
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -708,7 +707,7 @@ CREATE TABLE `testemunha` (
 
 LOCK TABLES `testemunha` WRITE;
 /*!40000 ALTER TABLE `testemunha` DISABLE KEYS */;
-INSERT INTO `testemunha` VALUES (4,8);
+INSERT INTO `testemunha` VALUES (4,14),(8,16),(9,17);
 /*!40000 ALTER TABLE `testemunha` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -730,7 +729,7 @@ CREATE TABLE `trabalhador` (
   PRIMARY KEY (`id`),
   KEY `trabalhador_ibfk_1` (`pessoaID`),
   CONSTRAINT `trabalhador_ibfk_1` FOREIGN KEY (`pessoaID`) REFERENCES `pessoa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -739,7 +738,7 @@ CREATE TABLE `trabalhador` (
 
 LOCK TABLES `trabalhador` WRITE;
 /*!40000 ALTER TABLE `trabalhador` DISABLE KEYS */;
-INSERT INTO `trabalhador` VALUES (130,'Gerente','Vendas','Luanda','queixoso',208,111),(134,'undefined','undefined','Luanda','queixoso',215,116),(135,'b','b','Luanda','queixoso',216,117),(136,'d','d','Luanda','queixoso',217,118),(137,'Assistente de recursos humanos','RH','Luanda','queixante',223,0),(138,'O','O','Luanda','queixante',224,0),(139,'O','O','Luanda','queixante',225,0),(140,'O','O','Luanda','queixante',226,0),(141,'O','O','Luanda','queixante',227,0),(142,'O','O','Luanda','queixante',228,0),(146,'Inspector','Inspecção','Benguela','igt',234,132),(147,'Inspector','Inspecção','Luanda','igt',235,133),(155,'Inspector','Inspecção','Luanda','igt',243,141),(157,'chefe_servicos','Chief','Luanda','igt',245,143);
+INSERT INTO `trabalhador` VALUES (147,'Inspector','Inspecção','Luanda','igt',235,133),(158,'Inspector','Inspecção','Benguela','igt',246,144),(159,'Inspector','Inspecção','Luanda','igt',247,145),(160,'Recepcionista','Administração','Benguela','igt',248,146),(161,'Recepcionista','Administração','Luanda','igt',249,147),(162,'chefe_servicos','Chefe','Benguela','igt',250,148),(164,'chefe_servicos','Chefe','Luanda','igt',252,150),(166,'Engnheiro Informatico','DTI','Luanda','queixoso',255,152),(170,'ccv','Master','Luanda','queixoso',259,156),(171,'Assistente de recursos humanos','NovaEmpresa','Benguela','queixoso',260,157),(172,'Engnheiro','Vendas','Benguela','queixante',261,0),(173,'xfd','dfdf','Benguela','queixante',262,0),(174,'zsd','sds','Luanda','queixamte',263,0),(175,'zsd','sds','Luanda','queixante',264,0),(176,'zsd','sds','Luanda','queixante',265,0),(177,'Engenheiro','Engenharia','Luanda','queixoso',266,160),(178,'r','r','Luanda','queixante',267,0),(179,'teste1','teste1','Luanda','queixoso',268,162),(180,'teste2','teste2','Luanda','queixoso',269,163),(181,'tester','mais','Benguela','queixante',270,0);
 /*!40000 ALTER TABLE `trabalhador` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -752,4 +751,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-06  2:16:37
+-- Dump completed on 2024-02-19 22:23:57
