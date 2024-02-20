@@ -31,8 +31,55 @@ const MaisDetalhes = () => {
   const [notas, setNotas] = useState([]);
   const [historicos, setHistorico] = useState([]);
   const [showModalActa, setShowModalActa] = useState(false);
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle2, setDisplayStyle2] = useState("none");
 
   const [inputFields, setInputFields] = useState([{ value: "" }]);
+
+  const [displayStyle3, setDisplayStyle3] = useState("none");
+
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay2 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle2((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay3 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle3((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const formData = new FormData();
+  const file_acta = document.querySelector("#file_acta");
+
+  const anexar_acta = (e, queixa) => {
+    e.preventDefault();
+
+    formData.append("fileActa", file_acta.files[0]);
+    formData.append("id_queixa", queixa.id);
+
+    Axios.post("http://localhost:3001/anexa_acta", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then((resposta) => {
+        toggleDisplay3();
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  };
   const getQueixa = async () => {
     await Axios.get("http://localhost:3001/mais_detalhes", {
       params: {
@@ -303,7 +350,7 @@ const MaisDetalhes = () => {
             variant="dark"
             border="secondary"
             type="button"
-            onClick={() => setShowModal(true)}
+            onClick={() => toggleDisplay()}
             style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
           >
             Agendar reunião
@@ -311,10 +358,7 @@ const MaisDetalhes = () => {
           <Button variant="outline-danger" style={{ marginRight: 7 }}>
             Aplicar multa
           </Button>
-          <Button
-            variant="outline-warning"
-            onClick={() => setShowModalActa(true)}
-          >
+          <Button variant="outline-warning" onClick={() => toggleDisplay()}>
             Anexar acta
           </Button>
         </Col>
@@ -360,18 +404,86 @@ const MaisDetalhes = () => {
           </Card>
         </Col>
       </Row>
-      <ModalReuniao
-        show={showModal}
-        setShow={setShowModal}
-        conflito={conflito}
-        close={() => setShowModal(false)}
-      />
-      <ModalActa
-        show={showModalActa}
-        setShow={setShowModalActa}
-        conflito={conflito}
-        close={() => setShowModalActa(false)}
-      />
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <br />
+          <p>Agendar reunião com?</p>
+          <div class="modal-footer">
+            <Link to="/nova_reuniao_empregador">
+              <Button variant="warning" onClick={toggleDisplay}>
+                Empregador
+              </Button>
+            </Link>
+            ou
+            <Link to="/nova_reuniao">
+              <Button className="btn btn-dark"> Trabalhador</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <br />
+          <p>Upload Acta</p>
+          <div class="modal-footer">
+            <Form
+              onSubmit={(e) => anexar_acta(e, conflito)}
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <Form.Label>Anexar uma acta</Form.Label>
+              <Form.Control
+                type="file"
+                name="file_acta"
+                id="file_acta"
+                required
+              />
+
+              <Button type="submit" className="btn btn-warning">
+                Anexar
+              </Button>
+            </Form>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle3,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <br />
+          <p>Acta</p>
+          <div class="modal-footer">Acta anexada com sucesso</div>
+        </div>
+      </div>
     </>
   );
 };
