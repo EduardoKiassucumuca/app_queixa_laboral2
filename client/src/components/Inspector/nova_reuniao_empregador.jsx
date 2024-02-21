@@ -19,6 +19,14 @@ function NovaReuniaoEmpregador(props) {
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   let data = {};
   if (localStorage.getItem("data_queixa")) {
     const savedData = localStorage.getItem("data_queixa");
@@ -36,8 +44,8 @@ function NovaReuniaoEmpregador(props) {
       fk_empregador: data.Empresa.id,
     })
       .then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
+        //setAlert(resposta.data.message);
+        toggleDisplay();
         //setRedireciona("/dashboard_admin");
       })
       .catch((resposta) => {
@@ -48,14 +56,33 @@ function NovaReuniaoEmpregador(props) {
     <>
       <SideNavInspector />
       <MenuInspector />
-      <ModalConfirmationQueixa
-        msg={alert}
-        show={showModal}
-        setShow={setShowModal}
-        redirect={redireciona}
-        close={() => setShowModal(false)}
-      />
 
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <br />
+          <p>Reunião</p>
+          <div class="modal-footer">
+            <p>A reunião foi agendada com sucesso </p>
+            <Button
+              type="button"
+              className="btn btn-warning"
+              onClick={toggleDisplay}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
           <h3 className="mb-3 h1-queixa">Agendar reunião com o Empregador</h3>

@@ -15,6 +15,7 @@ function NovaReuniao(props) {
   const [date, setDate] = useState("");
   const [hora, setHora] = useState("");
   const [obs, setOBS] = useState("");
+  const [displayStyle, setDisplayStyle] = useState("none");
 
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
@@ -24,6 +25,13 @@ function NovaReuniao(props) {
     const savedData = localStorage.getItem("data_queixa");
     data = JSON.parse(savedData);
   }
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const agendar_reuniao = (e) => {
     e.preventDefault();
     Axios.post("http://localhost:3001/nova_reuniao", {
@@ -37,7 +45,7 @@ function NovaReuniao(props) {
     })
       .then((resposta) => {
         setAlert(resposta.data.message);
-        setShowModal(true);
+        toggleDisplay();
         //setRedireciona("/dashboard_admin");
       })
       .catch((resposta) => {
@@ -48,14 +56,32 @@ function NovaReuniao(props) {
     <>
       <SideNavInspector />
       <MenuInspector />
-      <ModalConfirmationQueixa
-        msg={alert}
-        show={showModal}
-        setShow={setShowModal}
-        redirect={redireciona}
-        close={() => setShowModal(false)}
-      />
-
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <br />
+          <p>Reunião</p>
+          <div class="modal-footer">
+            <p>A reunião foi agendada com sucesso </p>
+            <Button
+              type="button"
+              className="btn btn-warning"
+              onClick={toggleDisplay}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
           <h3 className="mb-3 h1-queixa">Agendar reunião com o Trabalhador</h3>
