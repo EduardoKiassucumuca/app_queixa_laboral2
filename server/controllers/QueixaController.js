@@ -1408,7 +1408,7 @@ module.exports = {
   },
   async anexa_acta(req, res) {
     try {
-      const _fileActa = req.files["fileActa"][0].path;
+      const _fileActa = req.files["fileActa"][0].path.split("/")[1];
       const { id_queixa } = req.body;
 
       const novo_anexo = await Queixa.update(

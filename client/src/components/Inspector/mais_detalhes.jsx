@@ -263,13 +263,15 @@ const MaisDetalhes = () => {
                     {conflito.url_file_contrato}
                   </a>
                 </p>
+                <hr />
                 <p>
                   <FaFilePdf style={{ border: "red" }} />
                   <a
-                    href={conflito.url_file_acta}
+                    href="#"
+                    onClick={(e) => handleDownload(conflito.url_file_acta)}
                     style={{ color: "rgb(220, 195, 119)" }}
                   >
-                    Acta001.pdf
+                    {conflito.url_file_acta}
                   </a>
                 </p>
               </Card.Text>
@@ -286,7 +288,7 @@ const MaisDetalhes = () => {
               <Alert
                 variant="warning"
                 className="nota-queixa"
-                style={{ marginLeft: "5%" }}
+                style={{ marginLeft: "5%", marginBottom: 5 }}
               >
                 <Alert.Heading>Nota</Alert.Heading>
                 <p>{my_note.nota}</p>
@@ -300,10 +302,10 @@ const MaisDetalhes = () => {
               <p></p>
             </>
           ))}
-          ;
+          <p></p>
           {inputFields.map((inputField, index) => (
-            <div key={index} style={{}}>
-              <>
+            <>
+              <div key={index} style={{ marginBottom: 15 }}>
                 <Alert
                   style={{ marginLeft: "5%" }}
                   variant="warning"
@@ -342,9 +344,9 @@ const MaisDetalhes = () => {
                     </Button>
                   </small>
                 </Alert>
-                <p></p>
-              </>
-            </div>
+              </div>
+              <p></p>
+            </>
           ))}
           <Button
             variant="dark"
@@ -358,11 +360,11 @@ const MaisDetalhes = () => {
           <Button variant="outline-danger" style={{ marginRight: 7 }}>
             Aplicar multa
           </Button>
-          <Button variant="outline-warning" onClick={() => toggleDisplay()}>
+          <Button variant="outline-warning" onClick={() => toggleDisplay2()}>
             Anexar acta
           </Button>
         </Col>
-        <Col md={4}>
+        <Col md={4} style={{ marginTop: 50 }}>
           <Card
             bg="dark"
             border="secondary"
@@ -415,7 +417,15 @@ const MaisDetalhes = () => {
         }}
       >
         <div class="modal-content">
+          <a
+            onclick={toggleDisplay}
+            class="w3-button w3-display-topright"
+            style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
+          >
+            &times;
+          </a>
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+
           <br />
           <p>Agendar reunião com?</p>
           <div class="modal-footer">
@@ -435,7 +445,7 @@ const MaisDetalhes = () => {
         id="myModal"
         class="modal"
         style={{
-          display: displayStyle,
+          display: displayStyle2,
           position: "fixed",
           top: "150px",
           boxShadow: "10px 10px 5px #888888;",
