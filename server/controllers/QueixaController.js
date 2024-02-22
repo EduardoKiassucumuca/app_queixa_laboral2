@@ -1409,11 +1409,13 @@ module.exports = {
   async anexa_acta(req, res) {
     try {
       const _fileActa = req.files["fileActa"][0].path.split("/")[1];
-      const { id_queixa } = req.body;
+      const { id_queixa, multa, status } = req.body;
 
       const novo_anexo = await Queixa.update(
         {
           url_file_acta: _fileActa,
+          multa: multa[0],
+          estado: status[0],
         },
         {
           where: {
@@ -1423,10 +1425,10 @@ module.exports = {
       );
       return res.status(200).send({
         status: 1,
-        message: "Acta anexada com sucesso!",
+        message: "Queixa encerrada com sucesso!",
       });
-    } catch {
-      console.log("Error!");
+    } catch (error) {
+      console.log(error);
     }
   },
   async update_queixa(req, res) {

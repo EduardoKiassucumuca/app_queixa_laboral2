@@ -112,6 +112,10 @@ const Queixa = db.define("Queixa", {
     type: Sequelize.STRING,
     allowNull: true,
   },
+  multa: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
   testemunhaID: {
     type: Sequelize.INTEGER,
     references: {
