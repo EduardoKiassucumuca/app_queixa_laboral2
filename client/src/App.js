@@ -30,7 +30,8 @@ import NovaReuniaoEmpregador from "./components/Inspector/nova_reuniao_empregado
 import ReunioesEmpregados from "./components/Inspector/reunioes_empregados";
 import ReunioesEmpregadores from "./components/Inspector/reunioes_empregadores";
 import ReunioesQueixoso from "./components/Queixoso/reuniao_queixoso";
-
+import HomeDuvidas from "./components/Duvidas/homeDuvidas";
+import DetalhesDuvidas from "./components/Duvidas/detalhesDuvidas";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -81,7 +82,9 @@ function App() {
           path="/reunioes_empregadores"
           element={<ReunioesEmpregadores />}
         />
-        <Route path="/reunioes_queixoso" element={<ReunioesQueixoso/>}/>
+        <Route path="/reunioes_queixoso" element={<ReunioesQueixoso />} />
+        <Route path="/duvidas" element={<HomeDuvidas />} />
+        <Route path="/detalhesDuvidas" element={<DetalhesDuvidas />} />
       </Routes>
     </Router>
   );

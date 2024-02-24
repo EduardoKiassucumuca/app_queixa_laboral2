@@ -55,7 +55,7 @@ function Menu() {
                     <Nav.Link href="#features">Sobre</Nav.Link>
                     <Nav.Link href="#features">Noticias</Nav.Link>
                     <Nav.Link href="#features">Artigos</Nav.Link>
-                    <Nav.Link href="/join">Pedir Conselho</Nav.Link>
+                    <Nav.Link href="/duvidas">Duvidas</Nav.Link>
                     <Nav.Link href="/Entrar">Login</Nav.Link>
                   </Nav>
                 </Offcanvas.Body>

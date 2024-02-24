@@ -33,6 +33,8 @@ const MaisDetalhes = () => {
   const [showModalActa, setShowModalActa] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
+  const [multa, setMulta] = useState("");
+  const [status, setStatus] = useState("");
 
   const [inputFields, setInputFields] = useState([{ value: "" }]);
 
@@ -67,6 +69,8 @@ const MaisDetalhes = () => {
 
     formData.append("fileActa", file_acta.files[0]);
     formData.append("id_queixa", queixa.id);
+    formData.append("multa", multa);
+    formData.append("status", status);
 
     Axios.post("http://localhost:3001/anexa_acta", formData, {
       headers: {
@@ -357,11 +361,9 @@ const MaisDetalhes = () => {
           >
             Agendar reunião
           </Button>
-          <Button variant="outline-danger" style={{ marginRight: 7 }}>
-            Aplicar multa
-          </Button>
+
           <Button variant="outline-warning" onClick={() => toggleDisplay2()}>
-            Anexar acta
+            Encerrar
           </Button>
         </Col>
         <Col md={4} style={{ marginTop: 50 }}>
@@ -454,13 +456,22 @@ const MaisDetalhes = () => {
         <div class="modal-content">
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
           <br />
-          <p>Upload Acta</p>
+          <p>Encerrar o processo</p>
           <div class="modal-footer">
             <Form
               onSubmit={(e) => anexar_acta(e, conflito)}
               method="post"
               enctype="multipart/form-data"
             >
+              <Form.Label>Multa</Form.Label>
+              <Form.Control
+                type="text"
+                name="multa"
+                id="multa"
+                onChange={(e) => setMulta(e.target.value)}
+                placeholder="Valor da Multa"
+              />
+              <p></p>
               <Form.Label>Anexar uma acta</Form.Label>
               <Form.Control
                 type="file"
@@ -468,6 +479,19 @@ const MaisDetalhes = () => {
                 id="file_acta"
                 required
               />
+              <br />
+              <Form.Select
+                aria-label="Default select example"
+                required
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option>Status</option>
+                <option value="Encerrado">Encerrado</option>
+                <option value="Encaminhado ao Tribunal">
+                  Encaminhado ao Tribunal
+                </option>
+              </Form.Select>
+              <br />
 
               <Button type="submit" className="btn btn-warning">
                 Anexar
