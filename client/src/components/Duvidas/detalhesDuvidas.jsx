@@ -5,14 +5,16 @@ import Menu from "../Navbar/navbar";
 import Footer from "../Footer/footer";
 import React from "react";
 import {
+  MDBBtn,
   MDBCard,
   MDBCardBody,
+  MDBCardFooter,
   MDBCardImage,
   MDBCol,
   MDBContainer,
   MDBIcon,
   MDBRow,
-  MDBTypography,
+  MDBTextArea,
 } from "mdb-react-ui-kit";
 
 function DetalhesDuvidas() {
@@ -23,212 +25,85 @@ function DetalhesDuvidas() {
   return (
     <>
       <Menu />
-      <Container>
-        <Card
-          onClick={detalhesDuvidas}
-          style={{ marginTop: 10, cursor: "pointer" }}
-          bg="dark"
-          text="warning"
-        >
-          <Card.Header>Quote</Card.Header>
-          <Card.Body>
-            <blockquote className="blockquote mb-0">
-              <footer className="blockquote-footer">
-                Someone famous in <cite title="Source Title">Source Title</cite>
-              </footer>
-            </blockquote>
-          </Card.Body>
-        </Card>
-        <section style={{ backgroundColor: "#ad655f" }}>
-          <MDBCard className="text-dark">
-            <MDBCardBody className="p-4">
-              <MDBTypography tag="h4" className="mb-0">
-                Recent comments
-              </MDBTypography>
-              <p className="fw-light mb-4 pb-2">
-                Latest Comments section by users
-              </p>
+      <section className="vh-100" style={{ backgroundColor: "#eee" }}>
+        <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
+          <MDBRow className="justify-content-center">
+            <MDBCol md="12" lg="10" xl="8">
+              <MDBCard>
+                <MDBCardBody>
+                  <div className="d-flex flex-start align-items-center">
+                    <MDBCardImage
+                      className="rounded-circle shadow-1-strong me-3"
+                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
+                      alt="avatar"
+                      width="60"
+                      height="60"
+                    />
+                    <div>
+                      <h6 className="fw-bold text-primary mb-1">
+                        Lily Coleman
+                      </h6>
+                      <p className="text-muted small mb-0">
+                        Shared publicly - Jan 2020
+                      </p>
+                    </div>
+                  </div>
 
-              <div className="d-flex flex-start">
-                <MDBCardImage
-                  className="rounded-circle shadow-1-strong me-3"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
-                  alt="avatar"
-                  width="60"
-                  height="60"
-                />
-                <div>
-                  <MDBTypography tag="h6" className="fw-bold mb-1">
-                    Maggie Marsh
-                  </MDBTypography>
-                  <div className="d-flex align-items-center mb-3">
-                    <p className="mb-0">
-                      March 07, 2021
-                      <span className="badge bg-primary">Pending</span>
-                    </p>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="pencil-alt ms-2" />
+                  <p className="mt-3 mb-4 pb-2">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip consequat.
+                  </p>
+
+                  <div className="small d-flex justify-content-start">
+                    <a href="#!" className="d-flex align-items-center me-3">
+                      <MDBIcon far icon="thumbs-up me-2" />
+                      <p className="mb-0">Like</p>
                     </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="redo-alt ms-2" />
+                    <a href="#!" className="d-flex align-items-center me-3">
+                      <MDBIcon far icon="comment-dots me-2" />
+                      <p className="mb-0">Comment</p>
                     </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="heart ms-2" />
+                    <a href="#!" className="d-flex align-items-center me-3">
+                      <MDBIcon fas icon="share me-2" />
+                      <p className="mb-0">Share</p>
                     </a>
                   </div>
-                  <p className="mb-0">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it.
-                  </p>
-                </div>
-              </div>
-            </MDBCardBody>
+                </MDBCardBody>
 
-            <hr className="my-0" />
-
-            <MDBCardBody className="p-4">
-              <div className="d-flex flex-start">
-                <MDBCardImage
-                  className="rounded-circle shadow-1-strong me-3"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp"
-                  alt="avatar"
-                  width="60"
-                  height="60"
-                />
-                <div>
-                  <MDBTypography tag="h6" className="fw-bold mb-1">
-                    Lara Stewart
-                  </MDBTypography>
-                  <div className="d-flex align-items-center mb-3">
-                    <p className="mb-0">
-                      March 15, 2021
-                      <span className="badge bg-success">Approved</span>
-                    </p>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="pencil-alt ms-2" />
-                    </a>
-                    <a href="#!" className="text-success">
-                      <MDBIcon fas icon="redo-alt ms-2" />
-                    </a>
-                    <a href="#!" className="link-danger">
-                      <MDBIcon fas icon="heart ms-2" />
-                    </a>
+                <MDBCardFooter
+                  className="py-3 border-0"
+                  style={{ backgroundColor: "#f8f9fa" }}
+                >
+                  <div className="d-flex flex-start w-100">
+                    <MDBCardImage
+                      className="rounded-circle shadow-1-strong me-3"
+                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
+                      alt="avatar"
+                      width="40"
+                      height="40"
+                    />
+                    <MDBTextArea
+                      label="Message"
+                      id="textAreaExample"
+                      rows={4}
+                      style={{ backgroundColor: "#fff" }}
+                      wrapperClass="w-100"
+                    />
                   </div>
-                  <p className="mb-0">
-                    Contrary to popular belief, Lorem Ipsum is not simply random
-                    text. It has roots in a piece of classical Latin literature
-                    from 45 BC, making it over 2000 years old. Richard
-                    McClintock, a Latin professor at Hampden-Sydney College in
-                    Virginia, looked up one of the more obscure Latin words,
-                    consectetur, from a Lorem Ipsum passage, and going through
-                    the cites.
-                  </p>
-                </div>
-              </div>
-            </MDBCardBody>
-
-            <hr className="my-0" />
-
-            <MDBCardBody className="p-4">
-              <div className="d-flex flex-start">
-                <MDBCardImage
-                  className="rounded-circle shadow-1-strong me-3"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(33).webp"
-                  alt="avatar"
-                  width="60"
-                  height="60"
-                />
-                <div>
-                  <MDBTypography tag="h6" className="fw-bold mb-1">
-                    Alexa Bennett
-                  </MDBTypography>
-                  <div className="d-flex align-items-center mb-3">
-                    <p className="mb-0">
-                      March 24, 2021
-                      <span className="badge bg-danger">Rejected</span>
-                    </p>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="pencil-alt ms-2" />
-                    </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="redo-alt ms-2" />
-                    </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="heart ms-2" />
-                    </a>
+                  <div className="float-end mt-2 pt-1">
+                    <MDBBtn size="sm" className="me-1">
+                      Post comment
+                    </MDBBtn>
                   </div>
-                  <p className="mb-0">
-                    There are many variations of passages of Lorem Ipsum
-                    available, but the majority have suffered alteration in some
-                    form, by injected humour, or randomised words which don't
-                    look even slightly believable. If you are going to use a
-                    passage of Lorem Ipsum, you need to be sure.
-                  </p>
-                </div>
-              </div>
-            </MDBCardBody>
-
-            <hr className="my-0" />
-
-            <MDBCardBody className="p-4">
-              <div className="d-flex flex-start">
-                <MDBCardImage
-                  className="rounded-circle shadow-1-strong me-3"
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(24).webp"
-                  alt="avatar"
-                  width="60"
-                  height="60"
-                />
-                <div>
-                  <MDBTypography tag="h6" className="fw-bold mb-1">
-                    Alexa Bennett
-                  </MDBTypography>
-                  <div className="d-flex align-items-center mb-3">
-                    <p className="mb-0">
-                      March 30, 2021
-                      <span className="badge bg-primary">Pending</span>
-                    </p>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="pencil-alt ms-2" />
-                    </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="redo-alt ms-2" />
-                    </a>
-                    <a href="#!" className="link-muted">
-                      <MDBIcon fas icon="heart ms-2" />
-                    </a>
-                  </div>
-                  <p className="mb-0">
-                    It uses a dictionary of over 200 Latin words, combined with
-                    a handful of model sentence structures, to generate Lorem
-                    Ipsum which looks reasonable. The generated Lorem Ipsum is
-                    therefore always free from repetition, injected humour, or
-                    non-characteristic words etc.
-                  </p>
-                </div>
-              </div>
-            </MDBCardBody>
-          </MDBCard>
-        </section>
-        <form>
-          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-            <textarea
-              id="newsletter1"
-              type="text"
-              rows="4"
-              class="form-control"
-              placeholder="Comentario"
-            />
-            <p></p>
-          </div>
-          <button class="btn btn-warning fw-bold btn-comentar" type="button">
-            Comentar
-          </button>
-        </form>
-      </Container>
-      <Footer />
+                </MDBCardFooter>
+              </MDBCard>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
+        <Footer />
+      </section>
     </>
   );
 }
