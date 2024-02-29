@@ -32,20 +32,8 @@ function DetalhesDuvidas() {
               <MDBCard>
                 <MDBCardBody>
                   <div className="d-flex flex-start align-items-center">
-                    <MDBCardImage
-                      className="rounded-circle shadow-1-strong me-3"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                      alt="avatar"
-                      width="60"
-                      height="60"
-                    />
                     <div>
-                      <h6 className="fw-bold text-primary mb-1">
-                        Lily Coleman
-                      </h6>
-                      <p className="text-muted small mb-0">
-                        Shared publicly - Jan 2020
-                      </p>
+                      <h6 className="fw-bold text-primary mb-1">Assunto1</h6>
                     </div>
                   </div>
 
@@ -55,48 +43,33 @@ function DetalhesDuvidas() {
                     aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                     ullamco laboris nisi ut aliquip consequat.
                   </p>
-
-                  <div className="small d-flex justify-content-start">
-                    <a href="#!" className="d-flex align-items-center me-3">
-                      <MDBIcon far icon="thumbs-up me-2" />
-                      <p className="mb-0">Like</p>
-                    </a>
-                    <a href="#!" className="d-flex align-items-center me-3">
-                      <MDBIcon far icon="comment-dots me-2" />
-                      <p className="mb-0">Comment</p>
-                    </a>
-                    <a href="#!" className="d-flex align-items-center me-3">
-                      <MDBIcon fas icon="share me-2" />
-                      <p className="mb-0">Share</p>
-                    </a>
-                  </div>
                 </MDBCardBody>
 
                 <MDBCardFooter
                   className="py-3 border-0"
-                  style={{ backgroundColor: "#f8f9fa" }}
+                  style={{ backgroundColor: "#212529" }}
                 >
-                  <div className="d-flex flex-start w-100">
-                    <MDBCardImage
-                      className="rounded-circle shadow-1-strong me-3"
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                      alt="avatar"
-                      width="40"
-                      height="40"
-                    />
-                    <MDBTextArea
-                      label="Message"
-                      id="textAreaExample"
-                      rows={4}
-                      style={{ backgroundColor: "#fff" }}
-                      wrapperClass="w-100"
-                    />
+                  <div
+                    className="d-flex flex-start w-100"
+                    style={{ marginLeft: 50 }}
+                  >
+                    <div>
+                      <h6 className="fw-bold text-primary mb-1">
+                        Lily Coleman
+                      </h6>
+                      <p className="text-muted small mb-0">
+                        Shared publicly - Jan 2020
+                      </p>
+                      <p className="mt-3 mb-4 pb-2">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip consequat.
+                      </p>
+                    </div>
                   </div>
-                  <div className="float-end mt-2 pt-1">
-                    <MDBBtn size="sm" className="me-1">
-                      Post comment
-                    </MDBBtn>
-                  </div>
+
+                  <div className="float-end mt-2 pt-1"></div>
                 </MDBCardFooter>
               </MDBCard>
             </MDBCol>

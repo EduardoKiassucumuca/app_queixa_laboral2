@@ -14,6 +14,8 @@ const { Op } = require("sequelize");
 const path = require("path");
 const Inspector = require("../models/Inspector");
 const Testemunha = require("../models/testemunha");
+const Duvida = require("../models/duvida");
+
 const tentativa = 0;
 
 module.exports = {
@@ -1558,6 +1560,24 @@ module.exports = {
       else console.log("good");
     });
   },
+  async novaQuestao(req, res) {
+    try {
+      const { username, assunto, descricao } = req.body;
+
+      const novaQuestao = await Duvida.create({
+        username: username,
+        assunto: assunto,
+        descricao: descricao,
+      });
+      return res.status(200).send({
+        status: 1,
+        message: "Hi, note que a sua duvida foi submetida com sucesso!",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async delete(req, res) {
     const { pessoa_id } = req.params;
 

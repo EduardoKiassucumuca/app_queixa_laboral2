@@ -45,6 +45,7 @@ app.use(express.json());
 var cpUpload = upload.fields([{ name: "fileContrato" }, { name: "fileBI" }]);
 var cpUpload2 = upload.fields([{ name: "fileContrato" }]);
 var upload_file_acta = upload.fields([{ name: "fileActa" }]);
+app.post("/nova_duvida", QueixaController.novaQuestao);
 
 app.post("/guardar_queixa", cpUpload, QueixaController.store);
 app.post(

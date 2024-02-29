@@ -1,84 +1,125 @@
 import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+} from "mdb-react-ui-kit";
+import { useState } from "react";
+import axios from "axios";
 
 function Duvidas() {
+  const [username, setUserName] = useState("");
+
+  const [assunto, setAssunto] = useState("");
+  const [descricao, setDescricao] = useState("");
+
   const navigate = useNavigate();
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
   }
+  function novaQuestao(e) {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3001/nova_duvida", {
+        username: username,
+        assunto: assunto,
+        descricao: descricao,
+      })
+      .then((resposta) => {
+        alert(resposta);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  }
   return (
     <>
-      <Container>
-        <h1 style={{ color: "#DAA316", fontSize: 24, fontWeight: "bold" }}>
-          Duvidas
-        </h1>
-        <Card
-          onClick={detalhesDuvidas}
-          style={{ marginTop: 10, cursor: "pointer" }}
-          bg="dark"
-          text="warning"
-        >
-          <Card.Header>Quote</Card.Header>
-          <Card.Body>
-            <blockquote className="blockquote mb-0">
-              <footer className="blockquote-footer">
-                Someone famous in <cite title="Source Title">Source Title</cite>
-              </footer>
-            </blockquote>
-          </Card.Body>
-        </Card>
-        <Card style={{ marginTop: 10 }} bg="dark" text="warning">
-          <Card.Header>Quote</Card.Header>
-          <Card.Body>
-            <blockquote className="blockquote mb-0">
-              <footer className="blockquote-footer">
-                Someone famous in <cite title="Source Title">Source Title</cite>
-              </footer>
-            </blockquote>
-          </Card.Body>
-        </Card>
-        <Card style={{ marginTop: 10 }} bg="dark" text="warning">
-          <Card.Header>Quote</Card.Header>
-          <Card.Body>
-            <blockquote className="blockquote mb-0">
-              <footer className="blockquote-footer">
-                Someone famous in <cite title="Source Title">Source Title</cite>
-              </footer>
-            </blockquote>
-          </Card.Body>
-        </Card>
-        <Card
-          style={{ marginTop: 10, marginBottom: 10 }}
-          bg="dark"
-          text="warning"
-        >
-          <Card.Header>Quote</Card.Header>
-          <Card.Body>
-            <blockquote className="blockquote mb-0">
-              <footer className="blockquote-footer">
-                Someone famous in <cite title="Source Title">Source Title</cite>
-              </footer>
-            </blockquote>
-          </Card.Body>
-        </Card>
-        <form>
-          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-            <input type="text" placeholder="Assunto" className="form-control" />
-            <textarea
-              id="newsletter1"
-              type="text"
-              rows="4"
-              class="form-control"
-              placeholder="Alguma Questao"
-            />
+      <section className="vh-100" style={{ backgroundColor: "#eee" }}>
+        <Container>
+          <h1 style={{ color: "#DAA316", fontSize: 24, fontWeight: "bold" }}>
+            Duvidas
+          </h1>
+          <div class="row">
+            <div
+              class="col-sm-12"
+              style={{ marginBottom: 10, marginTop: 10, cursor: "pointer" }}
+            >
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Special title treatment</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                  <a href="#" class="btn btn-warning">
+                    Saber mais
+                  </a>
+                </div>
+              </div>
+            </div>
             <p></p>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Special title treatment</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                  <a href="#" class="btn btn-warning">
+                    Saber mais
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-warning fw-bold btn-comentar" type="button">
-            Submeter
-          </button>
-        </form>
-      </Container>
+
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-text">
+                  <form onSubmit={novaQuestao}>
+                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                      <input
+                        type="text"
+                        placeholder="Nome"
+                        className="form-control"
+                        onChange={(e) => setUserName(e.target.value)}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Assunto"
+                        className="form-control"
+                        onChange={(e) => setAssunto(e.target.value)}
+                      />
+                      <textarea
+                        id="newsletter1"
+                        type="text"
+                        rows="4"
+                        class="form-control"
+                        placeholder="Alguma Questao"
+                        onChange={(e) => setDescricao(e.target.value)}
+                      />
+                      <p></p>
+                    </div>
+                    <button
+                      class="btn btn-warning fw-bold btn-comentar"
+                      type="submit"
+                    >
+                      Submeter
+                    </button>
+                  </form>
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
     </>
   );
 }
