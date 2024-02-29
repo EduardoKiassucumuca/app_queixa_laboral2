@@ -58,6 +58,8 @@ app.post("/anexa_acta", upload_file_acta, QueixaController.anexa_acta);
 app.post("/registar/conta", ContaController.store);
 app.post("/auth", ContaController.logar);
 app.get("/queixas", QueixaController.index);
+app.get("/duvidas", QueixaController.getDuvidas);
+
 app.get("/queixas_do_queixoso", QueixaController.queixas_do_queixoso);
 app.post("/queixar_mesma_empresa", QueixaController.queixar_mesma_empresa);
 app.post("/queixar_outra_empresa", QueixaController.queixar_outra_empresa);

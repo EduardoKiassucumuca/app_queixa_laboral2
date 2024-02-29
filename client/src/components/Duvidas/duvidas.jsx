@@ -8,7 +8,7 @@ import {
   MDBCardText,
   MDBBtn,
 } from "mdb-react-ui-kit";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Duvidas() {
@@ -16,6 +16,7 @@ function Duvidas() {
 
   const [assunto, setAssunto] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [duvidas, setDuvidas] = useState([]);
 
   const navigate = useNavigate();
   function detalhesDuvidas() {
@@ -30,12 +31,24 @@ function Duvidas() {
         descricao: descricao,
       })
       .then((resposta) => {
-        alert(resposta);
+        console.log(resposta);
+        alert(resposta.data.message);
       })
       .catch((resposta) => {
         console.log("error", resposta);
       });
   }
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/duvidas")
+      .then(({ data }) => {
+        setDuvidas(data.duvidas);
+        console.log(data);
+      })
+      .catch((res) => {
+        console.log("res");
+      });
+  }, []);
   return (
     <>
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
@@ -44,38 +57,24 @@ function Duvidas() {
             Duvidas
           </h1>
           <div class="row">
-            <div
-              class="col-sm-12"
-              style={{ marginBottom: 10, marginTop: 10, cursor: "pointer" }}
-            >
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Special title treatment</h5>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                  <a href="#" class="btn btn-warning">
-                    Saber mais
-                  </a>
+            {duvidas.map((duvida) => (
+              <div
+                class="col-sm-12"
+                style={{ marginBottom: 10, marginTop: 10, cursor: "pointer" }}
+              >
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">{duvida.assunto}</h5>
+                    <p class="card-text">{duvida.descricao}</p>
+                    <a href="#" class="btn btn-warning">
+                      Saber mais
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
+
             <p></p>
-            <div class="col-sm-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Special title treatment</h5>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                  <a href="#" class="btn btn-warning">
-                    Saber mais
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div class="col-sm-12">

@@ -1578,6 +1578,18 @@ module.exports = {
     }
   },
 
+  async getDuvidas(req, res) {
+    try {
+      const duvidas = await Duvida.findAll({
+        attributes: ["id", "username", "assunto", "descricao"],
+      }).then((duvidas) => {
+        res.status(200).json({ duvidas });
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
+
   async delete(req, res) {
     const { pessoa_id } = req.params;
 
