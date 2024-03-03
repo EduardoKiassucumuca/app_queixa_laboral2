@@ -84,7 +84,10 @@ function App() {
         />
         <Route path="/reunioes_queixoso" element={<ReunioesQueixoso />} />
         <Route path="/duvidas" element={<HomeDuvidas />} />
-        <Route path="/detalhesDuvidas" element={<DetalhesDuvidas />} />
+        <Route
+          path="/detalhesDuvidas/:id_duvida"
+          element={<DetalhesDuvidas />}
+        />
       </Routes>
     </Router>
   );

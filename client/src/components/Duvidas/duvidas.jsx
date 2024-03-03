@@ -1,13 +1,20 @@
 import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  MDBBtn,
   MDBCard,
   MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBBtn,
+  MDBCardFooter,
+  MDBCardImage,
+  MDBCol,
+  MDBContainer,
+  MDBIcon,
+  MDBRow,
+  MDBTextArea,
 } from "mdb-react-ui-kit";
+import Footer from "../Footer/footer";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -22,6 +29,7 @@ function Duvidas() {
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
   }
+
   function novaQuestao(e) {
     e.preventDefault();
     axios
@@ -52,31 +60,28 @@ function Duvidas() {
   return (
     <>
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
-        <Container>
-          <h1 style={{ color: "#DAA316", fontSize: 24, fontWeight: "bold" }}>
-            Duvidas
-          </h1>
-          <div class="row">
+        <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
+          <MDBRow className="justify-content-center">
             {duvidas.map((duvida) => (
-              <div
-                class="col-sm-12"
-                style={{ marginBottom: 10, marginTop: 10, cursor: "pointer" }}
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{duvida.assunto}</h5>
-                    <p class="card-text">{duvida.descricao}</p>
-                    <a href="#" class="btn btn-warning">
-                      Saber mais
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <Link to={`/detalhesDuvidas/${duvida.id}`}>
+                <MDBCol md="12" lg="10" xl="12" style={{ cursor: "pointer" }}>
+                  <MDBCard>
+                    <MDBCardBody>
+                      <div className="d-flex flex-start align-items-center">
+                        <div>
+                          <h6 className="fw-bold text-primary mb-1">
+                            {duvida.assunto}
+                          </h6>
+                        </div>
+                      </div>
+
+                      <p className="mt-3 mb-4 pb-2">{duvida.descricao}</p>
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBCol>
+              </Link>
             ))}
-
-            <p></p>
-          </div>
-
+          </MDBRow>
           <div class="col-sm-12">
             <div class="card">
               <div class="card-body">
@@ -117,7 +122,7 @@ function Duvidas() {
               </div>
             </div>
           </div>
-        </Container>
+        </MDBContainer>
       </section>
     </>
   );

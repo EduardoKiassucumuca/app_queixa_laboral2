@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import Menu from "../Navbar/navbar";
 import Footer from "../Footer/footer";
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBCard,
@@ -18,9 +18,26 @@ import {
 } from "mdb-react-ui-kit";
 
 function DetalhesDuvidas() {
+  const [MyDuvida, setMyDuvida] = useState({});
   const navigate = useNavigate();
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
+  }
+  const { id_duvida } = useParams();
+  function getDuvidas(e) {
+    e.preventDefault();
+    axios
+      .get("http://localhost:3001/myDuvida", {
+        params: {
+          duvidaID: id_duvida,
+        },
+      })
+      .then((resposta) => {
+        setMyDuvida(resposta);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
   }
   return (
     <>
@@ -28,7 +45,7 @@ function DetalhesDuvidas() {
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
         <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
           <MDBRow className="justify-content-center">
-            <MDBCol md="12" lg="10" xl="8">
+            <MDBCol md="12" lg="10" xl="12">
               <MDBCard>
                 <MDBCardBody>
                   <div className="d-flex flex-start align-items-center">

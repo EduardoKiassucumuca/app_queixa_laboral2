@@ -1589,7 +1589,19 @@ module.exports = {
       console.log("Error", error);
     }
   },
-
+  async getDetalhesDuvidas(req, res) {
+    try {
+      const { duvidaID } = req.params;
+      const duvidas = await Duvida.findAll({
+        attributes: ["id", "username", "assunto", "descricao"],
+        where: { id: duvidaID },
+      }).then((duvidas) => {
+        res.status(200).json({ duvidas });
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
   async delete(req, res) {
     const { pessoa_id } = req.params;
 
