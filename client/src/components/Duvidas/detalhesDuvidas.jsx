@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Menu from "../Navbar/navbar";
 import Footer from "../Footer/footer";
 import React, { useState } from "react";
@@ -16,29 +16,34 @@ import {
   MDBRow,
   MDBTextArea,
 } from "mdb-react-ui-kit";
+import axios from "axios";
 
 function DetalhesDuvidas() {
   const [MyDuvida, setMyDuvida] = useState({});
   const navigate = useNavigate();
-  function detalhesDuvidas() {
-    navigate("/detalhesDuvidas");
-  }
   const { id_duvida } = useParams();
-  function getDuvidas(e) {
-    e.preventDefault();
-    axios
-      .get("http://localhost:3001/myDuvida", {
+  const getDuvida = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/myDuvida", {
         params: {
           duvidaID: id_duvida,
         },
-      })
-      .then((resposta) => {
-        setMyDuvida(resposta);
-      })
-      .catch((resposta) => {
-        console.log("error", resposta);
       });
+
+      console.log(response.data.duvidas);
+      // Assuming you want to set the data from the response, not the entire response object
+      setMyDuvida(response.data.duvidas);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+  React.useEffect(() => {
+    getDuvida();
+  }, []);
+  function detalhesDuvidas() {
+    navigate("/detalhesDuvidas");
   }
+
   return (
     <>
       <Menu />
@@ -50,16 +55,13 @@ function DetalhesDuvidas() {
                 <MDBCardBody>
                   <div className="d-flex flex-start align-items-center">
                     <div>
-                      <h6 className="fw-bold text-primary mb-1">Assunto1</h6>
+                      <h6 className="fw-bold text-primary mb-1">
+                        {MyDuvida.assunto}
+                      </h6>
                     </div>
                   </div>
 
-                  <p className="mt-3 mb-4 pb-2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip consequat.
-                  </p>
+                  <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
                 </MDBCardBody>
 
                 <MDBCardFooter

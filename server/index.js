@@ -64,7 +64,7 @@ app.get("/queixas_do_queixoso", QueixaController.queixas_do_queixoso);
 app.post("/queixar_mesma_empresa", QueixaController.queixar_mesma_empresa);
 app.post("/queixar_outra_empresa", QueixaController.queixar_outra_empresa);
 app.get("/ler_queixa", QueixaController.ler_queixa);
-app.get("/myDuvida", QueixaController.ler_queixa);
+app.get("/myDuvida", QueixaController.getDetalhesDuvidas);
 app.post("/validar_BI", QueixaController.validarBI);
 app.get("/empresas", QueixaController.getEmpresas);
 app.post("/add_queixa", cpUpload2, QueixaController.add_queixa);

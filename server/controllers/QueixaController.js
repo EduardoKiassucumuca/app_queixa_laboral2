@@ -1591,11 +1591,12 @@ module.exports = {
   },
   async getDetalhesDuvidas(req, res) {
     try {
-      const { duvidaID } = req.params;
-      const duvidas = await Duvida.findAll({
+      const { duvidaID } = req.query;
+      const duvidas = await Duvida.findOne({
         attributes: ["id", "username", "assunto", "descricao"],
         where: { id: duvidaID },
       }).then((duvidas) => {
+        console.log(duvidas);
         res.status(200).json({ duvidas });
       });
     } catch (error) {
