@@ -15,7 +15,8 @@ const path = require("path");
 const Inspector = require("../models/Inspector");
 const Testemunha = require("../models/testemunha");
 const Duvida = require("../models/duvida");
-
+const Comentario = require("../models/comentario.js");
+const { clear } = require("console");
 const tentativa = 0;
 
 module.exports = {
@@ -1591,16 +1592,33 @@ module.exports = {
   },
   async getDetalhesDuvidas(req, res) {
     try {
-      const { duvidaID } = req.query;
-      const duvidas = await Duvida.findOne({
-        attributes: ["id", "username", "assunto", "descricao"],
-        where: { id: duvidaID },
-      }).then((duvidas) => {
-        console.log(duvidas);
-        res.status(200).json({ duvidas });
+      //const { duvidaID } = req.query;
+
+      const comentarios = await Comentario.findAll({
+        attributes: [
+          "id",
+          "duvidaID",
+          "comentario",
+          "username",
+          "data",
+          "status",
+          "tipo_user",
+        ],
+        required: true,
+        include: [
+          {
+            association: "duvida",
+            attributes: ["id", "username", "assunto", "descricao"],
+            required: true,
+          },
+        ],
       });
+
+      //console.log(comentarios);
+      res.status(200).json({ comentarios });
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   },
   async delete(req, res) {

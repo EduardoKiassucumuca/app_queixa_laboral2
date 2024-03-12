@@ -25,8 +25,11 @@ const Comentario = db.define("comentario", {
     type: Sequelize.STRING,
     allowNull: true,
   },
-
-  id_duvida: {
+  tipo_user: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  duvidaID: {
     type: Sequelize.INTEGER,
     references: {
       model: {
@@ -39,11 +42,11 @@ const Comentario = db.define("comentario", {
 });
 
 Duvida.hasMany(Comentario, {
-  foreignkey: "id_duvida",
+  foreignkey: "duvidaID",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
 Comentario.belongsTo(Duvida);
 
-module.exports = Queixa;
+module.exports = Comentario;
