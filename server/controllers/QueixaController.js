@@ -1578,7 +1578,26 @@ module.exports = {
       console.log(error);
     }
   },
+  async novoComentario(req, res) {
+    try {
+      const { username, duvidaID, tipoUser, comentario } = req.body;
+      const data_comentario = new Date();
 
+      const novoComentario = await Comentario.create({
+        username: username,
+        tipo_user: tipoUser,
+        comentario: comentario,
+        data: data_comentario,
+        duvidaID: duvidaID,
+      });
+      return res.status(200).send({
+        status: 1,
+        message: "Hi, note que o seu comentario foi submetido com sucesso!",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async getDuvidas(req, res) {
     try {
       const duvidas = await Duvida.findAll({
