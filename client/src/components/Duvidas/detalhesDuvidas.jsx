@@ -23,7 +23,7 @@ function DetalhesDuvidas() {
   const [comentarios, setComentarios] = useState([]);
   const [username, setUserName] = useState("");
   const [comentario, setComentario] = useState("");
-  const tipo_user = "Normal";
+  let tipo_user;
 
   const navigate = useNavigate();
   const { id_duvida } = useParams();
@@ -39,7 +39,7 @@ function DetalhesDuvidas() {
       .then((resposta) => {
         console.log(resposta);
         alert(resposta.data.message);
-        window.location.href = "/";
+        window.location.href = "/detalhesDuvidas/" + id_duvida;
       })
       .catch((resposta) => {
         console.log("error", resposta);
@@ -62,6 +62,11 @@ function DetalhesDuvidas() {
   };
   React.useEffect(() => {
     getDuvida();
+    if (sessionStorage.getItem("data_inspector")) {
+      tipo_user = "Inspector";
+    } else {
+      tipo_user = "Normal";
+    }
   }, []);
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
