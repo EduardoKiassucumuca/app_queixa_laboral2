@@ -20,6 +20,10 @@ const Duvida = db.define("duvida", {
     type: Sequelize.STRING,
     allowNull: true,
   },
+  status: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Duvida;

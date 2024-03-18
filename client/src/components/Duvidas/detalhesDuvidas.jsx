@@ -64,6 +64,18 @@ function DetalhesDuvidas() {
     getDuvida();
     if (sessionStorage.getItem("data_inspector")) {
       tipo_user = "Inspector";
+      const status = "lida";
+      axios
+        .put("http://localhost:3001/editar_status_duvida", {
+          duvidaID: id_duvida,
+          status: status,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          alert(error);
+        });
     } else {
       tipo_user = "Normal";
     }

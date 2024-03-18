@@ -85,6 +85,7 @@ app.put("/atualizarStatusConta", ContaController.update_tentativa);
 app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
 app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
 app.put("/editar_queixa2", QueixaController.update_queixa2);
+app.put("/editar_status_duvida", QueixaController.update_status_divida);
 
 app.post("/novo_funcionario", FuncionarioController.store);
 app.get("/funcionarios_igt", FuncionarioController.index);

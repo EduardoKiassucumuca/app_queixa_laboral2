@@ -1486,6 +1486,25 @@ module.exports = {
       message: "Queixa editada com sucesso!",
     });
   },
+  async update_status_divida(req, res) {
+    const { duvidaID, status } = req.body;
+
+    await Duvida.update(
+      {
+        status: status,
+      },
+      {
+        where: {
+          id: duvidaID,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      status: 1,
+      message: "Estado da duvida editada com sucesso!",
+    });
+  },
   async update(req, res) {
     try {
       const { id_inspector } = req.body.params;
@@ -1601,7 +1620,7 @@ module.exports = {
   async getDuvidas(req, res) {
     try {
       const duvidas = await Duvida.findAll({
-        attributes: ["id", "username", "assunto", "descricao"],
+        attributes: ["id", "username", "assunto", "descricao", "status"],
       }).then((duvidas) => {
         res.status(200).json({ duvidas });
       });

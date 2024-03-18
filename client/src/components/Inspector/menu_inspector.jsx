@@ -22,6 +22,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import axios from "axios";
+import { right } from "@popperjs/core";
 
 const MenuInspector = () => {
   const [showA, setShowA] = useState(false);
@@ -60,6 +61,9 @@ const MenuInspector = () => {
         console.log("res");
       });
   }, []);
+  function goDetalhesDuvidas(id_duvida) {
+    window.location.href = "/detalhesDuvidas/" + id_duvida;
+  }
   return (
     <>
       <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
@@ -137,15 +141,26 @@ const MenuInspector = () => {
                     }}
                   >
                     <Toast.Header>
-                      <img
-                        src="holder.js/20x20?text=%20"
-                        className="rounded me-2"
-                        alt=""
-                      />
                       <strong className="me-auto">{duvida.username}</strong>
                       <small>11 mins ago</small>
                     </Toast.Header>
-                    <Toast.Body>{duvida.assunto}</Toast.Body>
+                    <Toast.Body>
+                      {duvida.assunto}{" "}
+                      <Badge
+                        bg="warning"
+                        style={{
+                          height: 13,
+                          width: 13,
+                          marginRight: 5,
+                          borderRadius: 10,
+                          float: right,
+                          display:
+                            duvida.status === "lida" ? "none" : "inline-block",
+                        }}
+                      >
+                        {" "}
+                      </Badge>
+                    </Toast.Body>
                   </Toast>
                 </Link>
               ))}
