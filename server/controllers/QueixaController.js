@@ -1630,7 +1630,7 @@ module.exports = {
   },
   async getDetalhesDuvidas(req, res) {
     try {
-      //const { duvidaID } = req.query;
+      const { duvidaID } = req.query;
 
       const comentarios = await Comentario.findAll({
         attributes: [
@@ -1648,12 +1648,17 @@ module.exports = {
             association: "duvida",
             attributes: ["id", "username", "assunto", "descricao"],
             required: true,
+            where: { id: duvidaID },
           },
         ],
       });
 
+      const duvida = await Duvida.findOne({
+        attributes: ["id", "assunto", "descricao", "username", "status"],
+        where: { id: duvidaID },
+      });
       //console.log(comentarios);
-      res.status(200).json({ comentarios });
+      res.status(200).json({ comentarios, duvida });
     } catch (error) {
       console.error("Error:", error);
       res.status(500).json({ error: "Internal Server Error" });

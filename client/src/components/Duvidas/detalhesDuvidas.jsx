@@ -23,7 +23,7 @@ function DetalhesDuvidas() {
   const [comentarios, setComentarios] = useState([]);
   const [username, setUserName] = useState("");
   const [comentario, setComentario] = useState("");
-  let tipo_user;
+  const [tipo_user, setTipoUser] = useState("");
 
   const navigate = useNavigate();
   const { id_duvida } = useParams();
@@ -55,7 +55,7 @@ function DetalhesDuvidas() {
       setComentarios(response.data.comentarios);
       console.log(response.data.comentarios);
       // Assuming you want to set the data from the response, not the entire response object
-      setMyDuvida(response.data.comentarios[0].duvida);
+      setMyDuvida(response.data.duvida);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -63,7 +63,7 @@ function DetalhesDuvidas() {
   React.useEffect(() => {
     getDuvida();
     if (sessionStorage.getItem("data_inspector")) {
-      tipo_user = "Inspector";
+      setTipoUser("Inspector");
       const status = "lida";
       axios
         .put("http://localhost:3001/editar_status_duvida", {
@@ -87,7 +87,7 @@ function DetalhesDuvidas() {
   return (
     <>
       <Menu />
-      <section className="vh-100" style={{ backgroundColor: "#eee" }}>
+      <section className="vh-100" style={{ backgroundColor: "white" }}>
         <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
           <MDBRow className="justify-content-center">
             <MDBCol md="12" lg="10" xl="12">
@@ -104,33 +104,44 @@ function DetalhesDuvidas() {
                   <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
                 </MDBCardBody>
                 {comentarios.map((comentario) => (
-                  <MDBCardFooter
-                    className="py-3 border-0"
-                    style={{ backgroundColor: "#212529" }}
-                  >
-                    <div
-                      className="d-flex flex-start w-100"
-                      style={{ marginLeft: 50 }}
+                  <>
+                    <MDBCardFooter
+                      className="py-3 border-0"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderBottom: "2px solid #ddd",
+                      }}
                     >
-                      <div>
-                        <h6 className="fw-bold text-primary mb-1">
-                          {comentario.username}
-                        </h6>
-                        <p className="text-muted small mb-0">
-                          Shared publicly - {comentario.data}
-                        </p>
-                        <p className="mt-3 mb-4 pb-2">
-                          {comentario.comentario}
-                        </p>
-                      </div>
-                    </div>
+                      <div
+                        className="d-flex flex-start w-100"
+                        style={{ marginLeft: 50 }}
+                      >
+                        <div>
+                          {comentario.tipo_user === "Inspector" ? (
+                            <h6 className="fw-bold text-primary mb-1">
+                              Inspector,{comentario.username} respondeu
+                            </h6>
+                          ) : (
+                            <h6 className="fw-bold text-primary mb-1">
+                              {comentario.username}
+                            </h6>
+                          )}
 
-                    <div className="float-end mt-2 pt-1"></div>
-                  </MDBCardFooter>
+                          <p className="text-muted small mb-0">
+                            Shared publicly - {comentario.data}
+                          </p>
+                          <p className="mt-3 mb-4 pb-2">
+                            {comentario.comentario}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="float-end mt-2 pt-1"></div>
+                    </MDBCardFooter>
+                  </>
                 ))}{" "}
-                <hr />
               </MDBCard>
-              <div class="col-sm-12">
+              <div class="col-sm-12" style={{ marginTop: 5 }}>
                 <div class="card">
                   <div class="card-body">
                     <h5 class="card-title"></h5>

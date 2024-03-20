@@ -14,11 +14,14 @@ import {
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
+import Alert from "react-bootstrap/Alert";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Duvidas() {
+  const [show, setShow] = useState(true);
+
   const [username, setUserName] = useState("");
 
   const [assunto, setAssunto] = useState("");
@@ -41,6 +44,7 @@ function Duvidas() {
       .then((resposta) => {
         console.log(resposta);
         alert(resposta.data.message);
+        window.location.href = "/duvidas";
       })
       .catch((resposta) => {
         console.log("error", resposta);
@@ -59,12 +63,20 @@ function Duvidas() {
   }, []);
   return (
     <>
-      <section className="vh-100" style={{ backgroundColor: "#eee" }}>
+      <section className="" style={{ backgroundColor: "#eee" }}>
+        <div className="p-5 text-center bg-trabalhador">
+          <h1 className="mb-3 h1-queixa">Duvidas</h1>
+        </div>
         <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
           <MDBRow className="justify-content-center">
             {duvidas.map((duvida) => (
               <Link to={`/detalhesDuvidas/${duvida.id}`}>
-                <MDBCol md="12" lg="10" xl="12" style={{ cursor: "pointer" }}>
+                <MDBCol
+                  md="12"
+                  lg="10"
+                  xl="12"
+                  style={{ cursor: "pointer", marginBottom: 5 }}
+                >
                   <MDBCard>
                     <MDBCardBody>
                       <div className="d-flex flex-start align-items-center">
