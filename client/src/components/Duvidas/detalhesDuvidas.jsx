@@ -27,6 +27,34 @@ function DetalhesDuvidas() {
 
   const navigate = useNavigate();
   const { id_duvida } = useParams();
+  let data = "";
+  let nome = "";
+  let sobrenome = "";
+  let perfil = "";
+  React.useEffect(() => {
+    getDuvida();
+    if (sessionStorage.getItem("data_inspector")) {
+      setTipoUser("Inspector");
+      const status = "lida";
+      const savedData = sessionStorage.getItem("data_inspector");
+      data = JSON.parse(savedData);
+      perfil = data.pessoa.nome + " " + data.pessoa.sobrenome;
+      setUserName(perfil);
+      axios
+        .put("http://localhost:3001/editar_status_duvida", {
+          duvidaID: id_duvida,
+          status: status,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    } else {
+      tipo_user = "Normal";
+    }
+  }, []);
   function novoComentario(e) {
     e.preventDefault();
     axios
@@ -60,26 +88,7 @@ function DetalhesDuvidas() {
       console.log("Error fetching data:", error);
     }
   };
-  React.useEffect(() => {
-    getDuvida();
-    if (sessionStorage.getItem("data_inspector")) {
-      setTipoUser("Inspector");
-      const status = "lida";
-      axios
-        .put("http://localhost:3001/editar_status_duvida", {
-          duvidaID: id_duvida,
-          status: status,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          alert(error);
-        });
-    } else {
-      tipo_user = "Normal";
-    }
-  }, []);
+
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
   }
@@ -147,12 +156,16 @@ function DetalhesDuvidas() {
                     <h5 class="card-title"></h5>
                     <p class="card-text">
                       <form onSubmit={novoComentario}>
-                        <input
-                          type="text"
-                          placeholder="Seu nome"
-                          className="form-control"
-                          onChange={(e) => setUserName(e.target.value)}
-                        />
+                        {tipo_user === "Normal" ? (
+                          <input
+                            type="text"
+                            placeholder="Seu nome"
+                            className="form-control"
+                            onChange={(e) => setUserName(e.target.value)}
+                          />
+                        ) : (
+                          <></>
+                        )}
 
                         <textarea
                           id="newsletter1"

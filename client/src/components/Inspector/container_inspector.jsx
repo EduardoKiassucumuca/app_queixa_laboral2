@@ -52,6 +52,7 @@ const ContainerInspector = ({ onSearch }) => {
         setQueixaSelecProv(data.queixas);
 
         setConflitos(data.queixas);
+        console.log(data.queixas);
 
         //console.log(lista_queixa.minha_queixa)
       })
@@ -242,7 +243,11 @@ const ContainerInspector = ({ onSearch }) => {
               </Col>
               <Col md={3}>
                 <small className="text-muted">
-                  <FaCircle className="estado" /> {conflito.estado}
+                  <FaCircle
+                    className="estado"
+                    color={conflito.estado === "Encerrado" ? "red" : ""}
+                  />{" "}
+                  {conflito.estado}
                 </small>
               </Col>
             </Row>

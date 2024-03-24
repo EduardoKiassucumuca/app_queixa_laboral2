@@ -238,7 +238,10 @@ const MaisDetalhes = () => {
                 </Col>
                 <Col md={3}>
                   <small className="text-muted">
-                    <FaCircle className="estado" />
+                    <FaCircle
+                      className="estado"
+                      color={conflito.estado === "Encerrado" ? "red" : ""}
+                    />{" "}
                     {conflito.estado}{" "}
                   </small>
                 </Col>
@@ -333,38 +336,74 @@ const MaisDetalhes = () => {
                   <small className="text-muted-footer">
                     <FaPhone className="footer-nota" /> Inspencção geral do
                     trabalho
-                    <Button
-                      variant="dark"
-                      border="secondary"
-                      type="button"
-                      onClick={salvar_nota}
-                      style={{
-                        borderColor: "#ddd",
-                        marginRight: 7,
-                        float: "right",
-                      }}
-                    >
-                      Salvar nota
-                    </Button>
+                    {conflito.estado === "Encerrado" ? (
+                      <Button
+                        variant="dark"
+                        border="secondary"
+                        type="button"
+                        onClick={salvar_nota}
+                        style={{
+                          borderColor: "#ddd",
+                          marginRight: 7,
+                          float: "right",
+                        }}
+                      >
+                        Salvar nota
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="dark"
+                        border="secondary"
+                        type="button"
+                        onClick={salvar_nota}
+                        style={{
+                          borderColor: "#ddd",
+                          marginRight: 7,
+                          float: "right",
+                        }}
+                      >
+                        Salvar nota
+                      </Button>
+                    )}
                   </small>
                 </Alert>
               </div>
               <p></p>
             </>
           ))}
-          <Button
-            variant="dark"
-            border="secondary"
-            type="button"
-            onClick={() => toggleDisplay()}
-            style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
-          >
-            Agendar reunião
-          </Button>
+          {conflito.estado === "Encerrado" ? (
+            <>
+              <Button
+                variant="dark"
+                border="secondary"
+                type="button"
+                style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
+              >
+                Agendar reunião
+              </Button>
 
-          <Button variant="outline-warning" onClick={() => toggleDisplay2()}>
-            Encerrar
-          </Button>
+              <Button variant="outline-warning">Encerrar</Button>
+            </>
+          ) : (
+            <>
+              {" "}
+              <Button
+                variant="dark"
+                border="secondary"
+                type="button"
+                onClick={() => toggleDisplay()}
+                style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
+              >
+                Agendar reunião
+              </Button>
+              <Button
+                variant="outline-warning"
+                onClick={() => toggleDisplay2()}
+              >
+                Encerrar
+              </Button>
+            </>
+          )}
         </Col>
         <Col md={4} style={{ marginTop: 50 }}>
           <Card
