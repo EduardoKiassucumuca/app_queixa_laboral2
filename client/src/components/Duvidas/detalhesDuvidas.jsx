@@ -51,8 +51,10 @@ function DetalhesDuvidas() {
         .catch(function (error) {
           alert(error);
         });
+      console.log("aqui2");
     } else {
       tipo_user = "Normal";
+      console.log("aqui");
     }
   }, []);
   function novoComentario(e) {
@@ -81,7 +83,7 @@ function DetalhesDuvidas() {
         },
       });
       setComentarios(response.data.comentarios);
-      console.log(response.data.comentarios);
+      console.log(response.data.duvida);
       // Assuming you want to set the data from the response, not the entire response object
       setMyDuvida(response.data.duvida);
     } catch (error) {
@@ -112,43 +114,44 @@ function DetalhesDuvidas() {
 
                   <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
                 </MDBCardBody>
-                {comentarios.map((comentario) => (
-                  <>
-                    <MDBCardFooter
-                      className="py-3 border-0"
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        borderBottom: "2px solid #ddd",
-                      }}
-                    >
-                      <div
-                        className="d-flex flex-start w-100"
-                        style={{ marginLeft: 50 }}
+                {comentarios &&
+                  comentarios.map((comentario) => (
+                    <>
+                      <MDBCardFooter
+                        className="py-3 border-0"
+                        style={{
+                          backgroundColor: "#f8f9fa",
+                          borderBottom: "2px solid #ddd",
+                        }}
                       >
-                        <div>
-                          {comentario.tipo_user === "Inspector" ? (
-                            <h6 className="fw-bold text-primary mb-1">
-                              Inspector,{comentario.username} respondeu
-                            </h6>
-                          ) : (
-                            <h6 className="fw-bold text-primary mb-1">
-                              {comentario.username}
-                            </h6>
-                          )}
+                        <div
+                          className="d-flex flex-start w-100"
+                          style={{ marginLeft: 50 }}
+                        >
+                          <div>
+                            {comentario.tipo_user === "Inspector" ? (
+                              <h6 className="fw-bold text-primary mb-1">
+                                Inspector,{comentario.username} respondeu
+                              </h6>
+                            ) : (
+                              <h6 className="fw-bold text-primary mb-1">
+                                {comentario.username}
+                              </h6>
+                            )}
 
-                          <p className="text-muted small mb-0">
-                            Shared publicly - {comentario.data}
-                          </p>
-                          <p className="mt-3 mb-4 pb-2">
-                            {comentario.comentario}
-                          </p>
+                            <p className="text-muted small mb-0">
+                              Shared publicly - {comentario.data}
+                            </p>
+                            <p className="mt-3 mb-4 pb-2">
+                              {comentario.comentario}
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="float-end mt-2 pt-1"></div>
-                    </MDBCardFooter>
-                  </>
-                ))}{" "}
+                        <div className="float-end mt-2 pt-1"></div>
+                      </MDBCardFooter>
+                    </>
+                  ))}{" "}
               </MDBCard>
               <div class="col-sm-12" style={{ marginTop: 5 }}>
                 <div class="card">

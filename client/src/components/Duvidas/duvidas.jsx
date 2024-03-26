@@ -118,7 +118,7 @@ function Duvidas() {
                         type="text"
                         rows="4"
                         class="form-control"
-                        placeholder="Alguma Questao"
+                        placeholder="Submeta algum pedido de conselho, duvidas e muito mais ..."
                         onChange={(e) => setDescricao(e.target.value)}
                       />
                       <p></p>
