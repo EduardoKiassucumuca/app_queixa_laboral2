@@ -406,8 +406,8 @@ const ContainerChefeServicos = ({ onSearch }) => {
           queixa={conflito_selec}
           inspector={inspectores}
         />
-        <Col md={12}>
-          <table class="table table-striped table-responsive table-dark">
+        <Col md={12} style={{ marginTop: 5 }}>
+          <table class="table table-striped table-responsive">
             <thead>
               <tr>
                 <th scope="col">#</th>

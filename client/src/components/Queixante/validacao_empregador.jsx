@@ -58,35 +58,27 @@ const ValidacaoEmpregador = () => {
   const validar_NIF = (e) => {
     e.preventDefault();
     localStorage.clear();
-    if (myData.empresa.nif !== undefined) {
-      localStorage.setItem("empregador", JSON.stringify(myData));
-      console.log(myData);
+    console.log(myData);
 
-      navigate("/queixar_trabalhador");
-    } else {
-      Axios.post("http://localhost:3001/validar_NIF", {
-        _nif: NIF,
+    Axios.post("http://localhost:3001/validar_NIF", {
+      _nif: NIF,
+    })
+      .then((res) => {
+        //console.log(res.data.queixoso)
+        setAlert(res.data.msg);
+        toggleDisplay();
+        setQueixoso(true);
+        localStorage.setItem("empregador", JSON.stringify(res.data.empregador));
+
+        //navigate("/queixar_empregad");
       })
-        .then((res) => {
-          //console.log(res.data.queixoso)
-          setAlert(res.data.msg);
-          toggleDisplay();
-          setQueixoso(true);
-          localStorage.setItem(
-            "empregador",
-            JSON.stringify(res.data.empregador)
-          );
+      .catch((res) => {
+        //console.log(res.response.data.msg);
+        setAlert(res.response.data.msg);
 
-          //navigate("/queixar_empregad");
-        })
-        .catch((res) => {
-          //console.log(res.response.data.msg);
-          setAlert(res.response.data.msg);
-
-          toggleDisplay();
-          setQueixoso(false);
-        });
-    }
+        toggleDisplay();
+        setQueixoso(false);
+      });
   };
   //console.log(localStorage.getItem("trabalhador"));
   let formComponents = [];

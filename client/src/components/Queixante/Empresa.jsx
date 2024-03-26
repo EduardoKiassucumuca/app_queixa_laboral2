@@ -18,7 +18,7 @@ const Empresa = ({ data, updateFielHndler }) => {
   React.useEffect(() => {}, []);
   return (
     <>
-      {novoEmpregador.NIF ? (
+      {novoEmpregador && novoEmpregador.NIF ? (
         <h3 className="h3-cTrabalhador">
           {" "}
           Olá,{" "}

@@ -125,7 +125,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             overlay={popover}
             rootClose
           >
-            <Button variant="warning">Nova Queixa</Button>
+            <Button variant="warning">Queixar entidade</Button>
           </OverlayTrigger>
         </Col>
         <Col md={2}>
@@ -167,8 +167,11 @@ const ContainerRecepcionista = ({ onSearch }) => {
           queixa={detalhes_queixa}
         />
 
-        <Col md={12}>
-          <table class="table table-striped table-responsive table-dark">
+        <Col md={12} style={{ marginTop: 5 }}>
+          <table
+            class="table table-striped table-responsive "
+            style={{ color: "white !important" }}
+          >
             <thead>
               <tr>
                 <th scope="col">#</th>

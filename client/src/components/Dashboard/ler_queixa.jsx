@@ -95,7 +95,8 @@ const LerQueixa = () => {
           //console.log(response);
           toggleDisplay2();
           //window.location.href = '/chefe_servicos';
-          console.log(response);
+          alert("Queixa editada com sucesso");
+          window.location.href = "/ler_queixa/" + conflito.id;
         })
         .catch(function (error) {
           alert(error);
@@ -111,8 +112,8 @@ const LerQueixa = () => {
         .then(function (response) {
           //console.log(response);
           toggleDisplay2();
-          //window.location.href = '/chefe_servicos';
-          console.log(response);
+          alert("Queixa editada com sucesso");
+          window.location.href = "/ler_queixa/" + conflito.id;
         })
         .catch(function (error) {
           alert(error);
