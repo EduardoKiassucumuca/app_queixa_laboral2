@@ -173,6 +173,11 @@ const MaisDetalhes = () => {
       FileDownload(res.data, filename);
     });
   };
+  function goNovaReuniaoEmpregador() {
+    console.log(conflito);
+    localStorage.setItem("data_queixa", conflito);
+    window.location.href = "/nova_reuniao_empregador";
+  }
   React.useEffect(() => {
     getQueixa();
     getNotas();
@@ -470,11 +475,9 @@ const MaisDetalhes = () => {
           <br />
           <p>Agendar reunião com?</p>
           <div class="modal-footer">
-            <Link to="/nova_reuniao_empregador">
-              <Button variant="warning" onClick={toggleDisplay}>
-                Empregador
-              </Button>
-            </Link>
+            <Button variant="warning" onClick={goNovaReuniaoEmpregador}>
+              Empregador
+            </Button>
             ou
             <Link to="/nova_reuniao">
               <Button className="btn btn-dark"> Trabalhador</Button>

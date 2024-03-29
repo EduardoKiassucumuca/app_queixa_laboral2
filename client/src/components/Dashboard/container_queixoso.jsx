@@ -12,11 +12,25 @@ import { Link } from "react-router-dom";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import { useNavigate } from "react-router-dom";
 
+function calcularTempoTransacao(tempoTransacao) {
+  //console.log(tempoTransacao);
+  const tempoAtual = new Date(); // Obtém o tempo atual
+  const diferencaTempo = tempoAtual - Date(tempoTransacao); // Calcula a diferença de tempo em milissegundos
+
+  console.log(Date(tempoTransacao));
+  // Calcula horas, minutos e segundos
+  const horas = Math.floor(diferencaTempo / (1000 * 60 * 60));
+  const minutos = Math.floor((diferencaTempo % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((diferencaTempo % (1000 * 60)) / 1000);
+
+  return { horas, minutos, segundos };
+}
 const Container_queixoso = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [queixas, setQueixas] = useState([]);
   const [showModal2, setShowModal2] = useState(false);
+  const [tempoTransacao, setTempoTransacao] = useState("");
 
   let data = "";
   let id_queixoso = "";
@@ -44,6 +58,7 @@ const Container_queixoso = () => {
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
     //console.log("ok");
+
     Axios.get("http://localhost:3001/queixas_do_queixoso", {
       params: {
         queixosoID: id_queixoso,
@@ -100,10 +115,19 @@ const Container_queixoso = () => {
           border="secondary"
           text="warning"
           className="card-queixas-queixoso"
+          style={{
+            marginBottom: 25,
+            opacity:
+              conflito.estado === "Encerrado" || conflito.estado === "tribunal"
+                ? 0.5
+                : conflito.estado === "Analise"
+                ? 1
+                : 1,
+          }}
         >
-          <div class="ribbon">
-            <span>New</span>
-          </div>
+          {/* <div class="ribbon">
+            <span style={{ backgroundColor: "white" }}>New</span>
+      </div>*/}
           <Card.Body>
             <Link
               className="link-queixa-queixoso"
@@ -117,22 +141,48 @@ const Container_queixoso = () => {
           <Card.Footer>
             <Row>
               <Col md={3}>
-                <small className="text-muted">Last updated 3 mins ago </small>
+                <small className="text-muted">
+                  Last updated{" "}
+                  {`Tempo desde a transação: ${
+                    calcularTempoTransacao(conflito.created_at).horas
+                  } horas, ${
+                    calcularTempoTransacao(conflito.created_at).minutos
+                  } minutos e ${
+                    calcularTempoTransacao(conflito.created_at).segundos
+                  } segundos.`}{" "}
+                </small>
               </Col>
 
-              <Col md={3}>
+              <Col md={4}>
                 <small className="text-muted">
                   {" "}
                   <FaUser />
-                  <span>Inspector: </span> Não atribuido
+                  <span>Queixante: </span>{" "}
+                  {conflito.Empresa.tipo === "queixante"
+                    ? conflito.Empresa.nome_empresa
+                    : conflito.Trabalhador.tipo === "queixante"
+                    ? conflito.Trabalhador.Pessoa.nome +
+                      conflito.Trabalhador.Pessoa.sobrenome
+                    : ""}
                 </small>
               </Col>
-              <Col md={3}>
+              <Col md={2}>
                 <small className="text-muted">{conflito.provincia}</small>
               </Col>
               <Col md={3}>
                 <small className="text-muted">
-                  <FaCircle className="estado" /> {conflito.estado}
+                  <FaCircle
+                    className="estado"
+                    color={
+                      conflito.estado === "Encerrado" ||
+                      conflito.estado === "tribunal"
+                        ? "red"
+                        : conflito.estado === "Analise"
+                        ? "yellow"
+                        : ""
+                    }
+                  />{" "}
+                  {conflito.estado}
                 </small>
               </Col>
             </Row>

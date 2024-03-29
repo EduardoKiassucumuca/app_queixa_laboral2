@@ -150,8 +150,44 @@ module.exports = {
           "provincia",
           "estado",
           "url_file_contrato",
+          "created_at",
         ],
-        where: { queixosoID: queixosoID },
+        required: true,
+        include: [
+          {
+            association: "Empresa",
+            required: true,
+            attributes: [
+              "id",
+              "nome_empresa",
+              "nif",
+              "designacao",
+              "url_website",
+              "email",
+              "tipo",
+            ],
+          },
+          {
+            association: "Trabalhador",
+            required: true,
+
+            include: [
+              {
+                association: "Pessoa",
+                required: true,
+                include: [
+                  {
+                    association: "BI",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        where: {
+          queixosoID: queixosoID,
+        },
       });
       //console.log(queixas);
       res.status(200).json({ queixas });
@@ -173,9 +209,44 @@ module.exports = {
           "provincia",
           "estado",
           "url_file_contrato",
-          "modo",
+          "created_at",
         ],
-        where: { id: id_queixa },
+        required: true,
+        include: [
+          {
+            association: "Empresa",
+            required: true,
+            attributes: [
+              "id",
+              "nome_empresa",
+              "nif",
+              "designacao",
+              "url_website",
+              "email",
+              "tipo",
+            ],
+          },
+          {
+            association: "Trabalhador",
+            required: true,
+
+            include: [
+              {
+                association: "Pessoa",
+                required: true,
+                include: [
+                  {
+                    association: "BI",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        where: {
+          id: id_queixa,
+        },
       });
 
       //const serverPath = path.join(__dirname, 'uploads', queixas[0].url_file_contrato);

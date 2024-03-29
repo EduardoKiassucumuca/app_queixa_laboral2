@@ -164,7 +164,7 @@ const LerQueixa = () => {
         setAssunto(data.queixas[0].assunto);
         setDescricao(data.queixas[0].facto);
         setmodo(data.queixas[0].modo);
-
+        console.log(data.queixas[0]);
         setServerPath(data.normalizePath);
         //console.log(res);
         //console.log(lista_queixa.minha_queixa)
@@ -219,9 +219,9 @@ const LerQueixa = () => {
             text="warning"
             className="card-queixas-queixoso"
           >
-            <div class="ribbon">
+            {/*<div class="ribbon">
               <span>New</span>
-            </div>
+  </div>*/}
             <Card.Body className="body-facto-queixa">
               <Card.Title>
                 {conflito.id} - {conflito.assunto}
@@ -235,19 +235,35 @@ const LerQueixa = () => {
                   <small className="text-muted">Last updated 3 mins ago </small>
                 </Col>
 
-                <Col md={3}>
+                <Col md={4}>
                   <small className="text-muted">
                     {" "}
                     <FaUser />
-                    <span>Inspector: </span> Não atribuido{" "}
+                    <span>Queixante: </span>{" "}
+                    {conflito.Empresa?.tipo === "queixante"
+                      ? conflito.Empresa?.nome_empresa
+                      : conflito.Trabalhador?.tipo === "queixante"
+                      ? conflito.Trabalhador?.Pessoa?.nome +
+                        conflito.Trabalhador?.Pessoa?.sobrenome
+                      : ""}
                   </small>
                 </Col>
-                <Col md={3}>
+                <Col md={2}>
                   <small className="text-muted">{conflito.provincia}</small>
                 </Col>
                 <Col md={3}>
                   <small className="text-muted">
-                    <FaCircle className="estado" />
+                    <FaCircle
+                      className="estado"
+                      color={
+                        conflito.estado === "Encerrado" ||
+                        conflito.estado === "tribunal"
+                          ? "red"
+                          : conflito.estado === "Analise"
+                          ? "yellow"
+                          : ""
+                      }
+                    />
                     {conflito.estado}{" "}
                   </small>
                 </Col>
@@ -281,9 +297,40 @@ const LerQueixa = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Col md={5} style={{ marginTop: 50 }}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="white"
+            className="card-queixas-queixoso"
+          >
+            <Card.Header style={{ color: "#ffc107" }}>
+              Nota de encerramento{" "}
+            </Card.Header>
+            <Card.Body>
+              <>
+                <Card.Title>
+                  {" "}
+                  <small></small>
+                  <p></p>
+                </Card.Title>
+                <Card.Text>
+                  {" "}
+                  <p
+                    className="text-muted"
+                    style={{ color: "#cdd9e5 !important" }}
+                  >
+                    {conflito?.nota}
+                  </p>
+                  <hr />
+                </Card.Text>
+              </>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
       <p></p>
-      <Alert variant="warning" className="nota-queixa">
+      {/* <Alert variant="warning" className="nota-queixa">
         <Alert.Heading>Hi, {perfil}</Alert.Heading>
         <p>
           Recebemos a sua queixa e estamos trabalhando para que consigamos
@@ -294,16 +341,7 @@ const LerQueixa = () => {
         <small className="text-muted-footer">
           <FaPhone className="footer-nota" /> Inspencção geral do trabalho
         </small>
-      </Alert>
-
-      <Button
-        variant="warning"
-        onClick={queixar}
-        className="fw-bold btn-nova-queixa"
-        type="submit"
-      >
-        Nova Queixa
-      </Button>
+                    </Alert>*/}
 
       <div id="myModal" class="modal" style={{ display: displayStyle }}>
         <div class="modal-content">
@@ -400,14 +438,28 @@ const LerQueixa = () => {
           </div>
         </div>
       </div>
-      <Button
-        variant="warning"
-        onClick={toggleDisplay}
-        className="fw-bold btn-nova-queixa"
-        type="button"
-      >
-        Editar queixa
-      </Button>
+      {conflito.estado === "Encerrado" || conflito.estado === "tribunal" ? (
+        <Button
+          variant="warning"
+          onClick={toggleDisplay}
+          className="fw-bold btn-nova-queixa"
+          type="button"
+          style={{ marginLeft: 75 }}
+          disabled
+        >
+          Editar queixa
+        </Button>
+      ) : (
+        <Button
+          variant="warning"
+          onClick={toggleDisplay}
+          className="fw-bold btn-nova-queixa"
+          type="button"
+          style={{ marginLeft: 75 }}
+        >
+          Editar queixa
+        </Button>
+      )}
     </>
   );
 };

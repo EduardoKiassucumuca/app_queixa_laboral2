@@ -28,10 +28,14 @@ function NovaReuniaoEmpregador(props) {
     );
   };
   let data = {};
-  if (localStorage.getItem("data_queixa")) {
-    const savedData = localStorage.getItem("data_queixa");
-    data = JSON.parse(savedData);
-  }
+  React.useEffect(() => {
+    if (localStorage.getItem("data_queixa")) {
+      const savedData = localStorage.getItem("data_queixa");
+      data = JSON.parse(savedData);
+      console.log(data);
+    }
+    console.log(JSON.parse(localStorage.getItem("data_queixa")));
+  }, []);
   const agendar_reuniao = (e) => {
     e.preventDefault();
     Axios.post("http://localhost:3001/nova_reuniao_empregador", {
@@ -124,7 +128,7 @@ function NovaReuniaoEmpregador(props) {
                       id="trabalhador"
                       style={{ padding: "2px" }}
                       disabled
-                      value={data.Empresa.nome_empresa}
+                      value={""}
                     />
                   </FloatingLabel>
                 </Col>

@@ -1,106 +1,107 @@
 .row-queixoso {
-    margin-left: 5%;
-    width: auto;
+  margin-left: 5%;
+  width: auto;
 }
 
 .btn-nova-queixa {
-    margin-left: 67px;
-    margin-bottom: 5px;
+  margin-left: 67px;
+  margin-bottom: 5px;
 }
 
 .card-queixas-queixoso {
-    margin-left: 67px;
+  margin-left: 67px;
 }
 
 .text-queixa {
-    color: white;
+  color: white;
 }
 
-.text-muted-provincia {}
+.text-muted-provincia {
+}
 
 .text-muted-estado {
-    text-align: center;
+  text-align: center;
 }
 
 .link-queixa-queixoso {
-    color: #DAA316;
-    text-decoration: none;
+  color: #daa316;
+  text-decoration: none;
 }
 
 .link-queixa-queixoso:hover {
-    color: #DAA316;
+  color: #daa316;
 }
 
 .ribbon {
-    position: absolute;
-    right: -1px;
-    top: -5px;
-    z-index: 1;
-    overflow: hidden;
-    width: 90px;
-    height: 90px;
-    text-align: right;
+  position: absolute;
+  right: -1px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 90px;
+  height: 90px;
+  text-align: right;
 }
 
 .ribbon span {
-    font-size: 0.8rem;
-    color: #fff;
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: bold;
-    line-height: 32px;
-    transform: rotate(45deg);
-    width: 125px;
-    display: block;
-    background: #DAA316;
-    background: linear-gradient(#DAA316 0%, #DAA316 100%);
-    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-    position: absolute;
-    top: 17px;
-    right: -29px;
+  font-size: 0.8rem;
+  /*color: #fff;*/
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  line-height: 32px;
+  transform: rotate(45deg);
+  width: 125px;
+  display: block;
+  /*background: #DAA316;*/
+  /*background: linear-gradient(#DAA316 0%, #DAA316 100%);*/
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 17px;
+  right: -29px;
 }
 
 .ribbon span::before {
-    content: '';
-    position: absolute;
-    left: 0px;
-    top: 100%;
-    z-index: -1;
-    border-left: 3px solid #DAA316;
-    border-right: 3px solid transparent;
-    border-bottom: 3px solid transparent;
-    border-top: 3px solid #DAA316;
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #daa316;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #daa316;
 }
 
 .ribbon span::after {
-    content: '';
-    position: absolute;
-    right: 0%;
-    top: 100%;
-    z-index: -1;
-    border-right: 3px solid #DAA316;
-    border-left: 3px solid transparent;
-    border-bottom: 3px solid transparent;
-    border-top: 3px solid #DAA316;
+  content: "";
+  position: absolute;
+  right: 0%;
+  top: 100%;
+  z-index: -1;
+  border-right: 3px solid #daa316;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #daa316;
 }
 
 .estado {
-    color: #0d6efd;
+  color: #0d6efd;
 }
 
 .body-facto-queixa {
-    padding-bottom: 50px;
+  padding-bottom: 50px;
 }
 
 .nota-queixa {
-    margin: 0;
-    margin-left: 69px;
+  margin: 0;
+  margin-left: 69px;
 }
 
 .text-muted-footer {
-    color: dark;
+  color: dark;
 }
-.ler-queixa{
-    margin: 0;
-    padding: 0;
+.ler-queixa {
+  margin: 0;
+  padding: 0;
 }
