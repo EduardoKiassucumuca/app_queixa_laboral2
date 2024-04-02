@@ -140,20 +140,11 @@ const Container_queixoso = () => {
           </Card.Body>
           <Card.Footer>
             <Row>
-              <Col md={3}>
-                <small className="text-muted">
-                  Last updated{" "}
-                  {`Tempo desde a transação: ${
-                    calcularTempoTransacao(conflito.created_at).horas
-                  } horas, ${
-                    calcularTempoTransacao(conflito.created_at).minutos
-                  } minutos e ${
-                    calcularTempoTransacao(conflito.created_at).segundos
-                  } segundos.`}{" "}
-                </small>
+              <Col md={4}>
+                <small className="text-muted">{conflito.created_at}</small>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <small className="text-muted">
                   {" "}
                   <FaUser />

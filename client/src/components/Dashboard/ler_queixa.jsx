@@ -99,7 +99,7 @@ const LerQueixa = () => {
           window.location.href = "/ler_queixa/" + conflito.id;
         })
         .catch(function (error) {
-          alert(error);
+          console.log(error);
         });
     } else {
       Axios.put("http://localhost:3001/editar_queixa2", {
@@ -116,7 +116,7 @@ const LerQueixa = () => {
           window.location.href = "/ler_queixa/" + conflito.id;
         })
         .catch(function (error) {
-          alert(error);
+          console.log(error);
         });
     }
   }
@@ -232,7 +232,7 @@ const LerQueixa = () => {
             <Card.Footer>
               <Row>
                 <Col md={3}>
-                  <small className="text-muted">Last updated 3 mins ago </small>
+                  <small className="text-muted">{conflito.created_at}</small>
                 </Col>
 
                 <Col md={4}>

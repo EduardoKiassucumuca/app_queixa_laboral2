@@ -37,6 +37,7 @@ module.exports = {
           "empresaID",
           "trabalhadorID",
           "url_file_contrato",
+          "modo",
           "nota",
         ],
         required: true,
@@ -111,6 +112,7 @@ module.exports = {
               "facto",
               "provincia",
               "estado",
+              "modo",
               "empresaID",
               "trabalhadorID",
               "url_file_contrato",
@@ -149,6 +151,7 @@ module.exports = {
           "facto",
           "provincia",
           "estado",
+          "modo",
           "url_file_contrato",
           "created_at",
         ],
@@ -208,6 +211,7 @@ module.exports = {
           "facto",
           "provincia",
           "estado",
+          "modo",
           "url_file_contrato",
           "created_at",
         ],
@@ -1691,7 +1695,14 @@ module.exports = {
   async getDuvidas(req, res) {
     try {
       const duvidas = await Duvida.findAll({
-        attributes: ["id", "username", "assunto", "descricao", "status"],
+        attributes: [
+          "id",
+          "username",
+          "assunto",
+          "descricao",
+          "status",
+          "resposta",
+        ],
       }).then((duvidas) => {
         res.status(200).json({ duvidas });
       });
@@ -1703,33 +1714,19 @@ module.exports = {
     try {
       const { duvidaID } = req.query;
 
-      const comentarios = await Comentario.findAll({
+      const duvida = await Duvida.findOne({
         attributes: [
           "id",
-          "duvidaID",
-          "comentario",
+          "assunto",
+          "descricao",
           "username",
-          "data",
           "status",
-          "tipo_user",
+          "resposta",
         ],
-        required: true,
-        include: [
-          {
-            association: "duvida",
-            attributes: ["id", "username", "assunto", "descricao"],
-            required: true,
-            where: { id: duvidaID },
-          },
-        ],
-      });
-
-      const duvida = await Duvida.findOne({
-        attributes: ["id", "assunto", "descricao", "username", "status"],
         where: { id: duvidaID },
       });
       //console.log(comentarios);
-      res.status(200).json({ comentarios, duvida });
+      res.status(200).json({ duvida });
     } catch (error) {
       console.error("Error:", error);
       res.status(500).json({ error: "Internal Server Error" });
