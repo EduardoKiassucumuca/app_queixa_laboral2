@@ -53,7 +53,7 @@ function DetalhesDuvidas() {
         });
       console.log("aqui2");
     } else {
-      tipo_user = "Normal";
+      setTipoUser("Normal");
       console.log("aqui");
     }
   }, []);
@@ -106,13 +106,11 @@ function DetalhesDuvidas() {
                 <MDBCardBody>
                   <div className="d-flex flex-start align-items-center">
                     <div>
-                      <h6 className="fw-bold text-primary mb-1">
-                        {MyDuvida.assunto}
-                      </h6>
+                      <h6 className="fw-bold text-primary mb-1"></h6>
                     </div>
                   </div>
 
-                  <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
+                  <p className="mt-3 mb-4 pb-2"></p>
                 </MDBCardBody>
 
                 <>
@@ -128,12 +126,14 @@ function DetalhesDuvidas() {
                       style={{ marginLeft: 50 }}
                     >
                       <div>
-                        <h6 className="fw-bold text-primary mb-1"></h6>
+                        <h6 className="fw-bold text-primary mb-1">
+                          {MyDuvida.assunto}
+                        </h6>
 
                         <p className="text-muted small mb-0">
-                          Shared publicly -
+                          Shared publicly - {MyDuvida.username}
                         </p>
-                        <p className="mt-3 mb-4 pb-2"></p>
+                        <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
                       </div>
                     </div>
 
@@ -148,30 +148,31 @@ function DetalhesDuvidas() {
                     <p class="card-text">
                       <form onSubmit={novoComentario}>
                         {tipo_user === "Normal" ? (
-                          <input
-                            type="text"
-                            placeholder="Seu nome"
-                            className="form-control"
-                            onChange={(e) => setUserName(e.target.value)}
-                          />
+                          <>{MyDuvida.resposta}</>
                         ) : (
-                          <></>
+                          <>
+                            <input
+                              type="text"
+                              placeholder="Seu nome"
+                              className="form-control"
+                              onChange={(e) => setUserName(e.target.value)}
+                            />
+                            <textarea
+                              id="newsletter1"
+                              type="text"
+                              rows="4"
+                              class="form-control"
+                              placeholder="Comentario..."
+                              onChange={(e) => setComentario(e.target.value)}
+                            />
+                            <button
+                              class="btn btn-warning fw-bold btn-comentar"
+                              type="submit"
+                            >
+                              Comentar
+                            </button>
+                          </>
                         )}
-
-                        <textarea
-                          id="newsletter1"
-                          type="text"
-                          rows="4"
-                          class="form-control"
-                          placeholder="Comentario..."
-                          onChange={(e) => setComentario(e.target.value)}
-                        />
-                        <button
-                          class="btn btn-warning fw-bold btn-comentar"
-                          type="submit"
-                        >
-                          Comentar
-                        </button>
                       </form>
                     </p>
                   </div>
