@@ -20,6 +20,10 @@ function NovaReuniaoEmpregador(props) {
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [data, setData] = useState({});
+  const [conflitoID, setConflitoID] = useState(0);
+  const [empresaID, setEmpresaID] = useState(0);
+
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
@@ -27,14 +31,11 @@ function NovaReuniaoEmpregador(props) {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
-  let data = {};
+
   React.useEffect(() => {
-    if (localStorage.getItem("data_queixa")) {
-      const savedData = localStorage.getItem("data_queixa");
-      data = JSON.parse(savedData);
-      console.log(data);
-    }
-    console.log(JSON.parse(localStorage.getItem("data_queixa")));
+    setConflitoID(localStorage?.getItem("id_queixa"));
+    setEmpresaID(localStorage?.getItem("id_empresa"));
+    //console.log(JSON.parse(localStorage.getItem("data_queixa")));
   }, []);
   const agendar_reuniao = (e) => {
     e.preventDefault();
@@ -44,8 +45,8 @@ function NovaReuniaoEmpregador(props) {
       _data: date,
       _hora: hora,
       _obs: obs,
-      fk_queixa: data.id,
-      fk_empregador: data.Empresa.id,
+      fk_queixa: conflitoID,
+      fk_empregador: empresaID,
     })
       .then((resposta) => {
         //setAlert(resposta.data.message);

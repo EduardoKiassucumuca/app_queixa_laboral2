@@ -16,15 +16,18 @@ function NovaReuniao(props) {
   const [hora, setHora] = useState("");
   const [obs, setOBS] = useState("");
   const [displayStyle, setDisplayStyle] = useState("none");
-
+  const [conflitoID, setConflitoID] = useState(0);
+  const [trabalhadorID, setTrabalhadorID] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
   let data = {};
-  if (localStorage.getItem("data_queixa")) {
-    const savedData = localStorage.getItem("data_queixa");
-    data = JSON.parse(savedData);
-  }
+  React.useEffect(() => {
+    setConflitoID(localStorage?.getItem("id_queixa"));
+    setTrabalhadorID(localStorage?.getItem("id_trabalhador"));
+    console.log(trabalhadorID);
+    //console.log(JSON.parse(localStorage.getItem("data_queixa")));
+  }, []);
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
@@ -40,8 +43,8 @@ function NovaReuniao(props) {
       _data: date,
       _hora: hora,
       _obs: obs,
-      fk_queixa: data.id,
-      fk_trabalhador: data.Trabalhador.id,
+      fk_queixa: conflitoID,
+      fk_trabalhador: trabalhadorID,
     })
       .then((resposta) => {
         setAlert(resposta.data.message);
@@ -123,11 +126,6 @@ function NovaReuniao(props) {
                       id="trabalhador"
                       style={{ padding: "2px" }}
                       disabled
-                      value={
-                        data.Trabalhador.Pessoa.nome +
-                        " " +
-                        data.Trabalhador.Pessoa.sobrenome
-                      }
                     />
                   </FloatingLabel>
                 </Col>

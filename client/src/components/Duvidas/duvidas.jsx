@@ -51,6 +51,7 @@ function Duvidas() {
       });
   }
   useEffect(() => {
+    sessionStorage.removeItem("data_inspector");
     axios
       .get("http://localhost:3001/duvidas")
       .then(({ data }) => {

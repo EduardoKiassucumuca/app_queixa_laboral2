@@ -175,13 +175,22 @@ const MaisDetalhes = () => {
   };
   function goNovaReuniaoEmpregador() {
     console.log(conflito);
-    localStorage.setItem("data_queixa", conflito);
+    localStorage.setItem("id_queixa", conflito.id);
+    localStorage.setItem("id_empresa", conflito.Empresa.id);
+
     window.location.href = "/nova_reuniao_empregador";
+  }
+  function goNovaReuniaoTrabalhador() {
+    localStorage.setItem("id_queixa", conflito.id);
+    localStorage.setItem("id_trabalhador", conflito.Trabalhador.id);
+
+    window.location.href = "/nova_reuniao";
   }
   React.useEffect(() => {
     getQueixa();
     getNotas();
     getMudancas();
+    console.log(conflito);
   }, [id_queixa]);
   let data = "";
   let nome = "";
@@ -479,9 +488,9 @@ const MaisDetalhes = () => {
               Empregador
             </Button>
             ou
-            <Link to="/nova_reuniao">
-              <Button className="btn btn-dark"> Trabalhador</Button>
-            </Link>
+            <Button className="btn btn-dark" onClick={goNovaReuniaoTrabalhador}>
+              Trabalhador
+            </Button>
           </div>
         </div>
       </div>

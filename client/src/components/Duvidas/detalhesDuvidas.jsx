@@ -22,7 +22,7 @@ function DetalhesDuvidas() {
   const [MyDuvida, setMyDuvida] = useState({});
   const [comentarios, setComentarios] = useState([]);
   const [username, setUserName] = useState("");
-  const [comentario, setComentario] = useState("");
+  const [resposta, setResposta] = useState();
   const [tipo_user, setTipoUser] = useState("");
 
   const navigate = useNavigate();
@@ -33,6 +33,8 @@ function DetalhesDuvidas() {
   let perfil = "";
   React.useEffect(() => {
     getDuvida();
+    setResposta(MyDuvida.resposta);
+
     if (sessionStorage.getItem("data_inspector")) {
       setTipoUser("Inspector");
       const status = "lida";
@@ -56,14 +58,12 @@ function DetalhesDuvidas() {
       setTipoUser("Normal");
       console.log("aqui");
     }
-  }, []);
-  function novoComentario(e) {
+  }, [resposta]);
+  function responder(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/novo_comentario", {
-        username: username,
-        tipoUser: tipo_user,
-        comentario: comentario,
+      .post("http://localhost:3001/nova_resposta", {
+        resposta: resposta,
         duvidaID: id_duvida,
       })
       .then((resposta) => {
@@ -134,6 +134,11 @@ function DetalhesDuvidas() {
                           Shared publicly - {MyDuvida.username}
                         </p>
                         <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
+                        {tipo_user !== "Normal" ? (
+                          <p style={{ color: "green" }}>{MyDuvida.resposta}</p>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
 
@@ -146,31 +151,47 @@ function DetalhesDuvidas() {
                   <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text">
-                      <form onSubmit={novoComentario}>
+                      <form onSubmit={responder}>
                         {tipo_user === "Normal" ? (
                           <>{MyDuvida.resposta}</>
                         ) : (
                           <>
-                            <input
-                              type="text"
-                              placeholder="Seu nome"
-                              className="form-control"
-                              onChange={(e) => setUserName(e.target.value)}
-                            />
-                            <textarea
-                              id="newsletter1"
-                              type="text"
-                              rows="4"
-                              class="form-control"
-                              placeholder="Comentario..."
-                              onChange={(e) => setComentario(e.target.value)}
-                            />
-                            <button
-                              class="btn btn-warning fw-bold btn-comentar"
-                              type="submit"
-                            >
-                              Comentar
-                            </button>
+                            {MyDuvida.resposta === undefined ? (
+                              <>
+                                <textarea
+                                  id="newsletter1"
+                                  type="text"
+                                  rows="4"
+                                  class="form-control"
+                                  placeholder="Resposta..."
+                                  onChange={(e) => setResposta(e.target.value)}
+                                />
+                                <button
+                                  class="btn btn-warning fw-bold btn-comentar"
+                                  type="submit"
+                                >
+                                  Responder
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <textarea
+                                  id="newsletter1"
+                                  type="text"
+                                  rows="4"
+                                  class="form-control"
+                                  placeholder="Resposta..."
+                                  value={resposta}
+                                  onChange={(e) => setResposta(e.target.value)}
+                                />
+                                <button
+                                  class="btn btn-warning fw-bold btn-comentar"
+                                  type="submit"
+                                >
+                                  Editar
+                                </button>
+                              </>
+                            )}
                           </>
                         )}
                       </form>
