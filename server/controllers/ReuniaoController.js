@@ -1,242 +1,233 @@
-const Pessoa = require('../models/pessoa');
-const Reuniao = require('../models/reuniao');
-const { where } = require('sequelize');
+const Pessoa = require("../models/pessoa");
+const Reuniao = require("../models/reuniao");
+const { where } = require("sequelize");
 const { Op } = require("sequelize");
 module.exports = {
-    async index(req, res) {
+  async index(req, res) {
+    try {
+      const { fk_inspector } = req.query;
+      const reunioes = await Reuniao.findAll({
+        attributes: [
+          "id",
+          "assunto",
+          "local",
+          "data",
+          "hora",
+          "estado",
+          "queixaID",
+          "trabalhadorID",
+          "obs",
+        ],
 
-        try {
-            const {fk_inspector} = req.query;
-            const reunioes = await Reuniao.findAll({
+        include: [
+          {
+            association: "Queixa",
+            required: true,
+            attributes: ["id", "inspectorID"],
+            include: [
+              {
+                association: "Inspector",
+                required: true,
+                attributes: ["id", "trabalhadorID"],
 
-                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'queixaID', 'trabalhadorID', 'obs'],
-               
-             
                 include: [
-                    {
-                        association: 'Queixa',
+                  {
+                    association: "Trabalhador",
+                    required: true,
+                    include: [
+                      {
+                        association: "Pessoa",
                         required: true,
-                        attributes: ['id', 'inspectorID'],
-                        include:[{
-                            association: 'Inspector',
-                            required: true,
-                            attributes: ['id', 'trabalhadorID'],
-                         
-                            include: [
-                                {
-                                  
-                                   
-                                        association: 'Trabalhador',
-                                        required: true,
-                                        include: [
-                                            {
-                                                association: 'Pessoa',
-                                                required: true,
-                                                
-    
-                                            },
-    
-                                        ],
-    
-                                },
-    
-                            ],
-                        },],
-
-                    },
-                    {
-                        association: 'Trabalhador',
-                        required: true,
-
-                        include: [
-                            {
-                                association: 'Pessoa',
-                                required: true,
-                                include: [{
-                                    association: 'BI',
-                                    required: true
-                                }],
-
-                            },
-
-                        ],
-
-
-                    },
-                
-                ],
-          
-                where: {
-                    '$Queixa.Inspector.trabalhadorID$': fk_inspector,
+                      },
+                    ],
                   },
-            });
-            res.status(200).json({ reunioes });
-        } catch (error) {
+                ],
+              },
+            ],
+          },
+          {
+            association: "Trabalhador",
+            required: true,
 
-            console.log("Error", error);
-
-        }
-
-    },
-    async getReuniaoEmpregadores(req, res) {
-
-        try {
-            const {fk_inspector} = req.query;
-            const reunioes = await Reuniao.findAll({
-
-                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'queixaID', 'empresaID', 'obs'],
-               
-             
+            include: [
+              {
+                association: "Pessoa",
+                required: true,
                 include: [
-                    {
-                        association: 'Queixa',
-                        required: true,
-                        attributes: ['id', 'inspectorID'],
-                        include:[{
-                            association: 'Inspector',
-                            required: true,
-                            attributes: ['id', 'trabalhadorID'],
-                         
-                            include: [
-                                {
-                                  
-                                   
-                                        association: 'Trabalhador',
-                                        required: true,
-                                        include: [
-                                            {
-                                                association: 'Pessoa',
-                                                required: true,
-                                                
-    
-                                            },
-    
-                                        ],
-    
-                                },
-    
-                            ],
-                        },],
-
-                    },
-                    {
-                        association: 'Empresa',
-                        required: true,
-
-                    },
-                
-                ],
-          
-                where: {
-                    '$Queixa.Inspector.trabalhadorID$': fk_inspector,
+                  {
+                    association: "BI",
+                    required: true,
                   },
-            });
-            res.status(200).json({ reunioes });
-        } catch (error) {
+                ],
+              },
+            ],
+          },
+        ],
 
-            console.log("Error", error);
-
-        }
-
-    },
-    async getReuniaoQueixoso(req, res) {
-
-        try {
-            const {_queixosoID} = req.query;
-            const reunioes = await Reuniao.findAll({
-
-                attributes: ['id', 'assunto', 'local', 'data', 'hora', 'estado','queixaID','queixosoID', 'obs'],
-                where:{queixosoID:_queixosoID}
-            });
-            res.status(200).json({ reunioes });
-        } catch (error) {
-
-            console.log("Error", error);
-
-        }
-
-    },
-    async store(req, res) {
-        const {_assunto} = req.body;
-        const {_local} = req.body;
-        const {_data} = req.body;
-        const {_hora} = req.body;
-        const {_obs} = req.body;
-        const {fk_queixa} = req.body;
-        const {fk_trabalhador} = req.body;
-
-
-        const reuniao = await Reuniao.create({
-            assunto: _assunto,
-            local:_local,
-           data:_data,
-           hora:_hora,
-           obs:_obs,
-           queixaID: fk_queixa,
-           trabalhadorID: fk_trabalhador
-        });
-        return res.status(200).send({
-            status: 1,
-            message: 'Reunião agendada com sucesso!',
-        });
-    },
-    async nova_reuniao_empregador(req, res) {
-        const {_assunto} = req.body;
-        const {_local} = req.body;
-        const {_data} = req.body;
-        const {_hora} = req.body;
-        const {_obs} = req.body;
-        const {fk_queixa} = req.body;
-        const {fk_empregador} = req.body;
-
-
-        const reuniao = await Reuniao.create({
-            assunto: _assunto,
-            local:_local,
-           data:_data,
-           hora:_hora,
-           obs:_obs,
-           queixaID: fk_queixa,
-           empresaID: fk_empregador
-        });
-        return res.status(200).send({
-            status: 1,
-            message: 'Reunião agendada com sucesso!',
-        });
-    },
-    async update(req, res) {
-
-        const {nome} = req.params;
-        const {sobrenome} = req.params;
-
-        const {pessoa_id} = req.params;
-
-        await Pessoa.update({nome:'Muka', sobrenome:'Cristiano'}, {
-            where: {
-                id: pessoa_id
-            }
-        });
-
-        return res.status(200).send({
-            status:1,
-            message: 'Pessoa atualizada com sucesso!',
-
-        });
-
-    },
-    async delete(req, res) {
-        const {pessoa_id} = req.params;
-
-        await Pessoa.destroy({
-            where: {
-                id: pessoa_id
-            }
-        });
-          return res.status(200).send({
-            status:1,
-            message: 'Pessoa apagada com sucesso!',
-
-        });
-
+        where: {
+          "$Queixa.Inspector.trabalhadorID$": fk_inspector,
+        },
+      });
+      res.status(200).json({ reunioes });
+    } catch (error) {
+      console.log("Error", error);
     }
+  },
+  async getReuniaoEmpregadores(req, res) {
+    try {
+      const { fk_inspector } = req.query;
+      const reunioes = await Reuniao.findAll({
+        attributes: [
+          "id",
+          "assunto",
+          "local",
+          "data",
+          "hora",
+          "queixaID",
+          "empresaID",
+          "obs",
+        ],
+
+        include: [
+          {
+            association: "Queixa",
+            required: true,
+            attributes: ["id", "inspectorID"],
+            include: [
+              {
+                association: "Inspector",
+                required: true,
+                attributes: ["id", "trabalhadorID"],
+
+                include: [
+                  {
+                    association: "Trabalhador",
+                    required: true,
+                    include: [
+                      {
+                        association: "Pessoa",
+                        required: true,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            association: "Empresa",
+            required: true,
+          },
+        ],
+
+        where: {
+          "$Queixa.Inspector.trabalhadorID$": fk_inspector,
+        },
+      });
+      res.status(200).json({ reunioes });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
+  async getReuniaoQueixoso(req, res) {
+    try {
+      const { _queixosoID } = req.query;
+      const reunioes = await Reuniao.findAll({
+        attributes: [
+          "id",
+          "assunto",
+          "local",
+          "data",
+          "hora",
+          "estado",
+          "queixaID",
+          "queixosoID",
+          "obs",
+        ],
+        where: { queixosoID: _queixosoID },
+      });
+      res.status(200).json({ reunioes });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
+  async store(req, res) {
+    const { _assunto } = req.body;
+    const { _local } = req.body;
+    const { _data } = req.body;
+    const { _hora } = req.body;
+    const { _obs } = req.body;
+    const { fk_queixa } = req.body;
+    const { fk_trabalhador } = req.body;
+
+    const reuniao = await Reuniao.create({
+      assunto: _assunto,
+      local: _local,
+      data: _data,
+      hora: _hora,
+      obs: _obs,
+      queixaID: fk_queixa,
+      trabalhadorID: fk_trabalhador,
+    });
+    return res.status(200).send({
+      status: 1,
+      message: "Reunião agendada com sucesso!",
+    });
+  },
+  async nova_reuniao_empregador(req, res) {
+    const { _assunto } = req.body;
+    const { _local } = req.body;
+    const { _data } = req.body;
+    const { _hora } = req.body;
+    const { _obs } = req.body;
+    const { fk_queixa } = req.body;
+    const { fk_empregador } = req.body;
+
+    const reuniao = await Reuniao.create({
+      assunto: _assunto,
+      local: _local,
+      data: _data,
+      hora: _hora,
+      obs: _obs,
+      queixaID: fk_queixa,
+      empresaID: fk_empregador,
+    });
+    return res.status(200).send({
+      status: 1,
+      message: "Reunião agendada com sucesso!",
+    });
+  },
+  async update(req, res) {
+    const { nome } = req.params;
+    const { sobrenome } = req.params;
+
+    const { pessoa_id } = req.params;
+
+    await Pessoa.update(
+      { nome: "Muka", sobrenome: "Cristiano" },
+      {
+        where: {
+          id: pessoa_id,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      status: 1,
+      message: "Pessoa atualizada com sucesso!",
+    });
+  },
+  async delete(req, res) {
+    const { pessoa_id } = req.params;
+
+    await Pessoa.destroy({
+      where: {
+        id: pessoa_id,
+      },
+    });
+    return res.status(200).send({
+      status: 1,
+      message: "Pessoa apagada com sucesso!",
+    });
+  },
 };

@@ -17,6 +17,13 @@ function ReunioesEmpregados(props) {
   const [queixas_selecprovincia, setQueixaSelecProv] = useState([]);
   const [reunioes, setReunioes] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
+  const [detalhes_reuniao, setDetalhesReuniao] = useState({});
+  const [data, setData] = useState("");
+  const [hora, setHora] = useState("");
+  const [assunto, setAssunto] = useState("");
+  const [local, setLocal] = useState("");
+  const [estado, setEstado] = useState("");
+
   const [displayStyle, setDisplayStyle] = useState("none");
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
@@ -87,6 +94,36 @@ function ReunioesEmpregados(props) {
     setDetalhesQueixa(conflito_selecionado);
     setShowModal(true);
   }
+  function ver_reuniao(reuniao) {
+    setDetalhesReuniao(reuniao);
+    setData(reuniao.data);
+    setHora(reuniao.hora);
+    setAssunto(reuniao.assunto);
+    setLocal(reuniao.local);
+    setEstado(reuniao.estado);
+    toggleDisplay();
+  }
+  function editar_reuniao() {
+    Axios.put("http://localhost:3001/editar_reuniao", {
+      reuniaoID: detalhes_reuniao.id,
+      queixaID: detalhes_reuniao.id_queixa,
+      assunto: assunto,
+      data: data,
+      hora: hora,
+      local: local,
+      estado: estado,
+    })
+      .then(function (response) {
+        //console.log(response);
+        //toggleDisplay2();
+        alert("Reuniao editada com sucesso");
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <SideNavInspector />
@@ -106,38 +143,63 @@ function ReunioesEmpregados(props) {
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Data</Form.Label>
-                <Form.Control type="date" placeholder="Data" />
+                <Form.Control
+                  type="date"
+                  placeholder="Data"
+                  value={data}
+                  onChange={(e) => setData(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Hora</Form.Label>
-                <Form.Control type="time" placeholder="hour" />
+                <Form.Control
+                  type="time"
+                  placeholder="hour"
+                  value={hora}
+                  onChange={(e) => setHora(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Assunto</Form.Label>
-                <Form.Control type="text" placeholder="Assunto" />
+                <Form.Control
+                  type="text"
+                  placeholder="Assunto"
+                  value={assunto}
+                  onChange={(e) => setAssunto(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Local</Form.Label>
-                <Form.Control type="text" placeholder="Local" />
+                <Form.Control
+                  type="text"
+                  placeholder="Local"
+                  value={local}
+                  onChange={(e) => setLocal(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Estado</Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option value="1">Realizada</option>
-                  <option value="2">Não realizada</option>
-                  <option value="3">Pendente</option>
+                <Form.Select
+                  aria-label="Default select example "
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                >
+                  <option value="1">Agendada</option>
+                  <option value="2">Realizada</option>
+                  <option value="3">Não realizada</option>
+                  <option value="4">Pendente</option>
                 </Form.Select>
               </Form.Group>
             </Row>
@@ -201,10 +263,35 @@ function ReunioesEmpregados(props) {
                     {reuniao.Trabalhador.Pessoa.nome}{" "}
                     {reuniao.Trabalhador.Pessoa.sobrenome}
                   </td>
-                  <td>{reuniao.estado}</td>
                   <td>
                     <Button
-                      onClick={() => toggleDisplay()}
+                      style={{
+                        cursor: "default",
+                        borderRadius: "20px",
+                        fontSize: "12px",
+                      }}
+                      variant={
+                        reuniao.estado === "1"
+                          ? "primary"
+                          : reuniao.estado === "2"
+                          ? "success"
+                          : reuniao.estado === "3"
+                          ? "danger"
+                          : "warning"
+                      }
+                    >
+                      {reuniao.estado === "1"
+                        ? "Agendada"
+                        : reuniao.estado === "2"
+                        ? "Realizada"
+                        : reuniao.estado === "3"
+                        ? "Não realizada"
+                        : "Pendente"}
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => ver_reuniao(reuniao)}
                       variant="warning"
                       className="fw-bold btn-nova-queixa"
                       type="button"
