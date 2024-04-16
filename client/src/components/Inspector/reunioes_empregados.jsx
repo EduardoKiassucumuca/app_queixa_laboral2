@@ -17,6 +17,14 @@ function ReunioesEmpregados(props) {
   const [queixas_selecprovincia, setQueixaSelecProv] = useState([]);
   const [reunioes, setReunioes] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   let data2 = "";
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_inspector");
@@ -83,12 +91,75 @@ function ReunioesEmpregados(props) {
     <>
       <SideNavInspector />
       <MenuInspector />
-      <ModalConfirmationQueixa
-        msg={alert}
-        show={showModal}
-        setShow={setShowModal}
-        close={() => setShowModal(false)}
-      />
+      <div id="myModal" class="modal" style={{ display: displayStyle }}>
+        <div class="modal-content">
+          <h1
+            style={{ fontSize: "20px", color: "#ffc107", marginBottom: "30px" }}
+          >
+            Editar reunião
+          </h1>
+
+          <form enctype="multipart/form-data">
+            <Row className="mb-3">
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Data</Form.Label>
+                <Form.Control type="date" placeholder="Data" />
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Hora</Form.Label>
+                <Form.Control type="time" placeholder="hour" />
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Assunto</Form.Label>
+                <Form.Control type="text" placeholder="Assunto" />
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Local</Form.Label>
+                <Form.Control type="text" placeholder="Local" />
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Estado</Form.Label>
+                <Form.Select aria-label="Default select example">
+                  <option value="1">Realizada</option>
+                  <option value="2">Não realizada</option>
+                  <option value="3">Pendente</option>
+                </Form.Select>
+              </Form.Group>
+            </Row>
+
+            <div class="modal-footer">
+              <Button
+                variant="default"
+                type="button"
+                onClick={toggleDisplay}
+                style={{ borderColor: "#ffc107", color: "#ffc107" }}
+              >
+                {" "}
+                Cancelar
+              </Button>
+              <Button variant="warning" type="submit">
+                {" "}
+                Editar
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <Row className="queixas_recepcionista">
         <Col md={6}>
@@ -133,7 +204,7 @@ function ReunioesEmpregados(props) {
                   <td>{reuniao.estado}</td>
                   <td>
                     <Button
-                      onClick={() => ver_queixa(reuniao)}
+                      onClick={() => toggleDisplay()}
                       variant="warning"
                       className="fw-bold btn-nova-queixa"
                       type="button"
