@@ -101,7 +101,7 @@ function ReunioesEmpregados(props) {
         </Col>
 
         <Col md={12}>
-          <table class="table table-striped table-responsive table-dark">
+          <table class="table table-striped table-responsive ">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -135,6 +135,14 @@ function ReunioesEmpregados(props) {
                     <Button
                       onClick={() => ver_queixa(reuniao)}
                       variant="warning"
+                      className="fw-bold btn-nova-queixa"
+                      type="button"
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      onClick={() => ver_queixa(reuniao)}
+                      variant="dark"
                       className="fw-bold btn-nova-queixa"
                       type="submit"
                     >
