@@ -57,6 +57,9 @@ function NovaReuniaoEmpregador(props) {
         console.log("error", resposta);
       });
   };
+  function refreshPage() {
+    window.location.reload();
+  }
   return (
     <>
       <SideNavInspector />
@@ -75,13 +78,12 @@ function NovaReuniaoEmpregador(props) {
         <div class="modal-content">
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
           <br />
-          <p>Reunião</p>
+          <p>A reunião foi agendada com sucesso </p>
           <div class="modal-footer">
-            <p>A reunião foi agendada com sucesso </p>
             <Button
               type="button"
               className="btn btn-warning"
-              onClick={toggleDisplay}
+              onClick={refreshPage}
             >
               OK
             </Button>

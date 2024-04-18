@@ -87,6 +87,7 @@ app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
 app.put("/editar_queixa2", QueixaController.update_queixa2);
 app.put("/editar_status_duvida", QueixaController.update_status_divida);
 app.put("/editar_reuniao", ReuniaoController.update);
+app.put("/editar_reuniao_empregador", ReuniaoController.update_empregadores);
 
 app.post("/novo_funcionario", FuncionarioController.store);
 app.get("/funcionarios_igt", FuncionarioController.index);

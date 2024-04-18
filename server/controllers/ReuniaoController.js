@@ -83,6 +83,7 @@ module.exports = {
           "local",
           "data",
           "hora",
+          "estado",
           "queixaID",
           "empresaID",
           "obs",
@@ -165,6 +166,7 @@ module.exports = {
       local: _local,
       data: _data,
       hora: _hora,
+      estado: "1",
       obs: _obs,
       queixaID: fk_queixa,
       trabalhadorID: fk_trabalhador,
@@ -188,6 +190,7 @@ module.exports = {
       local: _local,
       data: _data,
       hora: _hora,
+      estado: "1",
       obs: _obs,
       queixaID: fk_queixa,
       empresaID: fk_empregador,
@@ -218,6 +221,40 @@ module.exports = {
         local: local,
         estado: estado,
         trabalhadorID: trabalhadorID,
+      },
+      {
+        where: {
+          id: reuniaoID,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      status: 1,
+      message: "Reuniao atualizada com sucesso!",
+    });
+  },
+  async update_empregadores(req, res) {
+    const {
+      reuniaoID,
+      queixaID,
+      assunto,
+      data,
+      hora,
+      local,
+      estado,
+      empresaID,
+    } = req.body;
+
+    await Reuniao.update(
+      {
+        assunto: assunto,
+        queixaID: queixaID,
+        data: data,
+        hora: hora,
+        local: local,
+        estado: estado,
+        empresaID: empresaID,
       },
       {
         where: {
