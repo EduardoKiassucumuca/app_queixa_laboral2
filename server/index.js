@@ -86,6 +86,7 @@ app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
 app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
 app.put("/editar_queixa2", QueixaController.update_queixa2);
 app.put("/editar_status_duvida", QueixaController.update_status_divida);
+app.put("/editar_reuniao", ReuniaoController.update);
 
 app.post("/novo_funcionario", FuncionarioController.store);
 app.get("/funcionarios_igt", FuncionarioController.index);
@@ -94,7 +95,7 @@ app.put("/editar_funcionario", FuncionarioController.update);
 app.delete("/apagar_funcionario", FuncionarioController.delete);
 app.get("/queixas_inspectores2", InspectorController.getQueixasInspector2);
 app.get("/mais_detalhes", QueixaController.mais_detalhes);
-app.post("/nova_reuniao", ReuniaoController.store);
+app.post("/nova_reuniao", ReuniaoController.update);
 app.post("/nova_reuniao_empregador", ReuniaoController.nova_reuniao_empregador);
 app.get("/reunioes_empregados", ReuniaoController.index);
 app.get("/reunioes_empregadores", ReuniaoController.getReuniaoEmpregadores);

@@ -22,13 +22,24 @@ function ReunioesEmpregados(props) {
   const [hora, setHora] = useState("");
   const [assunto, setAssunto] = useState("");
   const [local, setLocal] = useState("");
-  const [estado, setEstado] = useState("");
+  const [estado, setEstado] = useState(0);
+  const [trabalhadorID, setTrabalhadorID] = useState(0);
+  const [queixaID, setQueixaID] = useState(0);
 
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle2, setDisplayStyle2] = useState("none");
+
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay2 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle2((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -100,18 +111,28 @@ function ReunioesEmpregados(props) {
     setHora(reuniao.hora);
     setAssunto(reuniao.assunto);
     setLocal(reuniao.local);
-    setEstado(reuniao.estado);
+    setEstado(parseInt(reuniao.estado));
+    setTrabalhadorID(parseInt(reuniao.Trabalhador.id));
+    setQueixaID(parseInt(reuniao.Queixa.id));
+
     toggleDisplay();
   }
-  function editar_reuniao() {
+  function mais_detalhes(reuniao) {
+    setDetalhesReuniao(reuniao);
+
+    toggleDisplay2();
+  }
+  function editar_reuniao(e) {
+    e.preventDefault();
     Axios.put("http://localhost:3001/editar_reuniao", {
       reuniaoID: detalhes_reuniao.id,
-      queixaID: detalhes_reuniao.id_queixa,
+      queixaID: queixaID,
       assunto: assunto,
       data: data,
       hora: hora,
       local: local,
       estado: estado,
+      trabalhadorID: trabalhadorID,
     })
       .then(function (response) {
         //console.log(response);
@@ -136,7 +157,7 @@ function ReunioesEmpregados(props) {
             Editar reunião
           </h1>
 
-          <form enctype="multipart/form-data">
+          <form onSubmit={(e) => editar_reuniao(e)}>
             <Row className="mb-3">
               <Form.Group
                 className="mb-3"
@@ -222,10 +243,28 @@ function ReunioesEmpregados(props) {
           </form>
         </div>
       </div>
+      <div id="myModal" class="modal" style={{ display: displayStyle2 }}>
+        <div class="modal-content">
+          <h1
+            style={{ fontSize: "20px", color: "#ffc107", marginBottom: "30px" }}
+          >
+            Mais detalhes
+          </h1>
+          OBS: {detalhes_reuniao.obs}
+          <div class="modal-footer">
+            <Button variant="warning" type="button" onClick={toggleDisplay2}>
+              {" "}
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
 
       <Row className="queixas_recepcionista">
         <Col md={6}>
-          <h4 style={{ color: "ffc107" }}>Reuniões com os empregados</h4>
+          <h1 style={{ color: "#ffc107", marginBottom: 15, fontSize: 20 }}>
+            Reuniões com os empregados
+          </h1>
         </Col>
 
         <Col md={2}>
@@ -242,10 +281,10 @@ function ReunioesEmpregados(props) {
                 <th scope="col"> Data</th>
                 <th scope="col"> Hora</th>
                 <th scope="col">Assunto</th>
+                <th scope="col">Estado</th>
+
                 <th scope="col">Local</th>
                 <th scope="col">Trabalhador</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Opção</th>
               </tr>
             </thead>
             <tbody>
@@ -257,12 +296,6 @@ function ReunioesEmpregados(props) {
                   <th scope="row"> {reuniao.data} </th>
                   <th scope="row">{reuniao.hora}</th>
                   <td>{reuniao.assunto}</td>
-                  <td>{reuniao.local}</td>
-
-                  <td>
-                    {reuniao.Trabalhador.Pessoa.nome}{" "}
-                    {reuniao.Trabalhador.Pessoa.sobrenome}
-                  </td>
                   <td>
                     <Button
                       style={{
@@ -277,7 +310,9 @@ function ReunioesEmpregados(props) {
                           ? "success"
                           : reuniao.estado === "3"
                           ? "danger"
-                          : "warning"
+                          : reuniao.estado === "4"
+                          ? "warning"
+                          : "secondary"
                       }
                     >
                       {reuniao.estado === "1"
@@ -286,9 +321,18 @@ function ReunioesEmpregados(props) {
                         ? "Realizada"
                         : reuniao.estado === "3"
                         ? "Não realizada"
-                        : "Pendente"}
+                        : reuniao.estado === "4"
+                        ? "Pendente"
+                        : "Sem estado"}
                     </Button>
                   </td>
+                  <td>{reuniao.local}</td>
+
+                  <td>
+                    {reuniao.Trabalhador.Pessoa.nome}{" "}
+                    {reuniao.Trabalhador.Pessoa.sobrenome}
+                  </td>
+
                   <td>
                     <Button
                       onClick={() => ver_reuniao(reuniao)}
@@ -299,7 +343,7 @@ function ReunioesEmpregados(props) {
                       Editar
                     </Button>
                     <Button
-                      onClick={() => ver_queixa(reuniao)}
+                      onClick={() => mais_detalhes(reuniao)}
                       variant="dark"
                       className="fw-bold btn-nova-queixa"
                       type="submit"

@@ -198,23 +198,37 @@ module.exports = {
     });
   },
   async update(req, res) {
-    const { nome } = req.params;
-    const { sobrenome } = req.params;
+    const {
+      reuniaoID,
+      queixaID,
+      assunto,
+      data,
+      hora,
+      local,
+      estado,
+      trabalhadorID,
+    } = req.body;
 
-    const { pessoa_id } = req.params;
-
-    await Pessoa.update(
-      { nome: "Muka", sobrenome: "Cristiano" },
+    await Reuniao.update(
+      {
+        assunto: assunto,
+        queixaID: queixaID,
+        data: data,
+        hora: hora,
+        local: local,
+        estado: estado,
+        trabalhadorID: trabalhadorID,
+      },
       {
         where: {
-          id: pessoa_id,
+          id: reuniaoID,
         },
       }
     );
 
     return res.status(200).send({
       status: 1,
-      message: "Pessoa atualizada com sucesso!",
+      message: "Reuniao atualizada com sucesso!",
     });
   },
   async delete(req, res) {
