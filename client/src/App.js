@@ -32,6 +32,7 @@ import ReunioesEmpregadores from "./components/Inspector/reunioes_empregadores";
 import ReunioesQueixoso from "./components/Queixoso/reuniao_queixoso";
 import HomeDuvidas from "./components/Duvidas/homeDuvidas";
 import DetalhesDuvidas from "./components/Duvidas/detalhesDuvidas";
+import QueixasFiltradasChefe from "./components/Chefe_Servicos/queixasFiltradas";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -70,6 +71,10 @@ function App() {
           element={<VerFuncionario />}
         />
         <Route path="/mais_detalhes/:id_queixa" element={<MaisDetalhes />} />
+        <Route
+          path="/queixasFiltradas/:estado"
+          element={<QueixasFiltradasChefe />}
+        />
 
         <Route path="/inspector" element={<DashboardInspector />} />
         <Route path="/nova_reuniao" element={<NovaReuniao />} />

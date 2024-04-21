@@ -13,13 +13,16 @@ import Search from "antd/es/transfer/search";
 import ModalInspectores from "./modal_inspectores";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalTestemunhas from "./modal_testemunhas";
+import SideNavChefe from "./sideNavChefeServicos";
+import MenuChefeServicos from "./menuChefeServicos";
+import { useParams } from "react-router-dom";
 
 const formTemplate = {
   review: "",
   comment: "",
 };
 
-const ContainerChefeServicos = ({ onSearch }) => {
+const QueixasFiltradasChefe = ({ onSearch }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
@@ -39,6 +42,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
   let data2 = "";
   let id_queixoso = "";
+  const { estado } = useParams();
 
   const savedData = sessionStorage.getItem("data_chefeServicos");
   data2 = JSON.parse(savedData);
@@ -245,9 +249,12 @@ const ContainerChefeServicos = ({ onSearch }) => {
         console.log("res");
       });
   }
+  console.log(inspectores);
 
   return (
     <>
+      <SideNavChefe />
+      <MenuChefeServicos />
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
         <div class="modal-content">
           <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
@@ -436,79 +443,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
           inspector={inspectores}
         />
 
-        <div class="row status-queixa">
-          <div class="col-md-3 col-sm-6" style={{ cursor: "pointer" }}>
-            <Link
-              className="link-queixa-queixoso"
-              to={`/queixasFiltradas/Aberto`}
-            >
-              <h4 className="status-qtd-queixas">Em aberto</h4>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#0d6efd" }}
-                  ></span>
-                </span>
-                <span class="progress-right">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#0d6efd" }}
-                  ></span>
-                </span>
-                <div class="progress-value" style={{ color: "#0d6efd" }}>
-                  {qtd_queixa_aberto}
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div class="col-md-3 col-sm-6">
-            <Link
-              className="link-queixa-queixoso"
-              to={`/queixasFiltradas/Analise`}
-            >
-              <h5 className="status-qtd-queixas">Em analise</h5>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#daa316" }}
-                  ></span>
-                </span>
-                <span class="progress-right">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#daa316" }}
-                  ></span>
-                </span>
-                <div class="progress-value" style={{ color: "#daa316" }}>
-                  {qtd_queixa_encaminhadasChefe}
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div class="col-md-3 col-sm-6">
-            <Link
-              className="link-queixa-queixoso"
-              to={`/queixasFiltradas/Encerrado`}
-            >
-              <h5 className="status-qtd-queixas">Finalizadas</h5>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span class="progress-bar"></span>
-                </span>
-                <span class="progress-right">
-                  <span class="progress-bar"></span>
-                </span>
-                <div class="progress-value">
-                  {qtd_queixa_encaminhadasfechada}
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
         <Col md={12} style={{ marginTop: 5 }}>
           <table class="table table-striped table-responsive">
             <thead>
@@ -525,78 +459,84 @@ const ContainerChefeServicos = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {conflitos.map((conflito) => (
-                <tr>
-                  <th scope="row">{conflito.id}</th>
-                  <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                  <th scope="row">{conflito.Empresa.nome_empresa}</th>
-                  <th scope="row">
-                    {conflito.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
-                  <th scope="row">
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
-                  <td>{conflito.facto}</td>
-                  <td>
-                    {" "}
-                    <Button
-                      style={{
-                        cursor: "default",
-                        borderRadius: "20px",
-                        fontSize: "12px",
-                      }}
-                      variant={
-                        conflito.estado === "Aberto"
-                          ? "primary"
-                          : conflito.estado === "Analise"
-                          ? "warning"
-                          : conflito.estado === "Encerrado"
-                          ? "danger"
-                          : "secondary"
+              {conflitos
+                .filter((conflito) => conflito.estado.includes(estado))
+                .map((conflito) => (
+                  <tr>
+                    <th scope="row">{conflito.id}</th>
+                    <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
+                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                    <th scope="row">
+                      {conflito.Inspector.Trabalhador.Pessoa.nome}{" "}
+                      {conflito.Inspector.Trabalhador.Pessoa.sobrenome}
+                    </th>
+                    <th scope="row">
+                      {conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome}{" "}
+                      {
+                        conflito.Testemunha.Inspector.Trabalhador.Pessoa
+                          .sobrenome
                       }
-                    >
-                      {conflito.estado}
-                    </Button>
-                  </td>
-                  <td>{conflito.provincia}</td>
-                  <td>
-                    {conflito.estado !== "Encerrado" ? (
-                      <>
-                        {" "}
-                        <Button
-                          onClick={() => ver_inspectores(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Nomear Inspector
-                        </Button>
-                        <Button
-                          onClick={() => ver_testemunhas(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Atribuir testemunhas
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <Button
-                          variant="dark"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Ver detalhes
-                        </Button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </th>
+                    <td>{conflito.facto}</td>
+                    <td>
+                      {" "}
+                      <Button
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          conflito.estado === "Aberto"
+                            ? "primary"
+                            : conflito.estado === "Analise"
+                            ? "warning"
+                            : conflito.estado === "Encerrado"
+                            ? "danger"
+                            : "secondary"
+                        }
+                      >
+                        {conflito.estado}
+                      </Button>
+                    </td>
+                    <td>{conflito.provincia}</td>
+
+                    <td>
+                      {estado !== "Encerrado" ? (
+                        <>
+                          {" "}
+                          <Button
+                            onClick={() => ver_inspectores(conflito)}
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Nomear Inspector
+                          </Button>
+                          <Button
+                            onClick={() => ver_testemunhas(conflito)}
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Atribuir testemunhas
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <Button
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Ver detalhes
+                          </Button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </Col>
@@ -604,4 +544,4 @@ const ContainerChefeServicos = ({ onSearch }) => {
     </>
   );
 };
-export default ContainerChefeServicos;
+export default QueixasFiltradasChefe;
