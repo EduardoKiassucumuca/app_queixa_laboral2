@@ -13,6 +13,8 @@ import Search from "antd/es/transfer/search";
 import ModalInspectores from "./modal_inspectores";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalTestemunhas from "./modal_testemunhas";
+import { FaFilePdf } from "react-icons/fa";
+import FileDownload from "js-file-download";
 
 const formTemplate = {
   review: "",
@@ -36,6 +38,8 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
+  const [displayStyle5, setDisplayStyle5] = useState("none");
+  const [notas, setNotas] = useState([]);
 
   let data2 = "";
   let id_queixoso = "";
@@ -73,6 +77,12 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const toggleDisplay3 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle3((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay5 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle5((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -245,7 +255,43 @@ const ContainerChefeServicos = ({ onSearch }) => {
         console.log("res");
       });
   }
+  function ver_detalhes(conflito) {
+    console.log(notas);
+    setConflitoSelec(conflito);
+    getNotas();
 
+    toggleDisplay5();
+  }
+  const handleDownload = async (url_file) => {
+    const filename = url_file.split("\\").pop();
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
+  const getNotas = async () => {
+    setNotas([]);
+    await Axios.get("http://localhost:3001/listar_notas", {
+      params: {
+        fk_queixa: conflito_selec.id,
+      },
+    })
+      .then(({ data }) => {
+        setNotas(data);
+        console.log(data);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+  };
   return (
     <>
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
@@ -368,6 +414,50 @@ const ContainerChefeServicos = ({ onSearch }) => {
               }
             >
               Feito
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle5,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#daa316", fontSize: 20 }}>Mais detalhes</h3>
+          <br />
+          <span style={{ color: "#daa316", display: "inline" }}>
+            {" "}
+            Multa:{" "}
+            <span style={{ color: "black" }}>{conflito_selec.multa ?? 0}</span>
+          </span>
+          Notas
+          {notas.map((nota, index) => (
+            <p key={index} style={{ color: "#daa316" }}>
+              {nota.nota ?? ""}
+            </p>
+          ))}
+          OBS:{" "}
+          <span style={{ color: "#daa316" }}>{conflito_selec.obs ?? ""}</span>
+          Acta
+          <p>
+            <FaFilePdf style={{ border: "red" }} />
+            <a
+              href="#"
+              onClick={(e) => handleDownload(conflito_selec.url_file_acta)}
+              style={{ color: "rgb(220, 195, 119)" }}
+            >
+              {conflito_selec.url_file_acta}
+            </a>
+          </p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={toggleDisplay5}>
+              OK
             </Button>
           </div>
         </div>
@@ -509,6 +599,10 @@ const ContainerChefeServicos = ({ onSearch }) => {
             </Link>
           </div>
         </div>
+        <h1 style={{ color: "#daa316", fontSize: "24px", fontWeight: "600" }}>
+          Queixas
+        </h1>
+
         <Col md={12} style={{ marginTop: 5 }}>
           <table class="table table-striped table-responsive">
             <thead>
@@ -519,7 +613,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 <th scope="col"> Empregador</th>
                 <th scope="col"> Inspector</th>
                 <th scope="col"> Testemunha</th>
-                <th scope="col">Facto</th>
+                <th scope="col">Queixa</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Provincia</th>
               </tr>
@@ -562,38 +656,35 @@ const ContainerChefeServicos = ({ onSearch }) => {
                   </td>
                   <td>{conflito.provincia}</td>
                   <td>
-                    {conflito.estado !== "Encerrado" ? (
-                      <>
-                        {" "}
-                        <Button
-                          onClick={() => ver_inspectores(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Nomear Inspector
-                        </Button>
-                        <Button
-                          onClick={() => ver_testemunhas(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Atribuir testemunhas
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <Button
-                          variant="dark"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Ver detalhes
-                        </Button>
-                      </>
-                    )}
+                    {" "}
+                    <Button
+                      onClick={() => ver_inspectores(conflito)}
+                      variant="warning"
+                      className="fw-bold btn-nova-queixa"
+                      type="button"
+                    >
+                      Nomear Inspector
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => ver_testemunhas(conflito)}
+                      variant="warning"
+                      className="fw-bold btn-nova-queixa"
+                      type="button"
+                    >
+                      Atribuir testemunhas
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      variant="dark"
+                      className="fw-bold btn-nova-queixa"
+                      type="button"
+                      onClick={(e) => ver_detalhes(conflito)}
+                    >
+                      Ver detalhes
+                    </Button>
                   </td>
                 </tr>
               ))}
