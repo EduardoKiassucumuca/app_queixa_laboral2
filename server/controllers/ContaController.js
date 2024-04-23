@@ -102,6 +102,9 @@ module.exports = {
           user: "marciocristiano105@gmail.com",
           pass: "opmnzjabkdexosfe",
         },
+        tls: {
+          rejectUnauthorized: false,
+        },
       });
 
       var mailOptions = {
