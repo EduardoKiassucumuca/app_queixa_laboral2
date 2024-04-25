@@ -255,11 +255,23 @@ const ContainerChefeServicos = ({ onSearch }) => {
         console.log("res");
       });
   }
-  function ver_detalhes(conflito) {
-    console.log(notas);
+  async function ver_detalhes(conflito) {
     setConflitoSelec(conflito);
-    getNotas();
-
+    setNotas([]);
+    await Axios.get("http://localhost:3001/listar_notas", {
+      params: {
+        fk_queixa: conflito_selec.id,
+      },
+    })
+      .then(({ data }) => {
+        setNotas(data);
+        console.log(data);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+    console.log(notas);
     toggleDisplay5();
   }
   const handleDownload = async (url_file) => {
@@ -276,22 +288,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
       FileDownload(res.data, filename);
     });
   };
-  const getNotas = async () => {
-    setNotas([]);
-    await Axios.get("http://localhost:3001/listar_notas", {
-      params: {
-        fk_queixa: conflito_selec.id,
-      },
-    })
-      .then(({ data }) => {
-        setNotas(data);
-        console.log(data);
-        //console.log(lista_queixa.minha_queixa)
-      })
-      .catch(({ res }) => {
-        console.log(res);
-      });
-  };
+  const getNotas = async () => {};
   return (
     <>
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
@@ -429,21 +426,14 @@ const ContainerChefeServicos = ({ onSearch }) => {
         }}
       >
         <div class="modal-content">
-          <h3 style={{ color: "#daa316", fontSize: 20 }}>Mais detalhes</h3>
+          <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
           <br />
-          <span style={{ color: "#daa316", display: "inline" }}>
+          <span style={{ color: "", display: "inline" }}>
             {" "}
             Multa:{" "}
             <span style={{ color: "black" }}>{conflito_selec.multa ?? 0}</span>
           </span>
-          Notas
-          {notas.map((nota, index) => (
-            <p key={index} style={{ color: "#daa316" }}>
-              {nota.nota ?? ""}
-            </p>
-          ))}
-          OBS:{" "}
-          <span style={{ color: "#daa316" }}>{conflito_selec.obs ?? ""}</span>
+          OBS: <span style={{ color: "" }}>{conflito_selec.obs ?? ""}</span>
           Acta
           <p>
             <FaFilePdf style={{ border: "red" }} />
@@ -463,53 +453,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
         </div>
       </div>
       <Row className="queixas_recepcionista">
-        <Col md={3}>
-          {/*<Button
-            variant="warning"
-            onClick={() => setShowModal2(true)}
-            className="fw-bold btn-nova-queixa"
-            type="submit"
-          >
-            Nova Queixa
-          </Button>*/}
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa1"
-            placeholder="Procurar pelo Código"
-            value={codigo}
-            onChange={(e) => buscaCodigo(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa"
-            placeholder="Procurar pelo Inspector"
-            value={inspector}
-            onChange={(e) => buscaInspector(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa1"
-            placeholder="Procurar pelo Bilhete de Identificação"
-            value={BI}
-            onChange={(e) => buscaBI(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa2"
-            placeholder="Procurar pelo NIF"
-            value={nif}
-            onChange={(e) => buscaNIF(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          {" "}
-          <p className="p-localizacao"></p>
-        </Col>
-
         <ModalInspectores
           show={showModal}
           setShow={setShowModal}
@@ -602,8 +545,54 @@ const ContainerChefeServicos = ({ onSearch }) => {
         <h1 style={{ color: "#daa316", fontSize: "24px", fontWeight: "600" }}>
           Queixas
         </h1>
+        <Col md={3}>
+          {/*<Button
+            variant="warning"
+            onClick={() => setShowModal2(true)}
+            className="fw-bold btn-nova-queixa"
+            type="submit"
+          >
+            Nova Queixa
+          </Button>*/}
+        </Col>
+        <Col md={2}>
+          <Search
+            className="pesquisa1"
+            placeholder="Procurar pelo Código"
+            value={codigo}
+            onChange={(e) => buscaCodigo(e.target.value)}
+          />
+        </Col>
+        <Col md={2}>
+          <Search
+            className="pesquisa"
+            placeholder="Procurar pelo Inspector"
+            value={inspector}
+            onChange={(e) => buscaInspector(e.target.value)}
+          />
+        </Col>
+        <Col md={2}>
+          <Search
+            className="pesquisa1"
+            placeholder="Procurar pelo Bilhete de Identificação"
+            value={BI}
+            onChange={(e) => buscaBI(e.target.value)}
+          />
+        </Col>
+        <Col md={2}>
+          <Search
+            className="pesquisa2"
+            placeholder="Procurar pelo NIF"
+            value={nif}
+            onChange={(e) => buscaNIF(e.target.value)}
+          />
+        </Col>
+        <Col md={2}>
+          {" "}
+          <p className="p-localizacao"></p>
+        </Col>
 
-        <Col md={12} style={{ marginTop: 5 }}>
+        <Col md={12} style={{ marginTop: 15 }}>
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
@@ -655,37 +644,42 @@ const ContainerChefeServicos = ({ onSearch }) => {
                     </Button>
                   </td>
                   <td>{conflito.provincia}</td>
-                  <td>
-                    {" "}
-                    <Button
-                      onClick={() => ver_inspectores(conflito)}
-                      variant="warning"
-                      className="fw-bold btn-nova-queixa"
-                      type="button"
-                    >
-                      Nomear Inspector
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() => ver_testemunhas(conflito)}
-                      variant="warning"
-                      className="fw-bold btn-nova-queixa"
-                      type="button"
-                    >
-                      Atribuir testemunhas
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      variant="dark"
-                      className="fw-bold btn-nova-queixa"
-                      type="button"
-                      onClick={(e) => ver_detalhes(conflito)}
-                    >
-                      Ver detalhes
-                    </Button>
-                  </td>
+                  {conflito.estado === "Encerrado" ? (
+                    <td>
+                      <Button
+                        variant="dark"
+                        className="fw-bold btn-nova-queixa"
+                        type="button"
+                        onClick={(e) => ver_detalhes(conflito)}
+                      >
+                        Ver detalhes
+                      </Button>
+                    </td>
+                  ) : (
+                    <>
+                      <td>
+                        {" "}
+                        <Button
+                          onClick={() => ver_inspectores(conflito)}
+                          variant="warning"
+                          className="fw-bold btn-nova-queixa"
+                          type="button"
+                        >
+                          Nomear Inspector
+                        </Button>
+                      </td>
+                      <td>
+                        <Button
+                          onClick={() => ver_testemunhas(conflito)}
+                          variant="warning"
+                          className="fw-bold btn-nova-queixa"
+                          type="button"
+                        >
+                          Atribuir testemunhas
+                        </Button>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

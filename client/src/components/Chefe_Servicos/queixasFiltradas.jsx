@@ -16,7 +16,8 @@ import ModalTestemunhas from "./modal_testemunhas";
 import SideNavChefe from "./sideNavChefeServicos";
 import MenuChefeServicos from "./menuChefeServicos";
 import { useParams } from "react-router-dom";
-
+import { FaFilePdf } from "react-icons/fa";
+import FileDownload from "js-file-download";
 const formTemplate = {
   review: "",
   comment: "",
@@ -39,6 +40,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
+  const [displayStyle5, setDisplayStyle5] = useState("none");
 
   let data2 = "";
   let id_queixoso = "";
@@ -59,6 +61,12 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle4((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay5 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle5((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -249,6 +257,25 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
         console.log("res");
       });
   }
+  const handleDownload = async (url_file) => {
+    const filename = url_file.split("\\").pop();
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
+  function ver_detalhes(conflito) {
+    setConflitoSelec(conflito);
+    toggleDisplay5();
+  }
+
   console.log(inspectores);
 
   return (
@@ -375,6 +402,43 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
               }
             >
               Feito
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle5,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
+          <br />
+          <span style={{ color: "", display: "inline" }}>
+            {" "}
+            Multa:{" "}
+            <span style={{ color: "black" }}>{conflito_selec.multa ?? 0}</span>
+          </span>
+          OBS: <span style={{ color: "" }}>{conflito_selec.obs ?? ""}</span>
+          Acta
+          <p>
+            <FaFilePdf style={{ border: "red" }} />
+            <a
+              href="#"
+              onClick={(e) => handleDownload(conflito_selec.url_file_acta)}
+              style={{ color: "rgb(220, 195, 119)" }}
+            >
+              {conflito_selec.url_file_acta}
+            </a>
+          </p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={toggleDisplay5}>
+              OK
             </Button>
           </div>
         </div>
@@ -529,6 +593,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
                             variant="warning"
                             className="fw-bold btn-nova-queixa"
                             type="button"
+                            onClick={() => ver_detalhes(conflito)}
                           >
                             Ver detalhes
                           </Button>

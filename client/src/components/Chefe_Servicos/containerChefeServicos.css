@@ -218,6 +218,8 @@
 
 .status-queixa {
   margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
 }
 
 .btn-add-queixa {
