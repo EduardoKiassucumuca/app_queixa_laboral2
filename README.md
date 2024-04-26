@@ -16,7 +16,7 @@ Client:
 
 Server:
 1. $ cd server
-2. $ yarn dev
+2. $ npm run dev
 
 
 
