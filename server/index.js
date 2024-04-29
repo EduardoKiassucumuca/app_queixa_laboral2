@@ -16,6 +16,9 @@ const socketIo = require("socket.io");
 const FuncionarioController = require("./controllers/FuncionarioController");
 const ReuniaoController = require("./controllers/ReuniaoController.js");
 const NotaController = require("./controllers/NotaController.js");
+const noticiaController = require("./controllers/noticiaController.js");
+const eventoController = require("./controllers/eventoController.js");
+const ArtigoController = require("./controllers/ArtigoController.js");
 
 const server = http.createServer(app);
 const io = socketIo(server, { cors: { origin: "http://localhost:3000" } });
@@ -105,6 +108,9 @@ app.get("/listar_notas", NotaController.index);
 app.get("/mudancas_queixas", QueixaController.getHistorico);
 app.get("/download_contrato", QueixaController.download_contrato);
 app.get("/reuniao_queixoso", ReuniaoController.getReuniaoQueixoso);
+app.get("/noticias", noticiaController.index);
+app.get("/eventos", eventoController.index);
+app.get("/artigos", ArtigoController.index);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
