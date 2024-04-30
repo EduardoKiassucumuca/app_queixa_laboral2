@@ -5,15 +5,16 @@ import Card from "react-bootstrap/Card";
 import img_noticia from "../../img/noticia1.jfif";
 import axios from "axios";
 import React, { useState } from "react";
+import Button from "react-bootstrap/esm/Button";
 
 function Noticias() {
-  const [noticias, setNoticias] = useState({});
+  const [noticias, setNoticias] = useState([]);
   React.useEffect(() => {
     axios
       .get("http://localhost:3001/noticias")
       .then((resposta) => {
-        setNoticias(resposta);
-        console.log(resposta);
+        setNoticias(resposta.data);
+        console.log(resposta.data);
       })
       .catch((res) => {
         console.log(res);
@@ -24,72 +25,68 @@ function Noticias() {
     <>
       <Row className="noticia-destaque">
         <Col md={7} className="col-noticia-destaque">
-          <Card className="card-noticia-destaque">
-            <button
-              type="button"
-              className="btn fw-bold bg-warning ribbon-noticia"
-            >
-              Notícia
-            </button>
-            <Card.Img className="img-noticia" variant="top" src={img_noticia} />
-            <h6 className="titulo-noticia">
-              {" "}
-              Diretor de Cooperação participa na sessão de abertura da formação
-              “Normas Internacionais do Trabalho” da OIT
-            </h6>
-            <br></br>
-            <p className="detalhes-noticia">
-              O Diretor de Cooperação do Secretariado Executivo da Comunidade
-              dos Países de Língua Portuguesa (CPLP), Manuel Clarote Lapão,
-              participou na sessão de abertura da formação “Normas
-              Internacionais do Trabalho”, no dia 12 de outubro de 2022.
-            </p>
-          </Card>
+          {noticias
+            .filter((noticiaDestaque) => noticiaDestaque.tipo === "destaque")
+            .map((noticia, index) => (
+              <Card className="card-noticia-destaque">
+                <button
+                  type="button"
+                  className="btn fw-bold bg-warning ribbon-noticia"
+                >
+                  Notícia
+                </button>
+                <Card.Img
+                  className="img-noticia"
+                  variant="top"
+                  src={img_noticia}
+                />
+                <h6 className="titulo-noticia"> {noticia.titulo}</h6>
+                <br></br>
+                <span className="detalhes-noticia">
+                  {noticia.descricao.substr(0, 321)}...
+                  <div className="saber-mais">
+                    {" "}
+                    <Button variant="outline-warning" className="btn-saberMais">
+                      Saiba mais
+                    </Button>
+                  </div>
+                </span>
+              </Card>
+            ))}
           <Row>
-            <Col md={6} className="col-outras-noticias">
-              <Card className="card-outras-noticias">
-                <button
-                  type="button"
-                  className="btn fw-bold bg-warning ribbon-noticia"
-                >
-                  Notícia
-                </button>
-                <Card.Img
-                  className="img-outras-noticias"
-                  variant="top"
-                  src={img_noticia}
-                />
-                <h6 className="titulo-outras-noticias">
-                  {" "}
-                  Diretor de Cooperação participa na sessão de abertura da
-                  formação
-                </h6>
-                <br></br>
-                <p className="detalhes-noticia"></p>
-              </Card>
-            </Col>
-            <Col md={6} className="col-outras-noticias">
-              <Card className="card-outras-noticias">
-                <button
-                  type="button"
-                  className="btn fw-bold bg-warning ribbon-noticia"
-                >
-                  Notícia
-                </button>
-                <Card.Img
-                  className="img-outras-noticias"
-                  variant="top"
-                  src={img_noticia}
-                />
-                <h6 className="titulo-outras-noticias">
-                  {" "}
-                  Diretor de Cooperação participa na sessão de abertura da
-                  formação
-                </h6>
-                <br></br>
-                <p className="detalhes-noticia"></p>
-              </Card>
-            </Col>
+            {noticias
+              .filter((noticiaDestaque) => noticiaDestaque.tipo !== "destaque")
+              .map((noticia, index) => (
+                <Col md={6} className="col-outras-noticias">
+                  <Card className="card-outras-noticias">
+                    <button
+                      type="button"
+                      className="btn fw-bold bg-warning ribbon-noticia"
+                    >
+                      Notícia
+                    </button>
+                    <Card.Img
+                      className="img-outras-noticias"
+                      variant="top"
+                      src={img_noticia}
+                    />
+                    <h6 className="titulo-outras-noticias">{noticia.titulo}</h6>
+                    <br></br>
+                    <span className="detalhes-noticia-normal">
+                      {noticia.descricao.substr(0, 100)}
+                      <div className="saber-mais">
+                        {" "}
+                        <Button
+                          variant="outline-warning"
+                          className="btn-saberMais"
+                        >
+                          Saiba mais
+                        </Button>
+                      </div>
+                    </span>
+                  </Card>
+                </Col>
+              ))}{" "}
           </Row>
         </Col>
       </Row>

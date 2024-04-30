@@ -1,19 +1,20 @@
 .sub-comentario {
-    background-color: white;
-    margin: 0;
+  background-color: white;
+  margin: 0;
 }
 
 .col-sub-comentario {
-    margin-left: auto;
-    margin-right: auto;
-    padding: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 80px;
 }
 
 .text-subComentario {
-    color: black;
+  color: black;
+  font-size: 18px;
 }
 
 .text-principal-comentario {
-    color: #DAA316;
-    font-weight: bold;
+  color: #daa316;
+  font-weight: bold;
 }

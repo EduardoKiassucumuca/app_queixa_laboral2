@@ -52,9 +52,9 @@ function Menu() {
                     <Nav.Link href="/" className="myHome">
                       Home
                     </Nav.Link>
-                    <Nav.Link href="#features">Sobre</Nav.Link>
-                    <Nav.Link href="#features">Noticias</Nav.Link>
-                    <Nav.Link href="#features">Artigos</Nav.Link>
+                    {/*<Nav.Link href="#features">Sobre</Nav.Link>*/}
+                    <Nav.Link href="/noticias">Noticias</Nav.Link>
+                    <Nav.Link href="/artigos">Artigos</Nav.Link>
                     <Nav.Link href="/duvidas">Duvidas</Nav.Link>
                     <Nav.Link href="/Entrar">Login</Nav.Link>
                   </Nav>

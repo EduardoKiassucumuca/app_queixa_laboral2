@@ -1,31 +1,33 @@
 .artigos {
-    justify-content: center;
-    padding: 70px;
-    margin: 0;
+  justify-content: center;
+  padding: 70px;
+  margin: 0;
 }
 
 .txt-artigos {
-    color: #DAA316;
+  color: #daa316;
+  font-size: 50px;
+  font-weight: bold;
 }
 
 .ribbon-artigo {
-    position: absolute;
-    top: 10;
-    left: -10px;
-    z-index: 1;
-    cursor: default !important;
+  position: absolute;
+  top: 10;
+  left: -10px;
+  z-index: 1;
+  cursor: default !important;
 }
 
 .ribbon-artigo:hover {
-    color: black;
-    background-color: #DAA316;
+  color: black;
+  background-color: #daa316;
 }
 
 .titulo-artigo {
-    color: black;
-    font-weight: bold;
+  color: black;
+  font-weight: bold;
 }
 
 .detalhes-artigo {
-    color: black;
+  color: black;
 }

@@ -33,6 +33,7 @@ import ReunioesQueixoso from "./components/Queixoso/reuniao_queixoso";
 import HomeDuvidas from "./components/Duvidas/homeDuvidas";
 import DetalhesDuvidas from "./components/Duvidas/detalhesDuvidas";
 import QueixasFiltradasChefe from "./components/Chefe_Servicos/queixasFiltradas";
+import HomeMaisNoticias from "./components/Noticias/homeMaisNoticias";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -93,6 +94,7 @@ function App() {
           path="/detalhesDuvidas/:id_duvida"
           element={<DetalhesDuvidas />}
         />
+        <Route path="/noticias" element={<HomeMaisNoticias />} />
       </Routes>
     </Router>
   );

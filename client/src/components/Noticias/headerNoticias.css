@@ -1,0 +1,20 @@
+.mymainHero {
+  position: relative; /* Garante que os filhos possam ser posicionados relativamente a este elemento */
+  background-image: url("../../img/noticia1.jfif"); /* Substitua 'caminho/para/sua/imagem.jpg' pelo caminho real da sua imagem */
+  background-size: cover; /* A imagem de fundo cobre todo o elemento */
+  background-position: center; /* A imagem é centralizada dentro do elemento */
+  filter: brightness(
+    0.3
+  ); /* Valor entre 0 e 1, onde 0 é totalmente escuro e 1 é o brilho normal */
+}
+.meuCover {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cover-title-igt {
+  font-size: 24px; /* Ajuste o tamanho da fonte conforme necessário */
+  z-index: 1; /* Define a ordem de empilhamento para que o span esteja sobreposto à imagem */
+}
