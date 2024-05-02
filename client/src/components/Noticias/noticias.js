@@ -6,6 +6,7 @@ import img_noticia from "../../img/noticia1.jfif";
 import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
+import { Link } from "react-router-dom";
 
 function Noticias() {
   const [noticias, setNoticias] = useState([]);
@@ -24,7 +25,7 @@ function Noticias() {
   return (
     <>
       <Row className="noticia-destaque">
-        <Col md={7} className="col-noticia-destaque">
+        <Col md={8} className="col-noticia-destaque">
           {noticias
             .filter((noticiaDestaque) => noticiaDestaque.tipo === "destaque")
             .map((noticia, index) => (
@@ -46,9 +47,14 @@ function Noticias() {
                   {noticia.descricao.substr(0, 321)}...
                   <div className="saber-mais">
                     {" "}
-                    <Button variant="outline-warning" className="btn-saberMais">
-                      Saiba mais
-                    </Button>
+                    <Link to={`/saiba_mais/${noticia.id}`}>
+                      <Button
+                        variant="outline-warning"
+                        className="btn-saberMais"
+                      >
+                        Saiba mais
+                      </Button>
+                    </Link>
                   </div>
                 </span>
               </Card>
@@ -56,6 +62,7 @@ function Noticias() {
           <Row>
             {noticias
               .filter((noticiaDestaque) => noticiaDestaque.tipo !== "destaque")
+              .slice(0, 3)
               .map((noticia, index) => (
                 <Col md={6} className="col-outras-noticias">
                   <Card className="card-outras-noticias">
@@ -76,12 +83,14 @@ function Noticias() {
                       {noticia.descricao.substr(0, 100)}
                       <div className="saber-mais">
                         {" "}
-                        <Button
-                          variant="outline-warning"
-                          className="btn-saberMais"
-                        >
-                          Saiba mais
-                        </Button>
+                        <Link to={`/saiba_mais/${noticia.id}`}>
+                          <Button
+                            variant="outline-warning"
+                            className="btn-saberMais"
+                          >
+                            Saiba mais
+                          </Button>
+                        </Link>
                       </div>
                     </span>
                   </Card>

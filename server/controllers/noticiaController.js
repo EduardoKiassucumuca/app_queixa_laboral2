@@ -19,4 +19,24 @@ module.exports = {
       console.log("Error", error);
     }
   },
+  async getMaisDetalhes(req, res) {
+    try {
+      const { id_noticia } = req.query;
+      const noticia = await Noticia.findOne({
+        attributes: [
+          "id",
+          "titulo",
+          "descricao",
+          "url_img_noticia",
+          "data",
+          "hora",
+          "tipo",
+        ],
+        where: { id: id_noticia },
+      });
+      return res.json(noticia);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
 };

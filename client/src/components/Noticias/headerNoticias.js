@@ -9,12 +9,10 @@ function HeaderNoticias() {
   return (
     <>
       {" "}
-      <div className="p-5 text-center bg-dark mymainHero">
-        <div className="meuCover">
-          {" "}
-          <span className="cover-title-igt">Todas noticias</span>
-        </div>
+      <div className="p-6 text-center bg-dark mymainHero2">
+        <div className="meuCover2"> </div>
       </div>
+      <span className="cover-title-igt2">Todas noticias</span>
     </>
   );
 }

@@ -34,6 +34,8 @@ import HomeDuvidas from "./components/Duvidas/homeDuvidas";
 import DetalhesDuvidas from "./components/Duvidas/detalhesDuvidas";
 import QueixasFiltradasChefe from "./components/Chefe_Servicos/queixasFiltradas";
 import HomeMaisNoticias from "./components/Noticias/homeMaisNoticias";
+import HomeMaisArtigos from "./components/artigos/homeMaisArtigos";
+import HomeMaisDetalhesNoticias from "./components/Noticias/homeMaisDetalhesNoticias";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -95,6 +97,11 @@ function App() {
           element={<DetalhesDuvidas />}
         />
         <Route path="/noticias" element={<HomeMaisNoticias />} />
+        <Route path="/artigos" element={<HomeMaisArtigos />} />
+        <Route
+          path="/saiba_mais/:cod_noticia"
+          element={<HomeMaisDetalhesNoticias />}
+        />
       </Routes>
     </Router>
   );

@@ -111,6 +111,7 @@ app.get("/reuniao_queixoso", ReuniaoController.getReuniaoQueixoso);
 app.get("/noticias", noticiaController.index);
 app.get("/eventos", eventoController.index);
 app.get("/artigos", ArtigoController.index);
+app.get("/mais_detalhes_noticias", noticiaController.getMaisDetalhes);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

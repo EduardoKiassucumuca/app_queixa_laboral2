@@ -2,11 +2,11 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "./artigos.css";
+
 import img_artigo from "../../img/lei_trabalho.jfif";
 import axios from "axios";
 import React, { useState } from "react";
-function Artigos() {
+function TodosArtigos() {
   const [artigos, setArtigos] = useState([]);
 
   React.useEffect(() => {
@@ -23,8 +23,8 @@ function Artigos() {
   return (
     <>
       <Row className="artigos">
-        <h1 className="txt-artigos">Artigos</h1>
-        {artigos.slice(0, 3).map((artigo, index) => (
+        <h1 className="txt-artigos"></h1>
+        {artigos.map((artigo, index) => (
           <Col md={3}>
             <Card style={{ width: "18rem" }}>
               <button
@@ -56,4 +56,4 @@ function Artigos() {
   );
 }
 
-export default Artigos;
+export default TodosArtigos;
