@@ -25,7 +25,7 @@ function Noticias() {
   return (
     <>
       <Row className="noticia-destaque">
-        <Col md={8} className="col-noticia-destaque">
+        <Col md={10} className="col-noticia-destaque">
           {noticias
             .filter((noticiaDestaque) => noticiaDestaque.tipo === "destaque")
             .map((noticia, index) => (
@@ -64,7 +64,7 @@ function Noticias() {
               .filter((noticiaDestaque) => noticiaDestaque.tipo !== "destaque")
               .slice(0, 3)
               .map((noticia, index) => (
-                <Col md={6} className="col-outras-noticias">
+                <Col md={4} className="col-outras-noticias">
                   <Card className="card-outras-noticias">
                     <button
                       type="button"
@@ -77,6 +77,7 @@ function Noticias() {
                       variant="top"
                       src={img_noticia}
                     />
+
                     <h6 className="titulo-outras-noticias">{noticia.titulo}</h6>
                     <br></br>
                     <span className="detalhes-noticia-normal">

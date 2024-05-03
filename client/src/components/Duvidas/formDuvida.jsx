@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { MDBContainer } from "mdb-react-ui-kit";
@@ -16,7 +16,12 @@ function FormDuvidas() {
   const [assunto, setAssunto] = useState("");
   const [descricao, setDescricao] = useState("");
   const [duvidas, setDuvidas] = useState([]);
-
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const toggleDisplay = () => {
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const navigate = useNavigate();
   function detalhesDuvidas() {
     navigate("/detalhesDuvidas");
@@ -32,8 +37,7 @@ function FormDuvidas() {
       })
       .then((resposta) => {
         console.log(resposta);
-        alert(resposta.data.message);
-        window.location.href = "/duvidas";
+        toggleDisplay();
       })
       .catch((resposta) => {
         console.log("error", resposta);
@@ -51,6 +55,9 @@ function FormDuvidas() {
         console.log("res");
       });
   }, []);
+  function go_duvidas() {
+    window.location.href = "/duvidas";
+  }
   return (
     <>
       <section className="" style={{ backgroundColor: "" }}>
@@ -99,6 +106,18 @@ function FormDuvidas() {
             </div>
           </div>
         </MDBContainer>
+        <div id="myModal4" class="modal" style={{ display: displayStyle }}>
+          <div class="modal-content">
+            <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
+            <br />
+            <p>Duvida submetida com sucesso!</p>
+            <div class="modal-footer">
+              <Button variant="warning" onClick={(e) => go_duvidas()}>
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );
