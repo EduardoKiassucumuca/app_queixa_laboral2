@@ -1,6 +1,8 @@
 import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+
 import {
   MDBBtn,
   MDBCard,
@@ -15,6 +17,7 @@ import {
 } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
 import Alert from "react-bootstrap/Alert";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -27,6 +30,8 @@ function Duvidas() {
   const [assunto, setAssunto] = useState("");
   const [descricao, setDescricao] = useState("");
   const [duvidas, setDuvidas] = useState([]);
+  const [visibleForm, setVisisbleForm] = useState(false);
+  const [inquietacao, setInquetacao] = useState("");
 
   const navigate = useNavigate();
   function detalhesDuvidas() {
@@ -50,8 +55,7 @@ function Duvidas() {
         console.log("error", resposta);
       });
   }
-  useEffect(() => {
-    sessionStorage.removeItem("data_inspector");
+  function getDuvidas() {
     axios
       .get("http://localhost:3001/duvidas")
       .then(({ data }) => {
@@ -61,14 +65,189 @@ function Duvidas() {
       .catch((res) => {
         console.log("res");
       });
+  }
+  useEffect(() => {
+    sessionStorage.removeItem("data_inspector");
+    getDuvidas();
   }, []);
+
+  function showForm() {
+    setVisisbleForm(true);
+  }
+  function enviarInquetacao(duvidaID) {
+    axios
+      .post("http://localhost:3001/nova_inquietacao", {
+        fk_duvida: duvidaID,
+        inquietacao: inquietacao,
+        data_created: new Date(),
+        data_updated: new Date(),
+      })
+      .then((resposta) => {
+        console.log(resposta);
+        getDuvidas();
+        setVisisbleForm(false);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  }
   return (
     <>
       <section className="" style={{ backgroundColor: "#eee" }}>
         <div className="p-5 text-center bg-trabalhador">
           <h1 className="mb-3 h1-queixa">Duvidas</h1>
         </div>
-        <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
+        <div class="">
+          {duvidas.map((duvida) => (
+            <div class="card" style={{ marginTop: 15 }}>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-2">
+                    {/*  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtjzMVWlBTKg5scbPuZUf_R0cIF8J7k8h8DHk-_VlsRsUsjAxd4yXE17gykJaSRno9yxk&usqp=CAU"
+                    style={{}}
+                    class="img img-rounded img-fluid"
+                  />*/}
+                    <i
+                      class="fas fa-question-circle "
+                      style={{
+                        fontSize: "98px",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    ></i>
+
+                    <p class="text-secondary text-center"></p>
+                  </div>
+                  <div class="col-md-10">
+                    <p>
+                      <a
+                        class="float-left"
+                        href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
+                      >
+                        <strong>{duvida.username}</strong>
+                      </a>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>{duvida.descricao}</p>
+                    <p style={{ marginLeft: 20, marginTop: 20 }}>
+                      {" "}
+                      <i
+                        class="fas fa-check-circle"
+                        style={{ marginRight: 5, color: "green" }}
+                      ></i>
+                      Resposta
+                    </p>
+                    <div style={{ backgroundColor: "#e9ecef" }}>
+                      <p
+                        style={{ marginLeft: 40, marginTop: 10, fontSize: 14 }}
+                      >
+                        Lorem Ipsum is simply dummy text of the pr make but also
+                        the leap into electronic typesetting, remaining
+                        essentially unchanged. It was popularised in the 1960s
+                        with the release of Letraset sheets containing Lorem
+                        Ipsum passages, and more recently with desktop
+                        publishing software like Aldus PageMaker including
+                        versions of Lorem Ipsum.
+                      </p>
+                    </div>
+                    <hr />
+                    <div style={{ marginLeft: 60, marginTop: 30 }}>
+                      <p>
+                        <a
+                          class="float-left"
+                          href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
+                        >
+                          <strong>{duvida.username}</strong>
+                        </a>
+                      </p>
+                      <div class="clearfix"></div>
+                      <p>{duvida.descricao}</p>
+                      <p style={{ marginLeft: 20, marginTop: 20 }}>
+                        {" "}
+                        <i
+                          class="fas fa-check-circle"
+                          style={{ marginRight: 5, color: "green" }}
+                        ></i>
+                        Resposta
+                      </p>
+                      <div style={{ backgroundColor: "#e9ecef" }}>
+                        <p
+                          style={{
+                            marginLeft: 40,
+                            marginTop: 10,
+                            fontSize: 14,
+                          }}
+                        >
+                          Lorem Ipsum is simply dummy text of the pr make but
+                          also the leap into electronic typesetting, remaining
+                          essentially unchanged. It was popularised in the 1960s
+                          with the release of Letraset sheets containing Lorem
+                          Ipsum passages, and more recently with desktop
+                          publishing software like Aldus PageMaker including
+                          versions of Lorem Ipsum.
+                        </p>
+                      </div>
+                    </div>
+                    {visibleForm ? (
+                      <>
+                        {" "}
+                        <FloatingLabel
+                          controlId="floatingTextarea2"
+                          label="Escreve aqui"
+                          style={{ marginTop: 25 }}
+                        >
+                          <Form.Control
+                            placeholder="Inquietacao"
+                            name="inquietacao"
+                            id="inquietacao"
+                            style={{ padding: "2px" }}
+                            onChange={(e) => setInquetacao(e.target.value)}
+                          />
+                        </FloatingLabel>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+
+                    <p style={{ marginTop: 15 }}>
+                      {visibleForm ? (
+                        <>
+                          <a
+                            class="float-right btn btn-outline-primary ml-2"
+                            style={{ marginRight: 5 }}
+                            onClick={(e) => enviarInquetacao(duvida.id)}
+                          >
+                            {" "}
+                            <i class="fa fa-send"></i> Enviar
+                          </a>
+                        </>
+                      ) : (
+                        <>
+                          <a
+                            class="float-right btn btn-outline-primary ml-2"
+                            style={{ marginRight: 5 }}
+                            onClick={showForm}
+                          >
+                            {" "}
+                            <i class="fa fa-reply"></i> Insatisfeito com a
+                            resposta
+                          </a>
+                        </>
+                      )}
+
+                      <a class="float-right btn text-white btn-warning">
+                        {" "}
+                        <i class="fas fa-plus"></i> Ver mais
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/*<MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
           <MDBRow className="justify-content-center">
             {duvidas.map((duvida) => (
               <Link to={`/detalhesDuvidas/${duvida.id}`}>
@@ -135,7 +314,7 @@ function Duvidas() {
               </div>
             </div>
           </div>
-        </MDBContainer>
+          </MDBContainer>*/}
       </section>
     </>
   );

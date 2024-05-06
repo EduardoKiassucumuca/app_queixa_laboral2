@@ -19,6 +19,7 @@ const NotaController = require("./controllers/NotaController.js");
 const noticiaController = require("./controllers/noticiaController.js");
 const eventoController = require("./controllers/eventoController.js");
 const ArtigoController = require("./controllers/ArtigoController.js");
+const EsclarecimentoController = require("./controllers/EsclarecimentoController.js");
 
 const server = http.createServer(app);
 const io = socketIo(server, { cors: { origin: "http://localhost:3000" } });
@@ -112,6 +113,7 @@ app.get("/noticias", noticiaController.index);
 app.get("/eventos", eventoController.index);
 app.get("/artigos", ArtigoController.index);
 app.get("/mais_detalhes_noticias", noticiaController.getMaisDetalhes);
+app.post("/nova_inquietacao", EsclarecimentoController.store);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;
