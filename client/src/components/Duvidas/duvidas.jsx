@@ -30,6 +30,7 @@ function Duvidas() {
   const [assunto, setAssunto] = useState("");
   const [descricao, setDescricao] = useState("");
   const [duvidas, setDuvidas] = useState([]);
+  const [esclarecimentos, setEsclarecimentos] = useState([]);
   const [visibleForm, setVisisbleForm] = useState(false);
   const [inquietacao, setInquetacao] = useState("");
 
@@ -66,9 +67,21 @@ function Duvidas() {
         console.log("res");
       });
   }
+  function mostrarEsclarecimentos() {
+    axios
+      .get("http://localhost:3001/ver_esclarecimentos")
+      .then(({ data }) => {
+        setEsclarecimentos(data.esclarecimentos);
+        console.log(data);
+      })
+      .catch((res) => {
+        console.log("res");
+      });
+  }
   useEffect(() => {
     sessionStorage.removeItem("data_inspector");
     getDuvidas();
+    mostrarEsclarecimentos();
   }, []);
 
   function showForm() {
