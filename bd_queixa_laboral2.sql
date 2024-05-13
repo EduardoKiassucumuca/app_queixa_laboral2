@@ -38,7 +38,7 @@ CREATE TABLE `artigo` (
 
 LOCK TABLES `artigo` WRITE;
 /*!40000 ALTER TABLE `artigo` DISABLE KEYS */;
-INSERT INTO `artigo` VALUES (1,'Lei 12/23','A aprovação da constituição da república de Angola em 2010 lançou as premissas constitucionais para o fortalecimento do Estado democratico de direito, bem como reconfigurou o catálogo dos direitos fundamentais',NULL),(2,'Lei 7/15','O processo de criação das condições mais adequadas para a aplicação das politicas publicas e dos programas nacionais com vista a assegurar o crescimento e o desenvolvimento económico e social do pais, exige a adpção, o aperfeiçoamento ou a modificação de distintos instrumentos de governação, com vista a concretizar, de forma dinâmica e gradual, esses objectivos.',NULL),(3,'Lei geral do trabalho','A lei geral do trabalho aplica-se a todos os contratos de trabalho celebrados entre pessoas singulares e empresas públicas,privadas,mistas,cooperativas e consulares.',NULL);
+INSERT INTO `artigo` VALUES (1,'Lei 12/23','A aprovação da constituição da república de Angola em 2010 lançou as premissas constitucionais para o fortalecimento do Estado democratico de direito, bem como reconfigurou o catálogo dos direitos fundamentais','LEI-GERAL-DO-TRABALHO-2023.pdf'),(2,'Lei 7/15','O processo de criação das condições mais adequadas para a aplicação das politicas publicas e dos programas nacionais com vista a assegurar o crescimento e o desenvolvimento económico e social do pais, exige a adpção, o aperfeiçoamento ou a modificação de distintos instrumentos de governação, com vista a concretizar, de forma dinâmica e gradual, esses objectivos.','LEI GERAL DO TRABALHGO 2015.pdf'),(3,'Lei geral do trabalho','A lei geral do trabalho aplica-se a todos os contratos de trabalho celebrados entre pessoas singulares e empresas públicas,privadas,mistas,cooperativas e consulares.','Apresentação da LGT.pdf');
 /*!40000 ALTER TABLE `artigo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +288,7 @@ CREATE TABLE `duvida` (
   `resposta` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +297,7 @@ CREATE TABLE `duvida` (
 
 LOCK TABLES `duvida` WRITE;
 /*!40000 ALTER TABLE `duvida` DISABLE KEYS */;
-INSERT INTO `duvida` VALUES (1,'Eduardo Kiassucumuca','Exploracao de trabalhadores ','As empresas actuamente exigem muito dos trablhadores mas as questões financeiras são precarias, o que vocês fazem perante essas situações ','lida',NULL),(2,'Eduardo Kiassucumuca','Horas extras não se fazem sentir','Eu trabalho a 5 anos e a empresa nunnca me dá horas extras, oque tenho que fazer','lida',NULL),(3,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(4,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(5,'Edu','Novo','nova','lida','raaaajkjk\n'),(6,'e','e','e',NULL,NULL),(7,'Marcio Silva','Segurança no trabalho','Preciso saber se existe alguma lei correspondente a trabalhos de risco.',NULL,NULL),(8,'Joao Costa','duvida1','duvida1',NULL,NULL),(9,'','','',NULL,NULL);
+INSERT INTO `duvida` VALUES (1,'Eduardo Kiassucumuca','Exploracao de trabalhadores ','As empresas actuamente exigem muito dos trablhadores mas as questões financeiras são precarias, o que vocês fazem perante essas situações ','lida',NULL),(2,'Eduardo Kiassucumuca','Horas extras não se fazem sentir','Eu trabalho a 5 anos e a empresa nunnca me dá horas extras, oque tenho que fazer','lida',NULL),(3,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(4,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(5,'Edu','Novo','nova','lida','raaaajkjk\n'),(6,'e','e','e',NULL,NULL),(7,'Marcio Silva','Segurança no trabalho','Preciso saber se existe alguma lei correspondente a trabalhos de risco.',NULL,NULL),(8,'Joao Costa','duvida1','duvida1',NULL,NULL),(9,'','','',NULL,NULL),(10,'yu','yu','yu',NULL,NULL);
 /*!40000 ALTER TABLE `duvida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -392,6 +392,40 @@ CREATE TABLE `enderecos` (
 LOCK TABLES `enderecos` WRITE;
 /*!40000 ALTER TABLE `enderecos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `enderecos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `esclarecimento`
+--
+
+DROP TABLE IF EXISTS `esclarecimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `esclarecimento` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `duvidaID` int NOT NULL,
+  `inspectorID` int DEFAULT NULL,
+  `resposta` varchar(1045) DEFAULT NULL,
+  `inquietacao` varchar(1045) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_duvida_idx` (`duvidaID`),
+  KEY `fk_inspector_idx` (`inspectorID`),
+  CONSTRAINT `fk_duvida` FOREIGN KEY (`duvidaID`) REFERENCES `duvida` (`id`),
+  CONSTRAINT `fk_inspector` FOREIGN KEY (`inspectorID`) REFERENCES `inspector` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `esclarecimento`
+--
+
+LOCK TABLES `esclarecimento` WRITE;
+/*!40000 ALTER TABLE `esclarecimento` DISABLE KEYS */;
+INSERT INTO `esclarecimento` VALUES (1,1,NULL,NULL,' It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.','2024-05-06 15:12:47','2024-05-06 15:12:47');
+/*!40000 ALTER TABLE `esclarecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -548,7 +582,7 @@ CREATE TABLE `noticia` (
   `tipo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idnoticia_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +591,7 @@ CREATE TABLE `noticia` (
 
 LOCK TABLES `noticia` WRITE;
 /*!40000 ALTER TABLE `noticia` DISABLE KEYS */;
-INSERT INTO `noticia` VALUES (1,'Diretor de Cooperação participa na sessão de abertura da formação “Normas Internacionais do Trabalho” da OIT','O Diretor de Cooperação do Secretariado Executivo da Comunidade dos Países de Língua Portuguesa (CPLP), Manuel Clarote Lapão, participou na sessão de abertura da formação “Normas Internacionais do Trabalho”, no dia 12 de outubro de 2022.',NULL,'2022-10-12',NULL,'normal'),(2,'Inspecção Geral do Trabalho regista mais de 23 mil infracções laborais','A Inspecção Geral do Trabalho (IGT) realizou, de Janeiro a Setembro deste ano, 6.115 visitas inspectivas, em várias empresas do país, que resultaram no registo de 23.426 infracções laborais, informou, quinta-feira, o inspector-geral do Trabalho.No campo das mediações de conflitos laborais, revelou que foram recepcionados 4.595 pedidos de mediação, com o registo de 1.987, dos quais 1.443 casos foram resolvidos, sendo 107 a favor dos empregadores e 1.336 a favor dos trabalhadores, que resultaram em indemnizações no valor de 330.879.818 de kwanzas.',NULL,'2023-11-17','10:13:00','destaque'),(3,'IGT no Bié regista mais de mil infracções laborais','Cuito - Mil e 171 infracções laborais foram notificadas de Janeiro a presente data pela Inspecção Geral do Trabalho (IGT) na província do Bié, menos 195 em relação ao igual período anterior.',NULL,'2022-12-26','17:39:00','normal');
+INSERT INTO `noticia` VALUES (1,'Diretor de Cooperação participa na sessão de abertura da formação “Normas Internacionais do Trabalho” da OIT','O Diretor de Cooperação do Secretariado Executivo da Comunidade dos Países de Língua Portuguesa (CPLP), Manuel Clarote Lapão, participou na sessão de abertura da formação “Normas Internacionais do Trabalho”, no dia 12 de outubro de 2022.','','2022-10-12',NULL,'normal'),(2,'Inspecção Geral do Trabalho regista mais de 23 mil infracções laborais','A Inspecção Geral do Trabalho (IGT) realizou, de Janeiro a Setembro deste ano, 6.115 visitas inspectivas, em várias empresas do país, que resultaram no registo de 23.426 infracções laborais, informou, quinta-feira, o inspector-geral do Trabalho.No campo das mediações de conflitos laborais, revelou que foram recepcionados 4.595 pedidos de mediação, com o registo de 1.987, dos quais 1.443 casos foram resolvidos, sendo 107 a favor dos empregadores e 1.336 a favor dos trabalhadores, que resultaram em indemnizações no valor de 330.879.818 de kwanzas.','','2023-11-17','10:13:00','destaque'),(3,'IGT no Bié regista mais de mil infracções laborais','Cuito - Mil e 171 infracções laborais foram notificadas de Janeiro a presente data pela Inspecção Geral do Trabalho (IGT) na província do Bié, menos 195 em relação ao igual período anterior.','noticia1.jfif','2022-12-26','17:39:00','normal'),(4,'Inspecção Geral do Trabalho dirimiu 14 mil conflitos laborais','Pelo menos 17.000 processos relacionados com conflitos laborais, deram entrada na Inspecção Geral do Trabalho e destes, 14 mil foram resolvidos com sucesso, revelou em Malanje, o ministro da Administração Pública, Trabalho e Segurança Social. Jesus Maiato disse que a acção exercida pela Inspecção Geral do Trabalho permitiu que o Tribunal do Trabalho e o Ministério Público passassem só a dirimir processos que não chegavam a consenso entre as partes. Segundo o titular do MAPTSS, com a entrada em vigor da nova Lei Geral do Trabalho, a Inspecção Geral do Trabalho passou a ter um papel de realce na mediação de conflitos laborais.','20181117104504ministro_da_administracao_publica','2018-11-17','13:10:00','normal');
 /*!40000 ALTER TABLE `noticia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -898,4 +932,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-30 17:52:41
+-- Dump completed on 2024-05-06 16:36:35
