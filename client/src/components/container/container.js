@@ -61,9 +61,9 @@ const CompnentMain = () => {
             fiscalizar a acção dos sujeitos da relação jurídico-laboral.
           </h4>
           <h4 className="mb-3 lead-igt">
-            Queixa laboral, é um serviço feito pela IGT em todo continente
-            nacional com o obejctivo de resolver os conflitos existentes entre
-            empregador e trabalhador.
+            Queixa trabalhista é um serviço oferecido pela IGT em todo o
+            território nacional, com o objectivo de resolver os conflitos
+            existentes entre empregadores e trabalhadores.
           </h4>
           <p className="mb-3 lead-igt">
             Caso pretender consultar o estado de uma queixa já submetida ou

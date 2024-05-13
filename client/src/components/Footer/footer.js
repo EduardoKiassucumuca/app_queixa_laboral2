@@ -8,8 +8,8 @@ function Footer() {
     <footer class="py-5 igt-footer">
       <Row className="row-footer">
         <Col md={3}>
-          <Nav defaultActiveKey="/home" className="flex-column">
-            <Nav.Link className="link-sobre" href="/home">
+          <Nav defaultActiveKey="#" className="flex-column">
+            <Nav.Link className="link-sobre" style={{ cursor: "default" }}>
               Sobre nós
             </Nav.Link>
             <p className="mb-6 mb-6-footer">
@@ -22,9 +22,14 @@ function Footer() {
             </p>
           </Nav>
         </Col>
+
         <Col md={3}>
-          <Nav defaultActiveKey="/home" className="flex-column">
-            <Nav.Link className="link-contactos" href="/home">
+          <Nav
+            defaultActiveKey="#"
+            className="flex-column"
+            style={{ cursor: "default" }}
+          >
+            <Nav.Link className="link-contactos" style={{ cursor: "default" }}>
               Contactos
             </Nav.Link>
             <p className="mb-3 mb-6-footer">
@@ -70,8 +75,8 @@ function Footer() {
           </Nav>
         </Col>
         <Col md={3}>
-          <Nav defaultActiveKey="/home" className="flex-column">
-            <Nav.Link className="link-contactos" href="/home">
+          <Nav className="flex-column">
+            <Nav.Link className="link-contactos" style={{ cursor: "default" }}>
               Horarios de Funcionamento
             </Nav.Link>
             <div className="mb-3 mb-6-footer">Segunda - Sexta</div>
