@@ -31,7 +31,7 @@ const Esclarecimento = db.define("Esclarecimento", {
     type: Sequelize.INTEGER,
     references: {
       model: {
-        tableName: "duvida",
+        tableName: "Duvida",
       },
       key: "id",
     },

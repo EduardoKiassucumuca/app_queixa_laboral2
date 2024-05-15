@@ -2,6 +2,7 @@ import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
+import { Pagination } from "react-bootstrap";
 
 import {
   MDBBtn,
@@ -18,9 +19,10 @@ import {
 import Footer from "../Footer/footer";
 import Alert from "react-bootstrap/Alert";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-
+import "./duvidas.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import FormDuvidas from "./formDuvida";
 
 function Duvidas() {
   const [show, setShow] = useState(true);
@@ -33,6 +35,14 @@ function Duvidas() {
   const [esclarecimentos, setEsclarecimentos] = useState([]);
   const [visibleForm, setVisisbleForm] = useState(false);
   const [inquietacao, setInquetacao] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4; // Número de itens por página
+
+  // Cálculo dos índices dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = duvidas.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const navigate = useNavigate();
   function detalhesDuvidas() {
@@ -108,11 +118,22 @@ function Duvidas() {
     <>
       <section className="" style={{ backgroundColor: "#eee" }}>
         <div className="p-5 text-center bg-trabalhador">
-          <h1 className="mb-3 h1-queixa">Duvidas</h1>
+          <i
+            class="fas fa-question-circle "
+            style={{
+              fontSize: "70px",
+            }}
+          ></i>
+          <h1
+            className="mb-3 h1-queixa"
+            style={{ color: "var(--bs-gray-200)" }}
+          >
+            Questões comuns sobre a legislação laboral
+          </h1>
         </div>
         <div class="">
-          {duvidas.map((duvida) => (
-            <div class="card" style={{ marginTop: 15 }}>
+          {currentItems.map((duvida, index) => (
+            <div class="card" style={{ marginTop: 15 }} key={index}>
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-2">
@@ -155,15 +176,11 @@ function Duvidas() {
                       <p
                         style={{ marginLeft: 40, marginTop: 10, fontSize: 14 }}
                       >
-                        Lorem Ipsum is simply dummy text of the pr make but also
-                        the leap into electronic typesetting, remaining
-                        essentially unchanged. It was popularised in the 1960s
-                        with the release of Letraset sheets containing Lorem
-                        Ipsum passages, and more recently with desktop
-                        publishing software like Aldus PageMaker including
-                        versions of Lorem Ipsum.
+                        {duvida.resposta ??
+                          "Sem resposta no momento. Por favor aguarde ate que a IGT responda. Obrigado"}
                       </p>
                     </div>
+                    {/*
                     <hr />
                     <div style={{ marginLeft: 60, marginTop: 30 }}>
                       <p>
@@ -201,8 +218,8 @@ function Duvidas() {
                           versions of Lorem Ipsum.
                         </p>
                       </div>
-                    </div>
-                    {visibleForm ? (
+                        </div>*/}
+                    {/*visibleForm ? (
                       <>
                         {" "}
                         <FloatingLabel
@@ -221,9 +238,9 @@ function Duvidas() {
                       </>
                     ) : (
                       <></>
-                    )}
+                    )}*/}
 
-                    <p style={{ marginTop: 15 }}>
+                    {/*<p style={{ marginTop: 15 }}>
                       {visibleForm ? (
                         <>
                           <a
@@ -253,13 +270,30 @@ function Duvidas() {
                         {" "}
                         <i class="fas fa-plus"></i> Ver mais
                       </a>
-                    </p>
+                      </p>*/}
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        <Pagination
+          className="justify-content-center mb-0"
+          style={{ marginTop: 10, paddingBottom: 10 }}
+        >
+          {Array.from({
+            length: Math.ceil(duvidas.length / itemsPerPage),
+          }).map((_, index) => (
+            <Pagination.Item
+              key={index}
+              active={index + 1 === currentPage}
+              onClick={() => paginate(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
+        <FormDuvidas />
         {/*<MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
           <MDBRow className="justify-content-center">
             {duvidas.map((duvida) => (

@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 
 function Footer() {
   return (
-    <footer class="py-5 igt-footer">
+    <footer class="py-5 igt-footer" style={{ marginTop: "5px !important" }}>
       <Row className="row-footer">
         <Col md={3}>
           <Nav defaultActiveKey="#" className="flex-column">

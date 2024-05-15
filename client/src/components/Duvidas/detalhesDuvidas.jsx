@@ -22,7 +22,7 @@ function DetalhesDuvidas() {
   const [MyDuvida, setMyDuvida] = useState({});
   const [comentarios, setComentarios] = useState([]);
   const [username, setUserName] = useState("");
-  const [resposta, setResposta] = useState();
+  const [resposta, setResposta] = useState("");
   const [tipo_user, setTipoUser] = useState("");
 
   const navigate = useNavigate();
@@ -58,21 +58,22 @@ function DetalhesDuvidas() {
       setTipoUser("Normal");
       console.log("aqui");
     }
-  }, [resposta]);
+  }, []);
   function responder(e) {
     e.preventDefault();
+    alert(resposta);
     axios
       .post("http://localhost:3001/nova_resposta", {
         resposta: resposta,
         duvidaID: id_duvida,
       })
-      .then((resposta) => {
-        console.log(resposta);
-        alert(resposta.data.message);
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
         window.location.href = "/detalhesDuvidas/" + id_duvida;
       })
-      .catch((resposta) => {
-        console.log("error", resposta);
+      .catch((error) => {
+        console.log("error", error);
       });
   }
   const getDuvida = async () => {
@@ -99,109 +100,88 @@ function DetalhesDuvidas() {
     <>
       <Menu />
       <section className="vh-100" style={{ backgroundColor: "white" }}>
-        <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
-          <MDBRow className="justify-content-center">
-            <MDBCol md="12" lg="10" xl="12">
-              <MDBCard>
-                <MDBCardBody>
-                  <div className="d-flex flex-start align-items-center">
-                    <div>
-                      <h6 className="fw-bold text-primary mb-1"></h6>
-                    </div>
-                  </div>
+        <div class="card" style={{ marginTop: 15 }}>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-2">
+                {/*  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtjzMVWlBTKg5scbPuZUf_R0cIF8J7k8h8DHk-_VlsRsUsjAxd4yXE17gykJaSRno9yxk&usqp=CAU"
+                    style={{}}
+                    class="img img-rounded img-fluid"
+                  />*/}
+                <i
+                  class="fas fa-question-circle "
+                  style={{
+                    fontSize: "98px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                ></i>
 
-                  <p className="mt-3 mb-4 pb-2"></p>
-                </MDBCardBody>
-
-                <>
-                  <MDBCardFooter
-                    className="py-3 border-0"
-                    style={{
-                      backgroundColor: "#f8f9fa",
-                      borderBottom: "2px solid #ddd",
-                    }}
+                <p class="text-secondary text-center"></p>
+              </div>
+              <div class="col-md-10">
+                <p>
+                  <a
+                    class="float-left"
+                    href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
                   >
-                    <div
-                      className="d-flex flex-start w-100"
-                      style={{ marginLeft: 50 }}
-                    >
-                      <div>
-                        <h6 className="fw-bold text-primary mb-1">
-                          {MyDuvida.assunto}
-                        </h6>
-
-                        <p className="text-muted small mb-0">
-                          Shared publicly - {MyDuvida.username}
-                        </p>
-                        <p className="mt-3 mb-4 pb-2">{MyDuvida.descricao}</p>
-                        {tipo_user !== "Normal" ? (
-                          <p style={{ color: "green" }}>{MyDuvida.resposta}</p>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="float-end mt-2 pt-1"></div>
-                  </MDBCardFooter>
-                </>
-              </MDBCard>
-              <div class="col-sm-12" style={{ marginTop: 5 }}>
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text">
-                      <form onSubmit={responder}>
-                        {tipo_user === "Normal" ? (
-                          <>{MyDuvida.resposta}</>
-                        ) : (
-                          <>
-                            {MyDuvida.resposta === undefined ? (
-                              <>
-                                <textarea
-                                  id="newsletter1"
-                                  type="text"
-                                  rows="4"
-                                  class="form-control"
-                                  placeholder="Resposta..."
-                                  onChange={(e) => setResposta(e.target.value)}
-                                />
-                                <button
-                                  class="btn btn-warning fw-bold btn-comentar"
-                                  type="submit"
-                                >
-                                  Responder
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <textarea
-                                  id="newsletter1"
-                                  type="text"
-                                  rows="4"
-                                  class="form-control"
-                                  placeholder="Resposta..."
-                                  value={resposta}
-                                  onChange={(e) => setResposta(e.target.value)}
-                                />
-                                <button
-                                  class="btn btn-warning fw-bold btn-comentar"
-                                  type="submit"
-                                >
-                                  Editar
-                                </button>
-                              </>
-                            )}
-                          </>
-                        )}
-                      </form>
-                    </p>
-                  </div>
+                    <strong>{MyDuvida.username}</strong>
+                  </a>
+                </p>
+                <div class="clearfix"></div>
+                <p>{MyDuvida.descricao}</p>
+                <p style={{ marginLeft: 20, marginTop: 20 }}>
+                  {" "}
+                  <i
+                    class="fas fa-check-circle"
+                    style={{ marginRight: 5, color: "green" }}
+                  ></i>
+                  Resposta
+                </p>
+                <div style={{ backgroundColor: "#e9ecef" }}>
+                  <p style={{ marginLeft: 40, marginTop: 10, fontSize: 14 }}>
+                    {MyDuvida.resposta}
+                  </p>
                 </div>
               </div>
-            </MDBCol>
-          </MDBRow>
-        </MDBContainer>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12" style={{ marginTop: 5 }}>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <p class="card-text">
+                <form onSubmit={responder}>
+                  {tipo_user === "Normal" ? (
+                    <>{MyDuvida.resposta}</>
+                  ) : (
+                    <>
+                      <textarea
+                        id="newsletter1"
+                        type="text"
+                        rows="4"
+                        class="form-control"
+                        placeholder="Resposta..."
+                        value={resposta}
+                        onChange={(e) => setResposta(e.target.value)}
+                      />
+                      <button
+                        class="btn btn-warning fw-bold btn-comentar"
+                        type="submit"
+                      >
+                        Responder
+                      </button>
+                    </>
+                  )}
+                </form>
+              </p>
+            </div>
+          </div>
+        </div>
+
         <Footer />
       </section>
     </>

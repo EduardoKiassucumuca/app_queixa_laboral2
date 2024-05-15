@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/conexao.js");
 
-const Duvida = db.define("duvida", {
+const Duvida = db.define("Duvida", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,

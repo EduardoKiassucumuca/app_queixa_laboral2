@@ -61,51 +61,49 @@ function FormDuvidas() {
   return (
     <>
       <section className="" style={{ backgroundColor: "" }}>
-        <MDBContainer className="py-5" style={{ maxWidth: "1000px" }}>
-          <div class="col-sm-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title"></h5>
-                <p class="card-text">
-                  <form onSubmit={novaQuestao}>
-                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                      <input
-                        type="text"
-                        placeholder="Nome"
-                        className="form-control"
-                        onChange={(e) => setUserName(e.target.value)}
-                        required
-                      />
-                      <input
-                        type="text"
-                        placeholder="Assunto"
-                        className="form-control"
-                        onChange={(e) => setAssunto(e.target.value)}
-                        required
-                      />
-                      <textarea
-                        id="newsletter1"
-                        type="text"
-                        rows="4"
-                        class="form-control"
-                        placeholder="Submeta algum pedido de conselho, duvidas e muito mais ..."
-                        onChange={(e) => setDescricao(e.target.value)}
-                        required
-                      />
-                      <p></p>
-                    </div>
-                    <button
-                      class="btn btn-warning fw-bold btn-comentar"
-                      type="submit"
-                    >
-                      Submeter
-                    </button>
-                  </form>
-                </p>
-              </div>
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <p class="card-text">
+                <form onSubmit={novaQuestao}>
+                  <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                    <input
+                      type="text"
+                      placeholder="Nome"
+                      className="form-control"
+                      onChange={(e) => setUserName(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Assunto"
+                      className="form-control"
+                      onChange={(e) => setAssunto(e.target.value)}
+                      required
+                    />
+                    <textarea
+                      id="newsletter1"
+                      type="text"
+                      rows="4"
+                      class="form-control"
+                      placeholder="Submeta algum pedido de conselho, duvidas e muito mais ..."
+                      onChange={(e) => setDescricao(e.target.value)}
+                      required
+                    />
+                    <p></p>
+                  </div>
+                  <button
+                    class="btn btn-warning fw-bold btn-comentar"
+                    type="submit"
+                  >
+                    Submeter
+                  </button>
+                </form>
+              </p>
             </div>
           </div>
-        </MDBContainer>
+        </div>
         <div id="myModal4" class="modal" style={{ display: displayStyle }}>
           <div class="modal-content">
             <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
