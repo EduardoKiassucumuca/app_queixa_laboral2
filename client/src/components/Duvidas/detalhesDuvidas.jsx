@@ -17,6 +17,7 @@ import {
   MDBTextArea,
 } from "mdb-react-ui-kit";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
 
 function DetalhesDuvidas() {
   const [MyDuvida, setMyDuvida] = useState({});
@@ -24,7 +25,7 @@ function DetalhesDuvidas() {
   const [username, setUserName] = useState("");
   const [resposta, setResposta] = useState("");
   const [tipo_user, setTipoUser] = useState("");
-
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const { id_duvida } = useParams();
   let data = "";
@@ -61,7 +62,6 @@ function DetalhesDuvidas() {
   }, []);
   function responder(e) {
     e.preventDefault();
-    alert(resposta);
     axios
       .post("http://localhost:3001/nova_resposta", {
         resposta: resposta,
@@ -69,8 +69,8 @@ function DetalhesDuvidas() {
       })
       .then((res) => {
         console.log(res);
-        alert(res.data.message);
-        window.location.href = "/detalhesDuvidas/" + id_duvida;
+        getDuvida();
+        setShow(true);
       })
       .catch((error) => {
         console.log("error", error);
@@ -159,21 +159,37 @@ function DetalhesDuvidas() {
                     <>{MyDuvida.resposta}</>
                   ) : (
                     <>
-                      <textarea
-                        id="newsletter1"
-                        type="text"
-                        rows="4"
-                        class="form-control"
-                        placeholder="Resposta..."
-                        value={resposta}
-                        onChange={(e) => setResposta(e.target.value)}
-                      />
-                      <button
-                        class="btn btn-warning fw-bold btn-comentar"
-                        type="submit"
-                      >
-                        Responder
-                      </button>
+                      {MyDuvida.resposta || show ? (
+                        <>
+                          <Alert variant="success">
+                            {" "}
+                            <i
+                              class="fas fa-check-circle"
+                              style={{ marginRight: 5, color: "green" }}
+                            ></i>
+                            Questão respondida{" "}
+                          </Alert>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <textarea
+                            id="newsletter1"
+                            type="text"
+                            rows="4"
+                            class="form-control"
+                            placeholder="Resposta..."
+                            value={resposta}
+                            onChange={(e) => setResposta(e.target.value)}
+                          />
+                          <button
+                            class="btn btn-warning fw-bold btn-comentar"
+                            type="submit"
+                          >
+                            Responder
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
                 </form>

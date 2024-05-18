@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { MDBContainer } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
 import Alert from "react-bootstrap/Alert";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { Editor, EditorState, RichUtils } from "draft-js";
+import "draft-js/dist/Draft.css";
 
 function FormDuvidas() {
   const [show, setShow] = useState(true);
@@ -43,6 +44,20 @@ function FormDuvidas() {
         console.log("error", resposta);
       });
   }
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const handleKeyCommand = (command, editorState) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      setEditorState(newState);
+      return "handled";
+    }
+    return "not-handled";
+  };
+
+  const onBoldClick = () => {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
+  };
   useEffect(() => {
     sessionStorage.removeItem("data_inspector");
     axios
@@ -87,10 +102,11 @@ function FormDuvidas() {
                       type="text"
                       rows="4"
                       class="form-control"
-                      placeholder="Submeta algum pedido de conselho, duvidas e muito mais ..."
+                      placeholder="Escreva aqui a sua questão ..."
                       onChange={(e) => setDescricao(e.target.value)}
                       required
                     />
+
                     <p></p>
                   </div>
                   <button
