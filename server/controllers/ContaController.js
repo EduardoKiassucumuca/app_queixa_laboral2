@@ -78,68 +78,77 @@ module.exports = {
       if (!checkPassword) {
         return res.status(422).json({ msg: "Senha Inválida!" });
       }
+      try {
+        const secret = speakeasy.generateSecret({ length: 20 });
+
+        // Generate a TOTP code using the secret key
+        const code = speakeasy.totp({
+          // Use the Base32 encoding of the secret key
+          secret: secret.base32,
+
+          // Tell Speakeasy to use the Base32
+          // encoding format for the secret key
+          encoding: "base32",
+        });
+
+        // Log the secret key and TOTP code
+        // to the console
+        console.log("Secret: ", secret.base32);
+        console.log("Code: ", code);
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "marciocristiano105@gmail.com",
+            pass: "opmnzjabkdexosfe",
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+        });
+
+        var mailOptions = {
+          from: "marciocristiano105@gmail.com",
+          to: email,
+          subject: "IGT | Queixa laboral",
+          text: "Olá aqui tens o teu codigo de acesso:" + code,
+        };
+
+        const _secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
+        //console.log(secret);
+        const token = jwt.sign(
+          {
+            id: conta._id,
+          },
+          _secret
+        );
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            res.json({
+              msg: "Falha, Verifique sua conexao com a internet",
+            });
+          } else {
+            res.status(200).json({
+              sucesso:
+                "Olá foi enviado um codigo de verificação para o seu email, por favor verifique!",
+              token,
+              conta,
+              code,
+              trabalhador,
+              pessoa,
+              endereco,
+              bi,
+              igt_funcionario,
+              empresa,
+            });
+          }
+        });
+      } catch (error) {
+        res.status(200).json({
+          error: "Falha, Verifique sua conexao com a internet",
+        });
+      }
       // Generate a secret key with a length
       // of 20 characters
-      const secret = speakeasy.generateSecret({ length: 20 });
-
-      // Generate a TOTP code using the secret key
-      const code = speakeasy.totp({
-        // Use the Base32 encoding of the secret key
-        secret: secret.base32,
-
-        // Tell Speakeasy to use the Base32
-        // encoding format for the secret key
-        encoding: "base32",
-      });
-
-      // Log the secret key and TOTP code
-      // to the console
-      console.log("Secret: ", secret.base32);
-      console.log("Code: ", code);
-      var transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "marciocristiano105@gmail.com",
-          pass: "opmnzjabkdexosfe",
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      });
-
-      var mailOptions = {
-        from: "marciocristiano105@gmail.com",
-        to: email,
-        subject: "IGT | Queixa laboral",
-        text: "Olá aqui tens o teu codigo de acesso:" + code,
-      };
-
-      const _secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
-      //console.log(secret);
-      const token = jwt.sign(
-        {
-          id: conta._id,
-        },
-        _secret
-      );
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          res.status(200).json({
-            msg: "Olá foi enviado um codigo de verificação para o seu email, por favor verifique!",
-            token,
-            conta,
-            code,
-            trabalhador,
-            pessoa,
-            endereco,
-            bi,
-            igt_funcionario,
-            empresa,
-          });
-        }
-      });
     } catch (error) {
       console.log(error),
         res.status(500).json({

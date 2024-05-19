@@ -22,11 +22,16 @@ import {
 } from "mdb-react-ui-kit";
 import Footer from "../Footer/footer";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+
 function Login() {
   const navigate = useNavigate();
 
   const [body, setBody] = useState({ email: "", senha: "" });
   const [loading, setLoading] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
+  const [msg, setMSG] = useState("");
+
   const inputChange = ({ target }) => {
     const { name, value } = target;
     setBody({
@@ -54,7 +59,11 @@ function Login() {
           }
         })
         .catch((res) => {
-          console.log(res);
+          console.log(res.response);
+          if (res.response.data.msg) {
+            setShowMsg(true);
+            setMSG(res.response.data.msg);
+          }
         })
         .finally(() => {
           setLoading(false);
@@ -99,13 +108,25 @@ function Login() {
           <MDBCol md="4">
             <MDBCard className="my-5">
               <MDBCardBody className="p-5">
-                <h3 className="">
-                  Login
-                  <span className="text-primary">
+                {showMsg ? (
+                  <>
                     {" "}
-                    | Entre com as suas credenciais
-                  </span>
-                </h3>
+                    <Alert variant="danger">{msg}</Alert>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <h3 className="">
+                      Login
+                      <span className="text-primary">
+                        {" "}
+                        | Entre com as credenciais criadas no momento do
+                        registro
+                      </span>
+                    </h3>
+                  </>
+                )}
+
                 <br />
                 <Form>
                   <Form.Group className="mb-3" controlId="formGroupEmail">

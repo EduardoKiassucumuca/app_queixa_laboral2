@@ -9,6 +9,8 @@ import Dashboard from "../Dashboard/dashboard";
 import { useNavigate } from "react-router-dom";
 import Menu from "../Navbar/navbar";
 import "./validacao_email.css";
+import Alert from "react-bootstrap/Alert";
+
 import {
   MDBBtn,
   MDBContainer,
@@ -156,6 +158,9 @@ function ValidacaoEmail() {
       <MDBContainer fluid className="p-4">
         <MDBRow>
           <MDBCol md="4" className="row-login">
+            <Alert variant="success">
+              Foi enviado um codigo para o seu email.
+            </Alert>
             <MDBCard className="my-5">
               <MDBCardBody className="p-5">
                 <h3 className="">
