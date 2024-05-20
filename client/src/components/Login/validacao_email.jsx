@@ -25,6 +25,7 @@ import {
 import Footer from "../Footer/footer";
 import AlertAutenticacao from "./alert_autenticacao";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function atualizar_status_conta(conta) {
   axios
@@ -143,6 +144,9 @@ function ValidacaoEmail() {
       setTipo_msg(false);
     }
   }
+  React.useEffect(() => {
+    console.log(Cookies.get("token"));
+  }, []);
 
   return (
     <>

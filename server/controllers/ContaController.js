@@ -10,6 +10,7 @@ const speakeasy = require("speakeasy");
 var nodemailer = require("nodemailer");
 const BI = require("../models/bi");
 const Endereco = require("../models/endereco");
+const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   async logar(req, res) {
@@ -93,6 +94,13 @@ module.exports = {
 
         // Log the secret key and TOTP code
         // to the console
+
+        const _secret = uuidv4();
+        console.log(_secret);
+        const token = jwt.sign({ id: conta.id }, _secret, {
+          expiresIn: 3600, // expira em 1 hora
+        });
+
         console.log("Secret: ", secret.base32);
         console.log("Code: ", code);
         var transporter = nodemailer.createTransport({
@@ -113,14 +121,7 @@ module.exports = {
           text: "Olá aqui tens o teu codigo de acesso:" + code,
         };
 
-        const _secret = "275dfdfsdjskdjkdjsj!djdskdjkjsdk$@g6767";
-        //console.log(secret);
-        const token = jwt.sign(
-          {
-            id: conta._id,
-          },
-          _secret
-        );
+        //res.status(200).send({ auth: true, token });
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
             res.json({
@@ -143,7 +144,7 @@ module.exports = {
           }
         });
       } catch (error) {
-        res.status(200).json({
+        res.json({
           error: "Falha, Verifique sua conexao com a internet",
         });
       }
