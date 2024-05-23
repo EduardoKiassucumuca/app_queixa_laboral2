@@ -4,11 +4,20 @@ import { Button } from "react-bootstrap";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ModalDelete from "../Modal/modal_delete";
+import { Pagination } from "react-bootstrap";
 
 function ContainerAdmin(props) {
   const [showModal, setShowModal] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
   const [funcionario, setFuncionario] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Número de itens por página
+
+  // Cálculo dos índices dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = funcionarios.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const navigate = useNavigate();
   React.useEffect(() => {
@@ -41,7 +50,7 @@ function ContainerAdmin(props) {
       >
         Novo Funcionario
       </Button>
-      <table class="table table-striped table-responsive table-dark">
+      <table class="table table-striped table-responsive table-white">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -53,7 +62,7 @@ function ContainerAdmin(props) {
           </tr>
         </thead>
         <tbody>
-          {funcionarios.map((funcionario) => (
+          {currentItems.map((funcionario) => (
             <tr>
               <th scope="row">{funcionario.id}</th>
               <td>
@@ -65,7 +74,7 @@ function ContainerAdmin(props) {
               <td>
                 <a
                   href={`/ver_funcionario/${funcionario.id}`}
-                  className="btn btn-light"
+                  className="btn btn-warning"
                 >
                   Editar
                 </a>
@@ -82,6 +91,22 @@ function ContainerAdmin(props) {
           ))}
         </tbody>
       </table>
+      <Pagination
+        className="justify-content-center mb-0"
+        style={{ marginTop: 10, paddingBottom: 10 }}
+      >
+        {Array.from({
+          length: Math.ceil(funcionarios.length / itemsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={index + 1 === currentPage}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+      </Pagination>
       <ModalDelete
         show={showModal}
         setShow={setShowModal}

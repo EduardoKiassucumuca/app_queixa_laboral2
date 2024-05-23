@@ -22,6 +22,8 @@ function RegistrarFuncionario(props) {
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
+  const [erro, setErro] = useState("");
+  const [erro2, setErro2] = useState("");
 
   const guardar_funcionario = (e) => {
     e.preventDefault();
@@ -45,6 +47,51 @@ function RegistrarFuncionario(props) {
       .catch((resposta) => {
         console.log("error", resposta);
       });
+  };
+  const handleChangeNome = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setNome(valor);
+    }
+  };
+  const handleChangeSobrenome = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setSobrenome(valor);
+    }
+  };
+  const handleChangePhone1 = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^9[1-9][0-9]{7}$/.test(valor) || valor === "") {
+      setTelefone1(valor);
+      setErro("");
+    } else {
+      setErro(
+        "O número deve começar com 9, seguido por um dígito entre 1 e 9, e ter exatamente 9 dígitos."
+      );
+    }
+  };
+  const handleChangePhone2 = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^9[1-9][0-9]{7}$/.test(valor) || valor === "") {
+      setTelefone2(valor);
+      setErro2("");
+    } else {
+      setErro2(
+        "O número deve começar com 9, seguido por um dígito entre 1 e 9, e ter exatamente 9 dígitos."
+      );
+    }
+  };
+  const handleChangeDepartamento = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setDepartamento(valor);
+    }
   };
   return (
     <>
@@ -72,12 +119,13 @@ function RegistrarFuncionario(props) {
                     <Form.Group>
                       <Form.Label>Nome</Form.Label>
                       <Form.Control
-                        type="name"
+                        type="text"
                         placeholder="Digite o seu Nome"
                         id="nome"
                         name="nome"
+                        value={nome}
                         required
-                        onChange={(e) => setNome(e.target.value)}
+                        onChange={(e) => handleChangeNome(e)}
                       />
                     </Form.Group>
                   </Col>
@@ -90,10 +138,12 @@ function RegistrarFuncionario(props) {
                         placeholder="Digite o seu sobrenome"
                         id="sobrenome"
                         name="sobrenome"
-                        onChange={(e) => setSobrenome(e.target.value)}
+                        value={sobrenome}
+                        onChange={(e) => handleChangeSobrenome(e)}
                       />
                     </Form.Group>
                   </Col>
+                  <p></p>
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Localização do local de Trabalho</Form.Label>
@@ -101,6 +151,7 @@ function RegistrarFuncionario(props) {
                         defaultValue="Choose..."
                         name="provincia"
                         id="provincia"
+                        required
                         onChange={(e) => setOffice(e.target.value)}
                       >
                         <option>Escolha...</option>
@@ -134,9 +185,14 @@ function RegistrarFuncionario(props) {
                         placeholder="930340539"
                         id="contacto1"
                         name="contacto_principal"
-                        onChange={(e) => setTelefone1(e.target.value)}
+                        required
+                        onChange={(e) => handleChangePhone1(e)}
+                        maxLength={9}
                       />
                     </Form.Group>
+                    {erro && (
+                      <div style={{ color: "red", fontSize: 12 }}>{erro}</div>
+                    )}
                   </Col>
                   <Col md={3}>
                     <Form.Group>
@@ -146,9 +202,14 @@ function RegistrarFuncionario(props) {
                         placeholder="950134233"
                         id="contacto2"
                         name="contacto_alternativo"
-                        onChange={(e) => setTelefone2(e.target.value)}
+                        required
+                        maxLength={9}
+                        onChange={(e) => handleChangePhone2(e)}
                       />
                     </Form.Group>
+                    {erro2 && (
+                      <div style={{ color: "red", fontSize: 12 }}>{erro2}</div>
+                    )}
                   </Col>
                   <Col md={7}>
                     <Form.Group>
@@ -157,6 +218,7 @@ function RegistrarFuncionario(props) {
                         defaultValue="Choose..."
                         name="cargo"
                         id="cargo"
+                        required
                         onChange={(e) => setCargo(e.target.value)}
                       >
                         <option>Escolha...</option>
@@ -174,7 +236,9 @@ function RegistrarFuncionario(props) {
                         name="area_departamento"
                         id="area_departamento"
                         placeholder="Área/departamento"
-                        onChange={(e) => setDepartamento(e.target.value)}
+                        required
+                        value={departamento}
+                        onChange={(e) => handleChangeDepartamento(e)}
                       />
                     </Form.Group>
                   </Col>
@@ -193,6 +257,7 @@ function RegistrarFuncionario(props) {
                             placeholder="Digite o seu email pessoal"
                             id="email_pessoal"
                             name="email_pessoal"
+                            required
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </Form.Group>
@@ -205,6 +270,7 @@ function RegistrarFuncionario(props) {
                             placeholder="Password"
                             id="password"
                             name="password"
+                            required
                             onChange={(e) => setSenha(e.target.value)}
                           />
                         </Form.Group>
@@ -216,6 +282,7 @@ function RegistrarFuncionario(props) {
                             defaultValue="Choose..."
                             name="privilegio"
                             id="privilegio"
+                            required
                             onChange={(e) => setPrivilegio(e.target.value)}
                           >
                             <option>Escolha...</option>

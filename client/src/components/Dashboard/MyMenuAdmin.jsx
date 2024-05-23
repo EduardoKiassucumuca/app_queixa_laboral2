@@ -19,7 +19,11 @@ const MyMenAdmin = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    navigate("/Entrar");
+    if (sessionStorage?.getItem("email") && sessionStorage?.getItem("senha")) {
+      sessionStorage?.removeItem("email");
+      sessionStorage?.removeItem("senha");
+      navigate("/Entrar");
+    }
   };
   return (
     <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
@@ -38,12 +42,12 @@ const MyMenAdmin = () => {
             menuVariant="white"
             className="user-logado"
           >
-            <NavDropdown.Item href="#action/3.2">
+            {/*<NavDropdown.Item href="#action/3.2">
               <span>
                 <FaRegSun />
               </span>{" "}
               Definições
-            </NavDropdown.Item>
+  </NavDropdown.Item>*/}
 
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={logout}>

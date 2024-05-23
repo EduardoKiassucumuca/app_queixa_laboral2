@@ -46,6 +46,9 @@ function Login() {
   function logar() {
     setLoading(true);
     if (body.email === "admin@igt.ao" && body.senha === "123@igt") {
+      sessionStorage.setItem("email", "admin@igt.ao");
+      sessionStorage.setItem("senha", "123@igt");
+
       navigate("/dashboard_admin");
     } else {
       // console.log(body);
