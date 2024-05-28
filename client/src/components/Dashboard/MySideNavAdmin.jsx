@@ -26,14 +26,18 @@ function MySideNavAdmin() {
           <NavIcon>
             <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
           </NavIcon>
-          <NavText>Home</NavText>
-        </NavItem>
+          <NavText>
+            <a href="/dashboard_admin">Home</a>
+          </NavText>
+        </NavItem>{" "}
         <NavItem eventKey="funcionario">
           <NavIcon>
             <FaUser style={{ fontSize: "1.75em" }} />
           </NavIcon>
 
-          <NavText>Registrar Funcionario</NavText>
+          <NavText>
+            <a href="/registrar_funcionario">Registrar Funcionario</a>
+          </NavText>
         </NavItem>
       </SideNav.Nav>
     </SideNav>

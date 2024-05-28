@@ -36,27 +36,6 @@ const ModalDelete = (props) => {
     id_pessoa = props.funcionario.Pessoa.id;
     id_endereco = props.funcionario.Pessoa.Endereco.id;
   }
-  function eliminar_funcionario() {
-    axios
-      .delete("http://localhost:3001/apagar_funcionario", {
-        params: {
-          _id_funcionario: id_funcionario,
-          pessoaID: id_pessoa,
-          enderecoID: id_endereco,
-        },
-      })
-      .then((response) => {
-        setAlert(response.data.message);
-        setRedireciona("/dashboard_admin");
-
-        setShowModal(false);
-        setShowModal2(true);
-        // You can update your UI here to reflect the deleted item.
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
 
   return (
     <>
@@ -87,13 +66,7 @@ const ModalDelete = (props) => {
               <Button onClick={props.close} variant="dark">
                 Não
               </Button>
-              <Button
-                className="btn btn-warning"
-                onClick={eliminar_funcionario}
-              >
-                {" "}
-                Sim
-              </Button>
+              <Button className="btn btn-warning"> Sim</Button>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

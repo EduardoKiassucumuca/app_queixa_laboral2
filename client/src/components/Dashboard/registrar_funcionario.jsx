@@ -7,6 +7,7 @@ import Axios from "axios";
 import ModalConfirmationQueixa from "../Queixoso/ModalConfirmationQueixa";
 import MyMenuAdmin from "./MyMenuAdmin";
 import MySideNavAdmin from "./MySideNavAdmin";
+import { Link } from "react-router-dom";
 
 function RegistrarFuncionario(props) {
   const [nome, setNome] = useState("");
@@ -18,35 +19,52 @@ function RegistrarFuncionario(props) {
   const [departamento, setDepartamento] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+
   const [privilegio, setPrivilegio] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
   const [erro, setErro] = useState("");
   const [erro2, setErro2] = useState("");
+  const [erroSenha, setErroSenha] = useState("");
+  const [erroSenhaConfirma, setErroSenhaConfirma] = useState("");
+  const [displayStyle, setDisplayStyle] = useState("none");
 
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const guardar_funcionario = (e) => {
     e.preventDefault();
-    Axios.post("http://localhost:3001/novo_funcionario", {
-      _nome: nome,
-      _sobrenome: sobrenome,
-      provincia: office,
-      telefone_principal: telefone1,
-      telefone_alternativo: telefone2,
-      _cargo: cargo,
-      _departamento: departamento,
-      _email: email,
-      _senha: senha,
-      _privilegio: privilegio,
-    })
-      .then((resposta) => {
-        setAlert(resposta.data.message);
-        setShowModal(true);
-        setRedireciona("/dashboard_admin");
+    if (
+      erro === "" &&
+      erro2 === "" &&
+      erroSenha === "" &&
+      erroSenhaConfirma === ""
+    ) {
+      Axios.post("http://localhost:3001/novo_funcionario", {
+        _nome: nome,
+        _sobrenome: sobrenome,
+        provincia: office,
+        telefone_principal: telefone1,
+        telefone_alternativo: telefone2,
+        _cargo: cargo,
+        _departamento: departamento,
+        _email: email,
+        _senha: senha,
+        _privilegio: privilegio,
       })
-      .catch((resposta) => {
-        console.log("error", resposta);
-      });
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          toggleDisplay();
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    }
   };
   const handleChangeNome = (e) => {
     const valor = e.target.value;
@@ -93,6 +111,27 @@ function RegistrarFuncionario(props) {
       setDepartamento(valor);
     }
   };
+  const handlePassword = (e) => {
+    const valor = e.target.value;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (regex.test(valor)) {
+      setSenha(valor);
+      setErroSenha("");
+    } else {
+      setErroSenha(
+        "A senha deve conter no minimo 8 caracteres, conter uma letra maisucula, um numero e um caracter especial."
+      );
+    }
+  };
+  const handleConfirmarPassword = (e) => {
+    const valor = e.target.value;
+    if (senha !== valor) {
+      setErroSenhaConfirma("As senhas não combinam");
+    } else {
+      setErroSenhaConfirma("");
+    }
+  };
   return (
     <>
       <MySideNavAdmin />
@@ -104,7 +143,22 @@ function RegistrarFuncionario(props) {
         redirect={redireciona}
         close={() => setShowModal(false)}
       />
-
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+        }}
+      >
+        <div class="modal-content">
+          <p>{alert}</p>
+          <div class="modal-footer">
+            <Link to="/dashboard_admin">
+              <Button variant="warning">OK</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
           <h3 className="mb-3 h1-queixa">Registrar Funcionarios</h3>
@@ -249,7 +303,7 @@ function RegistrarFuncionario(props) {
                   </div>
                   <div class="card-body">
                     <Row>
-                      <Col md={6}>
+                      <Col md={3}>
                         <Form.Group>
                           <Form.Label>Email</Form.Label>
                           <Form.Control
@@ -271,9 +325,32 @@ function RegistrarFuncionario(props) {
                             id="password"
                             name="password"
                             required
-                            onChange={(e) => setSenha(e.target.value)}
+                            onChange={(e) => handlePassword(e)}
                           />
                         </Form.Group>
+                        {erroSenha && (
+                          <div style={{ color: "red", fontSize: 12 }}>
+                            {erroSenha}
+                          </div>
+                        )}
+                      </Col>
+                      <Col md={3}>
+                        <Form.Group>
+                          <Form.Label>Confirmar Password</Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="Confirmar Password"
+                            id="confirmPassword"
+                            name="confirm_password"
+                            required
+                            onChange={(e) => handleConfirmarPassword(e)}
+                          />
+                        </Form.Group>
+                        {erroSenhaConfirma && (
+                          <div style={{ color: "red", fontSize: 12 }}>
+                            {erroSenhaConfirma}
+                          </div>
+                        )}
                       </Col>
                       <Col md={3}>
                         <Form.Group>

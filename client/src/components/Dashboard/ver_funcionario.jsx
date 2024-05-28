@@ -31,12 +31,20 @@ const VerFuncionario = () => {
 
   const [alert, setAlert] = useState("");
   const [redireciona, setRedireciona] = useState("");
-  const { id_funcionario } = useParams();
 
   const [funcionario, setFuncionario] = useState({});
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [displayStyle, setDisplayStyle] = useState("none");
 
+  const id_funcionario = localStorage.getItem("id_funcionario");
+
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   useEffect(() => {
     Axios.get("http://localhost:3001/ver_funcionario", {
       params: {
@@ -89,9 +97,7 @@ const VerFuncionario = () => {
     })
       .then(function (response) {
         //console.log(response);
-        setAlert(response.data.message);
-        setRedireciona(window.location.pathname);
-        setShowModal(true);
+        toggleDisplay();
 
         //window.location.href = '/chefe_servicos';
       })
@@ -99,18 +105,30 @@ const VerFuncionario = () => {
         console.log(error);
       });
   };
+  function goDashboard() {
+    window.location.href = "/dashboard_admin";
+  }
 
   return (
     <>
       <MySideNavAdmin />
       <MyMenuAdmin />
-      <ModalConfirmationQueixa
-        msg={alert}
-        show={showModal}
-        setShow={setShowModal}
-        redirect={redireciona}
-        close={() => setShowModal(false)}
-      />
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+        }}
+      >
+        <div class="modal-content">
+          <p>Funcionario editado com sucesso</p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={goDashboard}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
 
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
@@ -226,14 +244,16 @@ const VerFuncionario = () => {
                   <Col md={7}>
                     <Form.Group>
                       <Form.Label>Cargo</Form.Label>
-                      <Form.Control
-                        type="name"
+                      <Form.Select
+                        defaultValue="Choose..."
                         name="cargo"
                         id="cargo"
-                        placeholder="Cargo"
                         value={cargo}
                         onChange={(e) => setCargo(e.target.value)}
-                      />
+                      >
+                        <option>Inspector</option>
+                        <option>Recepcionista</option>
+                      </Form.Select>
                     </Form.Group>
                   </Col>
                   <Col md={5}>

@@ -69,10 +69,7 @@ function App() {
           path="/registrar_funcionario"
           element={<RegistrarFuncionario />}
         />
-        <Route
-          path="/ver_funcionario/:id_funcionario"
-          element={<VerFuncionario />}
-        />
+        <Route path="/ver_funcionario" element={<VerFuncionario />} />
         <Route path="/mais_detalhes/:id_queixa" element={<MaisDetalhes />} />
         <Route
           path="/queixasFiltradas/:estado"

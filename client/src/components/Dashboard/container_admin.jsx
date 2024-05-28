@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import "./container_admin.css";
 import { Button } from "react-bootstrap";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ModalDelete from "../Modal/modal_delete";
+import { Link, useNavigate } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
 
 function ContainerAdmin(props) {
@@ -11,6 +10,11 @@ function ContainerAdmin(props) {
   const [funcionarios, setFuncionarios] = useState([]);
   const [funcionario, setFuncionario] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle2, setDisplayStyle2] = useState("none");
+
+  const [alert, setAlert] = useState("");
+
   const itemsPerPage = 10; // Número de itens por página
 
   // Cálculo dos índices dos itens a serem exibidos na página atual
@@ -20,6 +24,18 @@ function ContainerAdmin(props) {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const navigate = useNavigate();
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay2 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle2((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   React.useEffect(() => {
     //console.log("ok");
     Axios.get("http://localhost:3001/funcionarios_igt")
@@ -36,10 +52,37 @@ function ContainerAdmin(props) {
   const novo_funcionario = () => {
     navigate("/registrar_funcionario");
   };
-  const modal_apagar = (funcionario) => {
+  const funcionarioSelecionado = (funcionario) => {
     setFuncionario(funcionario);
-    setShowModal(true);
+    console.log(funcionario);
+    toggleDisplay();
   };
+  function eliminar_funcionario() {
+    Axios.delete("http://localhost:3001/apagar_funcionario", {
+      params: {
+        _id_funcionario: funcionario.id,
+        pessoaID: funcionario.Pessoa.id,
+        enderecoID: funcionario.Pessoa.Endereco.id,
+      },
+    })
+      .then((response) => {
+        setAlert(response.data.message);
+        toggleDisplay();
+        toggleDisplay2();
+
+        // You can update your UI here to reflect the deleted item.
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  function reloadPage() {
+    window.location.reload();
+  }
+  function ver_funcionario(funcionario) {
+    localStorage.setItem("id_funcionario", funcionario.id);
+    window.location.href = "/ver_funcionario";
+  }
   return (
     <>
       <Button
@@ -62,7 +105,7 @@ function ContainerAdmin(props) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((funcionario) => (
+          {currentItems.reverse().map((funcionario) => (
             <tr>
               <th scope="row">{funcionario.id}</th>
               <td>
@@ -72,17 +115,17 @@ function ContainerAdmin(props) {
               <td>{funcionario.cargo}</td>
               <td>{funcionario.area_departamento}</td>
               <td>
-                <a
-                  href={`/ver_funcionario/${funcionario.id}`}
+                <button
+                  onClick={(e) => ver_funcionario(funcionario)}
                   className="btn btn-warning"
                 >
                   Editar
-                </a>
+                </button>
               </td>
               <td>
                 <a
                   className="btn btn-danger"
-                  onClick={() => modal_apagar(funcionario)}
+                  onClick={() => funcionarioSelecionado(funcionario)}
                 >
                   Apagar
                 </a>
@@ -91,6 +134,41 @@ function ContainerAdmin(props) {
           ))}
         </tbody>
       </table>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+        }}
+      >
+        <div class="modal-content">
+          <p>Tens a certeza que pretendes eliminar?</p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={eliminar_funcionario}>
+              Sim
+            </Button>
+            <Button variant="danger" onClick={toggleDisplay}>
+              Nao
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle2,
+        }}
+      >
+        <div class="modal-content">
+          <p>Funcionario eliminado com sucesso</p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={reloadPage}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
       <Pagination
         className="justify-content-center mb-0"
         style={{ marginTop: 10, paddingBottom: 10 }}
@@ -107,12 +185,6 @@ function ContainerAdmin(props) {
           </Pagination.Item>
         ))}
       </Pagination>
-      <ModalDelete
-        show={showModal}
-        setShow={setShowModal}
-        close={() => setShowModal(false)}
-        funcionario={funcionario}
-      />
     </>
   );
 }
