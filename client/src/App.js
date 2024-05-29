@@ -36,6 +36,7 @@ import QueixasFiltradasChefe from "./components/Chefe_Servicos/queixasFiltradas"
 import HomeMaisNoticias from "./components/Noticias/homeMaisNoticias";
 import HomeMaisArtigos from "./components/artigos/homeMaisArtigos";
 import HomeMaisDetalhesNoticias from "./components/Noticias/homeMaisDetalhesNoticias";
+import QueixasAdmin from "./components/Dashboard/queixas_admin";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -99,6 +100,7 @@ function App() {
           path="/saiba_mais/:cod_noticia"
           element={<HomeMaisDetalhesNoticias />}
         />
+        <Route path="/queixas_admin" element={<QueixasAdmin />} />
       </Routes>
     </Router>
   );

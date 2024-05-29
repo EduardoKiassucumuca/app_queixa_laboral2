@@ -5,7 +5,7 @@ import SideNav, {
   NavIcon,
   NavText,
 } from "@trendmicro/react-sidenav";
-
+import { MdAnnouncement } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 
 // Be sure to include styles at some point, probably during your bootstraping
@@ -37,6 +37,15 @@ function MySideNavAdmin() {
 
           <NavText>
             <a href="/registrar_funcionario">Registrar Funcionario</a>
+          </NavText>
+        </NavItem>
+        <NavItem eventKey="Queixas">
+          <NavIcon>
+            <MdAnnouncement style={{ fontSize: "1.75em" }} />
+          </NavIcon>
+
+          <NavText>
+            <a href="/queixas_admin">Queixas</a>
           </NavText>
         </NavItem>
       </SideNav.Nav>

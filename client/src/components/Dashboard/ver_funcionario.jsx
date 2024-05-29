@@ -36,7 +36,10 @@ const VerFuncionario = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
-
+  const [erro, setErro] = useState("");
+  const [erro2, setErro2] = useState("");
+  const [erroSenha, setErroSenha] = useState("");
+  const [erroSenhaConfirma, setErroSenhaConfirma] = useState("");
   const id_funcionario = localStorage.getItem("id_funcionario");
 
   const toggleDisplay = () => {
@@ -108,6 +111,72 @@ const VerFuncionario = () => {
   function goDashboard() {
     window.location.href = "/dashboard_admin";
   }
+  const handleChangeNome = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setNome(valor);
+    }
+  };
+  const handleChangeSobrenome = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setSobrenome(valor);
+    }
+  };
+  const handleChangePhone1 = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^9[1-9][0-9]{7}$/.test(valor) || valor === "") {
+      setTelefone1(valor);
+      setErro("");
+    } else {
+      setErro(
+        "O número deve começar com 9, seguido por um dígito entre 1 e 9, e ter exatamente 9 dígitos."
+      );
+    }
+  };
+  const handleChangePhone2 = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^9[1-9][0-9]{7}$/.test(valor) || valor === "") {
+      setTelefone2(valor);
+      setErro2("");
+    } else {
+      setErro2(
+        "O número deve começar com 9, seguido por um dígito entre 1 e 9, e ter exatamente 9 dígitos."
+      );
+    }
+  };
+  const handleChangeDepartamento = (e) => {
+    const valor = e.target.value;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setDepartamento(valor);
+    }
+  };
+  const handlePassword = (e) => {
+    const valor = e.target.value;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // Expressão regular para permitir apenas letras (maiúsculas e minúsculas)
+    if (regex.test(valor)) {
+      setSenha(valor);
+      setErroSenha("");
+    } else {
+      setErroSenha(
+        "A senha deve conter no minimo 8 caracteres, conter uma letra maisucula, um numero e um caracter especial."
+      );
+    }
+  };
+  const handleConfirmarPassword = (e) => {
+    const valor = e.target.value;
+    if (senha !== valor) {
+      setErroSenhaConfirma("As senhas não combinam");
+    } else {
+      setErroSenhaConfirma("");
+    }
+  };
 
   return (
     <>
@@ -164,7 +233,7 @@ const VerFuncionario = () => {
                         name="nome"
                         required
                         value={nome}
-                        onChange={(e) => setNome(e.target.value)}
+                        onChange={handleChangeNome}
                       />
                     </Form.Group>
                   </Col>
@@ -178,7 +247,7 @@ const VerFuncionario = () => {
                         id="sobrenome"
                         name="sobrenome"
                         value={sobrenome}
-                        onChange={(e) => setSobrenome(e.target.value)}
+                        onChange={handleChangeSobrenome}
                       />
                     </Form.Group>
                   </Col>
@@ -190,6 +259,7 @@ const VerFuncionario = () => {
                         name="provincia"
                         id="provincia"
                         value={office}
+                        required
                         onChange={(e) => setOffice(e.target.value)}
                       >
                         <option>Escolha...</option>
@@ -224,9 +294,12 @@ const VerFuncionario = () => {
                         id="contacto1"
                         name="contacto_principal"
                         value={telefone1}
-                        onChange={(e) => setTelefone1(e.target.value)}
+                        onChange={handleChangePhone1}
                       />
                     </Form.Group>
+                    {erro && (
+                      <div style={{ color: "red", fontSize: 12 }}>{erro}</div>
+                    )}
                   </Col>
                   <Col md={3}>
                     <Form.Group>
@@ -237,9 +310,12 @@ const VerFuncionario = () => {
                         id="contacto2"
                         value={telefone2}
                         name="contacto_alternativo"
-                        onChange={(e) => setTelefone2(e.target.value)}
+                        onChange={handleChangePhone2}
                       />
                     </Form.Group>
+                    {erro2 && (
+                      <div style={{ color: "red", fontSize: 12 }}>{erro2}</div>
+                    )}
                   </Col>
                   <Col md={7}>
                     <Form.Group>
@@ -253,6 +329,9 @@ const VerFuncionario = () => {
                       >
                         <option>Inspector</option>
                         <option>Recepcionista</option>
+                        <option value={"chefe_servicos"}>
+                          Chefe dos servicos provinciais
+                        </option>
                       </Form.Select>
                     </Form.Group>
                   </Col>
@@ -265,7 +344,7 @@ const VerFuncionario = () => {
                         id="area_departamento"
                         placeholder="Área/departamento"
                         value={departamento}
-                        onChange={(e) => setDepartamento(e.target.value)}
+                        onChange={handleChangeDepartamento}
                       />
                     </Form.Group>
                   </Col>
