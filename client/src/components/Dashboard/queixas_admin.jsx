@@ -15,6 +15,7 @@ import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
 import MySideNavAdmin from "./MySideNavAdmin";
 import MyMenAdmin from "./MyMenuAdmin";
+import { Pagination } from "react-bootstrap";
 
 const formTemplate = {
   review: "",
@@ -39,7 +40,16 @@ const QueixasAdmin = ({ onSearch }) => {
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [displayStyle5, setDisplayStyle5] = useState("none");
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [notas, setNotas] = useState([]);
+  const itemsPerPage = 5; // Número de itens por página
+
+  // Cálculo dos índices dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = queixas.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   let data2 = "";
   let id_queixoso = "";
@@ -121,46 +131,14 @@ const QueixasAdmin = ({ onSearch }) => {
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
-        // const todas_queixas = data.queixas[0].concat(data.queixas[1])
-
-        //console.log("data.queixas");
-        const queixas_selecionadas = data.queixas.filter(
-          (queixa) => queixa.provincia === data2.trabalhador.localizacao_office
-        );
-        setQueixaSelecProv(queixas_selecionadas);
-
-        setConflitos(queixas_selecionadas);
-        console.log(data.queixas);
-
-        //console.log(lista_queixa.minha_queixa)
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    Axios.get("http://localhost:3001/queixas")
-      .then(({ data }) => {
         setQueixas(data.queixas);
-        //console.log(lista_queixa.minha_queixa)
+        console.log(data.queixas);
       })
       .catch((res) => {
         alert(res.response.data.msg);
       });
   }, []);
 
-  /*const queixas_selecprovincia2 = queixas.filter(
-    (queixa) => queixa.provincia === user_logado.trabalhador.localizacao_office
-  );
-  const qtd_queixa_aberto = queixas_selecprovincia.filter(
-    (queixa) => queixa.estado === "Aberto"
-  ).length;
-  const qtd_queixa_encaminhadasChefe = queixas_selecprovincia.filter(
-    (queixa) => queixa.estado === "Analise"
-  ).length;
-
-  const qtd_queixa_encaminhadasfechada = queixas_selecprovincia.filter(
-    (queixa) => queixa.estado === "Encerrado"
-  ).length;
-*/
   const [inspector, setInspector] = useState("");
   function buscaCodigo(codigo_pesquisado) {
     setCodigo(codigo_pesquisado);
@@ -464,7 +442,10 @@ const QueixasAdmin = ({ onSearch }) => {
                   ></span>
                 </span>
                 <div class="progress-value" style={{ color: "#0d6efd" }}>
-                  {0}
+                  {
+                    queixas?.filter((queixa) => queixa.estado === "Aberto")
+                      .length
+                  }
                 </div>
               </div>
             </Link>
@@ -490,7 +471,10 @@ const QueixasAdmin = ({ onSearch }) => {
                   ></span>
                 </span>
                 <div class="progress-value" style={{ color: "#daa316" }}>
-                  {0}
+                  {
+                    queixas?.filter((queixa) => queixa.estado === "Analise")
+                      .length
+                  }
                 </div>
               </div>
             </Link>
@@ -509,62 +493,37 @@ const QueixasAdmin = ({ onSearch }) => {
                 <span class="progress-right">
                   <span class="progress-bar"></span>
                 </span>
-                <div class="progress-value">{0}</div>
+                <div class="progress-value">
+                  {
+                    queixas?.filter((queixa) => queixa.estado === "Encerrado")
+                      .length
+                  }
+                </div>
               </div>
             </Link>
           </div>
         </div>
-        <h1 style={{ color: "#daa316", fontSize: "24px", fontWeight: "600" }}>
-          Todas Queixas
-        </h1>
+
         <Col md={3}>
-          {/*<Button
+          <Button
             variant="warning"
             onClick={() => setShowModal2(true)}
             className="fw-bold btn-nova-queixa"
             type="submit"
           >
             Nova Queixa
-          </Button>*/}
+          </Button>
         </Col>
-        <Col md={2}>
+        <Col md={6}>
           <Search
             className="pesquisa1"
-            placeholder="Procurar pelo Código"
+            placeholder="Pesquisar"
             value={codigo}
             onChange={(e) => buscaCodigo(e.target.value)}
           />
         </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa"
-            placeholder="Procurar pelo Inspector"
-            value={inspector}
-            onChange={(e) => buscaInspector(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa1"
-            placeholder="Procurar pelo Bilhete de Identificação"
-            value={BI}
-            onChange={(e) => buscaBI(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Search
-            className="pesquisa2"
-            placeholder="Procurar pelo NIF"
-            value={nif}
-            onChange={(e) => buscaNIF(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          {" "}
-          <p className="p-localizacao"></p>
-        </Col>
 
-        <Col md={12} style={{ marginTop: 15 }}>
+        <Col md={12} style={{ marginTop: 0 }}>
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
@@ -572,27 +531,19 @@ const QueixasAdmin = ({ onSearch }) => {
 
                 <th scope="col"> Trabalhador</th>
                 <th scope="col"> Empregador</th>
-                <th scope="col"> Inspector</th>
-                <th scope="col"> Testemunha</th>
+
                 <th scope="col">Queixa</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Provincia</th>
               </tr>
             </thead>
             <tbody>
-              {conflitos.map((conflito) => (
+              {currentItems.reverse()?.map((conflito) => (
                 <tr>
                   <th scope="row">{conflito.id}</th>
                   <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
                   <th scope="row">{conflito.Empresa.nome_empresa}</th>
-                  <th scope="row">
-                    {conflito.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
-                  <th scope="row">
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
+
                   <td>{conflito.facto}</td>
                   <td>
                     {" "}
@@ -630,6 +581,24 @@ const QueixasAdmin = ({ onSearch }) => {
                   ) : (
                     <>
                       <td>
+                        <Button
+                          variant="info"
+                          className="fw-bold btn-nova-queixa"
+                          type="button"
+                        >
+                          Editar
+                        </Button>
+                      </td>
+                      <td>
+                        <Button
+                          variant="danger"
+                          className="fw-bold btn-nova-queixa"
+                          type="button"
+                        >
+                          Eliminar
+                        </Button>
+                      </td>
+                      <td>
                         {" "}
                         <Button
                           onClick={() => ver_inspectores(conflito)}
@@ -643,7 +612,7 @@ const QueixasAdmin = ({ onSearch }) => {
                       <td>
                         <Button
                           onClick={() => ver_testemunhas(conflito)}
-                          variant="warning"
+                          variant="dark"
                           className="fw-bold btn-nova-queixa"
                           type="button"
                         >
@@ -656,6 +625,22 @@ const QueixasAdmin = ({ onSearch }) => {
               ))}
             </tbody>
           </table>
+          <Pagination
+            className="justify-content-center mb-0"
+            style={{ marginTop: 10, paddingBottom: 10 }}
+          >
+            {Array.from({
+              length: Math.ceil(queixas.length / itemsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
         </Col>
       </Row>
     </>
