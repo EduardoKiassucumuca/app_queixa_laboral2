@@ -37,6 +37,7 @@ import HomeMaisNoticias from "./components/Noticias/homeMaisNoticias";
 import HomeMaisArtigos from "./components/artigos/homeMaisArtigos";
 import HomeMaisDetalhesNoticias from "./components/Noticias/homeMaisDetalhesNoticias";
 import QueixasAdmin from "./components/Dashboard/queixas_admin";
+import QueixasPorEstado from "./components/Dashboard/queixas_por_estado";
 function App() {
   const [show, setShow] = useState("Empregador");
   return (
@@ -101,6 +102,7 @@ function App() {
           element={<HomeMaisDetalhesNoticias />}
         />
         <Route path="/queixas_admin" element={<QueixasAdmin />} />
+        <Route path="/queixas_admin/:estado" element={<QueixasPorEstado />} />
       </Routes>
     </Router>
   );

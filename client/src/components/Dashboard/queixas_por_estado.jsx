@@ -10,11 +10,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import Search from "antd/es/transfer/search";
-
-import { FaFilePdf } from "react-icons/fa";
-import FileDownload from "js-file-download";
+import ModalConfirmacao from "../Modal/modalConfirmation";
 import MySideNavAdmin from "./MySideNavAdmin";
 import MyMenAdmin from "./MyMenuAdmin";
+import { useParams } from "react-router-dom";
+import { FaFilePdf } from "react-icons/fa";
+import FileDownload from "js-file-download";
 import { Pagination } from "react-bootstrap";
 
 const formTemplate = {
@@ -22,7 +23,7 @@ const formTemplate = {
   comment: "",
 };
 
-const QueixasAdmin = ({ onSearch }) => {
+const QueixasPorEstado = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
@@ -40,19 +41,20 @@ const QueixasAdmin = ({ onSearch }) => {
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [displayStyle5, setDisplayStyle5] = useState("none");
-
+  const [pesquisar, setPesquisar] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [notas, setNotas] = useState([]);
-  const itemsPerPage = 5; // Número de itens por página
+  const itemsPerPage = 7; // Número de itens por página
 
   // Cálculo dos índices dos itens a serem exibidos na página atual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = queixas.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   let data2 = "";
   let id_queixoso = "";
+  const { estado } = useParams();
 
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
@@ -131,8 +133,7 @@ const QueixasAdmin = ({ onSearch }) => {
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
-        setQueixas(data.queixas);
-        console.log(data.queixas);
+        setConflitos(data.queixas);
       })
       .catch((res) => {
         alert(res.response.data.msg);
@@ -254,11 +255,11 @@ const QueixasAdmin = ({ onSearch }) => {
       FileDownload(res.data, filename);
     });
   };
-  const getNotas = async () => {};
   return (
     <>
       <MyMenAdmin />
       <MySideNavAdmin />
+
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
         <div class="modal-content">
           <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
@@ -421,106 +422,20 @@ const QueixasAdmin = ({ onSearch }) => {
         </div>
       </div>
       <Row className="queixas_recepcionista">
-        <div class="row status-queixa">
-          <div class="col-md-3 col-sm-6" style={{ cursor: "pointer" }}>
-            <Link className="link-queixa-queixoso" to={`/queixas_admin/Aberto`}>
-              <h4 className="status-qtd-queixas">Em aberto</h4>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#0d6efd" }}
-                  ></span>
-                </span>
-                <span class="progress-right">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#0d6efd" }}
-                  ></span>
-                </span>
-                <div class="progress-value" style={{ color: "#0d6efd" }}>
-                  {
-                    queixas?.filter((queixa) => queixa.estado === "Aberto")
-                      .length
-                  }
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div class="col-md-3 col-sm-6">
-            <Link
-              className="link-queixa-queixoso"
-              to={`/queixas_admin/Analise`}
-            >
-              <h5 className="status-qtd-queixas">Em analise</h5>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#daa316" }}
-                  ></span>
-                </span>
-                <span class="progress-right">
-                  <span
-                    class="progress-bar"
-                    style={{ borderColor: "#daa316" }}
-                  ></span>
-                </span>
-                <div class="progress-value" style={{ color: "#daa316" }}>
-                  {
-                    queixas?.filter((queixa) => queixa.estado === "Analise")
-                      .length
-                  }
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div class="col-md-3 col-sm-6">
-            <Link
-              className="link-queixa-queixoso"
-              to={`/queixas_admin/Encerrado`}
-            >
-              <h5 className="status-qtd-queixas">Finalizadas</h5>
-              <div class="progress blue">
-                <span class="progress-left">
-                  <span class="progress-bar"></span>
-                </span>
-                <span class="progress-right">
-                  <span class="progress-bar"></span>
-                </span>
-                <div class="progress-value">
-                  {
-                    queixas?.filter((queixa) => queixa.estado === "Encerrado")
-                      .length
-                  }
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        <Col md={3}>
-          <Button
-            variant="warning"
-            onClick={() => setShowModal2(true)}
-            className="fw-bold btn-nova-queixa"
-            type="submit"
-          >
-            Nova Queixa
-          </Button>
-        </Col>
-        <Col md={6}>
+        <Col md={4}>
           <Search
             className="pesquisa1"
-            placeholder="Pesquisar"
-            value={codigo}
-            onChange={(e) => buscaCodigo(e.target.value)}
+            placeholder="Procurar"
+            value={pesquisar}
+            onChange={(e) => setPesquisar(e.target.value)}
           />
         </Col>
+        <Col md={2}>
+          {" "}
+          <p className="p-localizacao"></p>
+        </Col>
 
-        <Col md={12} style={{ marginTop: 0 }}>
+        <Col md={12} style={{ marginTop: 5 }}>
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
@@ -528,98 +443,109 @@ const QueixasAdmin = ({ onSearch }) => {
 
                 <th scope="col"> Trabalhador</th>
                 <th scope="col"> Empregador</th>
-
-                <th scope="col">Queixa</th>
+                <th scope="col"> Inspector</th>
+                <th scope="col"> Testemunha</th>
+                <th scope="col">Facto</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Provincia</th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.reverse()?.map((conflito) => (
-                <tr>
-                  <th scope="row">{conflito.id}</th>
-                  <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                  <th scope="row">{conflito.Empresa.nome_empresa}</th>
+              {currentItems
+                .reverse()
+                .filter((conflito) => {
+                  return (
+                    conflito.estado.includes(estado) &&
+                    (pesquisar === "" ||
+                      conflito.Trabalhador.Pessoa.nome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Trabalhador.Pessoa.sobrenome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Empresa.nome_empresa
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()))
+                  );
+                })
 
-                  <td>{conflito.facto}</td>
-                  <td>
-                    {" "}
-                    <Button
-                      style={{
-                        cursor: "default",
-                        borderRadius: "20px",
-                        fontSize: "12px",
-                      }}
-                      variant={
-                        conflito.estado === "Aberto"
-                          ? "primary"
-                          : conflito.estado === "Analise"
-                          ? "warning"
-                          : conflito.estado === "Encerrado"
-                          ? "danger"
-                          : "secondary"
+                .map((conflito) => (
+                  <tr>
+                    <th scope="row">{conflito.id}</th>
+                    <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
+                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                    <th scope="row">
+                      {conflito.Inspector.Trabalhador.Pessoa.nome}{" "}
+                      {conflito.Inspector.Trabalhador.Pessoa.sobrenome}
+                    </th>
+                    <th scope="row">
+                      {conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome}{" "}
+                      {
+                        conflito.Testemunha.Inspector.Trabalhador.Pessoa
+                          .sobrenome
                       }
-                    >
-                      {conflito.estado}
-                    </Button>
-                  </td>
-                  <td>{conflito.provincia}</td>
-                  {conflito.estado === "Encerrado" ? (
+                    </th>
+                    <td>{conflito.facto}</td>
                     <td>
+                      {" "}
                       <Button
-                        variant="dark"
-                        className="fw-bold btn-nova-queixa"
-                        type="button"
-                        onClick={(e) => ver_detalhes(conflito)}
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          conflito.estado === "Aberto"
+                            ? "primary"
+                            : conflito.estado === "Analise"
+                            ? "warning"
+                            : conflito.estado === "Encerrado"
+                            ? "danger"
+                            : "secondary"
+                        }
                       >
-                        Ver detalhes
+                        {conflito.estado}
                       </Button>
                     </td>
-                  ) : (
-                    <>
-                      <td>
-                        <Button
-                          variant="info"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Editar
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          variant="danger"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Eliminar
-                        </Button>
-                      </td>
-                      <td>
-                        {" "}
-                        <Button
-                          onClick={() => ver_inspectores(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Nomear Inspector
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          onClick={() => ver_testemunhas(conflito)}
-                          variant="dark"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Atribuir testemunhas
-                        </Button>
-                      </td>
-                    </>
-                  )}
-                </tr>
-              ))}
+                    <td>{conflito.provincia}</td>
+
+                    <td>
+                      {estado !== "Encerrado" ? (
+                        <>
+                          {" "}
+                          <Button
+                            onClick={() => ver_inspectores(conflito)}
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Nomear Inspector
+                          </Button>
+                          <Button
+                            onClick={() => ver_testemunhas(conflito)}
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Atribuir testemunhas
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <Button
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                            onClick={() => ver_detalhes(conflito)}
+                          >
+                            Ver detalhes
+                          </Button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <Pagination
@@ -627,7 +553,10 @@ const QueixasAdmin = ({ onSearch }) => {
             style={{ marginTop: 10, paddingBottom: 10 }}
           >
             {Array.from({
-              length: Math.ceil(queixas.length / itemsPerPage),
+              length: Math.ceil(
+                conflitos.filter((conflito) => conflito.estado.includes(estado))
+                  .length / itemsPerPage
+              ),
             }).map((_, index) => (
               <Pagination.Item
                 key={index}
@@ -643,4 +572,4 @@ const QueixasAdmin = ({ onSearch }) => {
     </>
   );
 };
-export default QueixasAdmin;
+export default QueixasPorEstado;
