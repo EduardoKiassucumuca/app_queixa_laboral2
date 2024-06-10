@@ -58,7 +58,7 @@ const QueixasAdmin = ({ onSearch }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const [selectedConflito, setSelectedConflito] = useState("");
   const [serverPath, setServerPath] = useState("");
-
+  const [options, setOptions] = useState(["anonimo", "normal"]);
   let data2 = "";
   let id_queixoso = "";
   const navigate = useNavigate();
@@ -465,14 +465,13 @@ const QueixasAdmin = ({ onSearch }) => {
               onChange={(e) => setmodo(e.target.value)}
             >
               <option value={modo}>{modo}</option>
-
-              {selectedConflito.modo === "normal" ? (
-                <option value="anonimo">anonimo</option>
-              ) : (
-                selectedConflito.modo === "anonimo" && (
-                  <option value="normal">normal</option>
-                )
-              )}
+              {options
+                .filter((option) => option !== modo)
+                .map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
             </Form.Select>
             <div class="modal-footer">
               <Button variant="warning" type="submit">
