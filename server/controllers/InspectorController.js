@@ -136,6 +136,7 @@ module.exports = {
           "facto",
           "provincia",
           "estado",
+          "modo",
           "empresaID",
           "trabalhadorID",
           "inspectorID",

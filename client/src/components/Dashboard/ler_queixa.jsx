@@ -41,11 +41,19 @@ const LerQueixa = () => {
   const handleShow = () => setShow(true);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
+
   const navigate = useNavigate();
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay3 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle3((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };

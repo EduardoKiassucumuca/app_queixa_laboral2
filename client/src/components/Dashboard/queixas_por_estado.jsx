@@ -465,7 +465,29 @@ const QueixasPorEstado = () => {
                         .includes(pesquisar.toLowerCase()) ||
                       conflito.Empresa.nome_empresa
                         .toLowerCase()
-                        .includes(pesquisar.toLowerCase()))
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Inspector.Trabalhador.Pessoa.nome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Inspector.Trabalhador.Pessoa.sobrenome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.facto
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.estado
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.provincia
+                        .toLowerCase()
+                        .includes(pesquisar.toLowerCase()) ||
+                      conflito.id.toString().includes(pesquisar))
                   );
                 })
 
@@ -510,39 +532,15 @@ const QueixasPorEstado = () => {
                     <td>{conflito.provincia}</td>
 
                     <td>
-                      {estado !== "Encerrado" ? (
-                        <>
-                          {" "}
-                          <Button
-                            onClick={() => ver_inspectores(conflito)}
-                            variant="warning"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
-                          >
-                            Nomear Inspector
-                          </Button>
-                          <Button
-                            onClick={() => ver_testemunhas(conflito)}
-                            variant="warning"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
-                          >
-                            Atribuir testemunhas
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          {" "}
-                          <Button
-                            variant="warning"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
-                            onClick={() => ver_detalhes(conflito)}
-                          >
-                            Ver detalhes
-                          </Button>
-                        </>
-                      )}
+                      {" "}
+                      <Button
+                        variant="warning"
+                        className="fw-bold btn-nova-queixa"
+                        type="button"
+                        onClick={() => ver_detalhes(conflito)}
+                      >
+                        Ver detalhes
+                      </Button>
                     </td>
                   </tr>
                 ))}

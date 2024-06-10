@@ -8,7 +8,7 @@ import { FaCircle } from "react-icons/fa6";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Search from "antd/es/transfer/search";
 
 import { FaFilePdf } from "react-icons/fa";
@@ -16,6 +16,8 @@ import FileDownload from "js-file-download";
 import MySideNavAdmin from "./MySideNavAdmin";
 import MyMenAdmin from "./MyMenuAdmin";
 import { Pagination } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 const formTemplate = {
   review: "",
@@ -40,23 +42,36 @@ const QueixasAdmin = ({ onSearch }) => {
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [displayStyle5, setDisplayStyle5] = useState("none");
-
+  const [pesquisar, setPesquisar] = useState("");
+  const [displayStyle6, setDisplayStyle6] = useState("none");
+  const [assunto, setAssunto] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [modo, setmodo] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [notas, setNotas] = useState([]);
   const itemsPerPage = 5; // Número de itens por página
-
+  const [conflito, setConflito] = useState();
   // Cálculo dos índices dos itens a serem exibidos na página atual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = queixas.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const [selectedConflito, setSelectedConflito] = useState("");
+  const [serverPath, setServerPath] = useState("");
 
   let data2 = "";
   let id_queixoso = "";
+  const navigate = useNavigate();
 
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle4((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay6 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle6((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -254,11 +269,220 @@ const QueixasAdmin = ({ onSearch }) => {
       FileDownload(res.data, filename);
     });
   };
+  function editar_queixa(id) {
+    const formData = new FormData();
+    const file_contrato = document.querySelector("#file_contrato");
+    if (file_contrato.files[0]) {
+      console.log("aaaa");
+
+      formData.append("id_queixa", selectedConflito.id);
+      formData.append("_modo", modo);
+      formData.append("assunto", assunto);
+      formData.append("facto", descricao);
+      formData.append("fileContrato", file_contrato.files[0]);
+      Axios.put("http://localhost:3001/editar_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
+        },
+      })
+        .then(function (response) {
+          //console.log(response);
+          toggleDisplay2();
+          //window.location.href = '/chefe_servicos';
+          alert("Queixa editada com sucesso");
+          window.location.href = "/ler_queixa/" + selectedConflito.id;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      Axios.put("http://localhost:3001/editar_queixa2", {
+        id_queixa: selectedConflito.id,
+        assunto: assunto,
+        facto: descricao,
+        _modo: modo,
+        fileContrato: selectedConflito.url_file_contrato,
+      })
+        .then(function (response) {
+          //console.log(response);
+          toggleDisplay2();
+          alert("Queixa editada com sucesso");
+          window.location.href = "/ler_queixa/" + selectedConflito.id;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }
+
+  function criar_historico(e) {
+    e.preventDefault();
+
+    //const file_BI = document.querySelector("#file_BI");
+
+    Axios.post("http://localhost:3001/historico_queixa", {
+      id_queixa: selectedConflito.id,
+      assunto: selectedConflito.assunto,
+      facto: selectedConflito.facto,
+      _modo: selectedConflito.modo,
+      fileContrato: selectedConflito.url_file_contrato,
+    })
+      .then((resposta) => {
+        editar_queixa(selectedConflito.id);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  }
+  const getQueixa = async () => {
+    await Axios.get("http://localhost:3001/ler_queixa", {
+      params: {
+        id_queixa: selectedConflito.id,
+      },
+    })
+      .then(({ data }) => {
+        setConflito(data.queixas[0]);
+        setAssunto(data.queixas[0].assunto);
+        setDescricao(data.queixas[0].facto);
+        setmodo(data.queixas[0].modo);
+        console.log(data.queixas[0]);
+        setServerPath(data.normalizePath);
+        //console.log(res);
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+  };
+  const reload = () => {
+    window.location.reload();
+  };
+  React.useEffect(() => {}, []);
+
+  let data = "";
+  let nome = "";
+  let sobrenome = "";
+  let empresa = "";
+  let perfil = "";
+  let tipo = "";
+  if (sessionStorage.getItem("dashboard_queixoso")) {
+    const savedData = sessionStorage.getItem("dashboard_queixoso");
+    data = JSON.parse(savedData);
+    if (data.trabalhador) {
+      nome = data.pessoa.nome;
+      sobrenome = data.pessoa.sobrenome;
+      perfil = nome + " " + sobrenome;
+      tipo = "trabalhador";
+    } else if (data.empresa) {
+      empresa = data.empresa.nome_empresa;
+      perfil = empresa;
+      tipo = "empresa";
+    }
+  }
+  function queixar() {
+    if (tipo === "trabalhador") {
+      navigate("/validacao_trabalhador");
+    } else {
+      navigate("/empregador");
+    }
+  }
+  function goModalSelectQueixa(conflito) {
+    setSelectedConflito(conflito);
+    getQueixa();
+    console.log(conflito);
+    toggleDisplay6();
+  }
   const getNotas = async () => {};
   return (
     <>
       <MyMenAdmin />
       <MySideNavAdmin />
+      <div id="myModal" class="modal" style={{ display: displayStyle6 }}>
+        <div class="modal-content">
+          <span
+            class="close"
+            style={{ textAlign: "right" }}
+            onClick={toggleDisplay6}
+          >
+            &times;
+          </span>
+
+          <form
+            onSubmit={(e) => criar_historico(e)}
+            enctype="multipart/form-data"
+          >
+            <Row className="mb-3">
+              <FloatingLabel controlId="floatingTextarea2" label="Assunto">
+                <Form.Control
+                  placeholder="Queixa"
+                  name="assunto_queixa"
+                  id="assunto-queixa"
+                  value={assunto}
+                  onChange={(e) => setAssunto(e.target.value)}
+                  style={{ padding: "2px" }}
+                />
+              </FloatingLabel>
+              <p></p>
+              <p></p>
+              <FloatingLabel
+                controlId="floatingTextarea2"
+                label="Descreva o que aconteceu"
+              >
+                <Form.Control
+                  as="textarea"
+                  placeholder="Queixa"
+                  name="descricao"
+                  id="descr-queixa"
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  style={{ height: "100px" }}
+                />
+              </FloatingLabel>
+              <p>
+                <FaFilePdf style={{ border: "red" }} />
+                <a
+                  href="#"
+                  onClick={(e) => handleDownload(conflito.url_file_contrato)}
+                  style={{ color: "rgb(220, 195, 119)" }}
+                >
+                  {selectedConflito.url_file_contrato}
+                </a>
+              </p>
+
+              <Col md={6}>
+                <Form.Label>Editar Contrato de Trabalho</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="file_contrato"
+                  id="file_contrato"
+                />
+              </Col>
+            </Row>
+            <Form.Label>Modo</Form.Label>
+
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) => setmodo(e.target.value)}
+            >
+              <option value={modo}>{modo}</option>
+
+              {selectedConflito.modo === "normal" ? (
+                <option value="anonimo">anonimo</option>
+              ) : (
+                selectedConflito.modo === "anonimo" && (
+                  <option value="normal">normal</option>
+                )
+              )}
+            </Form.Select>
+            <div class="modal-footer">
+              <Button variant="warning" type="submit">
+                {" "}
+                Editar
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
         <div class="modal-content">
           <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
@@ -515,8 +739,8 @@ const QueixasAdmin = ({ onSearch }) => {
           <Search
             className="pesquisa1"
             placeholder="Pesquisar"
-            value={codigo}
-            onChange={(e) => buscaCodigo(e.target.value)}
+            value={pesquisar}
+            onChange={(e) => setPesquisar(e.target.value)}
           />
         </Col>
 
@@ -535,91 +759,130 @@ const QueixasAdmin = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.reverse()?.map((conflito) => (
-                <tr>
-                  <th scope="row">{conflito.id}</th>
-                  <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                  <th scope="row">{conflito.Empresa.nome_empresa}</th>
+              {currentItems
+                .reverse()
+                .filter((conflito) => {
+                  return (
+                    pesquisar === "" ||
+                    conflito.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Empresa.nome_empresa
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Inspector.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Inspector.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.facto
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.estado
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.provincia
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.id.toString().includes(pesquisar)
+                  );
+                })
+                .map((conflito) => (
+                  <tr>
+                    <th scope="row">{conflito.id}</th>
+                    <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
+                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
 
-                  <td>{conflito.facto}</td>
-                  <td>
-                    {" "}
-                    <Button
-                      style={{
-                        cursor: "default",
-                        borderRadius: "20px",
-                        fontSize: "12px",
-                      }}
-                      variant={
-                        conflito.estado === "Aberto"
-                          ? "primary"
-                          : conflito.estado === "Analise"
-                          ? "warning"
-                          : conflito.estado === "Encerrado"
-                          ? "danger"
-                          : "secondary"
-                      }
-                    >
-                      {conflito.estado}
-                    </Button>
-                  </td>
-                  <td>{conflito.provincia}</td>
-                  {conflito.estado === "Encerrado" ? (
+                    <td>{conflito.facto}</td>
                     <td>
+                      {" "}
                       <Button
-                        variant="dark"
-                        className="fw-bold btn-nova-queixa"
-                        type="button"
-                        onClick={(e) => ver_detalhes(conflito)}
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          conflito.estado === "Aberto"
+                            ? "primary"
+                            : conflito.estado === "Analise"
+                            ? "warning"
+                            : conflito.estado === "Encerrado"
+                            ? "danger"
+                            : "secondary"
+                        }
                       >
-                        Ver detalhes
+                        {conflito.estado}
                       </Button>
                     </td>
-                  ) : (
-                    <>
+                    <td>{conflito.provincia}</td>
+                    {conflito.estado === "Encerrado" ? (
                       <td>
                         <Button
-                          variant="info"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Editar
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          variant="danger"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Eliminar
-                        </Button>
-                      </td>
-                      <td>
-                        {" "}
-                        <Button
-                          onClick={() => ver_inspectores(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Nomear Inspector
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          onClick={() => ver_testemunhas(conflito)}
                           variant="dark"
                           className="fw-bold btn-nova-queixa"
                           type="button"
+                          onClick={(e) => ver_detalhes(conflito)}
                         >
-                          Atribuir testemunhas
+                          Ver detalhes
                         </Button>
                       </td>
-                    </>
-                  )}
-                </tr>
-              ))}
+                    ) : (
+                      <>
+                        <td>
+                          <Button
+                            variant="info"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                            onClick={(e) => goModalSelectQueixa(conflito)}
+                          >
+                            Editar
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Eliminar
+                          </Button>
+                        </td>
+                        <td>
+                          {" "}
+                          <Button
+                            onClick={() => ver_inspectores(conflito)}
+                            variant="warning"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Nomear Inspector
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            onClick={() => ver_testemunhas(conflito)}
+                            variant="dark"
+                            className="fw-bold btn-nova-queixa"
+                            type="button"
+                          >
+                            Atribuir testemunhas
+                          </Button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
             </tbody>
           </table>
           <Pagination
