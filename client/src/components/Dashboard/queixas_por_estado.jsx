@@ -133,7 +133,11 @@ const QueixasPorEstado = () => {
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
-        setConflitos(data.queixas);
+        setConflitos(
+          data.queixas.filter((conflito) =>
+            conflito.estado.toLowerCase().includes(estado.toLowerCase())
+          )
+        );
       })
       .catch((res) => {
         alert(res.response.data.msg);
@@ -152,41 +156,7 @@ const QueixasPorEstado = () => {
     if (codigo_pesquisado === "") setConflitos(queixas_selecprovincia);
     //console.log(conflitos);
   }
-  function buscaBI(bi_pesquisado) {
-    setBI(bi_pesquisado);
-    console.log(BI);
-    setConflitos(
-      queixas_selecprovincia.filter((queixa_pesquisada) =>
-        queixa_pesquisada.Trabalhador.Pessoa.BI.numeroBI
-          .toLowerCase()
-          .includes(bi_pesquisado.toLowerCase())
-      )
-    );
-    //console.log(conflitos);
-  }
-  function buscaInspector(inspector_pesquisado) {
-    setInspector(inspector_pesquisado);
 
-    setConflitos(
-      queixas_selecprovincia.filter((queixa_pesquisada) =>
-        queixa_pesquisada.Inspector.Trabalhador.Pessoa.nome
-          .toLowerCase()
-          .includes(inspector_pesquisado.toLowerCase())
-      )
-    );
-    //console.log(conflitos);
-  }
-  function buscaNIF(nif_pesquisado) {
-    setNif(nif_pesquisado);
-    setConflitos(
-      queixas_selecprovincia.filter((queixa_pesquisada) =>
-        queixa_pesquisada.Empresa.nif
-          .toLowerCase()
-          .includes(nif_pesquisado.toLowerCase())
-      )
-    );
-    //console.log(conflitos);
-  }
   function ver_inspectores(conflito_selecionado) {
     setConflitoSelec(conflito_selecionado);
     Axios.get("http://localhost:3001/inspectores")
@@ -452,42 +422,45 @@ const QueixasPorEstado = () => {
             </thead>
             <tbody>
               {currentItems
+                .filter((conflito) =>
+                  conflito.estado.toLowerCase().includes(estado.toLowerCase())
+                ) // Filtra primeiro pelo estado
+
                 .reverse()
                 .filter((conflito) => {
                   return (
-                    conflito.estado.includes(estado) &&
-                    (pesquisar === "" ||
-                      conflito.Trabalhador.Pessoa.nome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Trabalhador.Pessoa.sobrenome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Empresa.nome_empresa
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Inspector.Trabalhador.Pessoa.nome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Inspector.Trabalhador.Pessoa.sobrenome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.facto
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.estado
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.provincia
-                        .toLowerCase()
-                        .includes(pesquisar.toLowerCase()) ||
-                      conflito.id.toString().includes(pesquisar))
+                    pesquisar === "" ||
+                    conflito.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Empresa.nome_empresa
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Inspector.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Inspector.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.facto
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.estado
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.provincia
+                      .toLowerCase()
+                      .includes(pesquisar.toLowerCase()) ||
+                    conflito.id.toString().includes(pesquisar)
                   );
                 })
 
@@ -551,10 +524,7 @@ const QueixasPorEstado = () => {
             style={{ marginTop: 10, paddingBottom: 10 }}
           >
             {Array.from({
-              length: Math.ceil(
-                conflitos.filter((conflito) => conflito.estado.includes(estado))
-                  .length / itemsPerPage
-              ),
+              length: Math.ceil(conflitos.length / itemsPerPage),
             }).map((_, index) => (
               <Pagination.Item
                 key={index}
