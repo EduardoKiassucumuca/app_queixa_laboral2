@@ -42,6 +42,8 @@ const QueixasAdmin = ({ onSearch }) => {
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [displayStyle5, setDisplayStyle5] = useState("none");
+  const [displayStyle7, setDisplayStyle7] = useState("none");
+
   const [pesquisar, setPesquisar] = useState("");
   const [displayStyle6, setDisplayStyle6] = useState("none");
   const [assunto, setAssunto] = useState("");
@@ -72,6 +74,12 @@ const QueixasAdmin = ({ onSearch }) => {
   const toggleDisplay6 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle6((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay7 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle7((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -330,18 +338,18 @@ const QueixasAdmin = ({ onSearch }) => {
         console.log(error);
       });
   }
-  function criar_historico_apagar(queixa) {
+  function criar_historico_apagar() {
     //const file_BI = document.querySelector("#file_BI");
 
     Axios.post("http://localhost:3001/historico_queixa", {
-      id_queixa: queixa.id,
-      assunto: queixa.assunto,
-      facto: queixa.facto,
-      _modo: queixa.modo,
-      fileContrato: queixa.url_file_contrato,
+      id_queixa: selectedConflito.id,
+      assunto: selectedConflito.assunto,
+      facto: selectedConflito.facto,
+      _modo: selectedConflito.modo,
+      fileContrato: selectedConflito.url_file_contrato,
     })
       .then((resposta) => {
-        delete_queixa(queixa);
+        delete_queixa(selectedConflito);
       })
       .catch((resposta) => {
         console.log("error", resposta);
@@ -427,6 +435,10 @@ const QueixasAdmin = ({ onSearch }) => {
     getQueixa();
     console.log(conflito);
     toggleDisplay6();
+  }
+  function opt_confirmacao(conflito) {
+    setSelectedConflito(conflito);
+    toggleDisplay7();
   }
   const getNotas = async () => {};
   return (
@@ -679,6 +691,25 @@ const QueixasAdmin = ({ onSearch }) => {
           </div>
         </div>
       </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle7,
+        }}
+      >
+        <div class="modal-content">
+          <p>Tens a certeza que pretendes eliminar?</p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={criar_historico_apagar}>
+              Sim
+            </Button>
+            <Button variant="danger" onClick={toggleDisplay7}>
+              Nao
+            </Button>
+          </div>
+        </div>
+      </div>
       <Row className="queixas_recepcionista">
         <div class="row status-queixa">
           <div class="col-md-3 col-sm-6" style={{ cursor: "pointer" }}>
@@ -889,7 +920,7 @@ const QueixasAdmin = ({ onSearch }) => {
                             variant="danger"
                             className="fw-bold btn-nova-queixa"
                             type="button"
-                            onClick={(e) => criar_historico_apagar(conflito)}
+                            onClick={(e) => opt_confirmacao(conflito)}
                           >
                             Eliminar
                           </Button>
