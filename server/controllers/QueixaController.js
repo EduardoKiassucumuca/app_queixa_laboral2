@@ -1733,16 +1733,16 @@ module.exports = {
     }
   },
   async delete(req, res) {
-    const { pessoa_id } = req.params;
+    const { queixa_id } = req.query;
 
-    await Pessoa.destroy({
+    await Queixa.destroy({
       where: {
-        id: pessoa_id,
+        id: queixa_id,
       },
     });
     return res.status(200).send({
       status: 1,
-      message: "Pessoa apagada com sucesso!",
+      message: "Queixa apagada com sucesso!",
     });
   },
 };

@@ -247,13 +247,12 @@ const QueixasAdmin = ({ onSearch }) => {
       .then(({ data }) => {
         setNotas(data);
         console.log(data);
+        toggleDisplay5();
         //console.log(lista_queixa.minha_queixa)
       })
       .catch(({ res }) => {
         console.log(res);
       });
-    console.log(notas);
-    toggleDisplay5();
   }
   const handleDownload = async (url_file) => {
     const filename = url_file.split("\\").pop();
@@ -290,7 +289,7 @@ const QueixasAdmin = ({ onSearch }) => {
           toggleDisplay2();
           //window.location.href = '/chefe_servicos';
           alert("Queixa editada com sucesso");
-          window.location.href = "/ler_queixa/" + selectedConflito.id;
+          reload();
         })
         .catch(function (error) {
           console.log(error);
@@ -305,9 +304,9 @@ const QueixasAdmin = ({ onSearch }) => {
       })
         .then(function (response) {
           //console.log(response);
-          toggleDisplay2();
+          //toggleDisplay2();
           alert("Queixa editada com sucesso");
-          window.location.href = "/ler_queixa/" + selectedConflito.id;
+          reload();
         })
         .catch(function (error) {
           console.log(error);
@@ -315,6 +314,39 @@ const QueixasAdmin = ({ onSearch }) => {
     }
   }
 
+  function delete_queixa(queixa) {
+    Axios.delete(`http://localhost:3001/apagar_queixa`, {
+      params: {
+        queixa_id: queixa.id,
+      },
+    })
+      .then(function (response) {
+        //console.log(response);
+        //toggleDisplay2();
+        alert("Queixa apagada com sucesso");
+        reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  function criar_historico_apagar(queixa) {
+    //const file_BI = document.querySelector("#file_BI");
+
+    Axios.post("http://localhost:3001/historico_queixa", {
+      id_queixa: queixa.id,
+      assunto: queixa.assunto,
+      facto: queixa.facto,
+      _modo: queixa.modo,
+      fileContrato: queixa.url_file_contrato,
+    })
+      .then((resposta) => {
+        delete_queixa(queixa);
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+  }
   function criar_historico(e) {
     e.preventDefault();
 
@@ -354,10 +386,14 @@ const QueixasAdmin = ({ onSearch }) => {
         console.log(res);
       });
   };
+  useEffect(() => {
+    if (selectedConflito && selectedConflito.id) {
+      getQueixa();
+    }
+  }, [selectedConflito]);
   const reload = () => {
     window.location.reload();
   };
-  React.useEffect(() => {}, []);
 
   let data = "";
   let nome = "";
@@ -853,6 +889,7 @@ const QueixasAdmin = ({ onSearch }) => {
                             variant="danger"
                             className="fw-bold btn-nova-queixa"
                             type="button"
+                            onClick={(e) => criar_historico_apagar(conflito)}
                           >
                             Eliminar
                           </Button>

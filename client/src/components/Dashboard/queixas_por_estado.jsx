@@ -135,7 +135,10 @@ const QueixasPorEstado = () => {
       .then(({ data }) => {
         setConflitos(
           data.queixas.filter((conflito) =>
-            conflito.estado.toLowerCase().includes(estado.toLowerCase())
+            conflito.estado
+              .toString()
+              .toLowerCase()
+              .includes(estado.toString().toLowerCase())
           )
         );
       })
@@ -524,7 +527,7 @@ const QueixasPorEstado = () => {
             style={{ marginTop: 10, paddingBottom: 10 }}
           >
             {Array.from({
-              length: Math.ceil(conflitos.length / itemsPerPage),
+              length: Math.ceil(currentItems.length / itemsPerPage),
             }).map((_, index) => (
               <Pagination.Item
                 key={index}
