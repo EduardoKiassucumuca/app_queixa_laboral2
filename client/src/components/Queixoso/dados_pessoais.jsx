@@ -3,12 +3,13 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useState } from "react";
-
+import axios from "axios";
 import "./dados_pessoais.css";
 
 const UseForm = ({ data, updateFielHndler }) => {
   const [dataContacto, setdataContacto] = useState([data]);
-
+  const [city, setCity] = useState(data.provincia);
+  const [municipios, setMunicipios] = useState("");
   const addContacto = () => {
     setdataContacto([...dataContacto, data]);
   };
@@ -20,7 +21,124 @@ const UseForm = ({ data, updateFielHndler }) => {
   };
   const [show, setShow] = useState(false);
   const [novoTrabalhador, setNovoTrabalhador] = useState({});
+  const [bairros, setBairros] = useState([]);
+  const [ruas, setRuas] = useState([]);
+  const [options, setOptions] = useState(["Option 1", "Option 2", "Option 3"]);
+  const [newOption, setNewOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleInputChange = (event) => {
+    setNewOption(event.target.value);
+  };
+
+  const handleAddOption = () => {
+    if (newOption && !options.includes(newOption)) {
+      setOptions([...options, newOption]);
+      setSelectedOption(newOption);
+      setNewOption("");
+    }
+  };
   let novoTrabalhador2 = {};
+
+  async function getMunicipios(city) {
+    const overpassUrl = `
+      [out:json];
+      area[name="${city}"]->.searchArea;
+      (node["place"="city"](area.searchArea);
+       way["place"="city"](area.searchArea);
+       rel["place"="city"](area.searchArea););
+      out body;
+      >;
+      out skel qt;`;
+
+    try {
+      console.log("Fetching municipios for city:", city);
+      const response = await axios.post(
+        "http://overpass-api.de/api/interpreter",
+        overpassUrl
+      );
+      console.log("Overpass API response for municipios:", response.data);
+      const municipios = [];
+      response.data.elements.forEach((element) => {
+        if (element.tags && element.tags.name) {
+          municipios.push(element.tags.name);
+        }
+      });
+      console.log("Municipios found:", municipios);
+      return Array.from(new Set(municipios)); // Remove duplicates
+    } catch (error) {
+      console.error("Error fetching municipios:", error);
+      return [];
+    }
+  }
+
+  async function getNeighborhoods(municipio) {
+    const overpassUrl = `
+      [out:json];
+      area[name="${municipio}"]["place"="city"]->.municipioArea;
+      (node["place"="suburb"](area.municipioArea);
+       way["place"="suburb"](area.municipioArea);
+       rel["place"="suburb"](area.municipioArea););
+      out body;
+      >;
+      out skel qt;`;
+
+    try {
+      console.log("Fetching neighborhoods for municipio:", municipio);
+      const response = await axios.post(
+        "http://overpass-api.de/api/interpreter",
+        overpassUrl
+      );
+      console.log("Overpass API response for neighborhoods:", response.data);
+      const neighborhoods = [];
+      response.data.elements.forEach((element) => {
+        if (element.tags && element.tags.name) {
+          neighborhoods.push(element.tags.name);
+        }
+      });
+      console.log("Neighborhoods found:", neighborhoods);
+      return Array.from(new Set(neighborhoods)); // Remove duplicates
+    } catch (error) {
+      console.error("Error fetching neighborhoods:", error);
+      return [];
+    }
+  }
+
+  async function getStreets(neighborhood) {
+    const overpassUrl = `
+      [out:json];
+      area[name="${neighborhood}"]["place"="suburb"]->.neighborhoodArea;
+      (way["highway"](area.neighborhoodArea);
+       node(w)(area.neighborhoodArea););
+      out body;
+      >;
+      out skel qt;`;
+
+    try {
+      console.log("Fetching streets for neighborhood:", neighborhood);
+      const response = await axios.post(
+        "http://overpass-api.de/api/interpreter",
+        overpassUrl
+      );
+      console.log("Overpass API response for streets:", response.data);
+      const streets = [];
+      response.data.elements.forEach((element) => {
+        if (element.tags && element.tags.name) {
+          streets.push(element.tags.name);
+        }
+      });
+      console.log("Streets found:", streets);
+      return Array.from(new Set(streets)); // Remove duplicates
+    } catch (error) {
+      console.error(`Error fetching streets for ${neighborhood}:`, error);
+      return [];
+    }
+  }
+
   React.useEffect(() => {
     if (localStorage.getItem("trabalhador")) {
       const trabalhador = localStorage.getItem("trabalhador");
@@ -31,9 +149,33 @@ const UseForm = ({ data, updateFielHndler }) => {
       const BI_validado = JSON.parse(bilhete_identidade);
       console.log(novoTrabalhador);
       data.nBI = BI_validado;
-      //data.nome = novoTrabalhador.Pessoa.nome;
+      setCity(data.provincia); // Update city here
     }
-  }, []);
+  }, [data.provincia]);
+
+  const handleProvinceChange = async (e) => {
+    const value = e.target.value;
+    updateFielHndler("provincia", value);
+    setCity(value);
+    /*const municipios = await getMunicipios(value);
+    setMunicipios(municipios);
+    console.log("Municipios em", value, ":", municipios);
+
+    for (const municipio of municipios) {
+      const neighborhoods = await getNeighborhoods(municipio);
+      setBairros((prevBairros) => [...prevBairros, ...neighborhoods]);
+      console.log(`Bairros em ${municipio}:`, neighborhoods);
+
+      for (const neighborhood of neighborhoods) {
+        const streets = await getStreets(neighborhood);
+        setRuas((prevRuas) => ({
+          ...prevRuas,
+          [neighborhood]: streets,
+        }));
+        console.log(`Ruas em ${neighborhood}:`, streets);
+      }
+    }*/
+  };
 
   return (
     <>
@@ -69,6 +211,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o seu Nome"
                       id="nome"
                       name="nome"
+                      required
                       value={data.nome || ""}
                       onChange={(e) => updateFielHndler("nome", e.target.value)}
                     />
@@ -83,6 +226,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o seu sobrenome"
                       id="sobrenome"
                       name="sobrenome"
+                      required
                       value={data.sobrenome || ""}
                       onChange={(e) =>
                         updateFielHndler("sobrenome", e.target.value)
@@ -100,6 +244,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o nome do seu pai"
                       id="nomePai"
                       name="nomePai"
+                      required
                       value={data.nomePai || ""}
                       onChange={(e) =>
                         updateFielHndler("nomePai", e.target.value)
@@ -115,6 +260,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o nome da sua mãe"
                       id="nomeMae"
                       name="nomeMae"
+                      required
                       value={data.nomeMae || ""}
                       onChange={(e) =>
                         updateFielHndler("nomeMae", e.target.value)
@@ -132,6 +278,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o seu Bairro"
                       id="bairro"
                       name="bairro"
+                      required
                       value={data.bairro || ""}
                       onChange={(e) =>
                         updateFielHndler("bairro", e.target.value)
@@ -147,6 +294,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite a sua Rua"
                       id="rua"
                       name="rua"
+                      required
                       value={data.rua || ""}
                       onChange={(e) => updateFielHndler("rua", e.target.value)}
                     />
@@ -160,6 +308,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Casa/Edificio"
                       id="casaEdificio"
                       name="casaEdificio"
+                      required
                       value={data.casaEdificio || ""}
                       onChange={(e) =>
                         updateFielHndler("casaEdificio", e.target.value)
@@ -174,10 +323,12 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Label>BI</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="1234567812LA890"
+                      placeholder="123456789LA890"
+                      pattern="^\d{9}[A-Z]{2}\d{3}$"
                       id="nBI"
                       name="nBI"
-                      disabled
+                      required
+                      maxLength={14}
                       value={data.nBI || ""}
                       onChange={(e) => updateFielHndler("nBI", e.target.value)}
                     />
@@ -190,6 +341,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="date"
                       id="emitidoEm"
                       name="emitidoEm"
+                      required
                       value={data.emitidoEm || ""}
                       onChange={(e) =>
                         updateFielHndler("emitidoEm", e.target.value)
@@ -204,6 +356,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="date"
                       id="validoAte"
                       name="validoAte"
+                      required
                       value={data.validoAte || ""}
                       onChange={(e) =>
                         updateFielHndler("validoAte", e.target.value)
@@ -220,6 +373,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       defaultValue="Choose..."
                       id="ecivil"
                       name="ecivil"
+                      required
                       value={data.ecivil || ""}
                       onChange={(e) =>
                         updateFielHndler("ecivil", e.target.value)
@@ -239,6 +393,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="text"
                       placeholder="Natural de"
                       id="naturalidade"
+                      required
                       name="naturalidade"
                       value={data.naturalidade || ""}
                       onChange={(e) =>
@@ -270,10 +425,9 @@ const UseForm = ({ data, updateFielHndler }) => {
                       defaultValue="Choose..."
                       name="provincia"
                       id="provincia"
+                      required
                       value={data.provincia || ""}
-                      onChange={(e) =>
-                        updateFielHndler("provincia", e.target.value)
-                      }
+                      onChange={handleProvinceChange}
                     >
                       <option>Choose...</option>
                       <option>Bengo</option>
@@ -305,6 +459,8 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="1.50"
                       id="altura"
                       name="altura"
+                      required
+                      pattern="^\d{1,3}\.\d{2}$"
                       value={data.altura || ""}
                       onChange={(e) =>
                         updateFielHndler("altura", e.target.value)
@@ -323,6 +479,9 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="930340539"
                       id="contacto1"
                       name="contacto_principal"
+                      pattern="^9[1-9][0-9]{7}$"
+                      maxLength={9}
+                      required
                       value={data.contacto_principal || ""}
                       onChange={(e) =>
                         updateFielHndler("contacto_principal", e.target.value)
@@ -338,6 +497,8 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="950134233"
                       id="contacto2"
                       name="contacto_alternativo"
+                      pattern="^9[1-9][0-9]{7}$"
+                      required
                       value={data.contacto_alternativo || ""}
                       onChange={(e) =>
                         updateFielHndler("contacto_alternativo", e.target.value)

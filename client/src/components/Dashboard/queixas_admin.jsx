@@ -18,7 +18,8 @@ import MyMenAdmin from "./MyMenuAdmin";
 import { Pagination } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 const formTemplate = {
   review: "",
   comment: "",
@@ -63,6 +64,23 @@ const QueixasAdmin = ({ onSearch }) => {
   const [options, setOptions] = useState(["anonimo", "normal"]);
   let data2 = "";
   let id_queixoso = "";
+  const popover = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Queixa</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>Quem pretendes queixar?</strong>
+        <hr style={{ backgroundColor: "rgb(50 43 43)" }} />
+        <Link to="/validacao_trabalhador">
+          <Button variant="warning">Empregador</Button>
+        </Link>{" "}
+        ou
+        <Link to="/empregador">
+          {" "}
+          <Button className="btn btn-dark"> Trabalhador</Button>
+        </Link>
+      </Popover.Body>
+    </Popover>
+  );
   const navigate = useNavigate();
 
   const toggleDisplay4 = () => {
@@ -792,14 +810,21 @@ const QueixasAdmin = ({ onSearch }) => {
         </div>
 
         <Col md={3}>
-          <Button
-            variant="warning"
-            onClick={() => setShowModal2(true)}
-            className="fw-bold btn-nova-queixa"
-            type="submit"
+          <OverlayTrigger
+            trigger="click"
+            placement="bottom"
+            overlay={popover}
+            rootClose
           >
-            Nova Queixa
-          </Button>
+            <Button
+              variant="warning"
+              onClick={() => setShowModal2(true)}
+              className="fw-bold btn-nova-queixa"
+              type="submit"
+            >
+              Nova Queixa
+            </Button>
+          </OverlayTrigger>
         </Col>
         <Col md={6}>
           <Search

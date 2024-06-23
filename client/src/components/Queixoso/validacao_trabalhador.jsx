@@ -129,9 +129,15 @@ const ValidacaoTrabalhador = () => {
                     </Button>
                   </Link>
                 ) : (
-                  <Link to="/queixar_empregador">
-                    <Button variant="warning">ok</Button>
-                  </Link>
+                  <>
+                    {" "}
+                    <Link to="/queixar_empregador">
+                      <Button variant="warning">Registrar-se</Button>
+                    </Link>
+                    <Button variant="outline-warning" onClick={toggleDisplay}>
+                      Tentar novamente
+                    </Button>
+                  </>
                 )}
               </div>
             </div>

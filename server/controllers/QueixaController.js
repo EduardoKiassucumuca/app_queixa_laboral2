@@ -767,7 +767,9 @@ module.exports = {
 
       res.status(200).json({ msg: "Queixoso já existe!", queixoso });
     } catch (error) {
-      res.status(404).json({ msg: "Queixoso não encontrado!" });
+      res.status(404).json({
+        msg: "Não encontramos nenhuma entidade correspondente ao número de BI que você digitou.",
+      });
     }
   },
   async validarNIF(req, res) {

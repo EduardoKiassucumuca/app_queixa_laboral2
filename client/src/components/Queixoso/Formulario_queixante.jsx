@@ -51,11 +51,43 @@ const FormQueixante = () => {
   const [displayStyle, setDisplayStyle] = useState("none");
   const [logged, setLogged] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [erroBI, setErroBI] = useState("");
 
+  function validaCamposTexto(key, valor) {
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setData((prev) => {
+        return { ...prev, [key]: valor };
+      });
+    }
+  }
+  function validaBI(key, valor) {
+    if (/^\d{9}[A-Z]{2}\d{3}$/.test(valor) || valor === "") {
+      setData((prev) => {
+        return { ...prev, [key]: valor };
+      });
+    }
+  }
   const updateFielHndler = (key, value) => {
-    setData((prev) => {
-      return { ...prev, [key]: value };
-    });
+    switch (key) {
+      case "nome":
+        validaCamposTexto(key, value);
+        break;
+      case "sobrenome":
+        validaCamposTexto(key, value);
+        break;
+      case "nomePai":
+        validaCamposTexto(key, value);
+        break;
+      case "nomeMae":
+        validaCamposTexto(key, value);
+        break;
+
+      default:
+        setData((prev) => {
+          return { ...prev, [key]: value };
+        });
+        break;
+    }
   };
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
