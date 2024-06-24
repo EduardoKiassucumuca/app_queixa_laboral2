@@ -325,6 +325,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="text"
                       placeholder="123456789LA890"
                       pattern="^\d{9}[A-Z]{2}\d{3}$"
+                      title="O BI introduzido está incorrecto"
                       id="nBI"
                       name="nBI"
                       required
@@ -393,6 +394,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="text"
                       placeholder="Natural de"
                       id="naturalidade"
+                      pattern="^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$"
                       required
                       name="naturalidade"
                       value={data.naturalidade || ""}
@@ -409,6 +411,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="date"
                       id="data_nascimento"
                       name="dtNascimento"
+                      required
                       value={data.dtNascimento || ""}
                       onChange={(e) =>
                         updateFielHndler("dtNascimento", e.target.value)
@@ -461,6 +464,8 @@ const UseForm = ({ data, updateFielHndler }) => {
                       name="altura"
                       required
                       pattern="^\d{1,3}\.\d{2}$"
+                      title="Dados incorrectos"
+                      maxLength={4}
                       value={data.altura || ""}
                       onChange={(e) =>
                         updateFielHndler("altura", e.target.value)
@@ -589,6 +594,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="name"
                       name="cargo"
                       id="cargo"
+                      required
                       placeholder="Qual é o seu cargo na empresa"
                       value={data.cargo || ""}
                       onChange={(e) =>
@@ -602,6 +608,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Label>Area ou departamento</Form.Label>
                     <Form.Control
                       type="text"
+                      required
                       name="area_departamento"
                       id="area_departamento"
                       placeholder="Em que área/departamento estás na empresa"
@@ -641,10 +648,29 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="password"
                       placeholder="Password"
                       id="password"
+                      pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                      title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
                       name="password"
                       value={data.password || ""}
                       onChange={(e) =>
                         updateFielHndler("password", e.target.value)
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label>Confirmar Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirmar password"
+                      id="password2"
+                      pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                      title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
+                      name="password2"
+                      value={data.password2 || ""}
+                      onChange={(e) =>
+                        updateFielHndler("password2", e.target.value)
                       }
                     />
                   </Form.Group>

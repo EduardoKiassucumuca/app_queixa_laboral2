@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Footer from "../Footer/footer";
+import Alert from "react-bootstrap/Alert";
 
 import UseForm from "./dados_pessoais";
 import ReviewForm from "./dados_da_empresa";
@@ -52,7 +53,7 @@ const FormQueixante = () => {
   const [logged, setLogged] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [erroBI, setErroBI] = useState("");
-
+  const [erroSenha, setErroSenha] = useState(false);
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
       setData((prev) => {
@@ -348,7 +349,16 @@ const FormQueixante = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(data);
+    if (data.password === data.password2) {
+      setErroSenha(false);
+      changeStep(currentStep + 1, e);
+    } else {
+      setErroSenha(true);
+    }
+  };
   return (
     <Layout className="layout">
       <Menu />
@@ -395,7 +405,7 @@ const FormQueixante = () => {
                   <Steps currentStep={currentStep} />
 
                   <form
-                    onSubmit={(e) => changeStep(currentStep + 1, e)}
+                    onSubmit={handleSubmit}
                     method="post"
                     enctype="multipart/form-data"
                   >
@@ -435,6 +445,14 @@ const FormQueixante = () => {
                     </div>
                   </form>
                 </div>
+                {erroSenha ? (
+                  <Alert variant="danger" style={{ marginTop: 45 }}>
+                    <Alert.Heading>Aviso</Alert.Heading>
+                    As senhas não combinam
+                  </Alert>
+                ) : (
+                  <></>
+                )}
               </Col>
             </Col>
           </Row>
