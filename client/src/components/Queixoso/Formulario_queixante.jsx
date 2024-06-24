@@ -352,11 +352,18 @@ const FormQueixante = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(data);
-    if (data.password === data.password2) {
+    const today = new Date();
+
+    const birthDateObj = new Date(data.dtNascimento);
+    const age = today.getFullYear() - birthDateObj.getFullYear();
+    console.log(age);
+    if (data.password !== data.password2) {
+      setErroSenha(true);
+    } else if (age <= 18) {
+      console.log("Menor de idade");
+    } else {
       setErroSenha(false);
       changeStep(currentStep + 1, e);
-    } else {
-      setErroSenha(true);
     }
   };
   return (
