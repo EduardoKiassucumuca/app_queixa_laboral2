@@ -573,7 +573,7 @@ module.exports = {
       return res.status(200).send({
         status: 1,
         message:
-          "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!",
+          "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
         Queixa,
         novaConta,
       });
@@ -861,7 +861,7 @@ module.exports = {
         return res.status(200).send({
           status: 1,
           message:
-            "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!",
+            "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
           Queixa,
         });
       } else if (queixoso === "Empregador") {
@@ -887,7 +887,7 @@ module.exports = {
         return res.status(200).send({
           status: 1,
           message:
-            "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clicar no botão abaixo para entrar no nosso portal!",
+            "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
           Queixa,
         });
       }
@@ -1109,7 +1109,7 @@ module.exports = {
       return res.status(200).send({
         status: 1,
         message:
-          "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!",
+          "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
         Queixa,
         novaConta,
       });
@@ -1210,7 +1210,7 @@ module.exports = {
       return res.status(200).send({
         status: 1,
         message:
-          "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique ok para entrar no nosso portal!",
+          "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
         Queixa,
         novaConta,
       });
@@ -1293,7 +1293,7 @@ module.exports = {
         return res.status(200).send({
           status: 1,
           message:
-            "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou acompanhar a queixa no nosso portal!",
+            "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
           Queixa,
         });
       } else if (queixoso === "Empregador") {
@@ -1400,7 +1400,7 @@ module.exports = {
         return res.status(200).send({
           status: 1,
           message:
-            "Hi, note que a sua queixa foi enviada para IGT. Deste modo terá que aguardar a guardar a ligação dos nossos Inspectores ou clique no botão para entrar no nosso portal!",
+            "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
           Queixa,
         });
       }

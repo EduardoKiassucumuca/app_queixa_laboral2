@@ -200,7 +200,9 @@ const UseForm = ({ data, updateFielHndler }) => {
       ) : (
         <div>
           <div class="card">
-            <div class="card-header">Dados Pessoais</div>
+            <div class="card-header" style={{ fontWeight: "bold" }}>
+              Dados Pessoais
+            </div>
             <div class="card-body">
               <Row className="mb-3">
                 <Col md={8}>
@@ -513,7 +515,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Col md={1}>
+                <Col md={2}>
                   {data.checked && data.sexo == "Masculino" ? (
                     <div class="form-check">
                       <input
@@ -523,6 +525,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                         name="sexo"
                         id="sexo-masculino"
                         checked
+                        required
                         onChange={(e) => onchangeRadio(e)}
                       />
 
@@ -548,7 +551,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                   )}
                 </Col>
                 <br></br>
-                <Col md={1}>
+                <Col md={2}>
                   {data.checked && data.sexo == "Feminino" ? (
                     <div class="form-check">
                       <input
@@ -557,6 +560,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                         value="Feminino"
                         name="sexo"
                         id="sexo-feminino"
+                        required
                         checked
                         onChange={(e) => onchangeRadio(e)}
                       />
@@ -571,6 +575,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                         type="radio"
                         value="Feminino"
                         name="sexo"
+                        required
                         id="sexo-feminino"
                         onChange={(e) => onchangeRadio(e)}
                       />
@@ -583,8 +588,10 @@ const UseForm = ({ data, updateFielHndler }) => {
               </Row>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">Dados Empresariais</div>
+          <div class="card" style={{ marginTop: 10 }}>
+            <div class="card-header" style={{ fontWeight: "bold" }}>
+              Dados Empresariais
+            </div>
             <div class="card-body">
               <Row className="mb-3">
                 <Col md={7}>
@@ -622,8 +629,10 @@ const UseForm = ({ data, updateFielHndler }) => {
               </Row>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">Dados da Conta para acessar o portal</div>
+          <div class="card" style={{ marginTop: 10 }}>
+            <div class="card-header" style={{ fontWeight: "bold" }}>
+              Dados da Conta para acessar o portal
+            </div>
             <div class="card-body">
               <Row>
                 <Col md={6}>
@@ -634,6 +643,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite o seu email pessoal"
                       id="email_pessoal"
                       name="email_pessoal"
+                      required
                       value={data.email_pessoal || ""}
                       onChange={(e) =>
                         updateFielHndler("email_pessoal", e.target.value)
@@ -641,13 +651,14 @@ const UseForm = ({ data, updateFielHndler }) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+                <Col md={3}>
                   <Form.Group>
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       type="password"
                       placeholder="Password"
                       id="password"
+                      required
                       pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                       title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
                       name="password"
@@ -658,13 +669,14 @@ const UseForm = ({ data, updateFielHndler }) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+                <Col md={3}>
                   <Form.Group>
                     <Form.Label>Confirmar Password</Form.Label>
                     <Form.Control
                       type="password"
                       placeholder="Confirmar password"
                       id="password2"
+                      required
                       pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                       title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
                       name="password2"

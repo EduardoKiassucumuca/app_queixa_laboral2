@@ -53,7 +53,7 @@ const FormQueixante = () => {
   const [logged, setLogged] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [erroBI, setErroBI] = useState("");
-  const [erroSenha, setErroSenha] = useState(false);
+  const [erro, setErro] = useState("");
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
       setData((prev) => {
@@ -355,14 +355,21 @@ const FormQueixante = () => {
     const today = new Date();
 
     const birthDateObj = new Date(data.dtNascimento);
+    const emitidoEm = new Date(data.emitidoEm);
+    const validoAte = new Date(data.validoAte);
+    const validade = validoAte.getFullYear() - emitidoEm.getFullYear();
     const age = today.getFullYear() - birthDateObj.getFullYear();
-    console.log(age);
+
     if (data.password !== data.password2) {
-      setErroSenha(true);
-    } else if (age <= 18) {
-      console.log("Menor de idade");
+      setErro("As senhas não combinam");
+    } else if (age < 18) {
+      setErro("A data de nascimento inserida está incorrecta.");
+    } else if (validoAte <= today) {
+      setErro("Bilhete de identidade vencido");
+    } else if (validade < 5) {
+      setErro("Por favor verifique as datas de emissão e validade do BI");
     } else {
-      setErroSenha(false);
+      setErro("");
       changeStep(currentStep + 1, e);
     }
   };
@@ -422,7 +429,7 @@ const FormQueixante = () => {
                     >
                       {currentComponent}
                     </div>
-                    <div className="actions">
+                    <div className="actions" style={{ marginTop: 10 }}>
                       {!isFirstStep && (
                         <button
                           type="button"
@@ -452,10 +459,10 @@ const FormQueixante = () => {
                     </div>
                   </form>
                 </div>
-                {erroSenha ? (
+                {erro ? (
                   <Alert variant="danger" style={{ marginTop: 45 }}>
                     <Alert.Heading>Aviso</Alert.Heading>
-                    As senhas não combinam
+                    {erro}
                   </Alert>
                 ) : (
                   <></>

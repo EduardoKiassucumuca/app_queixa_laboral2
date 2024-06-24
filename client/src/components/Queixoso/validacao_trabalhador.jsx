@@ -165,6 +165,7 @@ const ValidacaoTrabalhador = () => {
                           placeholder="1234567812LA890"
                           id="nBI"
                           name="nBI"
+                          required
                           onChange={(e) => setBI(e.target.value)}
                         />
                       )}
