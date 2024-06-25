@@ -104,6 +104,8 @@ const FormQueixante = () => {
       setLogged(1);
     } else if (sessionStorage.getItem("data_recepcionista")) {
       setLogged(2);
+    } else if (sessionStorage.getItem("email")) {
+      setLogged(3);
     }
   }, []);
   function queixar() {
@@ -402,6 +404,10 @@ const FormQueixante = () => {
                   </Link>
                 ) : logged === 2 ? (
                   <Link to="/recepcionista">
+                    <Button variant="warning">OK</Button>
+                  </Link>
+                ) : logged === 3 ? (
+                  <Link to="/queixas_admin">
                     <Button variant="warning">OK</Button>
                   </Link>
                 ) : (

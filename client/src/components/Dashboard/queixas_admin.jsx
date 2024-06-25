@@ -44,7 +44,9 @@ const QueixasAdmin = ({ onSearch }) => {
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [displayStyle5, setDisplayStyle5] = useState("none");
   const [displayStyle7, setDisplayStyle7] = useState("none");
-
+  const [displayStyle8, setDisplayStyle8] = useState("none");
+  const [displayStyle9, setDisplayStyle9] = useState("none");
+  const [detalhesSelec, setDetalhesSelec] = useState("");
   const [pesquisar, setPesquisar] = useState("");
   const [displayStyle6, setDisplayStyle6] = useState("none");
   const [assunto, setAssunto] = useState("");
@@ -125,6 +127,18 @@ const QueixasAdmin = ({ onSearch }) => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const toggleDisplay8 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle8((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay9 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle9((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const atribuir_testemunha = (inspector_nomeado, queixa_selecionada) => {
     Axios.put("http://localhost:3001/atribuir_testemunhas", {
       params: {
@@ -172,7 +186,7 @@ const QueixasAdmin = ({ onSearch }) => {
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
-        setQueixas(data.queixas);
+        setQueixas(data.queixas.reverse());
         console.log(data.queixas);
       })
       .catch((res) => {
@@ -459,6 +473,20 @@ const QueixasAdmin = ({ onSearch }) => {
     toggleDisplay7();
   }
   const getNotas = async () => {};
+  function detalhesEmpregador(detalhes) {
+    setDetalhesSelec(detalhes);
+    toggleDisplay8();
+  }
+  function detalhesTrabalhador(detalhes) {
+    console.log(detalhes);
+    setDetalhesSelec(detalhes);
+    toggleDisplay9();
+  }
+  function estadoQueixa(detalhes) {
+    console.log(detalhes);
+    setDetalhesSelec(detalhes);
+    toggleDisplay5();
+  }
   return (
     <>
       <MyMenAdmin />
@@ -685,12 +713,21 @@ const QueixasAdmin = ({ onSearch }) => {
         <div class="modal-content">
           <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
           <br />
+          <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+            {detalhesSelec.assunto}
+          </h4>
+          <br />{" "}
+          <span style={{ color: "", display: "inline" }}>
+            {" "}
+            Descrição:{" "}
+            <span style={{ color: "black" }}>{detalhesSelec.facto ?? 0}</span>
+          </span>
           <span style={{ color: "", display: "inline" }}>
             {" "}
             Multa:{" "}
-            <span style={{ color: "black" }}>{conflito_selec.multa ?? 0}</span>
+            <span style={{ color: "black" }}>{detalhesSelec.multa ?? 0}</span>
           </span>
-          OBS: <span style={{ color: "" }}>{conflito_selec.obs ?? ""}</span>
+          OBS: <span style={{ color: "" }}>{detalhesSelec.obs ?? ""}</span>
           Acta
           <p>
             <FaFilePdf style={{ border: "red" }} />
@@ -704,6 +741,96 @@ const QueixasAdmin = ({ onSearch }) => {
           </p>
           <div class="modal-footer">
             <Button variant="warning" onClick={toggleDisplay5}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle8,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
+          <br />
+          <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+            {detalhesSelec?.Empresa?.nome_empresa ?? ""}
+          </h4>
+          <br />{" "}
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>NIF:</span>{" "}
+            {detalhesSelec?.Empresa?.nif ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>
+              Localização:
+            </span>{" "}
+            {detalhesSelec?.Empresa?.localizacao_office ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>
+              Designação:
+            </span>{" "}
+            {detalhesSelec?.Empresa?.designacao ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
+            {detalhesSelec?.Empresa?.email ?? ""}
+          </span>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={toggleDisplay8}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle9,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
+          <br />
+          <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+            {detalhesSelec?.Trabalhador?.Pessoa?.nome ??
+              "" + " " + detalhesSelec?.Trabalhador?.Pessoa?.sobrenome ??
+              ""}
+          </h4>
+          <br />{" "}
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>BI:</span>{" "}
+            {detalhesSelec?.Trabalhador?.Pessoa?.BI?.numeroBI ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>
+              Localização:
+            </span>{" "}
+            {detalhesSelec?.Trabalhador?.localizacao_office ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>Cargo:</span>{" "}
+            {detalhesSelec?.Trabalhador?.cargo ?? ""}
+          </span>
+          <span style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: "bold" }}>
+              Departamento:
+            </span>{" "}
+            {detalhesSelec?.Trabalhador?.area_departamento ?? ""}
+          </span>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={toggleDisplay9}>
               OK
             </Button>
           </div>
@@ -891,8 +1018,21 @@ const QueixasAdmin = ({ onSearch }) => {
                 .map((conflito) => (
                   <tr>
                     <th scope="row">{conflito.id}</th>
-                    <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                    <th
+                      scope="row"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => detalhesTrabalhador(conflito)}
+                    >
+                      {" "}
+                      {conflito.Trabalhador.Pessoa.nome}{" "}
+                    </th>
+                    <th
+                      scope="row"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => detalhesEmpregador(conflito)}
+                    >
+                      {conflito.Empresa.nome_empresa}
+                    </th>
 
                     <td>{conflito.facto}</td>
                     <td>
@@ -912,6 +1052,7 @@ const QueixasAdmin = ({ onSearch }) => {
                             ? "danger"
                             : "secondary"
                         }
+                        onClick={() => estadoQueixa(conflito)}
                       >
                         {conflito.estado}
                       </Button>
