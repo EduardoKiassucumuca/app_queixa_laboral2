@@ -20,6 +20,8 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const formTemplate = {
   review: "",
   comment: "",
@@ -66,6 +68,7 @@ const QueixasAdmin = ({ onSearch }) => {
   const [options, setOptions] = useState(["anonimo", "normal"]);
   let data2 = "";
   let id_queixoso = "";
+
   const popover = (
     <Popover id="popover-basic" style={{ minWidth: 290 }}>
       <Popover.Header as="h3">Queixa</Popover.Header>
@@ -487,6 +490,11 @@ const QueixasAdmin = ({ onSearch }) => {
     setDetalhesSelec(detalhes);
     toggleDisplay5();
   }
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Clique para ver mais
+    </Tooltip>
+  );
   return (
     <>
       <MyMenAdmin />
@@ -1024,38 +1032,60 @@ const QueixasAdmin = ({ onSearch }) => {
                       onClick={() => detalhesTrabalhador(conflito)}
                     >
                       {" "}
-                      {conflito.Trabalhador.Pessoa.nome}{" "}
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip}
+                      >
+                        <a href="#" className="link-entidade">
+                          {" "}
+                          {conflito.Trabalhador.Pessoa.nome}{" "}
+                        </a>
+                      </OverlayTrigger>
                     </th>
                     <th
                       scope="row"
                       style={{ cursor: "pointer" }}
                       onClick={() => detalhesEmpregador(conflito)}
                     >
-                      {conflito.Empresa.nome_empresa}
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip}
+                      >
+                        <a href="#" className="link-entidade">
+                          {conflito.Empresa.nome_empresa}
+                        </a>
+                      </OverlayTrigger>
                     </th>
 
                     <td>{conflito.facto}</td>
                     <td>
-                      {" "}
-                      <Button
-                        style={{
-                          cursor: "default",
-                          borderRadius: "20px",
-                          fontSize: "12px",
-                        }}
-                        variant={
-                          conflito.estado === "Aberto"
-                            ? "primary"
-                            : conflito.estado === "Analise"
-                            ? "warning"
-                            : conflito.estado === "Encerrado"
-                            ? "danger"
-                            : "secondary"
-                        }
-                        onClick={() => estadoQueixa(conflito)}
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip}
                       >
-                        {conflito.estado}
-                      </Button>
+                        <Button
+                          style={{
+                            cursor: "default",
+                            borderRadius: "20px",
+                            fontSize: "12px",
+                          }}
+                          variant={
+                            conflito.estado === "Aberto"
+                              ? "primary"
+                              : conflito.estado === "Analise"
+                              ? "warning"
+                              : conflito.estado === "Encerrado"
+                              ? "danger"
+                              : "secondary"
+                          }
+                          onClick={() => estadoQueixa(conflito)}
+                        >
+                          {conflito.estado}
+                        </Button>
+                      </OverlayTrigger>
                     </td>
                     <td>{conflito.provincia}</td>
                     {conflito.estado === "Encerrado" ? (

@@ -142,11 +142,15 @@ const FormQueixante = () => {
             setAlert("Queixa registrada com sucesso!");
             toggleDisplay();
             //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
           } else {
             setAlert(resposta.data.message);
             toggleDisplay();
-            //setRedirect("/Entrar");
-            //setShowModal(true);
           }
 
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
@@ -194,10 +198,15 @@ const FormQueixante = () => {
             setAlert("Queixa registrada com sucesso!");
             toggleDisplay();
             //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
           } else {
             setAlert(resposta.data.message);
             toggleDisplay();
-            //setRedirect("/Entrar");
           }
         })
         .catch((resposta) => {
@@ -253,10 +262,15 @@ const FormQueixante = () => {
             setAlert("Queixa registrada com sucesso!");
             toggleDisplay();
             //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
           } else {
             setAlert(resposta.data.message);
             toggleDisplay();
-            //setRedirect("/Entrar");
           }
         })
         .catch((resposta) => {
@@ -320,10 +334,15 @@ const FormQueixante = () => {
             setAlert("Queixa registrada com sucesso!");
             toggleDisplay();
             //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
           } else {
             setAlert(resposta.data.message);
             toggleDisplay();
-            //setRedirect("/Entrar");
           }
           //setShowModal(true);
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
