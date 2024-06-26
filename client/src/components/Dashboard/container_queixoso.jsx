@@ -11,6 +11,9 @@ import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import { useNavigate } from "react-router-dom";
+import { auto, right } from "@popperjs/core";
+import { Pagination } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 
 function calcularTempoTransacao(tempoTransacao) {
   //console.log(tempoTransacao);
@@ -31,6 +34,13 @@ const Container_queixoso = () => {
   const [queixas, setQueixas] = useState([]);
   const [showModal2, setShowModal2] = useState(false);
   const [tempoTransacao, setTempoTransacao] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pesquisar, setPesquisar] = useState("");
+  const itemsPerPage = 4;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = queixas.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   let data = "";
   let id_queixoso = "";
@@ -90,6 +100,17 @@ const Container_queixoso = () => {
   };
   return (
     <>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          color: "white",
+          fontWeight: "bold",
+          fontSize: "28px",
+        }}
+      >
+        Bem-vindo ao portal do queixoso
+      </h1>
       <Button
         variant="warning"
         onClick={queixar}
@@ -98,6 +119,15 @@ const Container_queixoso = () => {
       >
         Nova Queixa
       </Button>
+      <Form.Control
+        size="lg"
+        type="text"
+        placeholder="Search"
+        variant="dark"
+        style={{ width: 300, float: right }}
+        onChange={(e) => setPesquisar(e.target.value)}
+      />
+
       <ModalConfirmacao
         show={showModal2}
         setShow={setShowModal2}
@@ -109,78 +139,121 @@ const Container_queixoso = () => {
         setShow={setShowModal}
         close={() => setShowModal(false)}
       />
-      {queixas.map((conflito) => (
-        <Card
-          bg="dark"
-          border="secondary"
-          text="warning"
-          className="card-queixas-queixoso"
-          style={{
-            marginBottom: 25,
-            opacity:
-              conflito.estado === "Encerrado" || conflito.estado === "tribunal"
-                ? 0.5
-                : conflito.estado === "Analise"
-                ? 1
-                : 1,
-          }}
-        >
-          {/* <div class="ribbon">
+      {currentItems
+        .reverse()
+        .filter((conflito) => {
+          return (
+            pesquisar === "" ||
+            conflito.Empresa.nome_empresa
+              .toLowerCase()
+              .includes(pesquisar.toLowerCase()) ||
+            conflito.facto.toLowerCase().includes(pesquisar.toLowerCase()) ||
+            conflito.assunto.toLowerCase().includes(pesquisar.toLowerCase()) ||
+            conflito.estado.toLowerCase().includes(pesquisar.toLowerCase()) ||
+            conflito.provincia
+              .toLowerCase()
+              .includes(pesquisar.toLowerCase()) ||
+            conflito.id.toString().includes(pesquisar)
+          );
+        })
+        .map((conflito) => (
+          <Card
+            bg="dark"
+            border="secondary"
+            text="warning"
+            className="card-queixas-queixoso"
+            style={{
+              marginBottom: 25,
+              opacity:
+                conflito.estado === "Encerrado" ||
+                conflito.estado === "tribunal"
+                  ? 0.5
+                  : conflito.estado === "Analise"
+                  ? 1
+                  : 1,
+            }}
+          >
+            {/* <div class="ribbon">
             <span style={{ backgroundColor: "white" }}>New</span>
       </div>*/}
-          <Card.Body>
-            <Link
-              className="link-queixa-queixoso"
-              to={`/ler_queixa/${conflito.id}`}
-            >
-              <Card.Title>
-                {conflito.id} - {conflito.assunto}
-              </Card.Title>
-            </Link>
-          </Card.Body>
-          <Card.Footer>
-            <Row>
-              <Col md={4}>
-                <small className="text-muted">{conflito.created_at}</small>
-              </Col>
+            <Card.Body>
+              <Link
+                className="link-queixa-queixoso"
+                to={`/ler_queixa/${conflito.id}`}
+              >
+                <Card.Title>
+                  {conflito.id} - {conflito.assunto}
+                </Card.Title>{" "}
+                <p
+                  style={{
+                    paddingLeft: "20px",
+                    color: "rgba(171, 145, 69, 1)!important",
+                  }}
+                >
+                  {conflito.facto.toString().substr(0, 100)} {"..."}
+                </p>
+              </Link>
+            </Card.Body>
+            <Card.Footer>
+              <Row className="align-items-center my-2">
+                <Col md={5}>
+                  <small className="text-muted">{conflito.created_at}</small>
+                </Col>
 
-              <Col md={3}>
-                <small className="text-muted">
-                  {" "}
-                  <FaUser />
-                  <span>Queixante: </span>{" "}
-                  {conflito.Empresa.tipo === "queixante"
-                    ? conflito.Empresa.nome_empresa
-                    : conflito.Trabalhador.tipo === "queixante"
-                    ? conflito.Trabalhador.Pessoa.nome +
-                      conflito.Trabalhador.Pessoa.sobrenome
-                    : ""}
-                </small>
-              </Col>
-              <Col md={2}>
-                <small className="text-muted">{conflito.provincia}</small>
-              </Col>
-              <Col md={3}>
-                <small className="text-muted">
-                  <FaCircle
-                    className="estado"
-                    color={
-                      conflito.estado === "Encerrado" ||
-                      conflito.estado === "tribunal"
-                        ? "red"
-                        : conflito.estado === "Analise"
-                        ? "yellow"
-                        : ""
-                    }
-                  />{" "}
-                  {conflito.estado}
-                </small>
-              </Col>
-            </Row>
-          </Card.Footer>
-        </Card>
-      ))}
+                <Col md={4}>
+                  <small className="text-muted d-flex align-items-center">
+                    <FaUser className="me-2" />
+                    <span className="me-1">Queixante:</span>
+                    {conflito.Empresa.tipo === "queixante"
+                      ? conflito.Empresa.nome_empresa
+                      : conflito.Trabalhador.tipo === "queixante"
+                      ? conflito.Trabalhador.Pessoa.nome +
+                        " " +
+                        conflito.Trabalhador.Pessoa.sobrenome
+                      : ""}
+                  </small>
+                </Col>
 
+                <Col md={3}>
+                  <small className="text-muted">{conflito.provincia}</small>
+                </Col>
+
+                <Col md={2}>
+                  <small className="text-muted d-flex align-items-center">
+                    <FaCircle
+                      className="estado me-1"
+                      color={
+                        conflito.estado === "Encerrado" ||
+                        conflito.estado === "tribunal"
+                          ? "red"
+                          : conflito.estado === "Analise"
+                          ? "yellow"
+                          : ""
+                      }
+                    />
+                    {conflito.estado}
+                  </small>
+                </Col>
+              </Row>
+            </Card.Footer>
+          </Card>
+        ))}
+      <Pagination
+        className="justify-content-center mb-0"
+        style={{ marginTop: 10, paddingBottom: 10 }}
+      >
+        {Array.from({
+          length: Math.ceil(queixas.length / itemsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={index + 1 === currentPage}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+      </Pagination>
       {/*<table class="table table-striped table-responsive table-dark">
           <thead>
             <tr>

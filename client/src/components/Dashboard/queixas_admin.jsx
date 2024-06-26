@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../Chefe_Servicos/containerChefeServicos.css";
 import Button from "react-bootstrap/Button";
 
@@ -21,6 +21,11 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Dropdown } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { usePDF } from "react-to-pdf";
+import generatePDF from "react-to-pdf";
 
 const formTemplate = {
   review: "",
@@ -66,6 +71,8 @@ const QueixasAdmin = ({ onSearch }) => {
   const [selectedConflito, setSelectedConflito] = useState("");
   const [serverPath, setServerPath] = useState("");
   const [options, setOptions] = useState(["anonimo", "normal"]);
+  const targetRef = useRef();
+
   let data2 = "";
   let id_queixoso = "";
 
@@ -928,12 +935,18 @@ const QueixasAdmin = ({ onSearch }) => {
               <h5 className="status-qtd-queixas">Finalizadas</h5>
               <div class="progress blue">
                 <span class="progress-left">
-                  <span class="progress-bar"></span>
+                  <span
+                    class="progress-bar"
+                    style={{ borderColor: "#198754" }}
+                  ></span>
                 </span>
                 <span class="progress-right">
-                  <span class="progress-bar"></span>
+                  <span
+                    class="progress-bar"
+                    style={{ borderColor: "#198754" }}
+                  ></span>
                 </span>
-                <div class="progress-value">
+                <div class="progress-value" style={{ color: "#198754" }}>
                   {
                     queixas?.filter((queixa) => queixa.estado === "Encerrado")
                       .length
@@ -971,13 +984,14 @@ const QueixasAdmin = ({ onSearch }) => {
         </Col>
 
         <Col md={12} style={{ marginTop: 0 }}>
-          <table class="table table-striped table-responsive">
+          <table class="table table-striped table-responsive" ref={targetRef}>
             <thead>
               <tr>
                 <th scope="col">#</th>
 
                 <th scope="col"> Trabalhador</th>
                 <th scope="col"> Empregador</th>
+                <th scope="col">Assunto</th>
 
                 <th scope="col">Queixa</th>
                 <th scope="col">Estado</th>
@@ -1026,124 +1040,94 @@ const QueixasAdmin = ({ onSearch }) => {
                 .map((conflito) => (
                   <tr>
                     <th scope="row">{conflito.id}</th>
-                    <th
-                      scope="row"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => detalhesTrabalhador(conflito)}
-                    >
-                      {" "}
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                      >
-                        <a href="#" className="link-entidade">
-                          {" "}
-                          {conflito.Trabalhador.Pessoa.nome}{" "}
-                        </a>
-                      </OverlayTrigger>
-                    </th>
-                    <th
-                      scope="row"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => detalhesEmpregador(conflito)}
-                    >
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                      >
-                        <a href="#" className="link-entidade">
-                          {conflito.Empresa.nome_empresa}
-                        </a>
-                      </OverlayTrigger>
-                    </th>
-
+                    <th scope="row">{conflito.Trabalhador.Pessoa.nome} </th>
+                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                    <td>{conflito.assunto}</td>
                     <td>{conflito.facto}</td>
                     <td>
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
+                      <Button
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          conflito.estado === "Aberto"
+                            ? "primary"
+                            : conflito.estado === "Analise"
+                            ? "warning"
+                            : conflito.estado === "Encerrado"
+                            ? "success"
+                            : "secondary"
+                        }
                       >
-                        <Button
-                          style={{
-                            cursor: "default",
-                            borderRadius: "20px",
-                            fontSize: "12px",
-                          }}
-                          variant={
-                            conflito.estado === "Aberto"
-                              ? "primary"
-                              : conflito.estado === "Analise"
-                              ? "warning"
-                              : conflito.estado === "Encerrado"
-                              ? "danger"
-                              : "secondary"
-                          }
-                          onClick={() => estadoQueixa(conflito)}
-                        >
-                          {conflito.estado}
-                        </Button>
-                      </OverlayTrigger>
+                        {conflito.estado}
+                      </Button>
                     </td>
                     <td>{conflito.provincia}</td>
-                    {conflito.estado === "Encerrado" ? (
-                      <td>
-                        <Button
-                          variant="dark"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                          onClick={(e) => ver_detalhes(conflito)}
+                    <td>
+                      <Dropdown id="dropdown-basic-button">
+                        <Dropdown.Toggle
+                          variant="warning"
+                          id="dropdown-basic-button"
                         >
-                          Ver detalhes
-                        </Button>
-                      </td>
-                    ) : (
-                      <>
-                        <td>
-                          <Button
-                            variant="info"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
+                          <FontAwesomeIcon icon={faCog} />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            href="#/action-1"
                             onClick={(e) => goModalSelectQueixa(conflito)}
                           >
                             Editar
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
-                            variant="danger"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-2"
                             onClick={(e) => opt_confirmacao(conflito)}
                           >
                             Eliminar
-                          </Button>
-                        </td>
-                        <td>
-                          {" "}
-                          <Button
-                            onClick={() => ver_inspectores(conflito)}
-                            variant="warning"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() =>
+                              generatePDF(targetRef, { filename: "page.pdf" })
+                            }
                           >
-                            Nomear Inspector
-                          </Button>
-                        </td>
-                        <td>
-                          <Button
+                            Exportar PDF
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() => detalhesTrabalhador(conflito)}
+                          >
+                            Ver queixoso
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() => detalhesEmpregador(conflito)}
+                          >
+                            ver queixante
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() => estadoQueixa(conflito)}
+                          >
+                            ver queixa
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() => ver_inspectores(conflito)}
+                          >
+                            Nomear inspector
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            href="#/action-3"
                             onClick={() => ver_testemunhas(conflito)}
-                            variant="dark"
-                            className="fw-bold btn-nova-queixa"
-                            type="button"
                           >
                             Atribuir testemunhas
-                          </Button>
-                        </td>
-                      </>
-                    )}
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
                   </tr>
                 ))}
             </tbody>

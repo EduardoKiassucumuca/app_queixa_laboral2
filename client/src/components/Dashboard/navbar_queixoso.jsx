@@ -56,6 +56,7 @@ const MyMenu = () => {
             menuVariant="white"
             className="user-logado"
           >
+            {/*
             <NavDropdown.Item href="#action/3.2">
               <span>
                 <FaRegSun />
@@ -63,7 +64,7 @@ const MyMenu = () => {
               Definições
             </NavDropdown.Item>
 
-            <NavDropdown.Divider />
+  <NavDropdown.Divider />*/}
             <NavDropdown.Item onClick={logout}>
               <FaPowerOff /> Sair
             </NavDropdown.Item>

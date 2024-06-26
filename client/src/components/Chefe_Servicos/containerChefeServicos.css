@@ -288,7 +288,7 @@
   }
   100% {
     -webkit-transform: rotate(126deg);
-    transform: rotate(126deg);
+    transform: rotate(36deg);
   }
 }
 
@@ -296,4 +296,7 @@
   .progress {
     margin-bottom: 20px;
   }
+}
+.custom-dropdown-toggle::after {
+  display: none !important;
 }

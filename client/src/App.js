@@ -38,6 +38,7 @@ import HomeMaisArtigos from "./components/artigos/homeMaisArtigos";
 import HomeMaisDetalhesNoticias from "./components/Noticias/homeMaisDetalhesNoticias";
 import QueixasAdmin from "./components/Dashboard/queixas_admin";
 import QueixasPorEstado from "./components/Dashboard/queixas_por_estado";
+
 function App() {
   const [show, setShow] = useState("Empregador");
   return (

@@ -23,7 +23,9 @@ function MySideNav() {
           <NavIcon>
             <i className="fa fa-fw fa-home" style={{ fontSize: "1.75em" }} />
           </NavIcon>
-          <NavText>Home</NavText>
+          <NavText>
+            <a href="/dashboard_queixoso">Home</a>
+          </NavText>
         </NavItem>
 
         <NavItem eventKey="Reuniões">
