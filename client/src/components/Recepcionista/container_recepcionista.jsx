@@ -14,6 +14,9 @@ import ModalRecepcionista from "./modal_recepcionista";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
+import { FaFilePdf } from "react-icons/fa";
+import FileDownload from "js-file-download";
+import { Pagination } from "react-bootstrap";
 
 const formTemplate = {
   review: "",
@@ -27,10 +30,24 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [queixas_selecprovincia, setQueixaSelecProv] = useState([]);
   const [queixas, setQueixas] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
+  const [displayStyle5, setDisplayStyle5] = useState("none");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Número de itens por página
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   let data2 = "";
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_recepcionista");
   data2 = JSON.parse(savedData);
+  const toggleDisplay5 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle5((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const popover = (
     <Popover id="popover-basic" style={{ minWidth: 290 }}>
       <Popover.Header as="h3">Queixa</Popover.Header>
@@ -107,9 +124,22 @@ const ContainerRecepcionista = ({ onSearch }) => {
   }
   function ver_queixa(conflito_selecionado) {
     setDetalhesQueixa(conflito_selecionado);
-    setShowModal(true);
+    toggleDisplay5();
   }
-
+  const handleDownload = async (url_file) => {
+    const filename = url_file.split("\\").pop();
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
   return (
     <>
       <ModalConfirmacao
@@ -117,6 +147,19 @@ const ContainerRecepcionista = ({ onSearch }) => {
         setShow={setShowModal2}
         close={() => setShowModal2(false)}
       />
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          color: "white",
+          fontWeight: "bold",
+          fontSize: "28px",
+          marginBottom: 50,
+        }}
+      >
+        Bem-vindo a área de Administração para os conflitos laborais
+      </h1>
+
       <Row className="queixas_recepcionista">
         <Col md={2}>
           <OverlayTrigger
@@ -160,12 +203,56 @@ const ContainerRecepcionista = ({ onSearch }) => {
           </p>
         </Col>
 
-        <ModalRecepcionista
-          show={showModal}
-          setShow={setShowModal}
-          close={() => setShowModal(false)}
-          queixa={detalhes_queixa}
-        />
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle5,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          <div class="modal-content">
+            <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
+            <br />
+            <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+              {detalhes_queixa.assunto}
+            </h4>
+            <br />{" "}
+            <span style={{ color: "", display: "inline" }}>
+              {" "}
+              Descrição:{" "}
+              <span style={{ color: "black" }}>
+                {detalhes_queixa.facto ?? 0}
+              </span>
+            </span>
+            <span style={{ color: "", display: "inline" }}>
+              {" "}
+              Multa:{" "}
+              <span style={{ color: "black" }}>
+                {detalhes_queixa.multa ?? 0}
+              </span>
+            </span>
+            OBS: <span style={{ color: "" }}>{detalhes_queixa.obs ?? ""}</span>
+            Acta
+            <p>
+              <FaFilePdf style={{ border: "red" }} />
+              <a
+                href="#"
+                onClick={(e) => handleDownload(detalhes_queixa.url_file_acta)}
+                style={{ color: "rgb(220, 195, 119)" }}
+              >
+                {detalhes_queixa.url_file_acta}
+              </a>
+            </p>
+            <div class="modal-footer">
+              <Button variant="warning" onClick={toggleDisplay5}>
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
 
         <Col md={12} style={{ marginTop: 5 }}>
           <table
@@ -185,7 +272,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {conflitos.map((conflito) => (
+              {currentItems?.reverse().map((conflito) => (
                 <tr>
                   <th scope="row">{conflito.id}</th>
                   <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
@@ -209,6 +296,22 @@ const ContainerRecepcionista = ({ onSearch }) => {
               ))}
             </tbody>
           </table>
+          <Pagination
+            className="justify-content-center mb-0"
+            style={{ marginTop: 10, paddingBottom: 10 }}
+          >
+            {Array.from({
+              length: Math.ceil(conflitos.length / itemsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
         </Col>
       </Row>
     </>

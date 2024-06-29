@@ -23,6 +23,8 @@ import Modal from "react-bootstrap/Modal";
 import { right } from "@popperjs/core";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
+import { FaFileDownload } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -41,6 +43,7 @@ const LerQueixa = () => {
   const handleShow = () => setShow(true);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
+  const [displayStyle3, setDisplayStyle3] = useState("none");
 
   const navigate = useNavigate();
   const toggleDisplay = () => {
@@ -220,7 +223,7 @@ const LerQueixa = () => {
       <MySideNav />
       <MyMenu />
       <Row className="ler-queixa">
-        <Col md={7}>
+        <Col md={8}>
           <Card
             bg="dark"
             border="secondary"
@@ -292,13 +295,13 @@ const LerQueixa = () => {
               <Card.Title></Card.Title>
               <Card.Text>
                 <p>
-                  <FaFilePdf style={{ border: "red" }} />
                   <a
                     href="#"
                     onClick={(e) => handleDownload(conflito.url_file_contrato)}
                     style={{ color: "rgb(220, 195, 119)" }}
                   >
                     {conflito.url_file_contrato}
+                    <FaDownload style={{ marginLeft: 5 }} />
                   </a>
                 </p>
               </Card.Text>
@@ -393,13 +396,14 @@ const LerQueixa = () => {
                 />
               </FloatingLabel>
               <p>
-                <FaFilePdf style={{ border: "red" }} />
+                {/*<FaFilePdf />*/}
                 <a
                   href="#"
                   onClick={(e) => handleDownload(conflito.url_file_contrato)}
                   style={{ color: "rgb(220, 195, 119)" }}
                 >
                   {conflito.url_file_contrato}
+                  <FaDownload style={{ marginLeft: 5 }} />
                 </a>
               </p>
 
