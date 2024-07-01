@@ -14,18 +14,19 @@ import "../Queixoso/dados_da_empresa.css";
 const Empresa = ({ data, updateFielHndler }) => {
   const empregador = localStorage.getItem("empregador");
   const novoEmpregador = JSON.parse(empregador);
-  console.log(novoEmpregador);
-  React.useEffect(() => {}, []);
+  const [existeNIF, setExisteNIF] = useState("");
+  const [nome_empresa, setNomeEmpresa] = useState("");
+
+  React.useEffect(() => {
+    setExisteNIF(sessionStorage.getItem("nif"));
+    setNomeEmpresa(sessionStorage.getItem("nome_empresa"));
+  }, []);
   return (
     <>
-      {novoEmpregador && novoEmpregador.NIF ? (
+      {existeNIF ? (
         <h3 className="h3-cTrabalhador">
           {" "}
-          Olá,{" "}
-          <span className="span-cTrabalhador">
-            {" "}
-            {novoEmpregador.NIF.nome_empresa}
-          </span>
+          Olá, <span className="span-cTrabalhador"> {nome_empresa}</span>
         </h3>
       ) : novoEmpregador ? (
         <h3 className="h3-cTrabalhador">

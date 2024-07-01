@@ -46,14 +46,21 @@ const ValidacaoEmpregador = () => {
     );
   };
   React.useEffect(() => {
-    if (sessionStorage.getItem("dashboard_queixoso")) {
+    console.log(sessionStorage.getItem("nif"));
+    if (
+      sessionStorage.getItem("email") &&
+      sessionStorage.getItem("tipo_user") === "queixoso"
+    ) {
+      window.location.href = "/queixar_trabalhador";
+    }
+    /* if (sessionStorage.getItem("dashboard_queixoso")) {
       const savedData = sessionStorage.getItem("dashboard_queixoso");
       setMyData(JSON.parse(savedData));
       console.log(myData);
       //localStorage.setItem("empregador", JSON.stringify(data));
       //navigate("/queixar_trabalhador");
       setDesabilita(true);
-    }
+    }*/
   }, []);
   const validar_NIF = (e) => {
     e.preventDefault();

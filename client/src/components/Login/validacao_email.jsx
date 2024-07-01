@@ -113,22 +113,33 @@ function ValidacaoEmail() {
             sessionStorage.removeItem("data_login", JSON.stringify(data_login));
             navigate("/inspector");
           } else if (data_login.trabalhador.tipo === "queixoso") {
-            console.log("aquiiii");
+            console.log(data_login.trabalhador);
             sessionStorage.setItem(
               "dashboard_queixoso",
               JSON.stringify(data_login)
             );
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("tipo_user", data_login.trabalhador.tipo);
             //atualizar_status_conta(data_login.conta);
             //sessionStorage.removeItem("data_login", JSON.stringify(data_login));
-            navigate("/dashboard_queixoso");
+            // navigate("/dashboard_queixoso");
           }
         } else if (data_login.empresa) {
           if (data_login.empresa.tipo === "queixoso") {
-            console.log("aquiiii");
+            console.log("a11");
             sessionStorage.setItem(
               "dashboard_queixoso",
               JSON.stringify(data_login)
             );
+            console.log(data_login);
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("tipo_user", data_login.empresa.tipo);
+            sessionStorage.setItem("nif", data_login.empresa.nif);
+            sessionStorage.setItem(
+              "nome_empresa",
+              data_login.empresa.nome_empresa
+            );
+
             //atualizar_status_conta(data_login.conta);
             //sessionStorage.removeItem("data_login", JSON.stringify(data_login));
             navigate("/dashboard_queixoso");

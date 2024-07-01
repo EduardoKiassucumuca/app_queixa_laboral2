@@ -68,7 +68,6 @@ const Container_queixoso = () => {
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
     //console.log("ok");
-
     Axios.get("http://localhost:3001/queixas_do_queixoso", {
       params: {
         queixosoID: id_queixoso,
