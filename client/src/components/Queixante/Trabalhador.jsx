@@ -66,8 +66,9 @@ const UseForm = ({ data, updateFielHndler }) => {
   if (localStorage.getItem("trabalhador")) {
     const savedTrabalhador = localStorage.getItem("trabalhador");
     const trb_encontrado = JSON.parse(savedTrabalhador);
+    console.log(trb_encontrado);
 
-    pessoa = trb_encontrado.Pessoa.nome + " " + trb_encontrado.Pessoa.sobrenome;
+    pessoa = trb_encontrado.pessoa.nome + " " + trb_encontrado.pessoa.sobrenome;
   }
   data.nBI = BI2;
 

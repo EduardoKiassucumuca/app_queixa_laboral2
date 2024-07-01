@@ -120,9 +120,13 @@ function ValidacaoEmail() {
             );
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("tipo_user", data_login.trabalhador.tipo);
+            sessionStorage.setItem("BI", data_login.bi.numeroBI);
+            sessionStorage.setItem("nome_trabalhador", data_login.pessoa.nome);
+
+            console.log(data_login);
             //atualizar_status_conta(data_login.conta);
             //sessionStorage.removeItem("data_login", JSON.stringify(data_login));
-            // navigate("/dashboard_queixoso");
+            navigate("/dashboard_queixoso");
           }
         } else if (data_login.empresa) {
           if (data_login.empresa.tipo === "queixoso") {

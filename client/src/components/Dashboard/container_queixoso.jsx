@@ -59,7 +59,11 @@ const Container_queixoso = () => {
     }
   }
   function queixar() {
-    if (tipo === "trabalhador") {
+    if (tipo === "trabalhador" && sessionStorage.getItem("BI")) {
+      window.location.href = "/queixar_empregador";
+    } else if (tipo !== "trabalhador" && sessionStorage.getItem("nif")) {
+      window.location.href = "/queixar_trabalhador";
+    } else if (tipo === "trabalhador" && !sessionStorage.getItem("BI")) {
       navigate("/validacao_trabalhador");
     } else {
       navigate("/empregador");
