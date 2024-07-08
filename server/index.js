@@ -100,7 +100,7 @@ app.put("/editar_funcionario", FuncionarioController.update);
 app.delete("/apagar_funcionario", FuncionarioController.delete);
 app.get("/queixas_inspectores2", InspectorController.getQueixasInspector2);
 app.get("/mais_detalhes", QueixaController.mais_detalhes);
-app.post("/nova_reuniao", ReuniaoController.update);
+app.post("/nova_reuniao", ReuniaoController.store);
 app.post("/nova_reuniao_empregador", ReuniaoController.nova_reuniao_empregador);
 app.get("/reunioes_empregados", ReuniaoController.index);
 app.get("/reunioes_empregadores", ReuniaoController.getReuniaoEmpregadores);
