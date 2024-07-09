@@ -1494,8 +1494,8 @@ module.exports = {
       const novo_anexo = await Queixa.update(
         {
           url_file_acta: _fileActa,
-          multa: multa[0],
-          estado: status[0],
+          multa: multa,
+          estado: status,
         },
         {
           where: {
