@@ -104,32 +104,32 @@ const Container_queixoso = () => {
   return (
     <>
       <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          color: "white",
-          fontWeight: "bold",
-          fontSize: "28px",
-        }}
+        className="text-center text-white fw-bold ml-mobile"
+        style={{ fontSize: "28px" }}
       >
         Bem-vindo ao portal do queixoso
       </h1>
-      <Button
-        variant="warning"
-        onClick={queixar}
-        className="fw-bold btn-nova-queixa"
-        type="button"
+      <div className="d-flex justify-content-start mb-3">
+        <Button
+          variant="warning"
+          onClick={queixar}
+          className="fw-bold btn-nova-queixa"
+          type="button"
+        >
+          Nova Queixa
+        </Button>
+      </div>
+      <div
+        className="d-flex justify-content-end mb-3"
+        style={{ width: "20%", marginLeft: 60 }}
       >
-        Nova Queixa
-      </Button>
-      <Form.Control
-        size="lg"
-        type="text"
-        placeholder="Search"
-        variant="dark"
-        style={{ width: 300, float: right }}
-        onChange={(e) => setPesquisar(e.target.value)}
-      />
+        <Form.Control
+          type="text"
+          placeholder="Search"
+          className="search-input"
+          onChange={(e) => setPesquisar(e.target.value)}
+        />
+      </div>
 
       <ModalConfirmacao
         show={showModal2}
@@ -142,6 +142,7 @@ const Container_queixoso = () => {
         setShow={setShowModal}
         close={() => setShowModal(false)}
       />
+
       {currentItems
         .reverse()
         .filter((conflito) => {
@@ -161,6 +162,7 @@ const Container_queixoso = () => {
         })
         .map((conflito) => (
           <Card
+            key={conflito.id}
             bg="dark"
             border="secondary"
             text="warning"
@@ -176,9 +178,6 @@ const Container_queixoso = () => {
                   : 1,
             }}
           >
-            {/* <div class="ribbon">
-            <span style={{ backgroundColor: "white" }}>New</span>
-      </div>*/}
             <Card.Body>
               <Link
                 className="link-queixa-queixoso"
@@ -186,15 +185,8 @@ const Container_queixoso = () => {
               >
                 <Card.Title>
                   {conflito.id} - {conflito.assunto}
-                </Card.Title>{" "}
-                <p
-                  style={{
-                    paddingLeft: "20px",
-                    color: "rgba(171, 145, 69, 1)!important",
-                  }}
-                >
-                  {conflito.facto.toString().substr(0, 100)} {"..."}
-                </p>
+                </Card.Title>
+                <p className="text-warning" style={{ paddingLeft: "20px" }}></p>
               </Link>
             </Card.Body>
             <Card.Footer>
@@ -202,7 +194,6 @@ const Container_queixoso = () => {
                 <Col md={5}>
                   <small className="text-muted">{conflito.created_at}</small>
                 </Col>
-
                 <Col md={4}>
                   <small className="text-muted d-flex align-items-center">
                     <FaUser className="me-2" />
@@ -216,11 +207,9 @@ const Container_queixoso = () => {
                       : ""}
                   </small>
                 </Col>
-
                 <Col md={3}>
                   <small className="text-muted">{conflito.provincia}</small>
                 </Col>
-
                 <Col md={2}>
                   <small className="text-muted d-flex align-items-center">
                     <FaCircle

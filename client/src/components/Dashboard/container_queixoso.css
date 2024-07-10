@@ -108,3 +108,9 @@
 .text-muted {
   color: white !important;
 }
+/* Classe para adicionar margem esquerda em dispositivos móveis */
+@media (max-width: 767.98px) {
+  .ml-mobile {
+    margin-left: 1rem !important; /* Ajuste o valor conforme necessário */
+  }
+}

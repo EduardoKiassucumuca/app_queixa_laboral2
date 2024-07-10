@@ -40,15 +40,14 @@ const MyMenu = () => {
     navigate("/Entrar");
   };
   return (
-    <Navbar className="bg-body-tertiary" bg="dark" data-bs-theme="white">
+    <Navbar className="bg-body-tertiary" bg="dark" expand="lg">
       <Container>
         <Navbar.Brand className="logo-igt" href="/dashboard_queixoso">
-          {" "}
           <span className="nome-sede">IGT | </span>
           <span className="nome-servico">Queixa Laboral</span>
         </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Avatar shape="square" icon={<UserOutlined />} />
           <NavDropdown
             id="nav-dropdown-dark-example"
@@ -63,8 +62,7 @@ const MyMenu = () => {
               </span>{" "}
               Definições
             </NavDropdown.Item>
-
-  <NavDropdown.Divider />*/}
+            <NavDropdown.Divider />*/}
             <NavDropdown.Item onClick={logout}>
               <FaPowerOff /> Sair
             </NavDropdown.Item>

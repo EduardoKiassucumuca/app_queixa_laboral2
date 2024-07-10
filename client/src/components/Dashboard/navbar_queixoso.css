@@ -1,0 +1,17 @@
+/* Exemplo de CSS personalizado para Navbar responsivo */
+@media (max-width: 575.98px) {
+  .nome-sede {
+    display: none;
+  }
+
+  .nome-servico {
+    font-size: 1rem;
+  }
+
+  .user-logado {
+    font-size: 0.875rem;
+  }
+  .basic-navbar-nav {
+    float: right;
+  }
+}
