@@ -412,10 +412,14 @@ const FormQueixante = () => {
           }}
         >
           <Queixei />
-          <div id="myModal" class="modal" style={{ display: displayStyle }}>
-            <div class="modal-content">
-              <p>{alert}</p>
-              <p></p>
+          <div id="myModal" className="modal" style={{ display: displayStyle }}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Aviso</h5>
+              </div>
+              <div className="modal-body">
+                <p style={{ fontSize: "1.0rem" }}>{alert}</p>
+              </div>
               <div class="modal-footer">
                 {logged === 1 ? (
                   <Link to="/dashboard_queixoso">
@@ -437,6 +441,7 @@ const FormQueixante = () => {
               </div>
             </div>
           </div>
+
           <Row className="mb-3 row-queixa">
             <Col md={11} className="form-queixa">
               <Col md={8} className="form-queixa">
@@ -485,7 +490,7 @@ const FormQueixante = () => {
                   </form>
                 </div>
                 {erro ? (
-                  <Alert variant="danger" style={{ marginTop: 45 }}>
+                  <Alert variant="danger" style={{ marginTop: 55 }}>
                     <Alert.Heading>Aviso</Alert.Heading>
                     {erro}
                   </Alert>

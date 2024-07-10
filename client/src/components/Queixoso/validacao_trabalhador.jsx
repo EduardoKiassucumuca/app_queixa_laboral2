@@ -117,11 +117,15 @@ const ValidacaoTrabalhador = () => {
             background: colorBgContainer,
           }}
         >
-          <div id="myModal" class="modal" style={{ display: displayStyle }}>
-            <div class="modal-content">
-              <p>{alert}</p>
-              <p></p>
-              <div class="modal-footer">
+          <div id="myModal" className="modal" style={{ display: displayStyle }}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Aviso</h5>
+              </div>
+              <div className="modal-body">
+                <p style={{ fontSize: "1.0rem" }}>{alert}</p>
+              </div>
+              <div className="modal-footer">
                 {queixoso ? (
                   <Link to="/empregador">
                     <Button onClick={toggleDisplay} variant="warning">
@@ -130,7 +134,6 @@ const ValidacaoTrabalhador = () => {
                   </Link>
                 ) : (
                   <>
-                    {" "}
                     <Link to="/queixar_empregador">
                       <Button variant="warning">Registrar-se</Button>
                     </Link>
@@ -162,8 +165,11 @@ const ValidacaoTrabalhador = () => {
                       ) : (
                         <Form.Control
                           type="text"
-                          placeholder="1234567812LA890"
+                          placeholder="123456781LA890"
+                          maxLength={14}
                           id="nBI"
+                          pattern="^\d{9}[A-Z]{2}\d{3}$"
+                          title="O BI introduzido está incorrecto"
                           name="nBI"
                           required
                           onChange={(e) => setBI(e.target.value)}

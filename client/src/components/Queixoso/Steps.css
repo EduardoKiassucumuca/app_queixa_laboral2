@@ -1,64 +1,64 @@
 .steps {
-    display: flex;
-    gap: 4rem;
-    justify-content: center;
-    align-items: center;
-    max-width: 400px;
-    margin: 0 auto;
-    position: relative;
-    margin-bottom: 2rem;
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: 2rem;
 }
 
 .steps::after {
-    content: "";
-    width: 380px;
-    border-bottom: 1px solid #ccc;
-    position: absolute;
-    top: 25px;
+  content: "";
+  width: 380px;
+  border-bottom: 1px solid #ccc;
+  position: absolute;
+  top: 25px;
 }
 
 .step {
-    text-align: center;
-    background-color: #fff;
-    z-index: 1;
-    width: 120px;
+  text-align: center;
+  background-color: #fff;
+  z-index: 1;
+  width: 120px;
 }
 
 #step-queixa {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .step svg {
-    font-size: 1.6rem;
-    margin-bottom: .2rem;
-    fill: #ddd;
+  font-size: 1.6rem;
+  margin-bottom: 0.2rem;
+  fill: #ddd;
 }
 
 .active {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-.active>svg {
-    fill: #DAA316;
+.active > svg {
+  fill: #daa316;
 }
 
 .stepMain1 {
-    position: absolute;
-    top: 4px !important;
-    left: 40px !important;
-    color: #DAA316;
+  position: absolute;
+  top: 4px !important;
+  left: 40px !important;
+  color: #daa316;
 }
 
 .stepMain2 {
-    position: absolute;
-    top: 4px !important;
-    left: 196px !important;
-    color: #DAA316;
+  position: absolute;
+  top: 4px !important;
+  left: 196px !important;
+  color: #daa316;
 }
 
 .stepMain3 {
-    position: absolute;
-    top: 6px !important;
-    left: 350px !important;
-    color: #DAA316;
+  position: absolute;
+  top: 6px !important;
+  left: 350px !important;
+  color: #daa316;
 }

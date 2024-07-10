@@ -86,13 +86,13 @@ const ReviewForm = ({ data, updateFielHndler }) => {
       ) : (
         <div>
           <div class="card">
-            <button
+            {/*<button
               type="button"
               className="btn fw-bold bg-warning"
               onClick={selectEmpresaagain}
             >
               <span>Escolher novamente a empresa</span>
-            </button>
+            </button>*/}
             <div class="card-header">Empresa</div>
             <div class="card-body">
               <Row className="mb-3">

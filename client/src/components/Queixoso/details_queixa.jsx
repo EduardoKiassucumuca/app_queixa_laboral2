@@ -49,8 +49,8 @@ const Thanks = ({ data, updateFielHndler }) => {
             onChange={(e) => updateFielHndler("assunto_queixa", e.target.value)}
             style={{ padding: "2px" }}
           />
+          <br />
         </FloatingLabel>
-        <p></p>
         <FloatingLabel
           controlId="floatingTextarea2"
           label="Descreva o que aconteceu"
@@ -65,9 +65,9 @@ const Thanks = ({ data, updateFielHndler }) => {
               updateFielHndler("descricao_queixa", e.target.value)
             }
             style={{ height: "100px" }}
-          />
+          />{" "}
+          <br />
         </FloatingLabel>
-        <p></p>
         <Col md={6}>
           <Form.Label>Anexar Contrato de Trabalho</Form.Label>
           <Form.Control
@@ -76,6 +76,7 @@ const Thanks = ({ data, updateFielHndler }) => {
             id="file_contrato"
             required
           />
+          <br />
         </Col>
         {!novoTrabalhador ? (
           <Col md={6}>
@@ -86,6 +87,7 @@ const Thanks = ({ data, updateFielHndler }) => {
         ) : (
           <p></p>
         )}
+        <br />
 
         <Col md={6}>
           <Form.Check // prettier-ignore
