@@ -261,7 +261,16 @@ function ReunioesEmpregadores(props) {
       <p></p>
       <Row className="queixas_recepcionista">
         <Col md={6}>
-          <h4 style={{ color: "#ffc107" }}>Reuniões com os empregadores</h4>
+          <h2
+            style={{
+              color: "#ffc107",
+              fontWeight: "400",
+              fontSize: 22,
+              marginBottom: 15,
+            }}
+          >
+            Reuniões com os empregadores
+          </h2>
         </Col>
         <p></p>
         <Col md={2}>

@@ -85,6 +85,7 @@ function ValidacaoEmail() {
             data_login.trabalhador.tipo === "igt" &&
             data_login.trabalhador.cargo === "Recepcionista"
           ) {
+            sessionStorage.setItem("email", email);
             sessionStorage.setItem(
               "data_recepcionista",
               JSON.stringify(data_login)
@@ -96,6 +97,7 @@ function ValidacaoEmail() {
             data_login.trabalhador.tipo === "igt" &&
             data_login.trabalhador.cargo === "chefe_servicos"
           ) {
+            sessionStorage.setItem("email", email);
             sessionStorage.setItem(
               "data_chefeServicos",
               JSON.stringify(data_login)
@@ -106,10 +108,12 @@ function ValidacaoEmail() {
             data_login.trabalhador.tipo === "igt" &&
             data_login.trabalhador.cargo === "Inspector"
           ) {
+            sessionStorage.setItem("email", email);
             sessionStorage.setItem(
               "data_inspector",
               JSON.stringify(data_login)
             );
+            sessionStorage.setItem("email", email);
             sessionStorage.removeItem("data_login", JSON.stringify(data_login));
             navigate("/inspector");
           } else if (data_login.trabalhador.tipo === "queixoso") {

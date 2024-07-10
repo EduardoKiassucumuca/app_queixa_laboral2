@@ -23,7 +23,7 @@ import Row from "react-bootstrap/Row";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import axios from "axios";
 import { right } from "@popperjs/core";
-
+import "./menu_inspector.css";
 const MenuInspector = () => {
   const [showA, setShowA] = useState(false);
   const [showB, setShowB] = useState(false);
@@ -48,6 +48,9 @@ const MenuInspector = () => {
   }
   const logout = () => {
     sessionStorage.removeItem("data_inspector");
+    sessionStorage.removeItem("email");
+    sessionStorage.clear();
+
     navigate("/Entrar");
   };
   useEffect(() => {
@@ -75,39 +78,45 @@ const MenuInspector = () => {
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <FaBell
-              style={{
-                marginRight: 25,
-                fontSize: 18,
-                color: "white",
-                cursor: "pointer",
-              }}
-              onClick={toggleShowB}
-            />
-            <Badge
-              bg="warning"
-              style={{
-                position: "absolute",
-                top: 5,
-                right: 170,
-              }}
-            >
-              {duvidas?.length}
-            </Badge>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <FaBell
+                  style={{
+                    marginRight: 25,
+                    fontSize: 18,
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  onClick={toggleShowB}
+                />
+                <Badge
+                  count={duvidas?.length}
+                  style={{
+                    position: "absolute",
+                    top: -5,
+                    right: 10,
 
-            <Avatar shape="square" icon={<UserOutlined />} />
+                    borderRadius: "50%",
+                  }}
+                  bg="warning"
+                >
+                  {duvidas?.length}
+                </Badge>
+              </div>
+              <Avatar shape="square" icon={<UserOutlined />} />
+            </div>
             <NavDropdown
               id="nav-dropdown-dark-example"
               title={perfil}
               menuVariant="white"
               className="user-logado"
             >
-              <NavDropdown.Item href="#action/3.2">
+              {/*<NavDropdown.Item href="#action/3.2">
                 <span>
                   <FaRegSun />
                 </span>{" "}
                 Definições
-              </NavDropdown.Item>
+            </NavDropdown.Item>*/}
 
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={logout}>

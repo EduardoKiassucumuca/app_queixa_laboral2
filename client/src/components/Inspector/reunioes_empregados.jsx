@@ -61,6 +61,7 @@ function ReunioesEmpregados(props) {
     })
       .then(({ data }) => {
         setReunioes(data.reunioes);
+        console.log(data.reunioes);
       })
       .catch((res) => {
         console.log("res");

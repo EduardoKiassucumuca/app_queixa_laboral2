@@ -1,0 +1,17 @@
+@media (max-width: 1200px) {
+  .badge {
+    right: 29% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .badge {
+    right: 30%;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge {
+    right: 10%;
+  }
+}

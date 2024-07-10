@@ -60,6 +60,9 @@ function NovaReuniaoEmpregador(props) {
   function refreshPage() {
     window.location.reload();
   }
+  function goReunioes() {
+    window.location.href = "/reunioes_empregadores";
+  }
   return (
     <>
       <SideNavInspector />
@@ -83,7 +86,7 @@ function NovaReuniaoEmpregador(props) {
             <Button
               type="button"
               className="btn btn-warning"
-              onClick={refreshPage}
+              onClick={goReunioes}
             >
               OK
             </Button>
@@ -95,7 +98,9 @@ function NovaReuniaoEmpregador(props) {
           <h3 className="mb-3 h1-queixa">Agendar reunião com o Empregador</h3>
         </div>
         <div class="card">
-          <div class="card-header">Nova Reunião</div>
+          <div class="card-header" style={{ fontSize: 18 }}>
+            Nova Reunião
+          </div>
           <div class="card-body">
             <Form onSubmit={(e) => agendar_reuniao(e)}>
               <Row className="mb-3">
@@ -103,12 +108,14 @@ function NovaReuniaoEmpregador(props) {
                   <Form.Control
                     placeholder="Queixa"
                     name="assunto_queixa"
+                    pattern="[a-zA-Z0-9]*"
                     id="assunto-queixa"
                     style={{ padding: "2px" }}
+                    required
                     onChange={(e) => setAssunto(e.target.value)}
                   />
+                  <br />{" "}
                 </FloatingLabel>
-                <p></p>
                 <Col md={6}>
                   <FloatingLabel controlId="floatingTextarea2" label="Local">
                     <Form.Control
@@ -120,6 +127,7 @@ function NovaReuniaoEmpregador(props) {
                     />
                   </FloatingLabel>
                 </Col>
+                <br />{" "}
                 <Col md={6}>
                   <FloatingLabel
                     controlId="floatingTextarea2"
@@ -135,7 +143,7 @@ function NovaReuniaoEmpregador(props) {
                     />
                   </FloatingLabel>
                 </Col>
-                <p></p>
+                <br />{" "}
                 <Col md={6}>
                   <Form.Label>Data da Reunião</Form.Label>
                   <Form.Control
@@ -146,6 +154,7 @@ function NovaReuniaoEmpregador(props) {
                     onChange={(e) => setDate(e.target.value)}
                   />
                 </Col>
+                <br />{" "}
                 <Col md={6}>
                   <Form.Label>Hora da Reunião</Form.Label>
                   <Form.Control
@@ -155,8 +164,8 @@ function NovaReuniaoEmpregador(props) {
                     onChange={(e) => setHora(e.target.value)}
                     required
                   />
+                  <br />{" "}
                 </Col>
-                <p></p>
                 <FloatingLabel controlId="floatingTextarea2" label="Observação">
                   <Form.Control
                     as="textarea"
@@ -168,6 +177,7 @@ function NovaReuniaoEmpregador(props) {
                   />
                 </FloatingLabel>
               </Row>
+              <br />{" "}
               <Button
                 variant="warning"
                 type="submit"

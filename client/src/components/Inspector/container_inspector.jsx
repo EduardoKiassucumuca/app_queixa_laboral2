@@ -11,6 +11,7 @@ import Col from "react-bootstrap/Col";
 import { Link, useParams } from "react-router-dom";
 import Search from "antd/es/transfer/search";
 import ModalConfirmacao from "../Modal/modalConfirmation";
+import { useNavigate } from "react-router-dom";
 
 const formTemplate = {
   review: "",
@@ -29,6 +30,8 @@ const ContainerInspector = ({ onSearch }) => {
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
+  const navigate = useNavigate();
+
   let id_inspector = 0;
   let data = "";
   if (sessionStorage.getItem("data_inspector")) {
@@ -39,26 +42,30 @@ const ContainerInspector = ({ onSearch }) => {
   }
 
   React.useEffect(() => {
-    Axios.get("http://localhost:3001/queixas_inspectores2", {
-      params: {
-        fk_inspector: id_inspector,
-      },
-    })
-      .then(({ data }) => {
-        // const todas_queixas = data.queixas[0].concat(data.queixas[1])
-
-        //console.log("data.queixas");
-
-        setQueixaSelecProv(data.queixas);
-
-        setConflitos(data.queixas);
-        console.log(data.queixas);
-
-        //console.log(lista_queixa.minha_queixa)
+    if (sessionStorage.getItem("email")) {
+      Axios.get("http://localhost:3001/queixas_inspectores2", {
+        params: {
+          fk_inspector: id_inspector,
+        },
       })
-      .catch((res) => {
-        console.log("res");
-      });
+        .then(({ data }) => {
+          // const todas_queixas = data.queixas[0].concat(data.queixas[1])
+
+          //console.log("data.queixas");
+
+          setQueixaSelecProv(data.queixas);
+
+          setConflitos(data.queixas);
+          console.log(data.queixas);
+
+          //console.log(lista_queixa.minha_queixa)
+        })
+        .catch((res) => {
+          console.log("res");
+        });
+    } else {
+      navigate("/Entrar");
+    }
   }, []);
   //console.log(data.trabalhador.id);
 
@@ -167,7 +174,8 @@ const ContainerInspector = ({ onSearch }) => {
             Nova Queixa
           </Button>
         </Col>
-        <Col md={2}>
+        <br />
+        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Código"
@@ -175,7 +183,8 @@ const ContainerInspector = ({ onSearch }) => {
             onChange={(e) => buscaCodigo(e.target.value)}
           />
         </Col>
-        <Col md={2}>
+
+        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
           <Search
             className="pesquisa"
             placeholder="Procurar pelo Inspector"
@@ -183,7 +192,8 @@ const ContainerInspector = ({ onSearch }) => {
             onChange={(e) => buscaInspector(e.target.value)}
           />
         </Col>
-        <Col md={2}>
+
+        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Bilhete de Identificação"
@@ -191,7 +201,8 @@ const ContainerInspector = ({ onSearch }) => {
             onChange={(e) => buscaBI(e.target.value)}
           />
         </Col>
-        <Col md={2}>
+
+        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
           <Search
             className="pesquisa2"
             placeholder="Procurar pelo NIF"
@@ -199,11 +210,14 @@ const ContainerInspector = ({ onSearch }) => {
             onChange={(e) => buscaNIF(e.target.value)}
           />
         </Col>
+        <br />
+
         <Col md={2}>
           {" "}
           <p className="p-localizacao"></p>
         </Col>
       </Row>
+      <br />
 
       {conflitos.map((conflito) => (
         <Card

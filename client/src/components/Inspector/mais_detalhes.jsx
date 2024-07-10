@@ -39,11 +39,19 @@ const MaisDetalhes = () => {
   const [inputFields, setInputFields] = useState([{ value: "" }]);
 
   const [displayStyle3, setDisplayStyle3] = useState("none");
+  const [displayStyle4, setDisplayStyle4] = useState("none");
 
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay4 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle4((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -67,21 +75,27 @@ const MaisDetalhes = () => {
   const anexar_acta = (e, queixa) => {
     e.preventDefault();
 
+    const formData = new FormData();
+
+    // Supondo que `file_acta`, `multa` e `status` são variáveis definidas no escopo correto
     formData.append("fileActa", file_acta.files[0]);
     formData.append("id_queixa", queixa.id);
     formData.append("multa", multa);
     formData.append("status", status);
 
+    console.log(status);
+
     Axios.post("http://localhost:3001/anexa_acta", formData, {
       headers: {
-        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        "Content-Type": "multipart/form-data",
       },
     })
       .then((resposta) => {
+        console.log("Sucesso:", resposta.data);
         toggleDisplay3();
       })
-      .catch((resposta) => {
-        console.log("error", resposta);
+      .catch((error) => {
+        console.error("Erro:", error);
       });
   };
   const getQueixa = async () => {
@@ -210,7 +224,19 @@ const MaisDetalhes = () => {
       perfil = empresa;
     }
   }
-
+  function refreshPage() {
+    window.location.reload();
+  }
+  function verificarQueixaEncerrada(conflito) {
+    if (
+      conflito.estado === "Encerrado" ||
+      conflito.estado === "Encaminhado ao Tribunal"
+    ) {
+      toggleDisplay4();
+    } else {
+      toggleDisplay2();
+    }
+  }
   return (
     <>
       <SideNavInspector />
@@ -396,7 +422,12 @@ const MaisDetalhes = () => {
                 Agendar reunião
               </Button>
 
-              <Button variant="outline-warning">Encerrar</Button>
+              <Button
+                variant="outline-warning"
+                onClick={() => verificarQueixaEncerrada(conflito)}
+              >
+                Encerrar
+              </Button>
             </>
           ) : (
             <>
@@ -468,19 +499,23 @@ const MaisDetalhes = () => {
           display: displayStyle,
           position: "fixed",
           top: "150px",
-          boxShadow: "10px 10px 5px #888888;",
+          boxShadow: "10px 10px 5px #888888",
+        }}
+        onClick={(e) => {
+          if (e.target.id === "myModal") {
+            toggleDisplay();
+          }
         }}
       >
         <div class="modal-content">
           <a
-            onclick={toggleDisplay}
+            onClick={toggleDisplay}
             class="w3-button w3-display-topright"
             style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
           >
             &times;
           </a>
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
-
           <br />
           <p>Agendar reunião com?</p>
           <div class="modal-footer">
@@ -498,13 +533,59 @@ const MaisDetalhes = () => {
         id="myModal"
         class="modal"
         style={{
-          display: displayStyle2,
+          display: displayStyle4,
           position: "fixed",
           top: "150px",
-          boxShadow: "10px 10px 5px #888888;",
+          boxShadow: "10px 10px 5px #888888",
+        }}
+        onClick={(e) => {
+          if (e.target.id === "myModal") {
+            toggleDisplay4();
+          }
         }}
       >
         <div class="modal-content">
+          <a
+            onClick={toggleDisplay4}
+            class="w3-button w3-display-topright"
+            style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
+          >
+            &times;
+          </a>
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Aviso</h3>
+          <br />
+          <p>Esta queixa já foi encerrada</p>
+          <div class="modal-footer">
+            <Button className="btn btn-warning" onClick={toggleDisplay4}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle2,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888",
+        }}
+        onClick={(e) => {
+          if (e.target.id === "myModal") {
+            toggleDisplay2();
+          }
+        }}
+      >
+        <div class="modal-content">
+          <a
+            onClick={toggleDisplay2}
+            class="w3-button w3-display-topright"
+            style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
+          >
+            &times;
+          </a>
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
           <br />
           <p>Encerrar o processo</p>
@@ -513,14 +594,16 @@ const MaisDetalhes = () => {
               onSubmit={(e) => anexar_acta(e, conflito)}
               method="post"
               enctype="multipart/form-data"
+              style={{ marginLeft: 0 }}
             >
               <Form.Label>Multa</Form.Label>
               <Form.Control
                 type="text"
                 name="multa"
                 id="multa"
+                pattern="[0-9]*"
                 onChange={(e) => setMulta(e.target.value)}
-                placeholder="Valor da Multa"
+                placeholder="300"
               />
               <p></p>
               <Form.Label>Anexar uma acta</Form.Label>
@@ -551,7 +634,6 @@ const MaisDetalhes = () => {
           </div>
         </div>
       </div>
-
       <div
         id="myModal"
         class="modal"
@@ -563,10 +645,18 @@ const MaisDetalhes = () => {
         }}
       >
         <div class="modal-content">
-          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Acta</h3>
           <br />
-          <p>Acta</p>
-          <div class="modal-footer">Acta anexada com sucesso</div>
+          <p>Acta anexada com sucesso</p>
+          <div class="modal-footer">
+            <Button
+              type="button"
+              className="btn btn-warning"
+              onClick={refreshPage}
+            >
+              OK
+            </Button>
+          </div>
         </div>
       </div>
     </>
