@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for macos13 (x86_64)
 --
 -- Host: localhost    Database: bd_queixa_laboral2
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	8.2.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,7 +56,7 @@ CREATE TABLE `bi` (
   `file` varchar(255) NOT NULL,
   `numeroBI` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `bi` (
 
 LOCK TABLES `bi` WRITE;
 /*!40000 ALTER TABLE `bi` DISABLE KEYS */;
-INSERT INTO `bi` VALUES (300,'2018-10-06 00:00:00','2023-10-06 00:00:00','uploads\\1699396286533-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','123456LA092'),(301,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398612223-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(302,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398719086-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(303,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398808191-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(304,'2021-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699398839276-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','1234237BG543'),(305,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699399496878-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','1234567LA543'),(306,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699399996799-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','193456LA092'),(307,'2022-10-06 00:00:00','2021-10-07 00:00:00','uploads\\1699400509293-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','29301LA123'),(308,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699400727783-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(309,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699401238518-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(310,'2022-10-07 00:00:00','2022-10-07 00:00:00','uploads\\1699401448714-CIRURG â VOL 4 Cirurgia Vascular, Proctologia, Cirurgia de Obesidade, Cirurgia PediÃ¡trica, Tumores de CabeÃ§a e PescoÃ§o.pdf','09987LA213'),(311,'2021-10-10 00:00:00','2024-10-11 00:00:00','uploads\\1700039147380-CARDIO â VOL 2 InsuficiÃªncia CardÃ­aca e HipertensÃ£o Arterial.pdf','0922121LA234'),(312,'2022-10-14 00:00:00','2022-10-14 00:00:00','uploads\\1700041118350-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','3'),(313,'2022-12-31 00:00:00','2024-12-31 00:00:00','uploads/lauriÌssea Campos  2024(1).pdf','kjhhj'),(314,'2024-01-24 00:00:00','2024-01-18 00:00:00','uploads/laurÃ­ssea Campos  2024(1).pdf','102091LA123'),(315,'2024-01-02 00:00:00','2024-01-10 00:00:00','uploads/laurÃ­ssea Campos  2024(1).pdf','0922121LA232');
+INSERT INTO `bi` VALUES (318,'2024-04-03 00:00:00','2029-04-02 00:00:00','uploads/Attestation of engagement (Manuel) v.2.pdf','006401456LA048');
 /*!40000 ALTER TABLE `bi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +175,7 @@ CREATE TABLE `conta` (
   `tentativa` int DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `conta` (
 
 LOCK TABLES `conta` WRITE;
 /*!40000 ALTER TABLE `conta` DISABLE KEYS */;
-INSERT INTO `conta` VALUES (133,'b@xpto.ao','$2a$12$2x/oP3kZdvkKK1/QIdeU8.AH7WYbwGyCijjvyRwlacl6csyzKhybG',NULL,'admin',0),(144,'20171226@isptec.co.ao','$2a$12$VKlZocjT5BIYaXDWUy0/m.GB7x5XUdsHwW/x/qwNtjb2wj73mqfMu',NULL,'user',0),(145,'nelo4902@gmail.com','$2a$12$VoM6F87Zk/tMW61ZY.UVp.vrMmM9jCGekbVazIhzADDEwvKKGZq2C',NULL,'user',0),(146,'nelsoneduardo33@outlook.com','$2a$12$Jajowq6UpVbutauKqpZDfeY2namT87.pV1S1n2Q1xX0VL0nxWBSUa',NULL,'user',0),(147,'lucykiassy@hotmail.com','$2a$12$63I3AgYrr2O5fJnKj6uyf.lfj64.XZAVDGWYtPg7lPbb6Qx4flhBO',NULL,'user',0),(148,'fernandokiassucumuca@hotmail.com','$2a$12$BH0RikAhRpl/IA6nm5Z5vurf7HbrPZAOi49fnUO4jBav3hq0Wdvsa',NULL,'user',0),(150,'torrinhoandersonkiole@gmail.com','$2a$12$haltIPzNerJeyj.7N1VnterJSIxfu42K/UloVUK7.3LZAZfP1UNAG',NULL,'user',0),(152,'kiassucristiano@hotmail.com','$2a$12$sfZB5dZY2z0LneXzgfIaHueQrGTVRTyBzXZhf/snrxpugnLDRSUr6',NULL,NULL,1),(157,'marciocristiano105@gmail.com','$2a$12$JihMfH9AHoIgzZ1F6K0gnOJOlnRkasOAxBdtHeCqocibzeqe1lXWq',NULL,NULL,0),(163,'ange.kiass@hotmail.com','$2a$12$UxZcFM1KN4GAM378EhM9j.gv.qJkwt24FVxO./dERcGi.ZAi6iIFG',NULL,NULL,0),(164,'guikiassucumuca@hotmail.com','$2a$12$CRjePt2zLNmIzLJtMsdwt.NSdzxuN5hLoS3ii3Rb49i63gLdpcxVO',NULL,NULL,0),(165,'n@hotmail.com','$2a$12$IUlXjX1/X.dy.JrYMppb7.Dp1iYYbg7dVsM8vuEUru1IPGAEMLAZK',NULL,NULL,0);
+INSERT INTO `conta` VALUES (172,'kiassucristiano@hotmail.com','$2a$12$Ji0pVz/WfDZ00.1vjw7hm.CUl633Xon0s/sp/hwgD768dNkzWBdpm',NULL,NULL,0);
 /*!40000 ALTER TABLE `conta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,9 +283,9 @@ CREATE TABLE `duvida` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) DEFAULT NULL,
   `assunto` varchar(45) DEFAULT NULL,
-  `descricao` varchar(1045) DEFAULT NULL,
+  `descricao` varchar(7045) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
-  `resposta` varchar(45) DEFAULT NULL,
+  `resposta` varchar(5045) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -297,7 +297,7 @@ CREATE TABLE `duvida` (
 
 LOCK TABLES `duvida` WRITE;
 /*!40000 ALTER TABLE `duvida` DISABLE KEYS */;
-INSERT INTO `duvida` VALUES (1,'Eduardo Kiassucumuca','Exploracao de trabalhadores ','As empresas actuamente exigem muito dos trablhadores mas as questões financeiras são precarias, o que vocês fazem perante essas situações ','lida',NULL),(2,'Eduardo Kiassucumuca','Horas extras não se fazem sentir','Eu trabalho a 5 anos e a empresa nunnca me dá horas extras, oque tenho que fazer','lida',NULL),(3,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(4,'Eduardo Kiassucumuca','sods','sdsdsd\n','lida',NULL),(5,'Edu','Novo','nova','lida','raaaajkjk\n'),(6,'e','e','e',NULL,NULL),(7,'Marcio Silva','Segurança no trabalho','Preciso saber se existe alguma lei correspondente a trabalhos de risco.',NULL,NULL),(8,'Joao Costa','duvida1','duvida1',NULL,NULL),(9,'','','',NULL,NULL),(10,'yu','yu','yu',NULL,NULL);
+INSERT INTO `duvida` VALUES (1,'Eduardo Kiassucumuca','Exploracao de trabalhadores ','As empresas actuamente exigem muito dos trablhadores mas as questões financeiras são precarias, o que vocês fazem perante essas situações ','lida',NULL),(2,'Eduardo Kiassucumuca','Horas extras não se fazem sentir','Eu trabalho a 5 anos e a empresa nunnca me dá horas extras, oque tenho que fazer','lida',NULL),(3,'Eduardo Kiassucumuca','Direitos dos trabalhadores','Quais são os direitos básicos dos trabalhadores em Angola?','lida','Direito a um salário mínimo, definido pelo governo.\nLimites de horas de trabalho regulares e horas extras.\nFérias remuneradas e feriados públicos.\nSegurança e saúde no local de trabalho.\nProteção contra discriminação no emprego com base em características como gênero, raça, religião, etc.\nDireito a sindicalização e negociação coletiva.'),(4,'Eduardo Kiassucumuca','Calculo das horas de trabalho','Como posso calcular as horas extras e os seus pagamentos?','',NULL),(5,'Eduina Jassira','Rescisão de contrato','Quais são os requisitos para rescindir um contrato de trabalho?','',''),(6,'Mariana Silveira','Despedimento por injusta causa','Quais são os direitos dos trabalhadores em caso de despedimento injustificado?','lida','kj'),(7,'Marcio Silva','Contratação de trabalhadores estrangeiros','Quais são os requisitos para a contratação de trabalhadores estrangeiros?','lida','Os requisitos para a contratação de trabalhadores estrangeiros em Angola são estabelecidos pela legislação de imigração e trabalho do país. Isso pode incluir a obtenção de vistos de trabalho adequados, autorizações de residência e cumprimento de outros requisitos legais. Os empregadores que desejam contratar trabalhadores estrangeiros devem seguir os procedimentos estabelecidos e garantir que estejam em conformidade com todas as leis e regulamentos aplicáveis.');
 /*!40000 ALTER TABLE `duvida` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -322,7 +322,7 @@ CREATE TABLE `empresa` (
   KEY `fk_conta_idx` (`fk_conta`),
   KEY `empresa_ibfk_1` (`enderecoID`),
   CONSTRAINT `empresa_ibfk_1` FOREIGN KEY (`enderecoID`) REFERENCES `endereco` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +331,7 @@ CREATE TABLE `empresa` (
 
 LOCK TABLES `empresa` WRITE;
 /*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
-INSERT INTO `empresa` VALUES (141,'Kero','12839LA232','kkk','meu@kero.ao','www.kero.co.ao',504,0,'queixante'),(142,'ISPTEC','12839LA230','ççl','dti@isptec.ao','www.isptec.co.ao',505,0,'queixante'),(143,'Movicel','1234LA903','fff','nao2@xpto.ao','www.d.co.ao',511,0,'queixante'),(144,'a','678LA','ff','guikiassucumuca@hotmail.com','a.co.ao',513,158,'queixoso'),(145,'sdf','Bati','kkkkk','guikiassucumuca@hotmail.com','www.isptec.co.ao',515,159,'queixoso'),(146,'AngoReal','1334LA913','ffffff','angoreal@outlook.com','angoreal.co.ao',520,0,'queixante'),(147,'xpto','132','dfd','artur.miguel@isptec.co.ao','xpto.com',522,161,'queixoso'),(148,'teste1','teste1','teste1','teste1@hotmail.com','teste1',524,0,'queixante'),(149,'teste2','teste2','teste2','teste2@hotmail.com','teste2',526,0,'queixante'),(150,'outra1','outra1','outra1','outra1@hotmail.com','outra1',527,0,'queixante'),(151,'novaM1','0093920','novaM1','guikiassucumuca@hotmail.com','novaM1',529,164,'queixoso'),(152,'m','m','m','m@hotmail.com','m',530,0,'queixante'),(153,'n','934BG099','n','n@hotmail.com','n',531,165,'queixoso');
+INSERT INTO `empresa` VALUES (141,'Kero','12839LA232','kkk','meu@kero.ao','www.kero.co.ao',504,0,'queixante'),(142,'ISPTEC','12839LA230','ççl','dti@isptec.ao','www.isptec.co.ao',505,0,'queixante'),(143,'Movicel','1234LA903','fff','nao2@xpto.ao','www.d.co.ao',511,0,'queixante'),(144,'a','678LA','ff','guikiassucumuca@hotmail.com','a.co.ao',513,158,'queixoso'),(145,'sdf','Bati','kkkkk','guikiassucumuca@hotmail.com','www.isptec.co.ao',515,159,'queixoso'),(146,'AngoReal','1334LA913','ffffff','angoreal@outlook.com','angoreal.co.ao',520,0,'queixante'),(147,'xpto','132','dfd','artur.miguel@isptec.co.ao','xpto.com',522,161,'queixoso'),(148,'teste1','teste1','teste1','teste1@hotmail.com','teste1',524,0,'queixante'),(149,'teste2','teste2','teste2','teste2@hotmail.com','teste2',526,0,'queixante'),(150,'outra1','outra1','outra1','outra1@hotmail.com','outra1',527,0,'queixante'),(151,'novaM1','0093920','novaM1','guikiassucumuca@hotmail.com','novaM1',529,164,'queixoso'),(152,'m','m','m','m@hotmail.com','m',530,0,'queixante'),(153,'n','934BG099','n','n@hotmail.com','n',531,165,'queixoso'),(154,'j','j','h\r\n','sd@sd.co','',537,0,'queixante'),(155,'Alien group','3232323','Empresa focada no desenvolvimento de soluções tecnológicas.','geral@alien-group.com','https://www.alien-group.com/.co.ao',540,0,'queixante');
 /*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,7 +352,7 @@ CREATE TABLE `endereco` (
   `telefone_principal` varchar(255) NOT NULL,
   `telefone_alternativo` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=532 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=541 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,7 +361,7 @@ CREATE TABLE `endereco` (
 
 LOCK TABLES `endereco` WRITE;
 /*!40000 ALTER TABLE `endereco` DISABLE KEYS */;
-INSERT INTO `endereco` VALUES (428,'Valodia','Combatentes',NULL,'10','Luanda','930340539',959553137),(429,'Talatona','Belas','122',NULL,'Luanda','992333444',NULL),(439,'Viana','Viana','11',NULL,'Luanda','932332233',NULL),(463,'b','b',NULL,'b','Luanda','932332211',959553137),(464,'Valódia','Zé pirão','11',NULL,'Luanda','923443322',NULL),(465,'o','o',NULL,'o','Luanda','932332211',959887777),(466,'o','o',NULL,'o','Luanda','932332211',959887777),(467,'o','o',NULL,'o','Luanda','932332211',959887777),(468,'o','o',NULL,'o','Luanda','932332211',959887777),(469,'o','o',NULL,'o','Luanda','932332211',959887777),(470,'a','a','a',NULL,'Uíge','923445566',NULL),(471,'a','a','a',NULL,'Uíge','923445566',NULL),(472,'a','a','a',NULL,'Uíge','923445566',NULL),(473,'a','a','a',NULL,'Uíge','923445566',NULL),(480,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(481,NULL,NULL,NULL,NULL,NULL,'932332211',921223445),(489,NULL,NULL,NULL,NULL,'Luanda','923334454',959553137),(491,NULL,NULL,NULL,NULL,NULL,'923334454',921223445),(492,NULL,NULL,NULL,NULL,NULL,'930340539',959553137),(493,NULL,NULL,NULL,NULL,NULL,'943556677',921223445),(494,NULL,NULL,NULL,NULL,NULL,'923334454',921223445),(495,NULL,NULL,NULL,NULL,NULL,'923334454',959887777),(496,NULL,NULL,NULL,NULL,NULL,'912002200',932778899),(498,NULL,NULL,NULL,NULL,NULL,'923334454',959887777),(499,'Valodia','Combatentes',NULL,'vamo3','Luanda','930340539',921223445),(500,'Marçal','Belas','Kings Tower',NULL,'Benguela','932332233',NULL),(501,'Valodia','Combatentes',NULL,'vamo3','Luanda','930340539',921223445),(502,'Marçal','Belas','Kings Tower',NULL,'Benguela','932332233',NULL),(503,'Cazenga','lulul',NULL,'b','Luanda','930340539',921223445),(504,'Nova2','a','226',NULL,'Luanda','921234433',NULL),(505,'j','d','111',NULL,'Luanda','945556677',NULL),(506,'b','B',NULL,'105','Benguela','923334454',921223445),(507,'b','B',NULL,'105','Benguela','923334454',921223445),(508,'b','B',NULL,'105','Benguela','923334454',921223445),(509,'b','B',NULL,'105','Benguela','923334454',921223445),(510,'o','o',NULL,'o','Benguela','923334454',959553137),(511,'d','NovaEmpresa','111',NULL,'Benguela','932332212',NULL),(512,'B','df',NULL,'12','Benguela','923334454',959553137),(513,'tt','j','111',NULL,'Benguela','998998888',NULL),(514,'Rocha','teste1',NULL,'teste1','Benguela','923334454',921223445),(515,'a','Zé pirão','111',NULL,'Benguela','956789900',NULL),(516,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(517,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(518,'sdf','Rocha',NULL,'tt','Benguela','930340539',959553137),(519,'t','t',NULL,'t','Luanda','932332211',921223445),(520,'d','d','wd',NULL,'Luanda','923443322',NULL),(521,'t','t',NULL,'t','Luanda','943556678',932778899),(522,'NovaEmpresa','Belas','111',NULL,'Luanda','922122233',NULL),(523,'teste1','teste1',NULL,'teste1','Luanda','934556655',995445555),(524,'teste1','teste1','teste1',NULL,'Luanda','934554433',NULL),(525,'teste2','teste2',NULL,'teste2','Luanda','934443322',943221122),(526,'teste2','teste2','teste2',NULL,'Luanda','998887766',NULL),(527,'outra1','outra1','outra1',NULL,'Luanda','932223344',NULL),(528,'mais','mais',NULL,'mais','Luanda','993223344',998443344),(529,'novaM1','novaM1','novaM1',NULL,'Benguela','2449854433',NULL),(530,'m','m','m',NULL,'Benguela','934332233',NULL),(531,'n','n','n',NULL,'Benguela','924444444',NULL);
+INSERT INTO `endereco` VALUES (539,'Valodia','Combatentes',NULL,'226/10','Luanda','930340539',959553137),(540,'Azul','Doutor António Agostinho Neto ','NA',NULL,'Luanda','941067525',NULL);
 /*!40000 ALTER TABLE `endereco` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,7 +415,7 @@ CREATE TABLE `esclarecimento` (
   KEY `fk_inspector_idx` (`inspectorID`),
   CONSTRAINT `fk_duvida` FOREIGN KEY (`duvidaID`) REFERENCES `duvida` (`id`),
   CONSTRAINT `fk_inspector` FOREIGN KEY (`inspectorID`) REFERENCES `inspector` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,7 +424,7 @@ CREATE TABLE `esclarecimento` (
 
 LOCK TABLES `esclarecimento` WRITE;
 /*!40000 ALTER TABLE `esclarecimento` DISABLE KEYS */;
-INSERT INTO `esclarecimento` VALUES (1,1,NULL,NULL,' It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.','2024-05-06 15:12:47','2024-05-06 15:12:47');
+INSERT INTO `esclarecimento` VALUES (1,1,NULL,NULL,' It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.','2024-05-06 15:12:47','2024-05-06 15:12:47'),(2,1,NULL,NULL,'','2024-05-13 21:50:39','2024-05-13 21:50:39');
 /*!40000 ALTER TABLE `esclarecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -470,7 +470,7 @@ CREATE TABLE `funcionarioigt` (
   PRIMARY KEY (`id`),
   KEY `trabalhadorID_idx` (`trabalhadorID`),
   CONSTRAINT `trabalhadorID` FOREIGN KEY (`trabalhadorID`) REFERENCES `trabalhador` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -479,7 +479,7 @@ CREATE TABLE `funcionarioigt` (
 
 LOCK TABLES `funcionarioigt` WRITE;
 /*!40000 ALTER TABLE `funcionarioigt` DISABLE KEYS */;
-INSERT INTO `funcionarioigt` VALUES (9,147,'Inspector'),(20,158,'Inspector'),(21,159,'Inspector'),(22,160,'Recepcionista'),(23,161,'Recepcionista'),(24,162,'chefe_servicos'),(26,164,'chefe_servicos');
+INSERT INTO `funcionarioigt` VALUES (23,161,'Recepcionista'),(24,162,'chefe_servicos'),(26,164,'chefe_servicos');
 /*!40000 ALTER TABLE `funcionarioigt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -502,7 +502,7 @@ CREATE TABLE `historico_queixa` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `id_queixa_idx` (`queixaID`),
   CONSTRAINT `queixaID` FOREIGN KEY (`queixaID`) REFERENCES `queixa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -511,7 +511,7 @@ CREATE TABLE `historico_queixa` (
 
 LOCK TABLES `historico_queixa` WRITE;
 /*!40000 ALTER TABLE `historico_queixa` DISABLE KEYS */;
-INSERT INTO `historico_queixa` VALUES (32,NULL,'Bom dia, podem por favor ajudar nesta questão. O salario combinado no contraro não é o que recebo.','2023-11-07 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(33,NULL,'Boa tarde, sempre que tiro ferias não consigo gozar por completo os meus direitos, sou sempreimpedido.','2023-11-07 00:00:00','Ferias no trabalho','anonimo',NULL),(34,NULL,'sasssss','2023-11-07 00:00:00','Mais1','anonimo',NULL),(35,NULL,'wsdsdsdsd','2023-11-08 00:00:00','Vamos ver1','normal',NULL),(42,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(43,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(44,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(45,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(46,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(47,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(48,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(49,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(50,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(51,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(52,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(53,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(54,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(55,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(56,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(57,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(58,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(59,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(60,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(61,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(62,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(63,145,'ssss09','2024-02-01 00:00:00','sods01','anonimo',NULL),(64,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(65,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(66,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(67,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(68,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(69,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(70,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(71,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(72,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(73,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(74,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(75,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(76,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(77,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(78,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(79,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(80,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(81,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(82,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(83,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(84,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(85,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(86,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(87,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(88,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(89,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(90,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(91,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(92,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(93,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(94,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(95,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(96,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(97,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(98,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(99,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(100,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(101,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(102,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(103,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(104,145,'ssss091','2024-02-03 00:00:00','sods015','anonimo',NULL),(105,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(106,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(107,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(108,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(109,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(110,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(111,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(112,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(113,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(114,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(115,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonus','normal',NULL),(116,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonus','normal',NULL),(117,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonusss','normal',NULL),(118,151,'Empresa sem bonus sem benefício ','2024-03-27 00:00:00','Bonus','anonimo',NULL),(119,154,'mais1','2024-03-27 00:00:00','mais1','normal',NULL),(120,138,'teste2','2024-04-02 00:00:00','teste2','normal',NULL),(121,138,'teste2','2024-04-23 00:00:00','teste23','anonimo',NULL),(122,138,'teste2','2024-04-23 00:00:00','teste23g','anonimo',NULL),(123,138,'teste2v','2024-04-23 00:00:00','teste23g','normal',NULL);
+INSERT INTO `historico_queixa` VALUES (32,NULL,'Bom dia, podem por favor ajudar nesta questão. O salario combinado no contraro não é o que recebo.','2023-11-07 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(33,NULL,'Boa tarde, sempre que tiro ferias não consigo gozar por completo os meus direitos, sou sempreimpedido.','2023-11-07 00:00:00','Ferias no trabalho','anonimo',NULL),(34,NULL,'sasssss','2023-11-07 00:00:00','Mais1','anonimo',NULL),(35,NULL,'wsdsdsdsd','2023-11-08 00:00:00','Vamos ver1','normal',NULL),(42,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(43,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(44,NULL,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(45,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(46,125,'Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2024-01-09 00:00:00','Salario não corresponde ao combinado','anonimo',NULL),(47,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(48,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(49,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(50,145,'sdsd','2024-01-30 00:00:00','sods','normal',NULL),(51,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(52,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(53,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(54,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(55,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(56,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(57,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(58,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(59,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(60,145,'sdsd','2024-02-01 00:00:00','sods','normal',NULL),(61,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(62,145,'ssss','2024-02-01 00:00:00','sods01','anonimo',NULL),(63,145,'ssss09','2024-02-01 00:00:00','sods01','anonimo',NULL),(64,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(65,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(66,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(67,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(68,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(69,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(70,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(71,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(72,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(73,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(74,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(75,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(76,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(77,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(78,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(79,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(80,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(81,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(82,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(83,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(84,145,'ssss091','2024-02-01 00:00:00','sods01','anonimo',NULL),(85,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(86,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(87,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(88,145,'ssss091','2024-02-02 00:00:00','sods01','anonimo',NULL),(89,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(90,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(91,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(92,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(93,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(94,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(95,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(96,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(97,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(98,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(99,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(100,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(101,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(102,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(103,145,'ssss091','2024-02-03 00:00:00','sods01','anonimo',NULL),(104,145,'ssss091','2024-02-03 00:00:00','sods015','anonimo',NULL),(105,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(106,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(107,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(108,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(109,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(110,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(111,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(112,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(113,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(114,145,'ssss091','2024-02-03 00:00:00','sods015','normal',NULL),(115,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonus','normal',NULL),(116,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonus','normal',NULL),(117,151,'Empresa sem bonus sem benefício ','2024-03-26 00:00:00','Bonusss','normal',NULL),(118,151,'Empresa sem bonus sem benefício ','2024-03-27 00:00:00','Bonus','anonimo',NULL),(119,154,'mais1','2024-03-27 00:00:00','mais1','normal',NULL),(120,138,'teste2','2024-04-02 00:00:00','teste2','normal',NULL),(121,138,'teste2','2024-04-23 00:00:00','teste23','anonimo',NULL),(122,138,'teste2','2024-04-23 00:00:00','teste23g','anonimo',NULL),(123,138,'teste2v','2024-04-23 00:00:00','teste23g','normal',NULL),(124,130,'wsdsdsdsd','2024-06-19 00:00:00','Vamos ver10','normal',NULL),(125,130,'wsdsdsdsd67','2024-06-19 00:00:00','Vamos ver10','normal',NULL),(134,154,'mais1','2024-06-25 00:00:00','mais1skdksjd','normal',NULL),(136,145,'ssss0918','2024-06-29 00:00:00','sods0159','anonimo',NULL),(137,145,'ssss0918','2024-06-29 00:00:00','sods0159','normal',NULL),(138,157,'Olá sou Eduardo, entrei na alien group depois de ter saido em segundo lugar na maratona de programação , obtive um estagio durante três meses, mas no decorrer do tempo passou-se seis meses de trabalho mas não recebi nenhuma proposta salarial. Até o momento estou a 1 ano nessa empresa e ainda continuo como estagiario, preciso de ajuda nessa questão . Obrigado.','2024-07-10 00:00:00','Trabalho sem remuneração ','normal',NULL);
 /*!40000 ALTER TABLE `historico_queixa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -526,7 +526,7 @@ CREATE TABLE `inspector` (
   `id` int NOT NULL AUTO_INCREMENT,
   `trabalhadorID` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,7 +535,7 @@ CREATE TABLE `inspector` (
 
 LOCK TABLES `inspector` WRITE;
 /*!40000 ALTER TABLE `inspector` DISABLE KEYS */;
-INSERT INTO `inspector` VALUES (14,147),(16,158),(17,159);
+INSERT INTO `inspector` VALUES (14,147),(16,158),(17,159),(19,182),(20,185);
 /*!40000 ALTER TABLE `inspector` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,7 +552,7 @@ CREATE TABLE `nota` (
   `nota` varchar(1045) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -561,7 +561,6 @@ CREATE TABLE `nota` (
 
 LOCK TABLES `nota` WRITE;
 /*!40000 ALTER TABLE `nota` DISABLE KEYS */;
-INSERT INTO `nota` VALUES (1,104,'nota1'),(2,104,'nota2'),(3,104,'nota3'),(4,104,'no'),(5,104,'2'),(6,104,'26'),(7,104,'263'),(8,104,' 99'),(9,104,'a'),(10,132,'suds'),(11,132,' sdsdsd'),(12,149,'k'),(13,154,'j');
 /*!40000 ALTER TABLE `nota` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -616,7 +615,7 @@ CREATE TABLE `pessoa` (
   `estado_civil` varchar(255) DEFAULT NULL,
   `data_nascimento` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -625,7 +624,7 @@ CREATE TABLE `pessoa` (
 
 LOCK TABLES `pessoa` WRITE;
 /*!40000 ALTER TABLE `pessoa` DISABLE KEYS */;
-INSERT INTO `pessoa` VALUES (235,'Nenhum','Nenhum',NULL,NULL,NULL,NULL,NULL,NULL,481,NULL,NULL),(246,'Eduardo ','Kiassucmuca',NULL,NULL,NULL,NULL,NULL,NULL,492,NULL,NULL),(247,'Manuel','Gomes',NULL,NULL,NULL,NULL,NULL,NULL,493,NULL,NULL),(248,'Nelson','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,494,NULL,NULL),(249,'Lucy','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,495,NULL,NULL),(250,'Fernando','Kiassucumuca',NULL,NULL,NULL,NULL,NULL,NULL,496,NULL,NULL),(252,'Anderson Matilde','Kiole',NULL,NULL,NULL,NULL,NULL,NULL,498,NULL,NULL),(255,'Marcio Cristiano','Da Silva','df','lulul','Angola','Masculino','1.23',300,503,'Solteiro','Invalid date'),(259,'Silva','Silvano','b','NovaEmpresa2','c2','Feminino','1.87',304,509,'Solteiro','2022-10-07 00:00:00'),(260,'Cris','iu','o','B','Angola','Masculino','1.23',305,510,'Solteiro','2022-10-07 00:00:00'),(261,'Levanta','Kiole','Gomes','dd','Angola','Feminino','1.23',306,512,'Viuvo','2022-10-07 00:00:00'),(262,'Manuel','iu','vamo3','vamo3','vamo3','Masculino','1.87',307,514,'Solteiro','2021-10-07 00:00:00'),(263,'lll','lklk','B','Engracia','Angola','Masculino','1.23',308,516,'Solteiro','2014-10-07 00:00:00'),(264,'lll','lklk','B','Engracia','Angola','Masculino','1.23',309,517,'Solteiro','2014-10-07 00:00:00'),(265,'lll','lklk','B','Engracia','Angola','Masculino','1.23',310,518,'Solteiro','2014-10-07 00:00:00'),(266,'João','Costa','t','t','Angola','Masculino','1.23',311,519,'Casado','2006-10-14 00:00:00'),(267,'t','t','t','t','Luanda','Masculino','1.23',312,521,'Casado','2022-09-14 00:00:00'),(268,'teste1','teste1','teste1','teste1','teste1','Masculino','1.2',313,523,'Solteiro','1996-12-30 00:00:00'),(269,'teste2','teste2','teste2','teste2','teste2','Masculino','1.26',314,525,'Solteiro','2024-01-17 00:00:00'),(270,'mais','mais','mais','mais','mais','Feminino','2.3',315,528,'Solteiro','2024-01-05 00:00:00');
+INSERT INTO `pessoa` VALUES (277,'Eduardo Cristiano Da Silva','Kiassucumuca','Eduardo Kiassucumuca','Cristina Guilherme','Sambizanga','Masculino','1.65',318,539,'Solteiro','1999-03-06 00:00:00');
 /*!40000 ALTER TABLE `pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -700,7 +699,7 @@ CREATE TABLE `queixa` (
   CONSTRAINT `queixa_ibfk_2` FOREIGN KEY (`trabalhadorID`) REFERENCES `trabalhador` (`id`),
   CONSTRAINT `queixa_ibfk_3` FOREIGN KEY (`recepcionistaID`) REFERENCES `recepcionista` (`id`),
   CONSTRAINT `queixa_ibfk_5` FOREIGN KEY (`chefeServicosID`) REFERENCES `chefeservicos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -709,7 +708,7 @@ CREATE TABLE `queixa` (
 
 LOCK TABLES `queixa` WRITE;
 /*!40000 ALTER TABLE `queixa` DISABLE KEYS */;
-INSERT INTO `queixa` VALUES (125,'Salario não corresponde ao combinado','Bom dia, podem por favor ajudar nesta questão. O salário combinado no contrato não é o que recebo.','2023-11-07 22:31:28','2023-11-07 22:31:28','166','141',141,166,NULL,14,NULL,'l2.pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,''),(126,'Ferias no trabalho','Boa tarde, sempre que tiro ferias não consigo gozar por completo os meus direitos, sou sempre impedido.','2023-11-07 22:47:29','2023-11-07 22:47:29','166','141',141,166,NULL,14,NULL,'uploads\\1699397249136-CIRURG â VOL 1 Trauma.pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,''),(128,'Mais1','sasssss3','2023-11-07 22:53:23','2023-11-07 22:53:23','166','142',142,166,NULL,14,NULL,'uploads\\1699397603264-ENDOCR â VOL 2 DoenÃ§as da Suprarrenal_ DoenÃ§as da Paratireoide_ DoenÃ§as da HipÃ³fise e HipotÃ¡lamo.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(129,'Mais2','kjhhh','2023-11-07 23:14:00','2023-11-07 23:14:00','170','142',142,170,NULL,14,NULL,'uploads\\1699398839128-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(130,'Vamos ver10','wsdsdsdsd','2023-11-07 23:24:58','2023-11-07 23:24:58','171','143',143,171,NULL,17,NULL,'uploads\\1699399496622-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Benguela','normal','Analise',8,NULL,'uploads\\1700777869685-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf',NULL,''),(131,'b','kugg','2023-11-07 23:33:18','2023-11-07 23:33:18','144','172',144,172,NULL,16,NULL,'uploads\\1699399996526-CIRURG â VOL 3 Resposta EndÃ³crina e ImunolÃ³gica ao Trauma, Queimaduras, CicatrizaÃ§Ã£o de Feridas, Choque, Suporte Nutricional, Cirurgia PlÃ¡stica.pdf','Benguela','normal','Aberto',8,NULL,'uploads\\1700777173973-CIRURG â VOL 1 Trauma.pdf',NULL,''),(132,'Meu assunto11','sdsdsd','2023-11-07 23:41:51','2023-11-07 23:41:51','145','173',145,173,NULL,17,NULL,'uploads\\1699400508534-DERMATO - AnÃ¡tomo-histologia e LesÃµes Elementares_ DÃ§s InfectoparasitÃ¡rias da Pele_ Dermatoses InflamatÃ³rias_ Oncologia DermatolÃ³gica.pdf','Benguela','normal','Encerrado',9,NULL,'Actividades de grande vulto 2024.docx',1500,''),(133,'dd','ddddd','2023-11-07 23:57:31','2023-11-07 23:57:31','141','176',141,176,NULL,14,NULL,'uploads\\1699401448891-CIRURG â VOL 2 Preparo PrÃ©-operatÃ³rio, ComplicaÃ§Ãµes em Cirurgia, PrincÃ­pios de Anestesia, HÃ©rnias da Parede Abdominal.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(134,'Sem Subsidio de ferias','','2023-11-15 09:05:49','2023-11-15 09:05:49','177','146',146,177,NULL,14,NULL,'uploads\\1700039147182-CARDIO â VOL 4 DoenÃ§a Coronariana.pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,''),(135,'xpto','xpto','2023-11-15 09:38:39','2023-11-15 09:38:39','147','178',147,178,NULL,14,NULL,'uploads\\1700041118049-CIRURG â VOL 1 Trauma.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(136,'novinho','novinho1','2023-11-29 22:00:12','2023-11-29 22:00:12','166','141',141,166,NULL,14,NULL,'uploads\\gonorreia.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(137,'teste1','teste1','2024-01-22 19:49:32','2024-01-22 19:49:32','179','148',148,179,NULL,14,NULL,'uploads/Hernania Ferreira  2024(1).pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,''),(138,'teste23g','teste2v','2024-01-24 22:17:32','2024-01-24 22:17:32','180','149',149,180,NULL,14,NULL,'DOSSIÃ DA FEIRA FAVOR DA SAÃDE PREVENTIVA.docx','Luanda','normal','Aberto',4,NULL,'Actividades de grande vulto 2024.docx',NULL,''),(139,'outra1','outra1','2024-01-25 19:20:51','2024-01-25 19:20:51','180','150',150,180,NULL,14,NULL,'uploads/laurÃ­ssea Campos  2024(1).pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,''),(140,'outra2','outra2','2024-01-25 19:32:35','2024-01-25 19:32:35','180','150',150,180,NULL,14,NULL,'uploads/Selton Barros 2023 (1).docx','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(141,'mais','mais','2024-01-25 21:30:53','2024-01-25 21:30:53','151','181',151,181,NULL,14,NULL,'uploads/l2.pdf','Benguela','normal','Aberto',4,NULL,NULL,NULL,''),(142,'jjk','kjjk','2024-01-26 22:27:50','2024-01-26 22:27:50','179','143',143,179,NULL,14,NULL,'uploads/Manual de OrientaÃ§Ã£o - VD.pdf','Benguela','normal','Aberto',4,NULL,NULL,NULL,''),(143,'jj','j','2024-01-26 22:30:47','2024-01-26 22:30:47','179','144',144,179,NULL,14,NULL,'uploads/l2.pdf','Benguela','normal','Aberto',4,NULL,NULL,NULL,''),(144,'teste3','rf','2024-01-26 22:32:24','2024-01-26 22:32:24','179','145',145,179,NULL,14,NULL,'l2.pdf','Benguela','normal','Aberto',4,NULL,NULL,NULL,''),(145,'sods0159','ssss0918','2024-01-26 22:38:47','2024-01-26 22:38:47','180','144',144,180,NULL,14,NULL,'Angola Effective currency value.xlsx','Benguela','anonimo','Analise',9,NULL,NULL,NULL,''),(146,'jaj',',Jill','2024-02-12 22:36:12','2024-02-12 22:36:12','180','142',142,180,NULL,14,NULL,'l2.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(147,'df','df','2024-02-12 22:38:52','2024-02-12 22:38:52','180','141',141,180,NULL,14,NULL,'Acta numero1 da primeira reuniÃ£o do corpo directivo.docx','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(148,'sods','sdsd','2024-02-12 22:47:49','2024-02-12 22:47:49','180','142',142,180,NULL,14,NULL,'Hernania Ferreira  2024(1).pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,''),(149,'hkjk','obj','2024-02-14 19:00:35','2024-02-14 19:00:35','151','181',151,181,NULL,17,NULL,'Acta numero1 da primeira reuniÃ£o do corpo directivo.docx','Benguela','normal','Analise',8,NULL,'Actividades de grande vulto 2024.docx',NULL,''),(150,'Bonus','Sem Bonus em empresa sem margem de crescimento','2024-03-26 19:08:57','2024-03-26 19:08:57','181','141',141,181,NULL,14,NULL,'Convite.pdf','Luanda','normal','Aberto',4,NULL,NULL,NULL,NULL),(151,'Bonus','Empresa sem bonus sem benefício ','2024-03-26 19:14:14','2024-03-26 19:14:14','180','152',152,180,NULL,14,NULL,'Acta numero1 da primeira reuniÃÂ£o do corpo directivo.docx','Benguela','anonimo','Aberto',4,NULL,NULL,NULL,NULL),(152,'b','b','2024-03-26 19:27:56','2024-03-26 19:27:56','180','142',142,180,NULL,14,NULL,'Actividades de grande vulto 2024.docx','Luanda','normal','Aberto',4,NULL,NULL,NULL,NULL),(153,'n','n','2024-03-26 20:50:54','2024-03-26 20:50:54','153','181',153,181,NULL,14,NULL,'C.pdf','Benguela','normal','Aberto',4,NULL,NULL,NULL,NULL),(154,'mais1skdksjd','mais1','2024-03-26 20:57:44','2024-03-26 20:57:44','180','143',143,180,NULL,17,NULL,'Actividades de grande vulto 2024.pdf','Benguela','normal','Analise',8,NULL,NULL,NULL,NULL);
+INSERT INTO `queixa` VALUES (157,'Trabalho sem remuneração ','Olá sou Eduardo, entrei na alien group depois de ter saido em segundo lugar na maratona de programação , obtive um estagio durante três meses, mas no decorrer do tempo passou-se seis meses de trabalho mas não recebi nenhuma proposta salarial. Até o momento estou a 1 ano nessa empresa e ainda continuo como estagiario, preciso de ajuda nessa questão . Obrigado. sdsd','2024-07-10 21:26:39','2024-07-10 21:26:39','188','155',155,188,NULL,14,NULL,'Amira Elias.pdf','Luanda','anonimo','Aberto',4,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `queixa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -781,7 +780,7 @@ CREATE TABLE `reuniao` (
   `queixosoID` int DEFAULT NULL,
   `obs` varchar(1045) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -790,7 +789,6 @@ CREATE TABLE `reuniao` (
 
 LOCK TABLES `reuniao` WRITE;
 /*!40000 ALTER TABLE `reuniao` DISABLE KEYS */;
-INSERT INTO `reuniao` VALUES (5,'teste','teste','2023-12-12','12:12:00','agendada',125,NULL,NULL,166,'nenhuma'),(6,'teste2','teste2','2023-12-24','13:13:00','agndada',125,NULL,NULL,167,'nenhuma'),(7,'asas','asas','2024-02-28','12:22:00',NULL,149,NULL,151,NULL,'sands'),(8,'sdsdsds','sdsdsd','2024-02-21','13:00:00','1',149,181,NULL,NULL,'dxdx'),(9,'','jk','2024-02-10','09:30:00',NULL,149,NULL,151,NULL,''),(10,'','jk','2024-02-10','09:30:00','2',149,NULL,151,NULL,'jk'),(11,'dfdf','df','2024-02-24','04:23:00','4',149,NULL,151,NULL,'scud'),(12,'cd','dc','2024-02-25','23:22:00','1',149,181,NULL,NULL,'ddd'),(13,'sssh','ss','2024-04-20','12:22:00','3',149,NULL,151,NULL,'ss'),(14,'kjwe','jkas','2024-04-12','12:11:00','3',149,181,NULL,NULL,'mn'),(15,'as','as','2024-04-21','22:22:00','1',154,NULL,143,NULL,'sa'),(16,'as','as','2024-04-21','22:22:00','1',154,NULL,143,NULL,'sa');
 /*!40000 ALTER TABLE `reuniao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -910,7 +908,7 @@ CREATE TABLE `trabalhador` (
   PRIMARY KEY (`id`),
   KEY `trabalhador_ibfk_1` (`pessoaID`),
   CONSTRAINT `trabalhador_ibfk_1` FOREIGN KEY (`pessoaID`) REFERENCES `pessoa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -919,7 +917,7 @@ CREATE TABLE `trabalhador` (
 
 LOCK TABLES `trabalhador` WRITE;
 /*!40000 ALTER TABLE `trabalhador` DISABLE KEYS */;
-INSERT INTO `trabalhador` VALUES (147,'Inspector','Inspecção','Luanda','igt',235,133),(158,'Inspector','Inspecção','Benguela','igt',246,144),(159,'Inspector','Inspecção','Luanda','igt',247,145),(160,'Recepcionista','Administração','Benguela','igt',248,146),(161,'Recepcionista','Administração','Luanda','igt',249,147),(162,'chefe_servicos','Chefe','Benguela','igt',250,148),(164,'chefe_servicos','Chefe','Luanda','igt',252,150),(166,'Engnheiro Informatico','DTI','Luanda','queixoso',255,152),(170,'ccv','Master','Luanda','queixoso',259,156),(171,'Assistente de recursos humanos','NovaEmpresa','Benguela','queixoso',260,157),(172,'Engnheiro','Vendas','Benguela','queixante',261,0),(173,'xfd','dfdf','Benguela','queixante',262,0),(174,'zsd','sds','Luanda','queixamte',263,0),(175,'zsd','sds','Luanda','queixante',264,0),(176,'zsd','sds','Luanda','queixante',265,0),(177,'Engenheiro','Engenharia','Luanda','queixoso',266,160),(178,'r','r','Luanda','queixante',267,0),(179,'teste1','teste1','Luanda','queixoso',268,162),(180,'teste2','teste2','Luanda','queixoso',269,163),(181,'tester','mais','Benguela','queixante',270,0);
+INSERT INTO `trabalhador` VALUES (188,'Desenvolvedor de software ','Tic','Luanda','queixoso',277,172);
 /*!40000 ALTER TABLE `trabalhador` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -932,4 +930,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-06 16:36:35
+-- Dump completed on 2024-07-11  7:23:57
