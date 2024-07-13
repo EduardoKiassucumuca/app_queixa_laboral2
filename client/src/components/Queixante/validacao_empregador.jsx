@@ -111,25 +111,35 @@ const ValidacaoEmpregador = () => {
             background: colorBgContainer,
           }}
         >
-          <div id="myModal" class="modal" style={{ display: displayStyle }}>
-            <div class="modal-content">
-              <p>{alert}</p>
-              <p></p>
-              <div class="modal-footer">
+          <div id="myModal" className="modal" style={{ display: displayStyle }}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Aviso</h5>
+              </div>
+              <div className="modal-body">
+                <p style={{ fontSize: "1.0rem" }}>{alert}</p>
+              </div>
+              <div className="modal-footer">
                 {queixoso ? (
-                  <Link to="/empregador">
+                  <Link to="/trabalhador">
                     <Button onClick={toggleDisplay} variant="warning">
                       OK
                     </Button>
                   </Link>
                 ) : (
-                  <Link to="/queixar_trabalhador">
-                    <Button variant="warning">ok</Button>
-                  </Link>
+                  <>
+                    <Link to="/queixar_trabalhador">
+                      <Button variant="warning">Registrar-se</Button>
+                    </Link>
+                    <Button variant="outline-warning" onClick={toggleDisplay}>
+                      Tentar novamente
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
           </div>
+
           <Row className="mb-6 row-BI-Validacao">
             <Col md={11} className="form-queixa">
               <Col md={6} className="form-queixa">

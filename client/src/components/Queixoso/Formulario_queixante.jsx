@@ -55,6 +55,7 @@ const FormQueixante = () => {
   const [erroBI, setErroBI] = useState("");
   const [erro, setErro] = useState("");
   const [novoTrabalhadorID, setNovoTrabalhadorID] = useState("");
+  const [myDataTrab, setMyDataTrab] = useState("");
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
       setData((prev) => {
@@ -108,6 +109,10 @@ const FormQueixante = () => {
     } else if (sessionStorage.getItem("email")) {
       setLogged(3);
     }
+
+    const trab = localStorage?.getItem("trabalhador");
+    const data2 = JSON.parse(trab);
+    setMyDataTrab(data2);
     setNovoTrabalhadorID(sessionStorage.getItem("id_trabalhador"));
   }, []);
   function queixar() {
@@ -117,7 +122,7 @@ const FormQueixante = () => {
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
 
-    if (novoTrabalhadorID && data.empresa2 !== "outra") {
+    if ((myDataTrab || novoTrabalhadorID) && data.empresa2 !== "outra") {
       console.log("aqui");
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
@@ -125,7 +130,7 @@ const FormQueixante = () => {
       if (novoTrabalhadorID) {
         formData.append("_trabalhadorID", novoTrabalhadorID);
       } else {
-        formData.append("_trabalhadorID", novoTrabalhadorID);
+        formData.append("_trabalhadorID", myDataTrab.Trabalhador.id);
       }
 
       formData.append("_empresa", submissao_queixa.empresa2);
@@ -164,7 +169,7 @@ const FormQueixante = () => {
           console.log("error", resposta);
         });
     }
-    if (novoTrabalhadorID && data.empresa2 === "outra") {
+    if ((myDataTrab || novoTrabalhadorID) && data.empresa2 === "outra") {
       formData.append("_cargo", submissao_queixa.cargo);
       formData.append("_area_departamento", submissao_queixa.area_departamento);
       formData.append("nome_empresa", submissao_queixa.empresa);
@@ -183,7 +188,7 @@ const FormQueixante = () => {
       if (novoTrabalhadorID) {
         formData.append("_trabalhadorID", novoTrabalhadorID);
       } else {
-        formData.append("_trabalhadorID", novoTrabalhadorID);
+        formData.append("_trabalhadorID", myDataTrab.Trabalhador.id);
       } //formData.append("_empresa", submissao_queixa.empresa2);
       formData.append("_fileContrato", submissao_queixa.fileContrato);
       formData.append("fileContrato", file_contrato.files[0]);
@@ -214,7 +219,10 @@ const FormQueixante = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
-    } else if (!novoTrabalhadorID && data.empresa2 !== "outra") {
+    } else if (
+      (myDataTrab || !novoTrabalhadorID) &&
+      data.empresa2 !== "outra"
+    ) {
       console.log("entrei sem outra");
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
@@ -278,7 +286,10 @@ const FormQueixante = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
-    } else if (!novoTrabalhadorID && data.empresa2 === "outra") {
+    } else if (
+      (myDataTrab || !novoTrabalhadorID) &&
+      data.empresa2 === "outra"
+    ) {
       formData.append("_nome", submissao_queixa.nome);
       formData.append("_sobrenome", submissao_queixa.sobrenome);
       formData.append("_nomePai", submissao_queixa.nomePai);

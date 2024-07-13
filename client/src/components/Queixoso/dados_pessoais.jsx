@@ -29,7 +29,7 @@ const UseForm = ({ data, updateFielHndler }) => {
   const [options, setOptions] = useState(["Option 1", "Option 2", "Option 3"]);
   const [newOption, setNewOption] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
-
+  const [myData2, setMyData2] = useState("");
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -157,6 +157,11 @@ const UseForm = ({ data, updateFielHndler }) => {
     if (sessionStorage.getItem("email")) {
       setNomeTrabalhador(sessionStorage.getItem("nome_trabalhador"));
       setIDTrabalhador(sessionStorage.getItem("id_trabalhador"));
+    } else if (localStorage.getItem("trabalhador")) {
+      const trab = localStorage.getItem("trabalhador");
+      const data2 = JSON.parse(trab);
+      setMyData2(data2);
+      console.log(data2);
     }
   }, [data.provincia]);
 
@@ -189,6 +194,13 @@ const UseForm = ({ data, updateFielHndler }) => {
       {id_trabalhador ? (
         <h3 className="h3-cTrabalhador">
           Olá, <span className="span-cTrabalhador">{nome_trabalhador}</span>
+        </h3>
+      ) : myData2.Trabalhador ? (
+        <h3 className="h3-cTrabalhador">
+          Olá,{" "}
+          <span className="span-cTrabalhador">
+            {myData2.Pessoa.nome + " " + myData2.Pessoa.sobrenome}
+          </span>
         </h3>
       ) : (
         <div>
