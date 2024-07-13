@@ -42,7 +42,30 @@ function Login() {
     });
     //console.log(body);
   };
-
+  React.useEffect(() => {
+    if (
+      sessionStorage.getItem("email") &&
+      sessionStorage.getItem("tipo_user").toLowerCase() === "queixoso"
+    ) {
+      navigate("/dashboard_queixoso");
+    } else if (
+      sessionStorage.getItem("email") &&
+      sessionStorage.getItem("cargo").toLowerCase() === "recepcionista"
+    ) {
+      navigate("/recepcionista");
+    } else if (
+      sessionStorage.getItem("email") &&
+      sessionStorage.getItem("cargo").toLowerCase() === "chefe_servicos"
+    ) {
+      navigate("/chefe_servicos");
+    } else if (
+      sessionStorage.getItem("email") &&
+      sessionStorage.getItem("cargo").toLowerCase() === "inspector"
+    ) {
+      navigate("/inspector");
+    } else {
+    }
+  }, []);
   function logar() {
     setLoading(true);
     if (body.email === "admin@igt.ao" && body.senha === "123@igt") {

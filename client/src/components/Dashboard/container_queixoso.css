@@ -13,7 +13,6 @@
 }
 
 .text-queixa {
-  color: white;
 }
 
 .text-muted-provincia {
@@ -22,7 +21,9 @@
 .text-muted-estado {
   text-align: center;
 }
-
+.text-muted {
+  color: #6c757d !important;
+}
 .link-queixa-queixoso {
   color: #daa316;
   text-decoration: none;

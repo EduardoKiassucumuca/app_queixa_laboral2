@@ -1,7 +1,7 @@
-Inspectores-> 20171226@isptec.co.ao-ed2017,nelo4902@gmail.com -> gui2023
+Inspectores-> ange.kiass@hotmail.com,nelo4902@gmail.com -> gui2023
 Recepcionista -> nelsoneduardo33@outlook.com->nelson2023,lucykiassy@hotmail.com
 Chefe_Servicos -> fernandokiassucumuca@hotmail.com ->fernando2023,torrinhoandersonkiole@gmail.com ->torrinho
-Trabalhador -> kiassucristiano@hotmail.com -> ange.kiass@hotmail.com
+Trabalhador -> kiassucristiano@hotmail.com - IGT@2024 -> 20171226@isptec.co.ao-Angola2024!,
 Empregador -> artur.miguel@isptec.co.ao,guikiassucumuca@hotmail.com
 
-Password: IGT@2024
+Password: IGT@2024,Angola2024!

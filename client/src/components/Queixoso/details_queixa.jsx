@@ -18,6 +18,7 @@ import "./details_queixa.css";
 const Thanks = ({ data, updateFielHndler }) => {
   const [modal, setModal] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [novoTrabalhadorID, setNovoTrabalhadorID] = useState("");
   const onchangeAnonimo = (event) => {
     data.checkedAnonimo = event.target.checked;
     data.anonimo = event.target.value;
@@ -37,6 +38,9 @@ const Thanks = ({ data, updateFielHndler }) => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  React.useEffect(() => {
+    setNovoTrabalhadorID(sessionStorage.getItem("id_trabalhador"));
+  }, []);
   return (
     <>
       <Row className="mb-3">
@@ -78,7 +82,7 @@ const Thanks = ({ data, updateFielHndler }) => {
           />
           <br />
         </Col>
-        {!novoTrabalhador ? (
+        {!novoTrabalhadorID ? (
           <Col md={6}>
             <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
 

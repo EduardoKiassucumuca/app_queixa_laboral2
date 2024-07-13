@@ -91,6 +91,7 @@ function ValidacaoEmail() {
               JSON.stringify(data_login)
             );
             sessionStorage.removeItem("data_login", JSON.stringify(data_login));
+            sessionStorage.setItem("cargo", data_login.trabalhador.cargo);
 
             navigate("/recepcionista");
           } else if (
@@ -98,6 +99,8 @@ function ValidacaoEmail() {
             data_login.trabalhador.cargo === "chefe_servicos"
           ) {
             sessionStorage.setItem("email", email);
+            sessionStorage.setItem("cargo", data_login.trabalhador.cargo);
+
             sessionStorage.setItem(
               "data_chefeServicos",
               JSON.stringify(data_login)
@@ -109,6 +112,8 @@ function ValidacaoEmail() {
             data_login.trabalhador.cargo === "Inspector"
           ) {
             sessionStorage.setItem("email", email);
+            sessionStorage.setItem("cargo", data_login.trabalhador.cargo);
+
             sessionStorage.setItem(
               "data_inspector",
               JSON.stringify(data_login)
@@ -124,8 +129,13 @@ function ValidacaoEmail() {
             );
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("tipo_user", data_login.trabalhador.tipo);
+            sessionStorage.setItem("id_trabalhador", data_login.trabalhador.id);
+
             sessionStorage.setItem("BI", data_login.bi.numeroBI);
-            sessionStorage.setItem("nome_trabalhador", data_login.pessoa.nome);
+            sessionStorage.setItem(
+              "nome_trabalhador",
+              data_login.pessoa.nome + " " + data_login.pessoa.sobrenome
+            );
 
             console.log(data_login);
             //atualizar_status_conta(data_login.conta);
@@ -143,6 +153,8 @@ function ValidacaoEmail() {
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("tipo_user", data_login.empresa.tipo);
             sessionStorage.setItem("nif", data_login.empresa.nif);
+            sessionStorage.setItem("id_empresa", data_login.empresa.id);
+
             sessionStorage.setItem(
               "nome_empresa",
               data_login.empresa.nome_empresa

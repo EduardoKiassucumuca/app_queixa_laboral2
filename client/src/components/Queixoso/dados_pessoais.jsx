@@ -10,6 +10,9 @@ const UseForm = ({ data, updateFielHndler }) => {
   const [dataContacto, setdataContacto] = useState([data]);
   const [city, setCity] = useState(data.provincia);
   const [municipios, setMunicipios] = useState("");
+  const [nome_trabalhador, setNomeTrabalhador] = useState("");
+  const [id_trabalhador, setIDTrabalhador] = useState("");
+
   const addContacto = () => {
     setdataContacto([...dataContacto, data]);
   };
@@ -140,7 +143,7 @@ const UseForm = ({ data, updateFielHndler }) => {
   }
 
   React.useEffect(() => {
-    if (localStorage.getItem("trabalhador")) {
+    /*if (localStorage.getItem("trabalhador")) {
       const trabalhador = localStorage.getItem("trabalhador");
       const novoTrabalhador2 = JSON.parse(trabalhador);
       console.log(novoTrabalhador2);
@@ -150,6 +153,10 @@ const UseForm = ({ data, updateFielHndler }) => {
       console.log(novoTrabalhador);
       data.nBI = BI_validado;
       setCity(data.provincia); // Update city here
+    }*/
+    if (sessionStorage.getItem("email")) {
+      setNomeTrabalhador(sessionStorage.getItem("nome_trabalhador"));
+      setIDTrabalhador(sessionStorage.getItem("id_trabalhador"));
     }
   }, [data.provincia]);
 
@@ -179,23 +186,9 @@ const UseForm = ({ data, updateFielHndler }) => {
 
   return (
     <>
-      {novoTrabalhador.Pessoa ? (
+      {id_trabalhador ? (
         <h3 className="h3-cTrabalhador">
-          Olá,{" "}
-          <span className="span-cTrabalhador">
-            {novoTrabalhador.Pessoa.nome +
-              " " +
-              novoTrabalhador.Pessoa.sobrenome}
-          </span>
-        </h3>
-      ) : novoTrabalhador.pessoa ? (
-        <h3 className="h3-cTrabalhador">
-          Olá,{" "}
-          <span className="span-cTrabalhador">
-            {novoTrabalhador.pessoa.nome +
-              " " +
-              novoTrabalhador.pessoa.sobrenome}
-          </span>
+          Olá, <span className="span-cTrabalhador">{nome_trabalhador}</span>
         </h3>
       ) : (
         <div>

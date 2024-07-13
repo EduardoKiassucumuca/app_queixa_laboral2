@@ -831,7 +831,7 @@ module.exports = {
       let queixosoID = 0;
       let queixanteID = 0;
       if (queixoso === "Trabalhador") {
-        let _nome_empresa = _empresa.split(" ")[0];
+        let _nome_empresa = _empresa.split("-")[0].trimEnd();
         const empresaEncontrada = await Empresa.findOne({
           attributes: ["id", "nome_empresa", "enderecoID"],
           where: { nome_empresa: _nome_empresa },
@@ -1002,7 +1002,7 @@ module.exports = {
 
         _email = _email_pessoal;
 
-        _nome_empresa = _empresa.split(" ")[0];
+        _nome_empresa = _empresa.split("-")[0].trimEnd();
         empresaEncontrada = await Empresa.findOne({
           attributes: ["id", "nome_empresa", "enderecoID"],
           where: { nome_empresa: _nome_empresa },

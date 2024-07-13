@@ -190,43 +190,52 @@ const Container_queixoso = () => {
               </Link>
             </Card.Body>
             <Card.Footer>
-              <Row className="align-items-center my-2">
-                <Col md={5}>
-                  <small className="text-muted">{conflito.created_at}</small>
-                </Col>
-                <Col md={4}>
-                  <small className="text-muted d-flex align-items-center">
-                    <FaUser className="me-2" />
-                    <span className="me-1">Queixante:</span>
-                    {conflito.Empresa.tipo === "queixante"
-                      ? conflito.Empresa.nome_empresa
-                      : conflito.Trabalhador.tipo === "queixante"
-                      ? conflito.Trabalhador.Pessoa.nome +
-                        " " +
-                        conflito.Trabalhador.Pessoa.sobrenome
-                      : ""}
-                  </small>
-                </Col>
-                <Col md={3}>
-                  <small className="text-muted">{conflito.provincia}</small>
-                </Col>
-                <Col md={2}>
-                  <small className="text-muted d-flex align-items-center">
-                    <FaCircle
-                      className="estado me-1"
-                      color={
-                        conflito.estado === "Encerrado" ||
-                        conflito.estado === "tribunal"
-                          ? "red"
-                          : conflito.estado === "Analise"
-                          ? "yellow"
-                          : ""
-                      }
-                    />
-                    {conflito.estado}
-                  </small>
-                </Col>
-              </Row>
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito.created_at}
+              </small>
+
+              <small
+                className="text-muted d-flex align-items-center"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                <FaUser className="me-2" />
+                <span className="me-1">Queixante:</span>
+                {conflito.Empresa.tipo === "queixante"
+                  ? conflito.Empresa.nome_empresa
+                  : conflito.Trabalhador.tipo === "queixante"
+                  ? conflito.Trabalhador.Pessoa.nome +
+                    " " +
+                    conflito.Trabalhador.Pessoa.sobrenome
+                  : ""}
+              </small>
+
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito.provincia}
+              </small>
+
+              <small
+                className="text-muted d-flex align-items-center"
+                style={{ textAlign: "right", display: "inline-block" }}
+              >
+                <FaCircle
+                  className="estado me-1"
+                  color={
+                    conflito.estado === "Encerrado" ||
+                    conflito.estado === "tribunal"
+                      ? "red"
+                      : conflito.estado === "Analise"
+                      ? "yellow"
+                      : ""
+                  }
+                />
+                {conflito.estado}
+              </small>
             </Card.Footer>
           </Card>
         ))}
