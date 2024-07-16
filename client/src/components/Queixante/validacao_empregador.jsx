@@ -75,6 +75,7 @@ const ValidacaoEmpregador = () => {
         setAlert(res.data.msg);
         toggleDisplay();
         setQueixoso(true);
+        console.log(res.data);
         localStorage.setItem("empregador", JSON.stringify(res.data.empregador));
 
         //navigate("/queixar_empregad");
@@ -121,7 +122,7 @@ const ValidacaoEmpregador = () => {
               </div>
               <div className="modal-footer">
                 {queixoso ? (
-                  <Link to="/trabalhador">
+                  <Link to="/queixar_trabalhador">
                     <Button onClick={toggleDisplay} variant="warning">
                       OK
                     </Button>

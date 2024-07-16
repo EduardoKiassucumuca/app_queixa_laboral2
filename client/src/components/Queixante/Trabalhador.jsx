@@ -70,12 +70,12 @@ const UseForm = ({ data, updateFielHndler }) => {
 
     pessoa = trb_encontrado.pessoa.nome + " " + trb_encontrado.pessoa.sobrenome;
   }
-  data.nBI = BI2;
+  //data.nBI = BI2;
 
   return (
     <div>
       <>
-        <Form.Group>
+        {/*<Form.Group>
           <Form.Label>BI</Form.Label>
           <Form.Control
             type="text"
@@ -95,29 +95,31 @@ const UseForm = ({ data, updateFielHndler }) => {
           >
             Verificar
           </Button>
-        </span>
+        </span>*/}
       </>
 
       {pessoa ? (
         <>
-          <Alert key="success" variant="success">
+          {/*<Alert key="success" variant="success">
             O Trabalhador
             <Alert.Link href="#"> {pessoa}</Alert.Link> Já se encontra
             registrado, por favor siga o botão avançar.
-          </Alert>
+          </Alert>*/}
         </>
       ) : (
         <>
-          <Alert key="danger" variant="danger">
+          {/*<Alert key="danger" variant="danger">
             O Trabalhador ainda não foi registrado
             <Alert.Link href="#">
               {" "}
               Por favor preencha o formulario abaixo!
             </Alert.Link>
             .
-          </Alert>
+          </Alert>*/}
           <div class="card">
-            <div class="card-header">Dados Pessoais do Trabalhador</div>
+            <div class="card-header" style={{ fontWeight: "600" }}>
+              Dados Pessoais do Trabalhador
+            </div>
             <div class="card-body">
               <Row className="mb-3">
                 <Col md={8}>
@@ -129,6 +131,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       id="nome"
                       name="nome"
                       value={data.nome || ""}
+                      required
                       onChange={(e) => updateFielHndler("nome", e.target.value)}
                     />
                   </Form.Group>
@@ -233,9 +236,13 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Label>BI</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="1234567812LA890"
+                      placeholder="123456789LA890"
+                      pattern="^\d{9}[A-Z]{2}\d{3}$"
+                      title="O BI introduzido está incorrecto"
                       id="nBI"
                       name="nBI"
+                      required
+                      maxLength={14}
                       value={data.nBI || ""}
                       onChange={(e) => updateFielHndler("nBI", e.target.value)}
                     />
@@ -379,6 +386,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Control
                       type="text"
                       placeholder="930340539"
+                      maxLength={9}
                       id="contacto1"
                       name="contacto_principal"
                       value={data.contacto_principal || ""}
@@ -394,6 +402,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Control
                       type="text"
                       placeholder="950134233"
+                      maxLength={9}
                       id="contacto2"
                       name="contacto_alternativo"
                       value={data.contacto_alternativo || ""}
@@ -405,7 +414,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Col md={1}>
+                <Col md={2}>
                   {data.checked && data.sexo == "Masculino" ? (
                     <div class="form-check">
                       <input

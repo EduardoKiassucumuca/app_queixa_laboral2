@@ -397,7 +397,9 @@ const FormQueixante = () => {
     if (data.password !== data.password2) {
       setErro("As senhas não combinam");
     } else if (age < 18) {
-      setErro("A data de nascimento inserida está incorrecta.");
+      setErro(
+        "A plataforma permite o registro apenas de funcionários que sejam maiores de idade."
+      );
     } else if (validoAte <= today) {
       setErro("Bilhete de identidade vencido");
     } else if (validade < 5) {

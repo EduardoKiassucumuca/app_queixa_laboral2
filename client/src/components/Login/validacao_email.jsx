@@ -154,6 +154,7 @@ function ValidacaoEmail() {
             sessionStorage.setItem("tipo_user", data_login.empresa.tipo);
             sessionStorage.setItem("nif", data_login.empresa.nif);
             sessionStorage.setItem("id_empresa", data_login.empresa.id);
+            sessionStorage.setItem("provincia", data_login.empresa.provincia);
 
             sessionStorage.setItem(
               "nome_empresa",

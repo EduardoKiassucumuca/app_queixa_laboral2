@@ -14,6 +14,7 @@ import Empresa from "../Queixante/Empresa";
 import Trabalhador from "../Queixante/Trabalhador";
 import Queixa from "../Queixante/Queixa";
 import { Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 
 import "../Queixoso/submeter_queixa.css";
 
@@ -39,14 +40,13 @@ const { Header, Content } = Layout;
 const FormQueixoso = () => {
   const [data, setData] = useState(formTemplate);
   const navigate = useNavigate();
-  const updateFielHndler = (key, value) => {
-    setData((prev) => {
-      return { ...prev, [key]: value };
-    });
-  };
+
   const [alert, setAlert] = useState("");
   const [redirect, setRedirect] = useState("");
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [erro, setErro] = useState("");
+  const [empresaID, setEmpresaID] = useState("");
+  const [provincia, setProvincia] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const toggleDisplay = () => {
@@ -56,7 +56,43 @@ const FormQueixoso = () => {
     );
   };
   const [logged, setLogged] = useState(0);
+  React.useEffect(() => {
+    if (sessionStorage.getItem("nif")) {
+      setEmpresaID(sessionStorage.getItem("id_empresa"));
+      setProvincia(sessionStorage.getItem("provincia"));
+    } else {
+    }
+  }, []);
+  function validaCamposTexto(key, valor) {
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
+      setData((prev) => {
+        return { ...prev, [key]: valor };
+      });
+    }
+  }
 
+  const updateFielHndler = (key, value) => {
+    switch (key) {
+      case "nome":
+        validaCamposTexto(key, value);
+        break;
+      case "sobrenome":
+        validaCamposTexto(key, value);
+        break;
+      case "nomePai":
+        validaCamposTexto(key, value);
+        break;
+      case "nomeMae":
+        validaCamposTexto(key, value);
+        break;
+
+      default:
+        setData((prev) => {
+          return { ...prev, [key]: value };
+        });
+        break;
+    }
+  };
   function queixar() {
     const submissao_queixa = data;
 
@@ -65,8 +101,8 @@ const FormQueixoso = () => {
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
 
-    if (
-      localStorage.getItem("trabalhador") &&
+    /*if (
+      sessionStorage.getItem("nif") ||
       localStorage.getItem("empregador")
     ) {
       const trabalhador = localStorage.getItem("trabalhador");
@@ -108,15 +144,12 @@ const FormQueixoso = () => {
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
           //navigate("/Entrar");
           /*const [showModal, setShowModal] = useState(true);
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
+        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>
         })
         .catch((resposta) => {
           console.log("error", resposta);
-        });
-    } else if (
-      !localStorage.getItem("trabalhador") &&
-      localStorage.getItem("empregador")
-    ) {
+        });*/
+    if (sessionStorage.getItem("nif") || localStorage.getItem("empregador")) {
       const empregador = localStorage.getItem("empregador");
       const novoEmpregador = JSON.parse(empregador);
 
@@ -152,12 +185,12 @@ const FormQueixoso = () => {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      if (novoEmpregador.empresa) {
-        formData.append("_empresa", novoEmpregador.empresa.id);
-        formData.append("_provinciaEmp", novoEmpregador.endereco.provincia);
-      } else {
+      if (novoEmpregador.NIF) {
         formData.append("_empresa", novoEmpregador.NIF.id);
         formData.append("_provinciaEmp", novoEmpregador.Endereco.provincia);
+      } else {
+        formData.append("_empresa", empresaID);
+        formData.append("_provinciaEmp", provincia);
       }
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
@@ -187,10 +220,7 @@ const FormQueixoso = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
-    } else if (
-      localStorage.getItem("trabalhador") &&
-      !localStorage.getItem("empregador")
-    ) {
+    } else if (!localStorage.getItem("empregador")) {
       console.log(submissao_queixa);
       const trabalhador = localStorage.getItem("trabalhador");
       const trab_encontrado = JSON.parse(trabalhador);
@@ -345,6 +375,32 @@ const FormQueixoso = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(data);
+    const today = new Date();
+
+    const birthDateObj = new Date(data.dtNascimento);
+    const emitidoEm = new Date(data.emitidoEm);
+    const validoAte = new Date(data.validoAte);
+    const validade = validoAte.getFullYear() - emitidoEm.getFullYear();
+    const age = today.getFullYear() - birthDateObj.getFullYear();
+
+    if (data.password !== data.password2) {
+      setErro("As senhas não combinam");
+    } else if (age < 18) {
+      setErro(
+        "A plataforma permite o registro apenas de funcionários que sejam maiores de idade."
+      );
+    } else if (validoAte <= today) {
+      setErro("Bilhete de identidade vencido");
+    } else if (validade < 5) {
+      setErro("Por favor verifique as datas de emissão e validade do BI");
+    } else {
+      setErro("");
+      changeStep(currentStep + 1, e);
+    }
+  };
   return (
     <Layout className="layout">
       <Menu />
@@ -391,7 +447,7 @@ const FormQueixoso = () => {
                   <StepQueixante currentStep={currentStep} />
 
                   <form
-                    onSubmit={(e) => changeStep(currentStep + 1, e)}
+                    onSubmit={handleSubmit}
                     method="post"
                     enctype="multipart/form-data"
                   >
@@ -401,12 +457,12 @@ const FormQueixoso = () => {
                     >
                       {currentComponent}
                     </div>
-                    <div className="actions">
+                    <div className="actions" style={{ marginTop: 10 }}>
                       {!isFirstStep && (
                         <button
                           type="button"
                           className="btn fw-bold bg-default btn-voltar"
-                          onClick={() => changeStep(currentStep - 1)}
+                          onClick={handleSubmit}
                         >
                           <span>Voltar</span>
                         </button>
@@ -431,6 +487,14 @@ const FormQueixoso = () => {
                     </div>
                   </form>
                 </div>
+                {erro ? (
+                  <Alert variant="danger" style={{ marginTop: 55 }}>
+                    <Alert.Heading>Aviso</Alert.Heading>
+                    {erro}
+                  </Alert>
+                ) : (
+                  <></>
+                )}
               </Col>
             </Col>
           </Row>

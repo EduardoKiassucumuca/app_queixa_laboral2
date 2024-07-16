@@ -12,14 +12,19 @@ import Row from "react-bootstrap/Row";
 import "../Queixoso/dados_da_empresa.css";
 
 const Empresa = ({ data, updateFielHndler }) => {
-  const empregador = localStorage.getItem("empregador");
-  const novoEmpregador = JSON.parse(empregador);
   const [existeNIF, setExisteNIF] = useState("");
   const [nome_empresa, setNomeEmpresa] = useState("");
+  const [novoEmpregador, setNovoEmpregador] = useState({});
 
   React.useEffect(() => {
     setExisteNIF(sessionStorage.getItem("nif"));
     setNomeEmpresa(sessionStorage.getItem("nome_empresa"));
+    if (localStorage.getItem("empregador")) {
+      const empregador = localStorage.getItem("empregador");
+      setNovoEmpregador(JSON.parse(empregador));
+      console.log(empregador);
+    }
+    console.log(localStorage.getItem("empregador"));
   }, []);
   return (
     <>
@@ -34,7 +39,7 @@ const Empresa = ({ data, updateFielHndler }) => {
           Olá,{" "}
           <span className="span-cTrabalhador">
             {" "}
-            {novoEmpregador.empresa.nome_empresa}
+            {novoEmpregador?.NIF?.nome_empresa}
           </span>
         </h3>
       ) : (
