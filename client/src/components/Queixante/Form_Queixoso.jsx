@@ -185,7 +185,7 @@ const FormQueixoso = () => {
       formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
       formData.append("_modo", modo);
       formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      if (novoEmpregador.NIF) {
+      if (novoEmpregador?.NIF) {
         formData.append("_empresa", novoEmpregador.NIF.id);
         formData.append("_provinciaEmp", novoEmpregador.Endereco.provincia);
       } else {
@@ -213,54 +213,6 @@ const FormQueixoso = () => {
           }
 
           //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-
-          /*const [showModal, setShowModal] = useState(true);
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-        })
-        .catch((resposta) => {
-          console.log("error", resposta);
-        });
-    } else if (!localStorage.getItem("empregador")) {
-      console.log(submissao_queixa);
-      const trabalhador = localStorage.getItem("trabalhador");
-      const trab_encontrado = JSON.parse(trabalhador);
-
-      formData.append("_empresa", submissao_queixa.empresa);
-      formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
-      formData.append("_designacao", submissao_queixa.designacao);
-      formData.append("_nif", submissao_queixa.nif);
-      formData.append("_edificio", submissao_queixa.edificio);
-      formData.append("_ruaEmp", submissao_queixa.ruaEmp);
-      formData.append("_bairroEmp", submissao_queixa.bairroEmp);
-      formData.append("_website_empresa", submissao_queixa.websiteEmp);
-      formData.append("email_empresa", submissao_queixa.emailEmp);
-      formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
-      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
-      formData.append("_modo", modo);
-      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-      formData.append("_fileContrato", submissao_queixa.fileContrato);
-      formData.append("fileContrato", file_contrato.files[0]);
-      formData.append("queixante", "Trabalhador");
-      formData.append("queixoso", "Empregador");
-      formData.append("_email_pessoal", submissao_queixa.email_pessoal);
-      formData.append("senha", submissao_queixa.password);
-      formData.append("trabalhadorID", trab_encontrado.Trabalhador.id);
-      console.log(formData);
-      Axios.post("http://localhost:3001/add_empregador_queixa", formData, {
-        headers: {
-          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-        },
-      })
-        .then((resposta) => {
-          if (sessionStorage.getItem("dashboard_queixoso")) {
-            setAlert("Queixa registrada com sucesso!");
-            toggleDisplay();
-            setRedirect("/dashboard_queixoso");
-          } else {
-            setAlert(resposta.data.message);
-            toggleDisplay();
-            setRedirect("/Entrar");
-          }
 
           /*const [showModal, setShowModal] = useState(true);
         <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
@@ -421,8 +373,12 @@ const FormQueixoso = () => {
           <Queixei />
           <div id="myModal" class="modal" style={{ display: displayStyle }}>
             <div class="modal-content">
-              <p>{alert}</p>
-              <p></p>
+              <div className="modal-header">
+                <h5 className="modal-title">Aviso</h5>
+              </div>
+              <div className="modal-body">
+                <p style={{ fontSize: "1.0rem" }}>{alert}</p>
+              </div>
               <div class="modal-footer">
                 {logged === 1 ? (
                   <Link to="/dashboard_queixoso">

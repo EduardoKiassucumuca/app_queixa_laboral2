@@ -164,6 +164,7 @@ const ValidacaoEmpregador = () => {
                           placeholder="NIF"
                           id="nif"
                           name="nif"
+                          required
                           onChange={(e) => setNIF(e.target.value)}
                         />
                       )}

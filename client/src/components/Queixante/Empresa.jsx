@@ -33,7 +33,7 @@ const Empresa = ({ data, updateFielHndler }) => {
           {" "}
           Olá, <span className="span-cTrabalhador"> {nome_empresa}</span>
         </h3>
-      ) : novoEmpregador ? (
+      ) : Object.keys(novoEmpregador).length !== 0 ? (
         <h3 className="h3-cTrabalhador">
           {" "}
           Olá,{" "}
@@ -72,6 +72,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                       name="nif"
                       id="nif"
                       placeholder="NIF"
+                      required
                       value={data.nif || ""}
                       onChange={(e) => updateFielHndler("nif", e.target.value)}
                     />
@@ -187,6 +188,8 @@ const Empresa = ({ data, updateFielHndler }) => {
                     <Form.Control
                       type="text"
                       placeholder="Ex:930340539"
+                      pattern="^9[1-9][0-9]{7}$"
+                      maxLength={9}
                       value={data.contacto_empresa || ""}
                       onChange={(e) =>
                         updateFielHndler("contacto_empresa", e.target.value)
@@ -203,6 +206,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                       name="edificio"
                       id="edificio"
                       placeholder="Edificio"
+                      required
                       value={data.edificio || ""}
                       onChange={(e) =>
                         updateFielHndler("edificio", e.target.value)
@@ -232,17 +236,37 @@ const Empresa = ({ data, updateFielHndler }) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+                <Col md={3}>
                   <Form.Group>
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       type="password"
                       placeholder="Password"
+                      pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                      title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
                       id="password"
                       name="password"
                       value={data.password || ""}
                       onChange={(e) =>
                         updateFielHndler("password", e.target.value)
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label>Confirmar Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirmar password"
+                      id="password2"
+                      required
+                      pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                      title="A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial."
+                      name="password2"
+                      value={data.password2 || ""}
+                      onChange={(e) =>
+                        updateFielHndler("password2", e.target.value)
                       }
                     />
                   </Form.Group>

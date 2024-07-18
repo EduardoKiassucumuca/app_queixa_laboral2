@@ -387,6 +387,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       type="text"
                       placeholder="930340539"
                       maxLength={9}
+                      pattern="^9[1-9][0-9]{7}$"
                       id="contacto1"
                       name="contacto_principal"
                       value={data.contacto_principal || ""}
@@ -405,6 +406,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       maxLength={9}
                       id="contacto2"
                       name="contacto_alternativo"
+                      pattern="^9[1-9][0-9]{7}$"
                       value={data.contacto_alternativo || ""}
                       onChange={(e) =>
                         updateFielHndler("contacto_alternativo", e.target.value)
