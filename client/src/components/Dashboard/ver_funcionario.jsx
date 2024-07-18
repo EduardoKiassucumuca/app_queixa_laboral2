@@ -190,7 +190,15 @@ const VerFuncionario = () => {
         }}
       >
         <div class="modal-content">
-          <p>Funcionario editado com sucesso</p>
+          <div className="modal-header">
+            <h5 className="modal-title">Aviso</h5>
+          </div>
+          <div className="modal-body">
+            <p style={{ fontSize: "1.0rem" }}>
+              Funcionario editado com sucesso
+            </p>
+          </div>
+
           <div class="modal-footer">
             <Button variant="warning" onClick={goDashboard}>
               OK

@@ -214,12 +214,16 @@ const ContainerRecepcionista = ({ onSearch }) => {
           }}
         >
           <div class="modal-content">
-            <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
-            <br />
-            <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
-              {detalhes_queixa.assunto}
-            </h4>
-            <br />{" "}
+            <div className="modal-header">
+              <h5 className="modal-title">Mais detalhes</h5>
+            </div>
+            <div className="modal-body">
+              <p
+                style={{ fontSize: "1.0rem", fontSize: 30, fontWeight: "bold" }}
+              >
+                {detalhes_queixa.assunto}
+              </p>
+            </div>
             <span style={{ color: "", display: "inline" }}>
               {" "}
               Descrição:{" "}

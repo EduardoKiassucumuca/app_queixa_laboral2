@@ -53,6 +53,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
   let tipo = "";
   if (user_logado.igt_funcionario) {
     tipo = user_logado.igt_funcionario.tipo;
+    console.log(user_logado);
   } else {
     tipo = "Queixoso";
   }
@@ -228,8 +229,14 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
         //console.log("data.queixas");
 
-        console.log(data);
-        setInspectores(data.inspectores);
+        console.log(data.inspectores);
+        setInspectores(
+          data.inspectores.filter(
+            (inspector2) =>
+              inspector2.Trabalhador.localizacao_office ===
+              user_logado.trabalhador.localizacao_office
+          )
+        );
         toggleDisplay();
         //console.log(lista_queixa.minha_queixa)
       })
@@ -246,7 +253,12 @@ const ContainerChefeServicos = ({ onSearch }) => {
         //console.log("data.queixas");
 
         console.log(data);
-        setInspectores(data.inspectores);
+        setInspectores(
+          data.inspectores.filter(
+            (inspector2) =>
+              inspector2.Trabalhador.Pessoa.localizacao_office === "Benguela"
+          )
+        );
         toggleDisplay3();
 
         //console.log(lista_queixa.minha_queixa)
@@ -305,9 +317,12 @@ const ContainerChefeServicos = ({ onSearch }) => {
       </div>
       <div id="myModal2" class="modal" style={{ display: displayStyle2 }}>
         <div class="modal-content">
-          <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
-          <br />
-          <p>Inspector Nomeado com sucesso!</p>
+          <div className="modal-header">
+            <h5 className="modal-title">Confirmação</h5>
+          </div>
+          <div className="modal-body">
+            <p style={{ fontSize: "1.0rem" }}>Inspector Nomeado com sucesso!</p>
+          </div>
           <div class="modal-footer">
             <Button variant="warning" onClick={(e) => update_view()}>
               OK

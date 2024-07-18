@@ -64,6 +64,7 @@ function Login() {
     ) {
       navigate("/inspector");
     } else {
+      navigate("/Entrar");
     }
   }, []);
   function logar() {

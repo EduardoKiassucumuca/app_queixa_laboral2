@@ -151,7 +151,12 @@ function RegistrarFuncionario(props) {
         }}
       >
         <div class="modal-content">
-          <p>{alert}</p>
+          <div className="modal-header">
+            <h5 className="modal-title">Aviso</h5>
+          </div>
+          <div className="modal-body">
+            <p style={{ fontSize: "1.0rem" }}>{alert}</p>
+          </div>
           <div class="modal-footer">
             <Link to="/dashboard_admin">
               <Button variant="warning">OK</Button>

@@ -36,6 +36,9 @@ const MyMenu = () => {
   }
   const logout = () => {
     sessionStorage.removeItem("dashboard_queixoso");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("nif");
+    sessionStorage.removeItem("BI");
     sessionStorage.clear();
     navigate("/Entrar");
   };

@@ -32,6 +32,7 @@ const MenuRecepcionista = () => {
   }
   const logout = () => {
     sessionStorage.removeItem("data_recepcionista");
+    sessionStorage.clear();
     navigate("/Entrar");
   };
   return (
