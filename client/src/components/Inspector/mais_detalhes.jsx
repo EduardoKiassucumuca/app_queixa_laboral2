@@ -250,9 +250,6 @@ const MaisDetalhes = () => {
             text="warning"
             className="card-queixas-queixoso"
           >
-            <div class="ribbon">
-              <span>New</span>
-            </div>
             <Card.Body className="body-facto-queixa">
               <Card.Title>
                 {conflito.id} - {conflito.assunto}
@@ -261,31 +258,34 @@ const MaisDetalhes = () => {
               <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Row>
-                <Col md={3}>
-                  <small className="text-muted">Last updated 3 mins ago </small>
-                </Col>
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito.created_at}
+              </small>
 
-                <Col md={3}>
-                  <small className="text-muted">
-                    {" "}
-                    <FaUser />
-                    <span>Inspector: </span> Não atribuido{" "}
-                  </small>
-                </Col>
-                <Col md={3}>
-                  <small className="text-muted">{conflito.provincia}</small>
-                </Col>
-                <Col md={3}>
-                  <small className="text-muted">
-                    <FaCircle
-                      className="estado"
-                      color={conflito.estado === "Encerrado" ? "red" : ""}
-                    />{" "}
-                    {conflito.estado}{" "}
-                  </small>
-                </Col>
-              </Row>
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito.provincia}
+              </small>
+
+              <small className="text-muted">
+                <FaCircle
+                  className="estado"
+                  color={
+                    conflito.estado === "Encerrado" ||
+                    conflito.estado === "tribunal"
+                      ? "red"
+                      : conflito.estado === "Analise"
+                      ? "yellow"
+                      : ""
+                  }
+                />{" "}
+                {conflito.estado}{" "}
+              </small>
             </Card.Footer>
           </Card>
         </Col>
@@ -515,9 +515,13 @@ const MaisDetalhes = () => {
           >
             &times;
           </a>
-          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Reunião</h3>
+          <div className="modal-header">
+            <h5 className="modal-title">Reunião</h5>
+          </div>
+          <div className="modal-body">
+            <p style={{ fontSize: "1.0rem" }}>Agendar reunião com?</p>
+          </div>
           <br />
-          <p>Agendar reunião com?</p>
           <div class="modal-footer">
             <Button variant="warning" onClick={goNovaReuniaoEmpregador}>
               Empregador

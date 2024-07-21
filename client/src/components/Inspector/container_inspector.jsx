@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import Search from "antd/es/transfer/search";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "react-bootstrap";
 
 const formTemplate = {
   review: "",
@@ -30,6 +31,14 @@ const ContainerInspector = ({ onSearch }) => {
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pesquisar, setPesquisar] = useState("");
+  const itemsPerPage = 4;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const navigate = useNavigate();
 
   let id_inspector = 0;
@@ -219,55 +228,104 @@ const ContainerInspector = ({ onSearch }) => {
       </Row>
       <br />
 
-      {conflitos.map((conflito) => (
-        <Card
-          bg="dark"
-          border="secondary"
-          text="warning"
-          className="card-queixas-queixoso"
-        >
-          <div class="ribbon">
-            <span>New</span>
-          </div>
-          <Card.Body>
-            <Link
-              className="link-queixa-queixoso"
-              to={`/mais_detalhes/${conflito.id}`}
-            >
-              <Card.Title>
-                {conflito.id} - {conflito.assunto}
-              </Card.Title>
-            </Link>
-          </Card.Body>
-          <Card.Footer>
-            <Row>
-              <Col md={3}>
-                <small className="text-muted">Last updated 3 mins ago </small>
-              </Col>
+      {currentItems
+        .reverse()
 
-              <Col md={3}>
-                <small className="text-muted">
-                  {" "}
-                  <FaUser />
-                  <span>Inspector: </span> Não atribuido
-                </small>
-              </Col>
-              <Col md={3}>
-                <small className="text-muted">{conflito.provincia}</small>
-              </Col>
-              <Col md={3}>
-                <small className="text-muted">
-                  <FaCircle
-                    className="estado"
-                    color={conflito.estado === "Encerrado" ? "red" : ""}
-                  />{" "}
-                  {conflito.estado}
-                </small>
-              </Col>
-            </Row>
-          </Card.Footer>
-        </Card>
-      ))}
+        .map((conflito) => (
+          <Card
+            key={conflito.id}
+            bg="dark"
+            border="secondary"
+            text="warning"
+            className="card-queixas-queixoso"
+            style={{
+              marginBottom: 25,
+              opacity:
+                conflito.estado === "Encerrado" ||
+                conflito.estado === "tribunal"
+                  ? 0.5
+                  : conflito.estado === "Analise"
+                  ? 1
+                  : 1,
+            }}
+          >
+            <Card.Body>
+              <Link
+                className="link-queixa-queixoso"
+                to={`/mais_detalhes/${conflito.id}`}
+              >
+                <Card.Title>
+                  {conflito.id} - {conflito.assunto}
+                </Card.Title>
+                <p className="text-warning" style={{ paddingLeft: "20px" }}></p>
+              </Link>
+            </Card.Body>
+            <Card.Footer>
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito?.created_at}
+              </small>
+
+              <small
+                className="text-muted d-flex align-items-center"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                <FaUser className="me-2" />
+                <span className="me-1">Queixante:</span>
+                {conflito.Empresa.tipo === "queixante"
+                  ? conflito.Empresa.nome_empresa
+                  : conflito.Trabalhador.tipo === "queixante"
+                  ? conflito.Trabalhador.Pessoa.nome +
+                    " " +
+                    conflito.Trabalhador.Pessoa.sobrenome
+                  : ""}
+              </small>
+
+              <small
+                className="text-muted"
+                style={{ marginRight: 30, display: "inline-block" }}
+              >
+                {conflito.provincia}
+              </small>
+
+              <small
+                className="text-muted d-flex align-items-center"
+                style={{ textAlign: "right", display: "inline-block" }}
+              >
+                <FaCircle
+                  className="estado me-1"
+                  color={
+                    conflito.estado === "Encerrado" ||
+                    conflito.estado === "tribunal"
+                      ? "red"
+                      : conflito.estado === "Analise"
+                      ? "yellow"
+                      : ""
+                  }
+                />
+                {conflito.estado}
+              </small>
+            </Card.Footer>
+          </Card>
+        ))}
+      <Pagination
+        className="justify-content-center mb-0"
+        style={{ marginTop: 10, paddingBottom: 10 }}
+      >
+        {Array.from({
+          length: Math.ceil(conflitos.length / itemsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={index + 1 === currentPage}
+            onClick={() => paginate(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+      </Pagination>
     </>
   );
 };

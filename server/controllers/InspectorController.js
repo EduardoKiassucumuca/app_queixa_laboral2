@@ -46,6 +46,7 @@ module.exports = {
           "inspectorID",
           "url_file_contrato",
           "url_file_acta",
+          "created_at",
         ],
         required: true,
 

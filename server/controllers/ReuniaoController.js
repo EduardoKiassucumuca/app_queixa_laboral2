@@ -145,7 +145,7 @@ module.exports = {
           "queixosoID",
           "obs",
         ],
-        where: { queixosoID: _queixosoID },
+        where: { trabalhadorID: _queixosoID },
       });
       res.status(200).json({ reunioes });
     } catch (error) {

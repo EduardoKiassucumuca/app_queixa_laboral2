@@ -97,19 +97,26 @@ function ReunioesQueixoso(props) {
         setShow={setShowModal}
         close={() => setShowModal(false)}
       />
+      <h1
+        style={{
+          color: "#ffc107",
+          marginLeft: 100,
+          marginBottom: 10,
+          fontSize: 24,
+          fontWeight: "600",
+        }}
+      >
+        Reuniões agendadas
+      </h1>
 
       <Row className="queixas_recepcionista">
-        <Col md={6}>
-          <h4 style={{ color: "#ffc107" }}>Reuniões agendadas</h4>
-        </Col>
-
         <Col md={2}>
           {" "}
           <p className="p-localizacao"></p>
         </Col>
 
         <Col md={12}>
-          <table class="table table-striped table-responsive table-dark">
+          <table class="table table-striped table-responsive table-white">
             <thead>
               <tr>
                 <th scope="col">#</th>

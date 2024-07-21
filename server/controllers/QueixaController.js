@@ -277,6 +277,7 @@ module.exports = {
           "url_file_contrato",
           "modo",
           "url_file_acta",
+          "created_at",
         ],
         where: {
           id: id_queixa,

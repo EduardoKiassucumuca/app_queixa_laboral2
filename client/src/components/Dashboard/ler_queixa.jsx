@@ -314,7 +314,7 @@ const LerQueixa = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={5} style={{ marginTop: 50 }}>
+        {/*<Col md={5} style={{ marginTop: 50 }}>
           <Card
             bg="dark"
             border="secondary"
@@ -344,7 +344,7 @@ const LerQueixa = () => {
               </>
             </Card.Body>
           </Card>
-        </Col>
+                </Col>*/}
       </Row>
       <p></p>
       {/* <Alert variant="warning" className="nota-queixa">
