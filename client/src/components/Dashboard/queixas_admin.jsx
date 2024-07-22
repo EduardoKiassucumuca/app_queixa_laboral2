@@ -1087,14 +1087,14 @@ const QueixasAdmin = ({ onSearch }) => {
                           >
                             Eliminar
                           </Dropdown.Item>
-                          <Dropdown.Item
+                          {/*<Dropdown.Item
                             href="#/action-3"
                             onClick={() =>
                               generatePDF(targetRef, { filename: "page.pdf" })
                             }
                           >
                             Exportar PDF
-                          </Dropdown.Item>
+                          </Dropdown.Item>*/}
                           <Dropdown.Item
                             href="#/action-3"
                             onClick={() => detalhesTrabalhador(conflito)}
@@ -1132,6 +1132,7 @@ const QueixasAdmin = ({ onSearch }) => {
                 ))}
             </tbody>
           </table>
+
           <Pagination
             className="justify-content-center mb-0"
             style={{ marginTop: 10, paddingBottom: 10 }}
