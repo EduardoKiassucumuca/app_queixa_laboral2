@@ -64,7 +64,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={5}>
+                {/* <Col md={5}>
                   <Form.Group>
                     <Form.Label>NIF</Form.Label>
                     <Form.Control
@@ -77,7 +77,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                       onChange={(e) => updateFielHndler("nif", e.target.value)}
                     />
                   </Form.Group>
-                </Col>
+                    </Col>*/}
               </Row>
               <Row className="mb-3">
                 <Col md={12}>
@@ -106,6 +106,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                       type="text"
                       name="bairroEmp"
                       id="bairroEmp"
+                      pattern=".{3,}$"
                       placeholder="Diga-nos o bairro da empresa"
                       value={data.bairroEmp || ""}
                       onChange={(e) =>
@@ -156,6 +157,7 @@ const Empresa = ({ data, updateFielHndler }) => {
                     <Form.Control
                       type="text"
                       name="ruaEmp"
+                      pattern=".{2,}$"
                       id="rua_empresa"
                       placeholder="Diga-nos a rua que a empresa está localizada"
                       value={data.ruaEmp || ""}

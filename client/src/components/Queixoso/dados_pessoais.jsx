@@ -325,7 +325,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Col md={4}>
+                {/*<Col md={4}>
                   <Form.Group>
                     <Form.Label>BI</Form.Label>
                     <Form.Control
@@ -341,7 +341,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       onChange={(e) => updateFielHndler("nBI", e.target.value)}
                     />
                   </Form.Group>
-                </Col>
+                    </Col>*/}
                 <Col md={4}>
                   <Form.Group>
                     <Form.Label>Emitido em</Form.Label>
@@ -511,6 +511,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       name="contacto_alternativo"
                       pattern="^9[1-9][0-9]{7}$"
                       required
+                      maxLength={9}
                       value={data.contacto_alternativo || ""}
                       onChange={(e) =>
                         updateFielHndler("contacto_alternativo", e.target.value)

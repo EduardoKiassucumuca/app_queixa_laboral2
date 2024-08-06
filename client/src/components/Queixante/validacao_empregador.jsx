@@ -95,6 +95,11 @@ const ValidacaoEmpregador = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  function registrar() {
+    localStorage.setItem("NIFv", NIF);
+    navigate("/queixar_trabalhador");
+  }
+
   return (
     <Layout className="layout">
       <Menu />
@@ -122,16 +127,14 @@ const ValidacaoEmpregador = () => {
               </div>
               <div className="modal-footer">
                 {queixoso ? (
-                  <Link to="/queixar_trabalhador">
-                    <Button onClick={toggleDisplay} variant="warning">
-                      OK
-                    </Button>
-                  </Link>
+                  <Button onClick={registrar} variant="warning">
+                    OK
+                  </Button>
                 ) : (
                   <>
-                    <Link to="/queixar_trabalhador">
-                      <Button variant="warning">Registrar-se</Button>
-                    </Link>
+                    <Button variant="warning" onClick={registrar}>
+                      Registrar-se
+                    </Button>
                     <Button variant="outline-warning" onClick={toggleDisplay}>
                       Tentar novamente
                     </Button>

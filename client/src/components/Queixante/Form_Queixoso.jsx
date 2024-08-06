@@ -47,7 +47,8 @@ const FormQueixoso = () => {
   const [erro, setErro] = useState("");
   const [empresaID, setEmpresaID] = useState("");
   const [provincia, setProvincia] = useState("");
-
+  const [nifv, setNIFv] = useState("");
+  const [NIF2, setNIF2] = useState("");
   const [showModal, setShowModal] = useState(false);
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
@@ -57,11 +58,16 @@ const FormQueixoso = () => {
   };
   const [logged, setLogged] = useState(0);
   React.useEffect(() => {
+    console.log(localStorage?.getItem("NIFv") ?? "");
+    setNIFv(localStorage?.getItem("NIFv") ?? "");
     if (sessionStorage.getItem("nif")) {
       setEmpresaID(sessionStorage.getItem("id_empresa"));
       setProvincia(sessionStorage.getItem("provincia"));
     } else {
     }
+    const empregador = localStorage.getItem("empregador");
+    const novoEmpregador = JSON.parse(empregador);
+    setNIF2(novoEmpregador?.NIF);
   }, []);
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
@@ -250,7 +256,7 @@ const FormQueixoso = () => {
       formData.append("_empresa", submissao_queixa.empresa);
       formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
       formData.append("_designacao", submissao_queixa.designacao);
-      formData.append("_nif", submissao_queixa.nif);
+      formData.append("_nif", nifv);
       formData.append("_edificio", submissao_queixa.edificio);
       formData.append("_ruaEmp", submissao_queixa.ruaEmp);
       formData.append("_bairroEmp", submissao_queixa.bairroEmp);
@@ -332,11 +338,13 @@ const FormQueixoso = () => {
     console.log(data);
     const today = new Date();
 
-    const birthDateObj = new Date(data.dtNascimento);
-    const emitidoEm = new Date(data.emitidoEm);
-    const validoAte = new Date(data.validoAte);
-    const validade = validoAte.getFullYear() - emitidoEm.getFullYear();
-    const age = today.getFullYear() - birthDateObj.getFullYear();
+    const birthDateObj = new Date(data?.dtNascimento);
+    const emitidoEm = new Date(data?.emitidoEm);
+    const validoAte = new Date(data?.validoAte);
+    const validade = validoAte?.getFullYear() - emitidoEm?.getFullYear();
+    const age = today.getFullYear() - birthDateObj?.getFullYear();
+    console.log(nifv);
+    console.log(NIF2);
 
     if (data.password !== data.password2) {
       setErro("As senhas não combinam");
@@ -348,6 +356,14 @@ const FormQueixoso = () => {
       setErro("Bilhete de identidade vencido");
     } else if (validade < 5) {
       setErro("Por favor verifique as datas de emissão e validade do BI");
+    } else if (
+      (data.nBI === nifv || data.nBI === NIF2) &&
+      data.nBI !== undefined &&
+      (nifv !== "" || NIF2 !== undefined)
+    ) {
+      setErro(
+        "Não é permitido submeteres uma queixa para ti mesmo por-favor mude o seu bilhete de identidade"
+      );
     } else {
       setErro("");
       changeStep(currentStep + 1, e);

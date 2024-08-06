@@ -167,7 +167,7 @@ function ValidacaoEmail() {
           }
         }
       } else if (!sessionStorage.getItem("data_login")) {
-        navigate("/entrar");
+        //navigate("/entrar");
       }
       setTipo_msg(true);
     } else {

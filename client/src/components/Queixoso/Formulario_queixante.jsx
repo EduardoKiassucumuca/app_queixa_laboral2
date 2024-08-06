@@ -56,6 +56,9 @@ const FormQueixante = () => {
   const [erro, setErro] = useState("");
   const [novoTrabalhadorID, setNovoTrabalhadorID] = useState("");
   const [myDataTrab, setMyDataTrab] = useState("");
+  const [BIv, setBIv] = useState();
+  const [BI2, setBI2] = useState();
+
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
       setData((prev) => {
@@ -109,7 +112,7 @@ const FormQueixante = () => {
     } else if (sessionStorage.getItem("email")) {
       setLogged(3);
     }
-
+    setBIv(localStorage.getItem("BIv") ?? "");
     const trab = localStorage?.getItem("trabalhador");
     const data2 = JSON.parse(trab);
     setMyDataTrab(data2);
@@ -232,7 +235,7 @@ const FormQueixante = () => {
       formData.append("_rua", submissao_queixa.rua);
       formData.append("_casaEdificio", submissao_queixa.casaEdificio);
       formData.append("_estado_civil", submissao_queixa.ecivil);
-      formData.append("_nBI", submissao_queixa.nBI);
+      formData.append("_nBI", BIv);
       formData.append("_sexo", submissao_queixa.sexo);
       formData.append("_validoAte", submissao_queixa.validoAte);
       formData.append("_emitidoEm", submissao_queixa.emitidoEm);
@@ -298,7 +301,7 @@ const FormQueixante = () => {
       formData.append("_rua", submissao_queixa.rua);
       formData.append("_casaEdificio", submissao_queixa.casaEdificio);
       formData.append("_estado_civil", submissao_queixa.ecivil);
-      formData.append("_nBI", submissao_queixa.nBI);
+      formData.append("_nBI", BIv);
       formData.append("_sexo", submissao_queixa.sexo);
       formData.append("_validoAte", submissao_queixa.validoAte);
       formData.append("_emitidoEm", submissao_queixa.emitidoEm);
@@ -404,6 +407,14 @@ const FormQueixante = () => {
       setErro("Bilhete de identidade vencido");
     } else if (validade < 5) {
       setErro("Por favor verifique as datas de emissão e validade do BI");
+    } else if (
+      data.nif === BIv &&
+      data.nif !== undefined &&
+      (BIv !== "" || BIv !== undefined)
+    ) {
+      setErro(
+        "Não é permitido submeteres uma queixa para ti mesmo por-favor mude o seu bilhete de identidade"
+      );
     } else {
       setErro("");
       changeStep(currentStep + 1, e);
