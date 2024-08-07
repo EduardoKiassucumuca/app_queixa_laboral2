@@ -273,10 +273,10 @@ const ContainerInspector = ({ onSearch }) => {
                 style={{ marginRight: 30, display: "inline-block" }}
               >
                 <FaUser className="me-2" />
-                <span className="me-1">Queixante:</span>
-                {conflito.Empresa.tipo === "queixante"
+                <span className="me-1">Queixoso:</span>
+                {conflito.Empresa.tipo === "queixoso"
                   ? conflito.Empresa.nome_empresa
-                  : conflito.Trabalhador.tipo === "queixante"
+                  : conflito.Trabalhador.tipo === "queixoso"
                   ? conflito.Trabalhador.Pessoa.nome +
                     " " +
                     conflito.Trabalhador.Pessoa.sobrenome

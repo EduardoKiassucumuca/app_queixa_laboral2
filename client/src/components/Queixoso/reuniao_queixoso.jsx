@@ -20,21 +20,24 @@ function ReunioesQueixoso(props) {
   let data = "";
   let id_queixoso = 0;
   //console.log(data.trabalhador.id);
-  if (sessionStorage.getItem("dashboard_queixoso")) {
-    const savedData = sessionStorage.getItem("dashboard_queixoso");
-    data = JSON.parse(savedData);
-    if (data.trabalhador) {
-      id_queixoso = data.trabalhador.id;
-    }
-    if (data.empresa) {
-      id_queixoso = data.empresa.id;
-    }
-  }
+
   //console.log(queixas_selecprovincia);
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
   React.useEffect(() => {
+    if (sessionStorage.getItem("dashboard_queixoso")) {
+      const savedData = sessionStorage.getItem("dashboard_queixoso");
+      data = JSON.parse(savedData);
+      console.log(data);
+      if (data.trabalhador !== null) {
+        id_queixoso = data.trabalhador.id;
+        console.log(id_queixoso);
+      } else if (data.empresa !== null) {
+        id_queixoso = data.empresa.id;
+        console.log(id_queixoso);
+      }
+    }
     Axios.get("http://localhost:3001/reuniao_queixoso", {
       params: {
         _queixosoID: id_queixoso,

@@ -155,6 +155,7 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                       type="text"
                       name="bairroEmp"
                       id="bairroEmp"
+                      pattern=".{3,}$"
                       required
                       placeholder="Diga-nos o bairro da empresa"
                       value={data.bairroEmp || ""}
@@ -208,6 +209,7 @@ const ReviewForm = ({ data, updateFielHndler }) => {
                       type="text"
                       name="ruaEmp"
                       id="rua_empresa"
+                      pattern=".{3,}$"
                       required
                       placeholder="Diga-nos a rua que a empresa está localizada"
                       value={data.ruaEmp || ""}

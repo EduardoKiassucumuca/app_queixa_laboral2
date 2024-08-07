@@ -145,7 +145,7 @@ module.exports = {
           "queixosoID",
           "obs",
         ],
-        where: { trabalhadorID: _queixosoID },
+        where: { queixosoID: _queixosoID },
       });
       res.status(200).json({ reunioes });
     } catch (error) {
@@ -170,6 +170,7 @@ module.exports = {
       obs: _obs,
       queixaID: fk_queixa,
       trabalhadorID: fk_trabalhador,
+      queixosoID: fk_trabalhador,
     });
     return res.status(200).send({
       status: 1,
@@ -194,6 +195,7 @@ module.exports = {
       obs: _obs,
       queixaID: fk_queixa,
       empresaID: fk_empregador,
+      queixosoID: fk_empregador,
     });
     return res.status(200).send({
       status: 1,

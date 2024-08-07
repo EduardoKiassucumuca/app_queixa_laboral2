@@ -8,6 +8,7 @@ import ModalConfirmationQueixa from "../Queixoso/ModalConfirmationQueixa";
 import SideNavInspector from "./SideNavInspector";
 import MenuInspector from "./menu_inspector";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Alert from "react-bootstrap/Alert";
 
 function NovaReuniao(props) {
   const [assunto, setAssunto] = useState("");
@@ -20,6 +21,7 @@ function NovaReuniao(props) {
   const [trabalhadorID, setTrabalhadorID] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
+  const [msgErro, setMsgErro] = useState("");
   const [redireciona, setRedireciona] = useState("");
   let data = {};
   React.useEffect(() => {
@@ -37,24 +39,49 @@ function NovaReuniao(props) {
   };
   const agendar_reuniao = (e) => {
     e.preventDefault();
-    console.log(trabalhadorID);
-    Axios.post("http://localhost:3001/nova_reuniao", {
-      _assunto: assunto,
-      _local: local,
-      _data: date,
-      _hora: hora,
-      _obs: obs,
-      fk_queixa: conflitoID,
-      fk_trabalhador: trabalhadorID,
-    })
-      .then((resposta) => {
-        setAlert(resposta.data.message);
-        toggleDisplay();
-        //setRedireciona("/dashboard_admin");
+    const today = new Date();
+    const dateMeetObj = new Date(date);
+    const year = dateMeetObj.getFullYear();
+    const mes = dateMeetObj.getMonth();
+    const dia = dateMeetObj.getDay();
+    const hora_d = hora.split(":")[0];
+    const minuto_d = hora.split(":")[1];
+    const time_now = new Date();
+    const currentHour = time_now.getHours();
+    const currentMinute = time_now.getMinutes();
+
+    if (
+      today.getFullYear() > year ||
+      today.getMonth() > mes ||
+      today.getDay() > dia
+    ) {
+      setMsgErro("Data inválida");
+    } else if (
+      today.getFullYear() === year &&
+      today.getMonth() === mes &&
+      today.getDay() === dia &&
+      currentHour > hora_d
+    ) {
+      setMsgErro("Hora inválida");
+    } else {
+      Axios.post("http://localhost:3001/nova_reuniao", {
+        _assunto: assunto,
+        _local: local,
+        _data: date,
+        _hora: hora,
+        _obs: obs,
+        fk_queixa: conflitoID,
+        fk_trabalhador: trabalhadorID,
       })
-      .catch((resposta) => {
-        console.log("error", resposta);
-      });
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          toggleDisplay();
+          //setRedireciona("/dashboard_admin");
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    }
   };
   function refreshPage() {
     window.location.reload();
@@ -183,6 +210,14 @@ function NovaReuniao(props) {
             </Form>
           </div>
         </div>
+        {msgErro ? (
+          <Alert variant="danger" style={{ marginTop: 1, textAlign: "center" }}>
+            <Alert.Heading style={{}}>Aviso</Alert.Heading>
+            {msgErro}
+          </Alert>
+        ) : (
+          <></>
+        )}
       </Row>
     </>
   );

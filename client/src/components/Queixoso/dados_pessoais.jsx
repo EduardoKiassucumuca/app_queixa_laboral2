@@ -283,6 +283,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                     <Form.Control
                       type="text"
                       placeholder="Digite o seu Bairro"
+                      pattern=".{3,}$"
                       id="bairro"
                       name="bairro"
                       required
@@ -301,6 +302,7 @@ const UseForm = ({ data, updateFielHndler }) => {
                       placeholder="Digite a sua Rua"
                       id="rua"
                       name="rua"
+                      pattern=".{3,}$"
                       required
                       value={data.rua || ""}
                       onChange={(e) => updateFielHndler("rua", e.target.value)}

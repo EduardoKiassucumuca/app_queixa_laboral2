@@ -35,6 +35,10 @@ const Reuniao = db.define("reuniao", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  queixosoID: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   queixaID: {
     type: Sequelize.INTEGER,
     references: {
