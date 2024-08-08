@@ -63,6 +63,7 @@ module.exports = {
               "email",
               "tipo",
             ],
+            include: [{ association: "Endereco", required: true }],
           },
           {
             association: "Testemunha",
@@ -105,6 +106,10 @@ module.exports = {
                 include: [
                   {
                     association: "BI",
+                    required: true,
+                  },
+                  {
+                    association: "Endereco",
                     required: true,
                   },
                 ],

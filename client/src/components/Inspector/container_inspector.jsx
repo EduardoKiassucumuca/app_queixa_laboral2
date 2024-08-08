@@ -33,11 +33,13 @@ const ContainerInspector = ({ onSearch }) => {
   const [nif, setNif] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pesquisar, setPesquisar] = useState("");
+  const [detalhesSelec, setDetalhesSelec] = useState("");
   const itemsPerPage = 4;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const [displayStyle9, setDisplayStyle9] = useState("none");
 
   const navigate = useNavigate();
 
@@ -49,7 +51,12 @@ const ContainerInspector = ({ onSearch }) => {
 
     id_inspector = data.trabalhador.id;
   }
-
+  const toggleDisplay9 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle9((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   React.useEffect(() => {
     if (sessionStorage.getItem("email")) {
       Axios.get("http://localhost:3001/queixas_inspectores2", {
@@ -164,7 +171,11 @@ const ContainerInspector = ({ onSearch }) => {
       });
   }
   console.log(conflitos);
-
+  function detalhesQueixoso(detalhes) {
+    console.log(detalhes);
+    setDetalhesSelec(detalhes);
+    toggleDisplay9();
+  }
   return (
     <>
       <ModalConfirmacao
@@ -270,7 +281,12 @@ const ContainerInspector = ({ onSearch }) => {
 
               <small
                 className="text-muted d-flex align-items-center"
-                style={{ marginRight: 30, display: "inline-block" }}
+                style={{
+                  marginRight: 30,
+                  display: "inline-block",
+                  cursor: "pointer",
+                }}
+                onClick={() => detalhesQueixoso(conflito)}
               >
                 <FaUser className="me-2" />
                 <span className="me-1">Queixoso:</span>
@@ -326,6 +342,128 @@ const ContainerInspector = ({ onSearch }) => {
           </Pagination.Item>
         ))}
       </Pagination>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle9,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        {detalhesSelec?.Empresa?.tipo.toLowerCase() === "queixoso" ? (
+          <>
+            {" "}
+            <div class="modal-content">
+              <h3 style={{ color: "", fontSize: 20 }}>
+                Mais Detalhes do Queixoso
+              </h3>
+              <br />
+              <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                {detalhesSelec?.Empresa?.nome_empresa ?? "Nenhum"}
+              </h4>
+              <br />{" "}
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Entidade:
+                </span>{" "}
+                Empregadora{" "}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Designação:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.designacao ?? "Nenhuma"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>NIF:</span>{" "}
+                {detalhesSelec?.Empresa?.nif ?? "Nenhum"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Localização:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.Endereco.bairro +
+                  ", " +
+                  detalhesSelec?.Empresa?.Endereco.rua +
+                  ", " +
+                  detalhesSelec?.Empresa?.Endereco.edificio +
+                  ", " +
+                  detalhesSelec?.Empresa?.Endereco.provincia ?? "Nenhuma"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
+                {detalhesSelec?.Empresa?.email ?? "Nenhum"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Telefone Principal:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.Endereco.telefone_principal ??
+                  "Nenhum"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Telefone Alternativo:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.Endereco.telefone_alternativo ??
+                  "Nenhum"}
+              </span>
+              <div class="modal-footer">
+                <Button variant="warning" onClick={toggleDisplay9}>
+                  OK
+                </Button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {" "}
+            <div class="modal-content">
+              <h3 style={{ color: "", fontSize: 20 }}>Mais detalhes</h3>
+              <br />
+              <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                {detalhesSelec?.Trabalhador?.Pessoa?.nome +
+                  "" +
+                  detalhesSelec?.Trabalhador?.Pessoa?.sobrenome ?? ""}
+              </h4>
+              <br />{" "}
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>NIF:</span>{" "}
+                {detalhesSelec?.Trabalhador?.Pessoa?.BI.numeroBI ?? ""}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Localização:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.localizacao_office ?? ""}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Contacto Principal:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.designacao ?? ""}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Contacto Alternativo:
+                </span>{" "}
+                {detalhesSelec?.Empresa?.designacao ?? ""}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
+                {detalhesSelec?.Empresa?.email ?? ""}
+              </span>
+              <div class="modal-footer">
+                <Button variant="warning" onClick={toggleDisplay9}>
+                  OK
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
