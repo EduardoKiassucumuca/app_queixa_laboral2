@@ -98,7 +98,6 @@ module.exports = {
           {
             association: "Trabalhador",
             required: true,
-
             include: [
               {
                 association: "Pessoa",
@@ -149,6 +148,7 @@ module.exports = {
           "testemunhaID",
           "url_file_contrato",
           "url_file_acta",
+          "created_at",
         ],
         required: true,
         include: [

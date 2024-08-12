@@ -44,23 +44,23 @@ function Login() {
   };
   React.useEffect(() => {
     if (
-      sessionStorage.getItem("email") &&
-      sessionStorage.getItem("tipo_user").toLowerCase() === "queixoso"
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
     ) {
       navigate("/dashboard_queixoso");
     } else if (
-      sessionStorage.getItem("email") &&
-      sessionStorage.getItem("cargo").toLowerCase() === "recepcionista"
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
     ) {
       navigate("/recepcionista");
     } else if (
-      sessionStorage.getItem("email") &&
-      sessionStorage.getItem("cargo").toLowerCase() === "chefe_servicos"
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
     ) {
       navigate("/chefe_servicos");
     } else if (
-      sessionStorage.getItem("email") &&
-      sessionStorage.getItem("cargo").toLowerCase() === "inspector"
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
     ) {
       navigate("/inspector");
     } else {

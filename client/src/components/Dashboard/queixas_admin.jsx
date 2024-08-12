@@ -26,6 +26,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { usePDF } from "react-to-pdf";
 import generatePDF from "react-to-pdf";
+import { CSVLink, CSVDownload } from "react-csv";
+import { JsonToExcel } from "react-json-to-excel";
 
 const formTemplate = {
   review: "",
@@ -72,7 +74,7 @@ const QueixasAdmin = ({ onSearch }) => {
   const [serverPath, setServerPath] = useState("");
   const [options, setOptions] = useState(["anonimo", "normal"]);
   const targetRef = useRef();
-
+  const [myData, setMyData] = useState([{}]);
   let data2 = "";
   let id_queixoso = "";
 
@@ -198,6 +200,41 @@ const QueixasAdmin = ({ onSearch }) => {
       .then(({ data }) => {
         setQueixas(data.queixas.reverse());
         console.log(data.queixas);
+
+        let myQueixas = [];
+        data.queixas.forEach((queixa) => {
+          const myQueixa = {
+            "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
+              "pt-BR"
+            ),
+            Trabalhador:
+              queixa.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Trabalhador.Pessoa.sobrenome +
+              " (" +
+              queixa.Trabalhador.tipo +
+              ")",
+            Empregador:
+              queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+            Inspector:
+              queixa.Inspector.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+            Testemunha:
+              queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
+            Provincia: queixa.Trabalhador.localizacao_office,
+            Assunto: queixa.assunto,
+            Facto: queixa.facto,
+          };
+          myQueixas.push(myQueixa);
+        });
+        setMyData(myQueixas);
+        // Agora você pode usar myQueixas como quiser, por exemplo:
+        console.log(myQueixas);
+        // Ou atualizar um estado com setState
+        // setMyQueixas(myQueixas);
       })
       .catch((res) => {
         alert(res.response.data.msg);
@@ -957,7 +994,7 @@ const QueixasAdmin = ({ onSearch }) => {
           </div>
         </div>
 
-        <Col md={3}>
+        <Col md={2}>
           <OverlayTrigger
             trigger="click"
             placement="bottom"
@@ -973,6 +1010,17 @@ const QueixasAdmin = ({ onSearch }) => {
               Nova Queixa
             </Button>
           </OverlayTrigger>
+        </Col>
+        <Col md={2}>
+          {" "}
+          <JsonToExcel
+            title="Exportar"
+            data={myData}
+            fileName={`queixa${new Date().toLocaleDateString(
+              "pt-BR"
+            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+            btnClassName="btn btn-primary"
+          />
         </Col>
         <Col md={6}>
           <Search
