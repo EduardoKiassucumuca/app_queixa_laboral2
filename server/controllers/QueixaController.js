@@ -39,6 +39,9 @@ module.exports = {
           "url_file_contrato",
           "modo",
           "nota",
+          "url_file_contrato",
+          "url_file_acta",
+          "created_at",
         ],
         required: true,
         include: [
@@ -54,6 +57,7 @@ module.exports = {
               "email",
               "tipo",
             ],
+            include: [{ association: "Endereco", required: true }],
           },
 
           {
@@ -67,6 +71,10 @@ module.exports = {
                 include: [
                   {
                     association: "BI",
+                    required: true,
+                  },
+                  {
+                    association: "Endereco",
                     required: true,
                   },
                 ],

@@ -17,6 +17,10 @@ import Popover from "react-bootstrap/Popover";
 import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
 import { Pagination } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { FaDownload } from "react-icons/fa";
 
 const formTemplate = {
   review: "",
@@ -31,20 +35,43 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [queixas, setQueixas] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
   const [displayStyle5, setDisplayStyle5] = useState("none");
+  const [displayStyle, setDisplayStyle] = useState("none");
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Número de itens por página
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const [displayStyle8, setDisplayStyle8] = useState("none");
+  const [displayStyle9, setDisplayStyle9] = useState("none");
+  const [chefe_servicos, setChefeServicos] = useState([]);
+  const [chefe_selecionado, setChefeSelec] = useState({});
 
   let data2 = "";
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_recepcionista");
   data2 = JSON.parse(savedData);
+  const user_logado = data2;
+  const nome_user_logado =
+    user_logado.pessoa.nome + " " + user_logado.pessoa.sobrenome;
+  //const queixas_selecprovincia = '';
+  let tipo = "";
+  if (user_logado.igt_funcionario) {
+    tipo = user_logado.igt_funcionario.tipo;
+    console.log(user_logado);
+  } else {
+    tipo = "Queixoso";
+  }
   const toggleDisplay5 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle5((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -71,6 +98,20 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
   const [nif, setNif] = useState("");
+  const [detalhesSelec, setDetalhesSelec] = useState("");
+
+  const toggleDisplay8 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle8((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay9 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle9((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
@@ -139,6 +180,62 @@ const ContainerRecepcionista = ({ onSearch }) => {
       console.log(res);
       FileDownload(res.data, filename);
     });
+  };
+  function detalhesEmpregador(detalhes) {
+    setDetalhesSelec(detalhes);
+    toggleDisplay8();
+  }
+  function detalhesTrabalhador(detalhes) {
+    console.log(detalhes);
+    setDetalhesSelec(detalhes);
+    toggleDisplay9();
+  }
+  function ver_chefes(conflito_selecionado) {
+    setDetalhesSelec(conflito_selecionado);
+
+    Axios.get("http://localhost:3001/funcionarios_igt")
+      .then(({ data }) => {
+        console.log(
+          data.funcionarios.filter(
+            (funcionario) =>
+              funcionario?.Trabalhador?.localizacao_office ===
+                user_logado?.trabalhador?.localizacao_office &&
+              funcionario?.Trabalhador?.cargo === "chefe_servicos"
+          )
+        );
+        setChefeServicos(
+          data?.funcionarios.filter(
+            (funcionario) =>
+              funcionario?.Trabalhador?.localizacao_office ===
+                user_logado?.trabalhador?.localizacao_office &&
+              funcionario?.Trabalhador?.cargo === "chefe_servicos"
+          )
+        );
+        toggleDisplay();
+        //console.log(lista_queixa.minha_queixa)
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }
+  const encaminharAo_chefeServicos = (chefe_nomeado, queixa_selecionada) => {
+    Axios.put("http://localhost:3001/nomear_inspector", {
+      params: {
+        id_inspector: chefe_nomeado.id,
+        id_trabalhador: chefe_nomeado.trabalhadorID,
+        id_queixa: queixa_selecionada.id,
+      },
+    })
+      .then(function (response) {
+        //toggleDisplay();
+        //console.log(response);
+        // props.setShow(false);
+        //setSmShow(true);
+        //window.location.href = '/chefe_servicos';
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   return (
     <>
@@ -257,7 +354,369 @@ const ContainerRecepcionista = ({ onSearch }) => {
             </div>
           </div>
         </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle8,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          {detalhesSelec?.Empresa?.tipo.toLowerCase() === "queixoso" ? (
+            <>
+              {" "}
+              <div class="modal-content">
+                <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                  {detalhesSelec?.Empresa?.nome_empresa ?? "Nenhum"}
+                </h4>
+                <br />{" "}
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Tipo de utilizador:
+                  </span>{" "}
+                  Queixoso{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Entidade:
+                  </span>{" "}
+                  Empregadora{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Designação:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.designacao ?? "Nenhuma"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>NIF:</span>{" "}
+                  {detalhesSelec?.Empresa?.nif ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Localização:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.bairro +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.rua +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.edificio +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.provincia ?? "Nenhuma"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Email:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.email ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Telefone Principal:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.telefone_principal ??
+                    "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Telefone Alternativo:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.telefone_alternativo ??
+                    "Nenhum"}
+                </span>
+                <div class="modal-footer">
+                  <Button variant="warning" onClick={toggleDisplay8}>
+                    OK
+                  </Button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {" "}
+              <div class="modal-content">
+                <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                  {detalhesSelec?.Trabalhador?.Pessoa?.nome +
+                    " " +
+                    detalhesSelec?.Trabalhador?.Pessoa?.sobrenome ?? "Nenhum"}
+                </h4>
+                <br />{" "}
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Tipo de utilizador:
+                  </span>{" "}
+                  Queixoso{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>BI:</span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.BI.numeroBI ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Localização:
+                  </span>{" "}
+                  {(detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.bairro ||
+                    "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.rua ||
+                      "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.casa ||
+                      "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.provincia ||
+                      "Nenhuma")}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Contacto Principal:
+                  </span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
+                    .telefone_principal ?? ""}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Contacto Alternativo:
+                  </span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
+                    .telefone_alternativo ?? ""}
+                </span>
+                <br />
+                <strong>Bilhete de Identidade </strong>
+                <p>
+                  <a
+                    href="#"
+                    onClick={(e) =>
+                      handleDownload(detalhesSelec.url_file_contrato)
+                    }
+                    style={{ color: "rgb(201 152 6)" }}
+                  >
+                    {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
+                    <FaDownload style={{ marginLeft: 5 }} />
+                  </a>
+                </p>
+                <div class="modal-footer">
+                  <Button variant="warning" onClick={toggleDisplay8}>
+                    OK
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle9,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          {detalhesSelec?.Empresa?.tipo.toLowerCase() === "queixante" ? (
+            <>
+              {" "}
+              <div class="modal-content">
+                <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                  {detalhesSelec?.Empresa?.nome_empresa ?? "Nenhum"}
+                </h4>
+                <br />{" "}
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Tipo de utilizador:
+                  </span>{" "}
+                  Queixante{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Entidade:
+                  </span>{" "}
+                  Empregadora{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Designação:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.designacao ?? "Nenhuma"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>NIF:</span>{" "}
+                  {detalhesSelec?.Empresa?.nif ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Localização:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.bairro +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.rua +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.edificio +
+                    ", " +
+                    detalhesSelec?.Empresa?.Endereco?.provincia ?? "Nenhuma"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Email:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.email ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Telefone Principal:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.telefone_principal ??
+                    "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Telefone Alternativo:
+                  </span>{" "}
+                  {detalhesSelec?.Empresa?.Endereco?.telefone_alternativo ??
+                    "Nenhum"}
+                </span>
+                <div class="modal-footer">
+                  <Button variant="warning" onClick={toggleDisplay9}>
+                    OK
+                  </Button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {" "}
+              <div class="modal-content">
+                <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                  {detalhesSelec?.Trabalhador?.Pessoa?.nome +
+                    " " +
+                    detalhesSelec?.Trabalhador?.Pessoa?.sobrenome ?? "Nenhum"}
+                </h4>
+                <br />{" "}
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Tipo de utilizador:
+                  </span>{" "}
+                  Queixante{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Entidade:
+                  </span>{" "}
+                  Empregado{" "}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>BI:</span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.BI?.numeroBI ?? "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Localização:
+                  </span>{" "}
+                  {(detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.bairro ||
+                    "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.rua ||
+                      "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.casa ||
+                      "Nenhuma") +
+                    ", " +
+                    (detalhesSelec?.Trabalhador?.Pessoa?.Endereco?.provincia ||
+                      "Nenhuma")}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Contacto Principal:
+                  </span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
+                    ?.telefone_principal ?? ""}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Contacto Alternativo:
+                  </span>{" "}
+                  {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
+                    ?.telefone_alternativo ?? ""}
+                </span>
+                <br />
+                <strong>Bilhete de Identidade </strong>
+                <p>
+                  <a
+                    href="#"
+                    onClick={(e) =>
+                      handleDownload(detalhesSelec.url_file_contrato)
+                    }
+                    style={{ color: "rgb(201 152 6)" }}
+                  >
+                    {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
+                    <FaDownload style={{ marginLeft: 5 }} />
+                  </a>
+                </p>
+                {/*<FaFilePdf />*/}
+                <div class="modal-footer">
+                  <Button variant="warning" onClick={toggleDisplay9}>
+                    OK
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          <div class="modal-content">
+            <h3 style={{ color: "#ffc107", fontSize: 20 }}>
+              Chefes dos Serviços Provinciais
+            </h3>
+            <br />
+            {chefe_servicos.map((chefe) => (
+              <div class="form-check" style={{ display: "block" }}>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="Masculino"
+                  name="sexo"
+                  id="sexo-masculino"
+                  onChange={(e) => setChefeSelec(chefe)}
+                />
 
+                <label class="form-check-label" for="flexRadioDefault1">
+                  {" "}
+                  {chefe.Trabalhador.Pessoa.nome}{" "}
+                  {chefe.Trabalhador.Pessoa.sobrenome}
+                </label>
+              </div>
+            ))}
+            <div class="modal-footer">
+              <Button
+                variant="default"
+                onClick={toggleDisplay}
+                style={{ borderColor: "#ffc107", color: "#ffc107" }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="warning"
+                onClick={(e) =>
+                  encaminharAo_chefeServicos(chefe_selecionado, detalhesSelec)
+                }
+              >
+                Feito
+              </Button>
+            </div>
+          </div>
+        </div>
         <Col md={12} style={{ marginTop: 5 }}>
           <table
             class="table table-striped table-responsive "
@@ -286,15 +745,43 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   <td>{conflito.facto}</td>
                   <td>{conflito.provincia}</td>
                   <td>{conflito.estado}</td>
+
                   <td>
-                    <Button
-                      onClick={() => ver_queixa(conflito)}
-                      variant="warning"
-                      className="fw-bold btn-nova-queixa"
-                      type="submit"
-                    >
-                      Mais detalhes
-                    </Button>
+                    <Dropdown id="dropdown-basic-button">
+                      <Dropdown.Toggle
+                        variant="warning"
+                        id="dropdown-basic-button"
+                      >
+                        <FontAwesomeIcon icon={faCog} />
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => detalhesTrabalhador(conflito)}
+                        >
+                          Ver trabalhador
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => detalhesEmpregador(conflito)}
+                        >
+                          ver empregador
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => ver_queixa(conflito)}
+                        >
+                          ver detalhes
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => ver_chefes(conflito)}
+                        >
+                          Encaminhar ao Chefe dos serviços provinciais
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </td>
                 </tr>
               ))}

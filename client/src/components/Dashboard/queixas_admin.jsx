@@ -227,6 +227,7 @@ const QueixasAdmin = ({ onSearch }) => {
             Provincia: queixa.Trabalhador.localizacao_office,
             Assunto: queixa.assunto,
             Facto: queixa.facto,
+            Estado: queixa.estado,
           };
           myQueixas.push(myQueixa);
         });
