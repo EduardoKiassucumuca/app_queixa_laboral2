@@ -48,6 +48,21 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [chefe_servicos, setChefeServicos] = useState([]);
   const [chefe_selecionado, setChefeSelec] = useState({});
 
+  const [currentPageModal, setCurrentPageModal] = useState(1);
+  const itemsPerPageModal = 5; // Número de itens por página
+
+  // Calcular o índice do último e do primeiro item na página atual
+  const indexOfLastItemModal = currentPage * itemsPerPage;
+  const indexOfFirstItemModal = indexOfLastItem - itemsPerPage;
+  // Filtrar os chefes que serão exibidos na página atual
+  const currentChefeServicos = chefe_servicos.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Função para mudar de página
+  const paginateModal = (pageNumber) => setCurrentPage(pageNumber);
+
   let data2 = "";
   let id_queixoso = "";
   const savedData = sessionStorage.getItem("data_recepcionista");
@@ -195,20 +210,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
     Axios.get("http://localhost:3001/funcionarios_igt")
       .then(({ data }) => {
-        console.log(
-          data.funcionarios.filter(
-            (funcionario) =>
-              funcionario?.Trabalhador?.localizacao_office ===
-                user_logado?.trabalhador?.localizacao_office &&
-              funcionario?.Trabalhador?.cargo === "chefe_servicos"
-          )
-        );
+        console.log(data.funcionarios);
+
         setChefeServicos(
-          data?.funcionarios.filter(
+          data?.funcionarios?.filter(
             (funcionario) =>
-              funcionario?.Trabalhador?.localizacao_office ===
+              funcionario?.localizacao_office ===
                 user_logado?.trabalhador?.localizacao_office &&
-              funcionario?.Trabalhador?.cargo === "chefe_servicos"
+              funcionario?.cargo === "chefe_servicos"
           )
         );
         toggleDisplay();
@@ -680,7 +689,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
               Chefes dos Serviços Provinciais
             </h3>
             <br />
-            {chefe_servicos.map((chefe) => (
+            {currentChefeServicos.map((chefe) => (
               <div class="form-check" style={{ display: "block" }}>
                 <input
                   class="form-check-input"
@@ -693,11 +702,16 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
                 <label class="form-check-label" for="flexRadioDefault1">
                   {" "}
-                  {chefe.Trabalhador.Pessoa.nome}{" "}
-                  {chefe.Trabalhador.Pessoa.sobrenome}
+                  {chefe.Pessoa.nome} {chefe.Pessoa.sobrenome}
                 </label>
               </div>
             ))}
+            <Pagination
+              itemsPerPage={itemsPerPageModal}
+              totalItems={chefe_servicos.length}
+              currentPage={currentPageModal}
+              paginate={paginateModal}
+            />
             <div class="modal-footer">
               <Button
                 variant="default"
@@ -717,6 +731,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             </div>
           </div>
         </div>
+
         <Col md={12} style={{ marginTop: 5 }}>
           <table
             class="table table-striped table-responsive "
