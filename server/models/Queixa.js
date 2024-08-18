@@ -6,6 +6,7 @@ const Inspector = require("./Inspector.js");
 const Recepcionista = require("./recepcionista.js");
 const ChefeServicos = require("./ChefeServicos.js");
 const Testemunha = require("./testemunha.js");
+const funcionarioIGT = require("./FuncionarioIGT.js");
 
 const Queixa = db.define("Queixa", {
   id: {
@@ -82,11 +83,11 @@ const Queixa = db.define("Queixa", {
     },
     allowNull: true,
   },
-  chefeServicosID: {
+  funcionarioigtID: {
     type: Sequelize.INTEGER,
     references: {
       model: {
-        tableName: "ChefeServicos",
+        tableName: "funcionarioigt",
       },
       key: "id",
     },
@@ -149,8 +150,8 @@ Recepcionista.hasMany(Queixa, {
   onUpdate: "CASCADE",
 });
 
-ChefeServicos.hasMany(Queixa, {
-  foreignkey: "chefeServicosID",
+funcionarioIGT.hasMany(Queixa, {
+  foreignkey: "funcionarioigtID",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -164,7 +165,7 @@ Queixa.belongsTo(Empresa);
 Queixa.belongsTo(Trabalhador);
 Queixa.belongsTo(Inspector);
 Queixa.belongsTo(Recepcionista);
-Queixa.belongsTo(ChefeServicos);
+Queixa.belongsTo(funcionarioIGT);
 Queixa.belongsTo(Testemunha);
 
 module.exports = Queixa;

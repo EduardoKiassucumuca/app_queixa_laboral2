@@ -64,6 +64,7 @@ app.post("/registar/conta", ContaController.store);
 app.post("/auth", ContaController.logar);
 app.get("/queixas", QueixaController.index);
 app.get("/duvidas", QueixaController.getDuvidas);
+app.get("/buscar_email", ContaController.getEmail);
 
 app.get("/queixas_do_queixoso", QueixaController.queixas_do_queixoso);
 app.post("/queixar_mesma_empresa", QueixaController.queixar_mesma_empresa);
@@ -79,6 +80,9 @@ app.get("/trabalhadores", QueixaController.getTrabalhadores);
 app.get("/inspectores", InspectorController.index);
 app.get("/queixas_inspectores", InspectorController.getQueixasInspector);
 app.put("/nomear_inspector", QueixaController.update);
+app.put("/encaminhar_queixa_chefe", QueixaController.encaminhar_chefe);
+app.put("/anotar_observacao", QueixaController.anotarObservacao);
+
 app.put("/atribuir_testemunhas", QueixaController.update_testemunha);
 app.post(
   "/add_empregador_queixa",

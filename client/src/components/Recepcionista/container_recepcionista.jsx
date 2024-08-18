@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./container_recepcionista.css";
 import Button from "react-bootstrap/Button";
-
+import Form from "react-bootstrap/Form";
 import Axios from "axios";
 import { FaUser } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa6";
@@ -35,8 +35,12 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [queixas, setQueixas] = useState([]);
   const [detalhes_queixa, setDetalhesQueixa] = useState({});
   const [displayStyle5, setDisplayStyle5] = useState("none");
-  const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle6, setDisplayStyle6] = useState("none");
 
+  const [displayStyle4, setDisplayStyle4] = useState("none");
+  const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle2, setDisplayStyle2] = useState("none");
+  const [emailChefe, setEmailChefe] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Número de itens por página
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -47,7 +51,8 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [displayStyle9, setDisplayStyle9] = useState("none");
   const [chefe_servicos, setChefeServicos] = useState([]);
   const [chefe_selecionado, setChefeSelec] = useState({});
-
+  const [displayStyle3, setDisplayStyle3] = useState("none");
+  const [obs, setObs] = useState("");
   const [currentPageModal, setCurrentPageModal] = useState(1);
   const itemsPerPageModal = 5; // Número de itens por página
 
@@ -81,6 +86,30 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const toggleDisplay5 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle5((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay6 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle6((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay4 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle4((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay2 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle2((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay3 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle3((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -131,6 +160,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
         // const todas_queixas = data.queixas[0].concat(data.queixas[1])
+        console.log(data.queixas);
         const queixas_selecionadas = data.queixas.filter(
           (queixa) => queixa.provincia === data2.trabalhador.localizacao_office
         );
@@ -182,6 +212,11 @@ const ContainerRecepcionista = ({ onSearch }) => {
     setDetalhesQueixa(conflito_selecionado);
     toggleDisplay5();
   }
+  function mostrar_formulario(conflito_selecionado) {
+    setDetalhesQueixa(conflito_selecionado);
+    setObs(conflito_selecionado.obs);
+    toggleDisplay4();
+  }
   const handleDownload = async (url_file) => {
     const filename = url_file.split("\\").pop();
     const response = await Axios({
@@ -205,6 +240,26 @@ const ContainerRecepcionista = ({ onSearch }) => {
     setDetalhesSelec(detalhes);
     toggleDisplay9();
   }
+  function ver_chefeServicos(conflito_selecionado) {
+    setDetalhesSelec(conflito_selecionado);
+
+    Axios.get("http://localhost:3001/buscar_email", {
+      params: {
+        contaID: conflito_selecionado.funcionarioigt.Trabalhador.contaID,
+      },
+    })
+      .then(({ data }) => {
+        console.log(data.email);
+
+        setEmailChefe(data.email);
+        toggleDisplay3();
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+
+    //console.log(lista_queixa.minha_queixa)
+  }
   function ver_chefes(conflito_selecionado) {
     setDetalhesSelec(conflito_selecionado);
 
@@ -227,25 +282,43 @@ const ContainerRecepcionista = ({ onSearch }) => {
         console.log(res);
       });
   }
+
   const encaminharAo_chefeServicos = (chefe_nomeado, queixa_selecionada) => {
-    Axios.put("http://localhost:3001/nomear_inspector", {
+    Axios.put("http://localhost:3001/encaminhar_queixa_chefe", {
       params: {
-        id_inspector: chefe_nomeado.id,
+        id_chefe: chefe_nomeado.id,
         id_trabalhador: chefe_nomeado.trabalhadorID,
         id_queixa: queixa_selecionada.id,
       },
     })
       .then(function (response) {
-        //toggleDisplay();
-        //console.log(response);
-        // props.setShow(false);
-        //setSmShow(true);
-        //window.location.href = '/chefe_servicos';
+        toggleDisplay();
+        toggleDisplay2();
       })
       .catch(function (error) {
         console.log(error);
       });
   };
+  function anotar_observacao(event, conflito) {
+    event.preventDefault();
+    console.log(obs, conflito.id);
+    Axios.put("http://localhost:3001/anotar_observacao", {
+      params: {
+        observacao: obs,
+        queixaID: conflito.id,
+      },
+    })
+      .then(function (response) {
+        if (response) {
+          console.log(response);
+          toggleDisplay4();
+          toggleDisplay6();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   return (
     <>
       <ModalConfirmacao
@@ -330,30 +403,51 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 {detalhes_queixa.assunto}
               </p>
             </div>
-            <span style={{ color: "", display: "inline" }}>
+            <span style={{ color: "", display: "inline", fontWeight: "" }}>
               {" "}
               Descrição:{" "}
-              <span style={{ color: "black" }}>
-                {detalhes_queixa.facto ?? 0}
+              <span style={{ color: "black", fontSize: "12px" }}>
+                {detalhes_queixa.facto ?? "Nenhuma"}
               </span>
             </span>
-            <span style={{ color: "", display: "inline" }}>
+            <br />
+            <span style={{ color: "", display: "inline", fontWeight: "" }}>
+              {" "}
+              Observação:{" "}
+              <span style={{ color: "black", fontSize: "12px" }}>
+                {detalhes_queixa.obs ?? "Nenhuma"}
+              </span>
+            </span>
+            <br />
+            <span style={{ color: "", display: "inline", marginBottom: 10 }}>
               {" "}
               Multa:{" "}
               <span style={{ color: "black" }}>
                 {detalhes_queixa.multa ?? 0}
               </span>
             </span>
-            OBS: <span style={{ color: "" }}>{detalhes_queixa.obs ?? ""}</span>
-            Acta
-            <p>
-              <FaFilePdf style={{ border: "red" }} />
+            <strong>Contrato de Trabalho </strong>
+            <p style={{ marginBottom: 5 }}>
               <a
                 href="#"
-                onClick={(e) => handleDownload(detalhes_queixa.url_file_acta)}
-                style={{ color: "rgb(220, 195, 119)" }}
+                onClick={(e) =>
+                  handleDownload(detalhesSelec?.url_file_contrato)
+                }
+                style={{ color: "rgb(201 152 6)" }}
               >
-                {detalhes_queixa.url_file_acta}
+                {detalhesSelec?.url_file_contrato}
+                <FaDownload style={{ marginLeft: 5 }} />
+              </a>
+            </p>
+            <strong>Acta </strong>
+            <p style={{ marginBottom: 5 }}>
+              <a
+                href="#"
+                onClick={(e) => handleDownload(detalhesSelec?.url_file_acta)}
+                style={{ color: "rgb(201 152 6)" }}
+              >
+                {detalhesSelec?.url_file_acta}
+                <FaDownload style={{ marginLeft: 5 }} />
               </a>
             </p>
             <div class="modal-footer">
@@ -498,7 +592,9 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   <a
                     href="#"
                     onClick={(e) =>
-                      handleDownload(detalhesSelec.url_file_contrato)
+                      handleDownload(
+                        detalhesSelec.Trabalhador?.Pessoa?.BI?.file
+                      )
                     }
                     style={{ color: "rgb(201 152 6)" }}
                   >
@@ -707,11 +803,21 @@ const ContainerRecepcionista = ({ onSearch }) => {
               </div>
             ))}
             <Pagination
-              itemsPerPage={itemsPerPageModal}
-              totalItems={chefe_servicos.length}
-              currentPage={currentPageModal}
-              paginate={paginateModal}
-            />
+              className="justify-content-center mb-0"
+              style={{ marginTop: 10, paddingBottom: 10 }}
+            >
+              {Array.from({
+                length: Math.ceil(chefe_servicos.length / itemsPerPageModal),
+              }).map((_, index) => (
+                <Pagination.Item
+                  key={index}
+                  active={index + 1 === currentPageModal}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
             <div class="modal-footer">
               <Button
                 variant="default"
@@ -729,6 +835,148 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 Feito
               </Button>
             </div>
+          </div>
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle2,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          <div class="modal-content">
+            <h3 style={{ color: "#ffc107", fontSize: 20, fontWeight: "bold" }}>
+              Confirnação
+            </h3>
+            <br />O Chefe dos Serviços Provinciais nomeado com sucesso!
+            <div class="modal-footer">
+              <Button
+                variant="default"
+                onClick={toggleDisplay2}
+                style={{ backgroundColor: "#ffc107", color: "black" }}
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle6,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          <div class="modal-content">
+            <h3 style={{ color: "#ffc107", fontSize: 20, fontWeight: "bold" }}>
+              Confirnação
+            </h3>
+            <br />A Observação foi guardada com sucesso!
+            <div class="modal-footer">
+              <Button
+                variant="default"
+                onClick={toggleDisplay6}
+                style={{ backgroundColor: "#ffc107", color: "black" }}
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle3,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          {" "}
+          <div class="modal-content">
+            <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+              {detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.nome +
+                " " +
+                detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.sobrenome ??
+                "Nenhum"}
+            </h4>
+            <br />{" "}
+            <span style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                Departamento:
+              </span>{" "}
+              {detalhesSelec?.funcionarioigt?.Trabalhador?.departamento ??
+                "Nenhum"}
+            </span>
+            <span style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 15, fontWeight: "bold" }}>Cargo:</span>{" "}
+              {detalhesSelec?.funcionarioigt?.Trabalhador?.cargo ===
+              "chefe_servicos"
+                ? "Chefe dos Serviços Provinciais"
+                : "Nenhum"}
+            </span>
+            <span style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
+              {emailChefe}
+            </span>
+            <div class="modal-footer">
+              <Button variant="warning" onClick={toggleDisplay3}>
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div
+          id="myModal"
+          class="modal"
+          style={{
+            display: displayStyle4,
+            position: "fixed",
+            top: "150px",
+            boxShadow: "10px 10px 5px #888888;",
+          }}
+        >
+          <div class="modal-content">
+            <Form onSubmit={(e) => anotar_observacao(e, detalhes_queixa)}>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlTextarea1"
+              >
+                <Form.Label>Observação</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  placeholder="Observação..."
+                  required
+                  rows={3}
+                  value={obs}
+                  onChange={(e) => setObs(e.target.value)}
+                />
+              </Form.Group>
+
+              <div class="modal-footer">
+                <Button
+                  variant="default"
+                  onClick={toggleDisplay4}
+                  style={{ borderColor: "#ffc107", color: "#ffc107" }}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="default"
+                  type="submit"
+                  style={{ backgroundColor: "#ffc107", color: "black" }}
+                >
+                  Guardar
+                </Button>
+              </div>
+            </Form>
           </div>
         </div>
 
@@ -755,6 +1003,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   <th scope="row">{conflito.id}</th>
                   <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
                   <th scope="row">{conflito.Empresa.nome_empresa}</th>
+
                   <td>{conflito.assunto}</td>
 
                   <td>{conflito.facto}</td>
@@ -781,13 +1030,25 @@ const ContainerRecepcionista = ({ onSearch }) => {
                           href="#/action-3"
                           onClick={() => detalhesEmpregador(conflito)}
                         >
-                          ver empregador
+                          Ver empregador
                         </Dropdown.Item>
                         <Dropdown.Item
                           href="#/action-3"
                           onClick={() => ver_queixa(conflito)}
                         >
-                          ver detalhes
+                          Ver detalhes
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => mostrar_formulario(conflito)}
+                        >
+                          Anotar Observação
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          href="#/action-3"
+                          onClick={() => ver_chefeServicos(conflito)}
+                        >
+                          Ver o perfil do chefe dos serviços provinciais
                         </Dropdown.Item>
                         <Dropdown.Item
                           href="#/action-3"

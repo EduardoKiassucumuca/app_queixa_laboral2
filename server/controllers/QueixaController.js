@@ -17,6 +17,7 @@ const Testemunha = require("../models/testemunha");
 const Duvida = require("../models/duvida");
 const Comentario = require("../models/comentario.js");
 const { clear } = require("console");
+const funcionarioIGT = require("../models/FuncionarioIGT.js");
 const tentativa = 0;
 
 module.exports = {
@@ -75,6 +76,22 @@ module.exports = {
                   },
                   {
                     association: "Endereco",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            association: "funcionarioigt",
+            required: true,
+            include: [
+              {
+                association: "Trabalhador",
+                required: true,
+                include: [
+                  {
+                    association: "Pessoa",
                     required: true,
                   },
                 ],
@@ -1597,7 +1614,7 @@ module.exports = {
       const { id_queixa } = req.body.params;
 
       const updated_queixa = await Queixa.update(
-        { inspectorID: id_inspector, estado: "Analise" },
+        { inspectorID: id_inspector, estado: "Encaminhada ao Inspector" },
         {
           where: {
             id: id_queixa,
@@ -1614,7 +1631,60 @@ module.exports = {
       console.log(error);
     }
   },
+  async encaminhar_chefe(req, res) {
+    try {
+      const { id_chefe } = req.body.params;
+      const { id_queixa } = req.body.params;
+      const funcionario = await funcionarioIGT.findOne({
+        attributes: ["id", "trabalhadorID"],
+        where: { trabalhadorID: id_chefe },
+      });
+      const updated_queixa = await Queixa.update(
+        {
+          funcionarioigtID: funcionario.id,
+          estado: "Encaminhada ao Chefe dos Serviços Provinciais",
+        },
+        {
+          where: {
+            id: id_queixa,
+          },
+        }
+      );
 
+      return res.status(200).send({
+        status: 1,
+        message: "Chefe dos serviços nomeado com sucesso!",
+        updated_queixa,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async anotarObservacao(req, res) {
+    try {
+      const { observacao } = req.body.params;
+      const { queixaID } = req.body.params;
+
+      const updated_obs = await Queixa.update(
+        {
+          obs: observacao,
+        },
+        {
+          where: {
+            id: queixaID,
+          },
+        }
+      );
+
+      return res.status(200).send({
+        status: 1,
+        message: "A Observação foi guardada com sucesso!",
+        updated_obs,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async update_testemunha(req, res) {
     const { id_inspector } = req.body.params;
     const { id_queixa } = req.body.params;

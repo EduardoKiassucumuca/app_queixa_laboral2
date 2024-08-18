@@ -195,6 +195,21 @@ module.exports = {
       message: "Alterado com sucesso!",
     });
   },
+  async getEmail(req, res) {
+    try {
+      const { contaID } = req.query;
+
+      const conta = await Conta.findOne({
+        attributes: ["id", "email"],
+        where: { id: contaID },
+      });
+      //console.log(comentarios);
+      res.status(200).json({ email: conta.email });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
   async update(req, res) {},
   async delete(req, res) {},
 };
