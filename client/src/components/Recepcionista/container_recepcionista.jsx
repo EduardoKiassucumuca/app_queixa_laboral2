@@ -242,21 +242,25 @@ const ContainerRecepcionista = ({ onSearch }) => {
   }
   function ver_chefeServicos(conflito_selecionado) {
     setDetalhesSelec(conflito_selecionado);
-
-    Axios.get("http://localhost:3001/buscar_email", {
-      params: {
-        contaID: conflito_selecionado.funcionarioigt.Trabalhador.contaID,
-      },
-    })
-      .then(({ data }) => {
-        console.log(data.email);
-
-        setEmailChefe(data.email);
-        toggleDisplay3();
+    console.log(conflito_selecionado);
+    if (conflito_selecionado?.funcionarioigt !== null) {
+      Axios.get("http://localhost:3001/buscar_email", {
+        params: {
+          contaID: conflito_selecionado?.funcionarioigt?.Trabalhador?.contaID,
+        },
       })
-      .catch((res) => {
-        console.log(res);
-      });
+        .then(({ data }) => {
+          console.log(data.email);
+
+          setEmailChefe(data.email);
+          toggleDisplay3();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else {
+      toggleDisplay3();
+    }
 
     //console.log(lista_queixa.minha_queixa)
   }
@@ -319,6 +323,9 @@ const ContainerRecepcionista = ({ onSearch }) => {
         console.log(error);
       });
   }
+  function reload_page() {
+    window.location.reload();
+  }
   return (
     <>
       <ModalConfirmacao
@@ -378,7 +385,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
         <Col md={2}>
           {" "}
           <p className="p-localizacao">
-            {data2.trabalhador.localizacao_office}
+            {data2?.trabalhador?.localizacao_office}
           </p>
         </Col>
 
@@ -855,7 +862,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <div class="modal-footer">
               <Button
                 variant="default"
-                onClick={toggleDisplay2}
+                onClick={reload_page}
                 style={{ backgroundColor: "#ffc107", color: "black" }}
               >
                 OK
@@ -881,7 +888,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <div class="modal-footer">
               <Button
                 variant="default"
-                onClick={toggleDisplay6}
+                onClick={reload_page}
                 style={{ backgroundColor: "#ffc107", color: "black" }}
               >
                 OK
@@ -899,33 +906,56 @@ const ContainerRecepcionista = ({ onSearch }) => {
             boxShadow: "10px 10px 5px #888888;",
           }}
         >
-          {" "}
           <div class="modal-content">
-            <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
-              {detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.nome +
-                " " +
-                detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.sobrenome ??
-                "Nenhum"}
-            </h4>
-            <br />{" "}
-            <span style={{ marginBottom: 10 }}>
-              <span style={{ fontSize: 15, fontWeight: "bold" }}>
-                Departamento:
-              </span>{" "}
-              {detalhesSelec?.funcionarioigt?.Trabalhador?.departamento ??
-                "Nenhum"}
-            </span>
-            <span style={{ marginBottom: 10 }}>
-              <span style={{ fontSize: 15, fontWeight: "bold" }}>Cargo:</span>{" "}
-              {detalhesSelec?.funcionarioigt?.Trabalhador?.cargo ===
-              "chefe_servicos"
-                ? "Chefe dos Serviços Provinciais"
-                : "Nenhum"}
-            </span>
-            <span style={{ marginBottom: 10 }}>
-              <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
-              {emailChefe}
-            </span>
+            {detalhesSelec?.funcionarioigt === null ||
+            detalhesSelec?.funcionarioigt === undefined ? (
+              <>
+                <h3
+                  style={{ color: "#ffc107", fontSize: 20, fontWeight: "bold" }}
+                >
+                  Aviso
+                </h3>
+                <br />
+                <h3 style={{}}>
+                  Nenhum Chefe dos serviços provinciais foi adicionado a esta
+                  queixa
+                </h3>
+              </>
+            ) : (
+              <>
+                {" "}
+                <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                  {detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.nome +
+                    " " +
+                    detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa
+                      .sobrenome ?? "Nenhum"}
+                </h4>
+                <br />{" "}
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Departamento:
+                  </span>{" "}
+                  {detalhesSelec?.funcionarioigt?.Trabalhador?.departamento ??
+                    "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Cargo:
+                  </span>{" "}
+                  {detalhesSelec?.funcionarioigt?.Trabalhador?.cargo ===
+                  "chefe_servicos"
+                    ? "Chefe dos Serviços Provinciais"
+                    : "Nenhum"}
+                </span>
+                <span style={{ marginBottom: 10 }}>
+                  <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                    Email:
+                  </span>{" "}
+                  {emailChefe}
+                </span>
+              </>
+            )}
+
             <div class="modal-footer">
               <Button variant="warning" onClick={toggleDisplay3}>
                 OK
@@ -1000,15 +1030,15 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <tbody>
               {currentItems?.reverse().map((conflito) => (
                 <tr>
-                  <th scope="row">{conflito.id}</th>
-                  <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                  <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                  <th scope="row">{conflito?.id}</th>
+                  <th scope="row"> {conflito?.Trabalhador?.Pessoa?.nome} </th>
+                  <th scope="row">{conflito?.Empresa?.nome_empresa}</th>
 
-                  <td>{conflito.assunto}</td>
+                  <td>{conflito?.assunto}</td>
 
-                  <td>{conflito.facto}</td>
-                  <td>{conflito.provincia}</td>
-                  <td>{conflito.estado}</td>
+                  <td>{conflito?.facto}</td>
+                  <td>{conflito?.provincia}</td>
+                  <td>{conflito?.estado}</td>
 
                   <td>
                     <Dropdown id="dropdown-basic-button">

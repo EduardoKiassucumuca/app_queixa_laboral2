@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./containerChefeServicos.css";
 import Button from "react-bootstrap/Button";
-
 import Axios from "axios";
 import { FaUser } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa6";
@@ -15,7 +14,12 @@ import ModalConfirmacao from "../Modal/modalConfirmation";
 import ModalTestemunhas from "./modal_testemunhas";
 import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
-
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
+import { Pagination } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 const formTemplate = {
   review: "",
   comment: "",
@@ -57,6 +61,42 @@ const ContainerChefeServicos = ({ onSearch }) => {
   } else {
     tipo = "Queixoso";
   }
+  const popover = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encaminhada ao chefe dos serviços provinciais
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverAberto = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi submetida e sem dado o devido tratamento</strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverEncerrada = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encerrada sem a necessidade de ir ao tribunal
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverTribunal = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi encerrada e encaminhada ao tribunal</strong>
+      </Popover.Body>
+    </Popover>
+  );
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle4((prevDisplayStyle) =>
@@ -167,11 +207,16 @@ const ContainerChefeServicos = ({ onSearch }) => {
     (queixa) => queixa.estado === "Aberto"
   ).length;
   const qtd_queixa_encaminhadasChefe = queixas_selecprovincia.filter(
-    (queixa) => queixa.estado === "Analise"
+    (queixa) => queixa.estado === "encaminhada_chefe"
   ).length;
-
+  const qtd_queixa_encaminhadasInspector = queixas_selecprovincia.filter(
+    (queixa) => queixa.estado === "encaminhada_inspector"
+  ).length;
   const qtd_queixa_encaminhadasfechada = queixas_selecprovincia.filter(
     (queixa) => queixa.estado === "Encerrado"
+  ).length;
+  const qtd_queixa_encaminhadasTribunal = queixas_selecprovincia.filter(
+    (queixa) => queixa.estado === "Tribunal"
   ).length;
 
   const [inspector, setInspector] = useState("");
@@ -514,9 +559,11 @@ const ContainerChefeServicos = ({ onSearch }) => {
           <div class="col-md-3 col-sm-6">
             <Link
               className="link-queixa-queixoso"
-              to={`/queixasFiltradas/Analise`}
+              to={`/queixasFiltradas/encaminhada_chefe`}
             >
-              <h5 className="status-qtd-queixas">Em analise</h5>
+              <h5 className="status-qtd-queixas">
+                Encaminhadas ao Chefe dos Serviços Provinciais
+              </h5>
               <div class="progress blue">
                 <span class="progress-left">
                   <span
@@ -532,6 +579,31 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 </span>
                 <div class="progress-value" style={{ color: "#daa316" }}>
                   {qtd_queixa_encaminhadasChefe}
+                </div>
+              </div>
+            </Link>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <Link
+              className="link-queixa-queixoso"
+              to={`/queixasFiltradas/encaminhada_inspector`}
+            >
+              <h5 className="status-qtd-queixas">Encaminhadas ao Inspector</h5>
+              <div class="progress blue">
+                <span class="progress-left">
+                  <span
+                    class="progress-bar"
+                    style={{ borderColor: "#daa316" }}
+                  ></span>
+                </span>
+                <span class="progress-right">
+                  <span
+                    class="progress-bar"
+                    style={{ borderColor: "#daa316" }}
+                  ></span>
+                </span>
+                <div class="progress-value" style={{ color: "#daa316" }}>
+                  {qtd_queixa_encaminhadasInspector}
                 </div>
               </div>
             </Link>
@@ -557,20 +629,46 @@ const ContainerChefeServicos = ({ onSearch }) => {
             </Link>
           </div>
         </div>
-        <h1 style={{ color: "#daa316", fontSize: "24px", fontWeight: "600" }}>
+        <div class="col-md-3 col-sm-6">
+          <Link
+            className="link-queixa-queixoso"
+            to={`/queixasFiltradas/Tribunal`}
+          >
+            <h5 className="status-qtd-queixas">Enviadas ao Tribunal</h5>
+            <div class="progress blue">
+              <span class="progress-left">
+                <span class="progress-bar"></span>
+              </span>
+              <span class="progress-right">
+                <span class="progress-bar"></span>
+              </span>
+              <div class="progress-value">
+                {qtd_queixa_encaminhadasTribunal}
+              </div>
+            </div>
+          </Link>
+        </div>
+        <h1
+          style={{
+            color: "#daa316",
+            fontSize: "24px",
+            fontWeight: "600",
+            marginTop: "5%",
+          }}
+        >
           Queixas
         </h1>
-        <Col md={3}>
-          {/*<Button
+        {/* <Col md={3}>
+          <Button
             variant="warning"
             onClick={() => setShowModal2(true)}
             className="fw-bold btn-nova-queixa"
             type="submit"
           >
             Nova Queixa
-          </Button>*/}
-        </Col>
-        <Col md={2}>
+          </Button>
+      </Col>*/}
+        <Col md={2} style={{ marginLeft: "12%" }}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Código"
@@ -604,7 +702,9 @@ const ContainerChefeServicos = ({ onSearch }) => {
         </Col>
         <Col md={2}>
           {" "}
-          <p className="p-localizacao"></p>
+          <p className="p-localizacao" style={{ fontWeight: "bold" }}>
+            {data2?.trabalhador?.localizacao_office}
+          </p>
         </Col>
 
         <Col md={12} style={{ marginTop: 15 }}>
@@ -615,11 +715,9 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
                 <th scope="col"> Trabalhador</th>
                 <th scope="col"> Empregador</th>
-                <th scope="col"> Inspector</th>
-                <th scope="col"> Testemunha</th>
+
                 <th scope="col">Queixa</th>
                 <th scope="col">Estado</th>
-                <th scope="col">Provincia</th>
               </tr>
             </thead>
             <tbody>
@@ -628,37 +726,52 @@ const ContainerChefeServicos = ({ onSearch }) => {
                   <th scope="row">{conflito.id}</th>
                   <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
                   <th scope="row">{conflito.Empresa.nome_empresa}</th>
-                  <th scope="row">
-                    {conflito.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
-                  <th scope="row">
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.nome}{" "}
-                    {conflito.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome}
-                  </th>
+
                   <td>{conflito.facto}</td>
                   <td>
-                    {" "}
-                    <Button
-                      style={{
-                        cursor: "default",
-                        borderRadius: "20px",
-                        fontSize: "12px",
-                      }}
-                      variant={
-                        conflito.estado === "Aberto"
-                          ? "primary"
-                          : conflito.estado === "Analise"
-                          ? "warning"
-                          : conflito.estado === "Encerrado"
-                          ? "danger"
-                          : "secondary"
+                    <OverlayTrigger
+                      trigger="hover"
+                      placement="bottom"
+                      overlay={
+                        conflito.estado === "Aberto" ? (
+                          popoverAberto
+                        ) : conflito.estado === "Encerrado" ? (
+                          popoverEncerrada
+                        ) : conflito.estado === "Tribunal" ? (
+                          popoverTribunal
+                        ) : conflito.estado === "encaminhada_chefe" ? (
+                          popover
+                        ) : (
+                          <></>
+                        )
                       }
+                      rootClose
                     >
-                      {conflito.estado}
-                    </Button>
+                      <Button
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          {
+                            Aberto: "primary",
+                            encaminhada_chefe: "warning",
+                            encaminhada_inspector: "warning",
+                            tribunal: "danger",
+                            Encerrado: "danger",
+                          }[conflito.estado] || "secondary"
+                        }
+                      >
+                        {conflito.estado === "encaminhada_chefe"
+                          ? "Encaminhada ao Chefe"
+                          : conflito.estado === "encaminhada_inspector"
+                          ? "Encaminhada ao Inspector"
+                          : conflito.estado}
+                      </Button>
+                    </OverlayTrigger>
                   </td>
-                  <td>{conflito.provincia}</td>
+
                   {conflito.estado === "Encerrado" ? (
                     <td>
                       <Button
@@ -673,25 +786,35 @@ const ContainerChefeServicos = ({ onSearch }) => {
                   ) : (
                     <>
                       <td>
-                        {" "}
-                        <Button
-                          onClick={() => ver_inspectores(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Nomear Inspector
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          onClick={() => ver_testemunhas(conflito)}
-                          variant="warning"
-                          className="fw-bold btn-nova-queixa"
-                          type="button"
-                        >
-                          Atribuir testemunhas
-                        </Button>
+                        <Dropdown id="dropdown-basic-button">
+                          <Dropdown.Toggle
+                            variant="warning"
+                            id="dropdown-basic-button"
+                          >
+                            <FontAwesomeIcon icon={faCog} />
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => ver_inspectores(conflito)}
+                            >
+                              Nomear Inspector
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => ver_testemunhas(conflito)}
+                            >
+                              Atribuir testemunhas
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/action-3">
+                              Ver Inspector
+                            </Dropdown.Item>
+                            <Dropdown.Item href="#/action-3">
+                              Ver Testemunha
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </td>
                     </>
                   )}

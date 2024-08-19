@@ -434,7 +434,7 @@ const FormQueixoso = () => {
                         <button
                           type="button"
                           className="btn fw-bold bg-default btn-voltar"
-                          onClick={handleSubmit}
+                          onClick={() => changeStep(currentStep - 1)}
                         >
                           <span>Voltar</span>
                         </button>

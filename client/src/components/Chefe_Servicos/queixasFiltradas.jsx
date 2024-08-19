@@ -18,6 +18,9 @@ import MenuChefeServicos from "./menuChefeServicos";
 import { useParams } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa";
 import FileDownload from "js-file-download";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
+
 const formTemplate = {
   review: "",
   comment: "",
@@ -58,6 +61,42 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
   } else {
     tipo = "Queixoso";
   }
+  const popover = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encaminhada ao chefe dos serviços provinciais
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverAberto = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi submetida e sem dado o devido tratamento</strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverEncerrada = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encerrada sem a necessidade de ir ao tribunal
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverTribunal = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi encerrada e encaminhada ao tribunal</strong>
+      </Popover.Body>
+    </Popover>
+  );
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle4((prevDisplayStyle) =>
@@ -543,26 +582,49 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
                     </th>
                     <td>{conflito.facto}</td>
                     <td>
-                      {" "}
-                      <Button
-                        style={{
-                          cursor: "default",
-                          borderRadius: "20px",
-                          fontSize: "12px",
-                        }}
-                        variant={
-                          conflito.estado === "Aberto"
-                            ? "primary"
-                            : conflito.estado === "Analise"
-                            ? "warning"
-                            : conflito.estado === "Encerrado"
-                            ? "danger"
-                            : "secondary"
+                      <OverlayTrigger
+                        trigger="hover"
+                        placement="bottom"
+                        overlay={
+                          conflito.estado === "Aberto" ? (
+                            popoverAberto
+                          ) : conflito.estado === "Encerrado" ? (
+                            popoverEncerrada
+                          ) : conflito.estado === "Tribunal" ? (
+                            popoverTribunal
+                          ) : conflito.estado === "encaminhada_chefe" ? (
+                            popover
+                          ) : (
+                            <></>
+                          )
                         }
+                        rootClose
                       >
-                        {conflito.estado}
-                      </Button>
+                        <Button
+                          style={{
+                            cursor: "default",
+                            borderRadius: "20px",
+                            fontSize: "12px",
+                          }}
+                          variant={
+                            {
+                              Aberto: "primary",
+                              encaminhada_chefe: "warning",
+                              encaminhada_inspector: "warning",
+                              tribunal: "danger",
+                              Encerrado: "danger",
+                            }[conflito.estado] || "secondary"
+                          }
+                        >
+                          {conflito.estado === "encaminhada_chefe"
+                            ? "Encaminhada ao Chefe"
+                            : conflito.estado === "encaminhada_inspector"
+                            ? "Encaminhada ao Inspector"
+                            : conflito.estado}
+                        </Button>
+                      </OverlayTrigger>
                     </td>
+
                     <td>{conflito.provincia}</td>
 
                     <td>

@@ -43,12 +43,14 @@ module.exports = {
           "url_file_contrato",
           "url_file_acta",
           "created_at",
+          "obs",
+          "funcionarioigtID",
         ],
-        required: true,
+        required: false,
         include: [
           {
             association: "Empresa",
-            required: true,
+            required: false,
             attributes: [
               "id",
               "nome_empresa",
@@ -58,25 +60,25 @@ module.exports = {
               "email",
               "tipo",
             ],
-            include: [{ association: "Endereco", required: true }],
+            include: [{ association: "Endereco", required: false }],
           },
 
           {
             association: "Trabalhador",
-            required: true,
+            required: false,
 
             include: [
               {
                 association: "Pessoa",
-                required: true,
+                required: false,
                 include: [
                   {
                     association: "BI",
-                    required: true,
+                    required: false,
                   },
                   {
                     association: "Endereco",
-                    required: true,
+                    required: false,
                   },
                 ],
               },
@@ -84,15 +86,15 @@ module.exports = {
           },
           {
             association: "funcionarioigt",
-            required: true,
+            required: false,
             include: [
               {
                 association: "Trabalhador",
-                required: true,
+                required: false,
                 include: [
                   {
                     association: "Pessoa",
-                    required: true,
+                    required: false,
                   },
                 ],
               },

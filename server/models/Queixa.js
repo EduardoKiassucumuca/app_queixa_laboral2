@@ -105,6 +105,10 @@ const Queixa = db.define("Queixa", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  obs: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
   url_file_acta: {
     type: Sequelize.STRING,
     allowNull: true,
