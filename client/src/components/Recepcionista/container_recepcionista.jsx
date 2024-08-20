@@ -136,6 +136,43 @@ const ContainerRecepcionista = ({ onSearch }) => {
       </Popover.Body>
     </Popover>
   );
+  const popoverChefe = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encaminhada ao chefe dos serviços provinciais
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverAberto = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi submetida e sem dado o devido tratamento</strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverEncerrada = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>
+          A queixa foi encerrada sem a necessidade de ir ao tribunal
+        </strong>
+      </Popover.Body>
+    </Popover>
+  );
+  const popoverTribunal = (
+    <Popover id="popover-basic" style={{ minWidth: 290 }}>
+      <Popover.Header as="h3">Descrição do estado</Popover.Header>
+      <Popover.Body style={{ textAlign: "center" }}>
+        <strong>A queixa foi encerrada e encaminhada ao tribunal</strong>
+      </Popover.Body>
+    </Popover>
+  );
+
   //console.log(data.trabalhador.id);
 
   //console.log(queixas_selecprovincia);
@@ -233,12 +270,12 @@ const ContainerRecepcionista = ({ onSearch }) => {
   };
   function detalhesEmpregador(detalhes) {
     setDetalhesSelec(detalhes);
-    toggleDisplay8();
+    toggleDisplay9();
   }
   function detalhesTrabalhador(detalhes) {
     console.log(detalhes);
     setDetalhesSelec(detalhes);
-    toggleDisplay9();
+    toggleDisplay8();
   }
   function ver_chefeServicos(conflito_selecionado) {
     setDetalhesSelec(conflito_selecionado);
@@ -384,7 +421,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
 
         <Col md={2}>
           {" "}
-          <p className="p-localizacao">
+          <p className="p-localizacao" style={{ fontWeight: "bold" }}>
             {data2?.trabalhador?.localizacao_office}
           </p>
         </Col>
@@ -1022,7 +1059,6 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 <th scope="col"> Empregador</th>
                 <th scope="col">Assunto</th>
                 <th scope="col">Facto</th>
-                <th scope="col">Provincia</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Opção</th>
               </tr>
@@ -1037,8 +1073,49 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   <td>{conflito?.assunto}</td>
 
                   <td>{conflito?.facto}</td>
-                  <td>{conflito?.provincia}</td>
-                  <td>{conflito?.estado}</td>
+                  <td>
+                    <OverlayTrigger
+                      trigger="hover"
+                      placement="bottom"
+                      overlay={
+                        conflito.estado === "Aberto" ? (
+                          popoverAberto
+                        ) : conflito.estado === "Encerrado" ? (
+                          popoverEncerrada
+                        ) : conflito.estado === "Tribunal" ? (
+                          popoverTribunal
+                        ) : conflito.estado === "encaminhada_chefe" ? (
+                          popoverChefe
+                        ) : (
+                          <></>
+                        )
+                      }
+                      rootClose
+                    >
+                      <Button
+                        style={{
+                          cursor: "default",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                        }}
+                        variant={
+                          {
+                            Aberto: "primary",
+                            encaminhada_chefe: "warning",
+                            encaminhada_inspector: "warning",
+                            tribunal: "danger",
+                            Encerrado: "danger",
+                          }[conflito.estado] || "secondary"
+                        }
+                      >
+                        {conflito.estado === "encaminhada_chefe"
+                          ? "Encaminhada ao Chefe"
+                          : conflito.estado === "encaminhada_inspector"
+                          ? "Encaminhada ao Inspector"
+                          : conflito.estado}
+                      </Button>
+                    </OverlayTrigger>
+                  </td>
 
                   <td>
                     <Dropdown id="dropdown-basic-button">

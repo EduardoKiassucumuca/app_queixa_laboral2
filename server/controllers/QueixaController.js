@@ -1616,7 +1616,7 @@ module.exports = {
       const { id_queixa } = req.body.params;
 
       const updated_queixa = await Queixa.update(
-        { inspectorID: id_inspector, estado: "Encaminhada ao Inspector" },
+        { inspectorID: id_inspector, estado: "encaminhada_inspector" },
         {
           where: {
             id: id_queixa,
@@ -1703,7 +1703,7 @@ module.exports = {
         inspectorID: id_inspector,
       });
       await Queixa.update(
-        { testemunhaID: testemunha.id, estado: "Analise" },
+        { testemunhaID: testemunha.id },
         {
           where: {
             id: id_queixa,
@@ -1712,7 +1712,7 @@ module.exports = {
       );
     } else {
       await Queixa.update(
-        { testemunhaID: find_testemunha.id, estado: "Analise" },
+        { testemunhaID: find_testemunha.id },
         {
           where: {
             id: id_queixa,
