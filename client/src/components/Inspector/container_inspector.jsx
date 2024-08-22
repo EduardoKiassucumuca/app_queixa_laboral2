@@ -16,6 +16,8 @@ import { Pagination } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { FaDownload } from "react-icons/fa";
+import FileDownload from "js-file-download";
 
 const formTemplate = {
   review: "",
@@ -190,6 +192,20 @@ const ContainerInspector = ({ onSearch }) => {
     setDetalhesSelec(detalhes);
     toggleDisplay10();
   }
+  const handleDownload = async (url_file) => {
+    const filename = url_file.split("\\").pop();
+    const response = await Axios({
+      url: "http://localhost:3001/download_contrato",
+      method: "Get",
+      params: {
+        _filenameContrato: url_file,
+      },
+      responseType: "blob",
+    }).then((res) => {
+      console.log(res);
+      FileDownload(res.data, filename);
+    });
+  };
   return (
     <>
       <ModalConfirmacao
@@ -198,15 +214,15 @@ const ContainerInspector = ({ onSearch }) => {
         close={() => setShowModal2(false)}
       />
       <Row className="queixas_recepcionista">
-        <Col md={3}>
-          <Button
+        <Col md={2}>
+          {/*<Button
             variant="warning"
             onClick={() => setShowModal2(true)}
             className="fw-bold btn-nova-queixa"
             type="submit"
           >
             Nova Queixa
-          </Button>
+          </Button>*/}
         </Col>
         <br />
         <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
@@ -269,7 +285,7 @@ const ContainerInspector = ({ onSearch }) => {
                 conflito.estado === "Encerrado" ||
                 conflito.estado === "tribunal"
                   ? 0.5
-                  : conflito.estado === "Analise"
+                  : conflito.estado === "encaminhada_inspector"
                   ? 1
                   : 1,
             }}
@@ -366,12 +382,14 @@ const ContainerInspector = ({ onSearch }) => {
                     conflito.estado === "Encerrado" ||
                     conflito.estado === "tribunal"
                       ? "red"
-                      : conflito.estado === "Analise"
+                      : conflito.estado === "encaminhada_inspector"
                       ? "yellow"
                       : ""
                   }
                 />
-                {conflito.estado}
+                {conflito.estado === "encaminhada_inspector"
+                  ? "Encaminhada ao Inspector"
+                  : conflito.estado}
               </small>
             </Card.Footer>
           </Card>
@@ -477,7 +495,7 @@ const ContainerInspector = ({ onSearch }) => {
               <br />
               <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
                 {detalhesSelec?.Trabalhador?.Pessoa?.nome +
-                  "" +
+                  " " +
                   detalhesSelec?.Trabalhador?.Pessoa?.sobrenome ?? "Nenhum"}
               </h4>
               <br />{" "}
@@ -521,6 +539,20 @@ const ContainerInspector = ({ onSearch }) => {
                 {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
                   .telefone_alternativo ?? ""}
               </span>
+              <br />
+              <strong>Bilhete de Identidade </strong>
+              <p>
+                <a
+                  href="#"
+                  onClick={(e) =>
+                    handleDownload(detalhesSelec.Trabalhador?.Pessoa?.BI?.file)
+                  }
+                  style={{ color: "rgb(201 152 6)" }}
+                >
+                  {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
+                  <FaDownload style={{ marginLeft: 5 }} />
+                </a>
+              </p>
               <div class="modal-footer">
                 <Button variant="warning" onClick={toggleDisplay9}>
                   OK

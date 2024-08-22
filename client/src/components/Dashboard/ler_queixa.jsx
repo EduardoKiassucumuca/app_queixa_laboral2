@@ -278,12 +278,14 @@ const LerQueixa = () => {
                     conflito.estado === "Encerrado" ||
                     conflito.estado === "tribunal"
                       ? "red"
-                      : conflito.estado === "Analise"
+                      : conflito.estado === "encaminhada_inspector"
                       ? "yellow"
                       : ""
                   }
                 />
-                {conflito.estado}
+                {conflito.estado === "encaminhada_inspector"
+                  ? "Encaminhada ao Inspector"
+                  : conflito.estado}
               </small>
             </Card.Footer>
           </Card>
@@ -300,16 +302,29 @@ const LerQueixa = () => {
             <Card.Body>
               <Card.Title></Card.Title>
               <Card.Text>
-                <p>
+                <li>
                   <a
                     href="#"
-                    onClick={(e) => handleDownload(conflito.url_file_contrato)}
+                    onClick={(e) => handleDownload(conflito?.url_file_contrato)}
                     style={{ color: "rgb(220, 195, 119)" }}
                   >
                     {conflito.url_file_contrato}
                     <FaDownload style={{ marginLeft: 5 }} />
                   </a>
-                </p>
+                </li>
+                <br />
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) =>
+                      handleDownload(conflito?.Trabalhador?.Pessoa?.BI?.file)
+                    }
+                    style={{ color: "rgb(220, 195, 119)" }}
+                  >
+                    {conflito?.Trabalhador?.Pessoa?.BI?.file}
+                    <FaDownload style={{ marginLeft: 5 }} />
+                  </a>
+                </li>
               </Card.Text>
             </Card.Body>
           </Card>

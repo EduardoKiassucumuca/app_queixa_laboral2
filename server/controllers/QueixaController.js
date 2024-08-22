@@ -936,7 +936,7 @@ module.exports = {
       let fileBI = "";
       const { _validoAte } = req.body;
       if (queixoso === "Trabalhador") {
-        fileBI = req.files["fileBI"][0].path;
+        fileBI = req.files["fileBI"][0].path.split("/")[1];
       }
       const { _nBI } = req.body;
 

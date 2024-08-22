@@ -228,10 +228,7 @@ const MaisDetalhes = () => {
     window.location.reload();
   }
   function verificarQueixaEncerrada(conflito) {
-    if (
-      conflito.estado === "Encerrado" ||
-      conflito.estado === "Encaminhado ao Tribunal"
-    ) {
+    if (conflito.estado === "Encerrado" || conflito.estado === "Tribunal") {
       toggleDisplay4();
     } else {
       toggleDisplay2();
@@ -277,14 +274,16 @@ const MaisDetalhes = () => {
                   className="estado"
                   color={
                     conflito.estado === "Encerrado" ||
-                    conflito.estado === "tribunal"
+                    conflito.estado === "Tribunal"
                       ? "red"
-                      : conflito.estado === "Analise"
+                      : conflito.estado === "encaminhada_inspector"
                       ? "yellow"
                       : ""
                   }
                 />{" "}
-                {conflito.estado}{" "}
+                {conflito.estado === "encaminhada_inspector"
+                  ? "Encaminhada ao Inspector"
+                  : conflito.estado}{" "}
               </small>
             </Card.Footer>
           </Card>
@@ -376,7 +375,8 @@ const MaisDetalhes = () => {
                   <small className="text-muted-footer">
                     <FaPhone className="footer-nota" /> Inspencção geral do
                     trabalho
-                    {conflito.estado === "Encerrado" ? (
+                    {conflito.estado === "Encerrado" ||
+                    conflito.estado === "Tribunal" ? (
                       <Button
                         variant="dark"
                         border="secondary"
@@ -411,7 +411,7 @@ const MaisDetalhes = () => {
               <p></p>
             </>
           ))}
-          {conflito.estado === "Encerrado" ? (
+          {conflito.estado === "Encerrado" || conflito.estado === "Tribunal" ? (
             <>
               <Button
                 variant="dark"
@@ -625,9 +625,7 @@ const MaisDetalhes = () => {
               >
                 <option>Status</option>
                 <option value="Encerrado">Encerrado</option>
-                <option value="Encaminhado ao Tribunal">
-                  Encaminhado ao Tribunal
-                </option>
+                <option value="Tribunal">Encaminhado ao Tribunal</option>
               </Form.Select>
               <br />
 

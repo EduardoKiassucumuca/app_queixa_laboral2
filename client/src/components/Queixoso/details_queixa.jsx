@@ -101,6 +101,26 @@ const Thanks = ({ data, updateFielHndler }) => {
             onChange={(e) => onchangeAnonimo(e)}
           />
         </Col>
+        <br />
+        <strong style={{ marginTop: 20, marginBottom: 10, fontSize: 18 }}>
+          Diversos
+        </strong>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file1" id="file1" />
+        </Col>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file2" id="file2" />
+        </Col>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file3" id="file3" />
+        </Col>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file4" id="file4" required />
+        </Col>
       </Row>
     </>
   );
