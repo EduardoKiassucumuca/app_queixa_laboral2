@@ -58,7 +58,6 @@ const FormQueixante = () => {
   const [myDataTrab, setMyDataTrab] = useState("");
   const [BIv, setBIv] = useState();
   const [BI2, setBI2] = useState();
-
   function validaCamposTexto(key, valor) {
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(valor)) {
       setData((prev) => {
@@ -118,10 +117,24 @@ const FormQueixante = () => {
     setMyDataTrab(data2);
     setNovoTrabalhadorID(sessionStorage.getItem("id_trabalhador"));
   }, []);
+
+  function isValidFile(file) {
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+    ]; // Tipos MIME para PDF e Word
+
+    return allowedTypes.includes(file.type);
+  }
   function queixar() {
     const submissao_queixa = data;
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
+    const file3 = document.querySelector("#file3");
+    const file4 = document.querySelector("#file4");
+    const file5 = document.querySelector("#file5");
+    const file6 = document.querySelector("#file6");
     const file_BI = document.querySelector("#file_BI");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
 
@@ -137,11 +150,33 @@ const FormQueixante = () => {
       }
 
       formData.append("_empresa", submissao_queixa.empresa2);
-      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      // if (
+      //   !isValidFile(file_contrato.files[0]) ||
+      //   !isValidFile(file3.files[0]) ||
+      //   !isValidFile(file4.files[0]) ||
+      //   !isValidFile(file5.files[0]) ||
+      //   !isValidFile(file6.files[0])
+      // ) {
+      //   setErro("Apenas arquivos pdf e word.");
+      // } else {
       formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
+
       formData.append("queixoso", "Trabalhador");
       formData.append("queixante", "Empresa");
-
       Axios.post("http://localhost:3001/add_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
@@ -171,6 +206,7 @@ const FormQueixante = () => {
         .catch((resposta) => {
           console.log("error", resposta);
         });
+      // }
     }
     if ((myDataTrab || novoTrabalhadorID) && data.empresa2 === "outra") {
       formData.append("_cargo", submissao_queixa.cargo);
@@ -197,7 +233,18 @@ const FormQueixante = () => {
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Trabalhador");
       formData.append("queixante", "Empresa");
-
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
       Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
@@ -264,7 +311,18 @@ const FormQueixante = () => {
       formData.append("senha", submissao_queixa.password);
       formData.append("queixoso", "Trabalhador");
       formData.append("queixante", "Empresa");
-
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
       Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
@@ -339,7 +397,18 @@ const FormQueixante = () => {
       formData.append("queixoso", "Trabalhador");
       formData.append("_email_pessoal", submissao_queixa.email_pessoal);
       formData.append("senha", submissao_queixa.password);
-
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
       Axios.post("http://localhost:3001/guardar_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,

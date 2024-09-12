@@ -82,7 +82,7 @@ const Thanks = ({ data, updateFielHndler }) => {
           />
           <br />
         </Col>
-        {!novoTrabalhadorID ? (
+        {!novoTrabalhadorID && !novoTrabalhador ? (
           <Col md={6}>
             <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
 
@@ -107,19 +107,19 @@ const Thanks = ({ data, updateFielHndler }) => {
         </strong>
         <Col md={12} className="mb-3">
           {" "}
-          <Form.Control type="file" name="file1" id="file1" />
-        </Col>
-        <Col md={12} className="mb-3">
-          {" "}
-          <Form.Control type="file" name="file2" id="file2" />
-        </Col>
-        <Col md={12} className="mb-3">
-          {" "}
           <Form.Control type="file" name="file3" id="file3" />
         </Col>
         <Col md={12} className="mb-3">
           {" "}
-          <Form.Control type="file" name="file4" id="file4" required />
+          <Form.Control type="file" name="file4" id="file4" />
+        </Col>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file5" id="file5" />
+        </Col>
+        <Col md={12} className="mb-3">
+          {" "}
+          <Form.Control type="file" name="file6" id="file6" />
         </Col>
       </Row>
     </>

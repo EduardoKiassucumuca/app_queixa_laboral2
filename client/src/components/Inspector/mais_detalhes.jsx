@@ -40,6 +40,8 @@ const MaisDetalhes = () => {
 
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
+  const [filePreview, setFilePreview] = useState(null); // Armazenar o preview do arquivo
+  const [showPreview, setShowPreview] = useState(false); // Controlar a exibição do preview
 
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
@@ -173,6 +175,39 @@ const MaisDetalhes = () => {
         console.log("error", resposta);
       });
   };
+  const handlePreview = async (url_file) => {
+    try {
+      const response = await Axios({
+        url: "http://localhost:3001/download_contrato",
+        method: "Get",
+        params: {
+          _filenameContrato: url_file,
+        },
+        responseType: "blob", // Esperar o arquivo como blob
+      });
+
+      const fileType = response.data.type; // Verificar o tipo de arquivo
+      const blobUrl = URL.createObjectURL(response.data); // Criar um URL para preview
+
+      // Exibir o preview apenas para arquivos visualizáveis como imagens e PDFs
+      if (
+        fileType.includes("pdf") ||
+        fileType.includes("image") ||
+        fileType.includes("word")
+      ) {
+        setFilePreview(blobUrl); // Armazenar o preview
+        setShowPreview(true); // Exibir o modal ou seção de preview
+      } else {
+        // Se não for um tipo visualizável, exibir apenas um link para download
+        setFilePreview(null);
+        setShowPreview(false);
+        alert("Este tipo de arquivo não pode ser visualizado.");
+      }
+    } catch (error) {
+      console.error("Erro ao carregar o arquivo para preview: ", error);
+    }
+  };
+
   const handleDownload = async (url_file) => {
     const filename = url_file.split("\\").pop();
     const response = await Axios({
@@ -381,7 +416,7 @@ const MaisDetalhes = () => {
                         variant="dark"
                         border="secondary"
                         type="button"
-                        onClick={salvar_nota}
+                        onClick={() => verificarQueixaEncerrada(conflito)}
                         style={{
                           borderColor: "#ddd",
                           marginRight: 7,
@@ -418,6 +453,7 @@ const MaisDetalhes = () => {
                 border="secondary"
                 type="button"
                 style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
+                onClick={() => verificarQueixaEncerrada(conflito)}
               >
                 Agendar reunião
               </Button>

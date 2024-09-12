@@ -1,0 +1,36 @@
+@startuml
+class Pessoa {
+  +String nome
+  +String sobrenome
+  +String nome_pai
+  +String nome_mae
+  +String naturalidade
+  +String altura
+  +String estado_civil
+  +String sexo
+  +Date data_nascimento
+  +Integer biID
+  +Integer enderecoID
+}
+class BI {
+  +Date emitido_em
+  +Date valido_ate
+  +String file
+  +String numeroBI
+}
+class Endereco {
+  +String bairro
+  +String rua
+  +String edificio
+  +String casa
+  +String provincia
+  +String telefone_principal
+  +String telefone_alternativo
+}
+'  Pessoa --> BI : BIID
+'  BI : + Integer BIID
+' Pessoa --> Endereco : BIID
+' Endereco : + Integer BIID
+Pessoa "1" --> "1" BI
+
+@enduml

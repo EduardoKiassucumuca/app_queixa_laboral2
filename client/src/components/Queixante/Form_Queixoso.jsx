@@ -105,6 +105,10 @@ const FormQueixoso = () => {
     const formData = new FormData();
     const file_contrato = document.querySelector("#file_contrato");
     const file_BI = document.querySelector("#file_BI");
+    const file3 = document.querySelector("#file3");
+    const file4 = document.querySelector("#file4");
+    const file5 = document.querySelector("#file5");
+    const file6 = document.querySelector("#file6");
     const modo = submissao_queixa.checkedAnonimo ? "anonimo" : "normal";
 
     /*if (
@@ -201,7 +205,18 @@ const FormQueixoso = () => {
       formData.append("fileContrato", file_contrato.files[0]);
       formData.append("queixoso", "Empregador");
       formData.append("queixante", "Trabalhador");
-
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
       Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
@@ -273,7 +288,18 @@ const FormQueixoso = () => {
       formData.append("queixoso", "Empregador");
       formData.append("_email_pessoal", submissao_queixa.email_pessoal);
       formData.append("senha", submissao_queixa.password);
-
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
       /*Axios.post("http://localhost:3001/registar/conta",{
         email:"teste2@hotmail.com",
       }).then((res)=>{

@@ -575,6 +575,10 @@ module.exports = {
       const data_queixa = new Date();
       const data_alteracao_queixa = new Date();
       const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+      const _file3 = req.files["file3"][0].path.split("/")[1];
+      const _file4 = req.files["file4"][0].path.split("/")[1];
+      const _file5 = req.files["file5"][0].path.split("/")[1];
+      const _file6 = req.files["file6"][0].path.split("/")[1];
 
       if (queixante === "Trabalhador") {
         queixanteID = novoTrabalhador.id;
@@ -597,6 +601,10 @@ module.exports = {
         modo: _modo,
         inspectorID: 14,
         testemunhaID: 4,
+        file3: _file3,
+        file4: _file4,
+        file5: _file5,
+        file6: _file6,
       });
       return res.status(200).send({
         status: 1,
@@ -617,6 +625,10 @@ module.exports = {
     const { empresaID } = req.body;
     const { url_file_contrato } = req.body;
     const { localizacao_queixa } = req.body;
+    const _file3 = req.files["file3"][0].path.split("/")[1];
+    const _file4 = req.files["file4"][0].path.split("/")[1];
+    const _file5 = req.files["file5"][0].path.split("/")[1];
+    const _file6 = req.files["file6"][0].path.split("/")[1];
     const data_queixa = new Date();
     const data_alteracao_queixa = new Date();
     const queixoso = trabalhadorID;
@@ -635,6 +647,10 @@ module.exports = {
       provincia: localizacao_queixa,
       inspectorID: 14,
       testemunhaID: 4,
+      file3: _file3,
+      file4: _file4,
+      file5: _file5,
+      file6: _file6,
     });
     return res.status(200).send({
       status: 1,
@@ -654,6 +670,10 @@ module.exports = {
     const _tipoE = "queixante";
     const { contaID } = req.body;
     const { pessoaID } = req.body;
+    const _file3 = req.files["file3"][0].path.split("/")[1];
+    const _file4 = req.files["file4"][0].path.split("/")[1];
+    const _file5 = req.files["file5"][0].path.split("/")[1];
+    const _file6 = req.files["file6"][0].path.split("/")[1];
 
     const novoTrabalhador = await Trabalhador.create({
       cargo: _cargo,
@@ -727,6 +747,10 @@ module.exports = {
       modo: _modo,
       inspectorID: 14,
       testemunhaID: 4,
+      file3: _file3,
+      file4: _file4,
+      file5: _file5,
+      file6: _file6,
     });
     return res.status(200).send({
       status: 1,
@@ -856,6 +880,19 @@ module.exports = {
       const { _trabalhadorID } = req.body;
       const { _empresa } = req.body;
       const { _provincia } = req.body;
+
+      const _file3 = req?.files["file3"]
+        ? req?.files["file3"][0].path.split("/")[1]
+        : null;
+      const _file4 = req?.files["file4"]
+        ? req?.files["file4"][0].path.split("/")[1]
+        : null;
+      const _file5 = req.files["file5"]
+        ? req?.files["file5"][0].path.split("/")[1]
+        : null;
+      const _file6 = req.files["file6"]
+        ? req?.files["file6"][0].path.split("/")[1]
+        : null;
       let queixosoID = 0;
       let queixanteID = 0;
       if (queixoso === "Trabalhador") {
@@ -885,6 +922,10 @@ module.exports = {
           modo: _modo,
           inspectorID: 14,
           testemunhaID: 4,
+          file3: _file3,
+          file4: _file4,
+          file5: _file5,
+          file6: _file6,
         });
         return res.status(200).send({
           status: 1,
@@ -910,6 +951,10 @@ module.exports = {
           modo: _modo,
           inspectorID: 14,
           testemunhaID: 4,
+          file3: _file3,
+          file4: _file4,
+          file5: _file5,
+          file6: _file6,
         });
         //console.log(novaQueixa)
         return res.status(200).send({
@@ -1112,6 +1157,18 @@ module.exports = {
       const data_queixa = new Date();
       const data_alteracao_queixa = new Date();
       const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+      const _file3 = req?.files["file3"]
+        ? req?.files["file3"][0].path.split("/")[1]
+        : null;
+      const _file4 = req?.files["file4"]
+        ? req?.files["file4"][0].path.split("/")[1]
+        : null;
+      const _file5 = req.files["file5"]
+        ? req?.files["file5"][0].path.split("/")[1]
+        : null;
+      const _file6 = req.files["file6"]
+        ? req?.files["file6"][0].path.split("/")[1]
+        : null;
       if (queixante === "Trabalhador") {
         queixanteID = _trabalhadorID;
         queixosoID = novaEmpresa.id;
@@ -1133,6 +1190,10 @@ module.exports = {
         modo: _modo,
         inspectorID: 14,
         testemunhaID: 4,
+        file3: _file3,
+        file4: _file4,
+        file5: _file5,
+        file6: _file6,
       });
       return res.status(200).send({
         status: 1,
@@ -1234,6 +1295,10 @@ module.exports = {
         modo: _modo,
         inspectorID: 14,
         testemunhaID: 4,
+        file3: _file3,
+        file4: _file4,
+        file5: _file5,
+        file6: _file6,
       });
       return res.status(200).send({
         status: 1,
@@ -1283,6 +1348,18 @@ module.exports = {
         const data_queixa = new Date();
         const data_alteracao_queixa = new Date();
         const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+        const _file3 = req?.files["file3"]
+          ? req?.files["file3"][0].path.split("/")[1]
+          : null;
+        const _file4 = req?.files["file4"]
+          ? req?.files["file4"][0].path.split("/")[1]
+          : null;
+        const _file5 = req.files["file5"]
+          ? req?.files["file5"][0].path.split("/")[1]
+          : null;
+        const _file6 = req.files["file6"]
+          ? req?.files["file6"][0].path.split("/")[1]
+          : null;
         const { _trabalhadorID } = req.body;
         let queixosoID = 0;
         let queixanteID = 0;
@@ -1317,6 +1394,10 @@ module.exports = {
           modo: _modo,
           inspectorID: 14,
           testemunhaID: 4,
+          file3: _file3,
+          file4: _file4,
+          file5: _file5,
+          file6: _file6,
         });
         return res.status(200).send({
           status: 1,
@@ -1401,7 +1482,18 @@ module.exports = {
         // dados da queixa
         const { _empresa } = req.body;
         const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-
+        const _file3 = req?.files["file3"]
+          ? req?.files["file3"][0].path.split("/")[1]
+          : null;
+        const _file4 = req?.files["file4"]
+          ? req?.files["file4"][0].path.split("/")[1]
+          : null;
+        const _file5 = req.files["file5"]
+          ? req?.files["file5"][0].path.split("/")[1]
+          : null;
+        const _file6 = req.files["file6"]
+          ? req?.files["file6"][0].path.split("/")[1]
+          : null;
         const { _assunto_queixa } = req.body;
         const { _descricao_queixa } = req.body;
         const { _modo } = req.body;
@@ -1424,6 +1516,10 @@ module.exports = {
           modo: _modo,
           inspectorID: 14,
           testemunhaID: 4,
+          file3: _file3,
+          file4: _file4,
+          file5: _file5,
+          file6: _file6,
         });
         return res.status(200).send({
           status: 1,

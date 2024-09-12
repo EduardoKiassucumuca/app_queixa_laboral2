@@ -131,6 +131,22 @@ const Queixa = db.define("Queixa", {
     },
     allowNull: true,
   },
+  file3: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  file4: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  file5: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  file6: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 });
 
 Empresa.hasMany(Queixa, {

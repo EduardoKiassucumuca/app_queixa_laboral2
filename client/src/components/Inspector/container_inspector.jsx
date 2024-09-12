@@ -380,7 +380,7 @@ const ContainerInspector = ({ onSearch }) => {
                   className="estado me-1"
                   color={
                     conflito.estado === "Encerrado" ||
-                    conflito.estado === "tribunal"
+                    conflito.estado === "Tribunal"
                       ? "red"
                       : conflito.estado === "encaminhada_inspector"
                       ? "yellow"

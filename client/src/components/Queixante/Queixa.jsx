@@ -10,12 +10,11 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Axios from 'axios';
-import { useState } from 'react';
+import Axios from "axios";
+import { useState } from "react";
 import "../Queixoso/details_queixa.css";
 import ModalConfirmacao from "../Modal/modalConfirmation";
 import { Navigate } from "react-router-dom";
-
 
 const Queixa2 = ({ data, updateFielHndler }) => {
   const [show, setShow] = useState(false);
@@ -23,17 +22,12 @@ const Queixa2 = ({ data, updateFielHndler }) => {
   const onchangeAnonimo = (event) => {
     data.checkedAnonimo = event.target.checked;
     data.anonimo = event.target.value;
-
-
   };
   const trabalhador = localStorage.getItem("trabalhador");
   const novoTrabalhador = JSON.parse(trabalhador);
   return (
     <Row className="mb-3">
-      <FloatingLabel
-        controlId="floatingTextarea2"
-        label="Assunto"
-      >
+      <FloatingLabel controlId="floatingTextarea2" label="Assunto">
         <Form.Control
           placeholder="Queixa"
           name="assunto_queixa"
@@ -67,20 +61,12 @@ const Queixa2 = ({ data, updateFielHndler }) => {
           id="file_contrato"
           required
         />
-
       </Col>
       {!novoTrabalhador ? (
         <Col md={6}>
           <Form.Label>Anexar o Bilhete de Identidade</Form.Label>
 
-          <Form.Control
-            type="file"
-            name="file_BI"
-            id="file_BI"
-            required
-          />
-
-
+          <Form.Control type="file" name="file_BI" id="file_BI" required />
         </Col>
       ) : (
         <p></p>
@@ -93,6 +79,26 @@ const Queixa2 = ({ data, updateFielHndler }) => {
           onChange={(e) => onchangeAnonimo(e)}
         />
       </Col>
+      <br />
+      <strong style={{ marginTop: 20, marginBottom: 10, fontSize: 18 }}>
+        Diversos
+      </strong>
+      <Col md={12} className="mb-3">
+        {" "}
+        <Form.Control type="file" name="file3" id="file3" />
+      </Col>
+      <Col md={12} className="mb-3">
+        {" "}
+        <Form.Control type="file" name="file4" id="file4" />
+      </Col>
+      <Col md={12} className="mb-3">
+        {" "}
+        <Form.Control type="file" name="file5" id="file5" />
+      </Col>
+      <Col md={12} className="mb-3">
+        {" "}
+        <Form.Control type="file" name="file6" id="file6" />
+      </Col>{" "}
     </Row>
   );
 };

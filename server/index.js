@@ -46,8 +46,21 @@ io.on("connection", (socket) => {
 app.use(cors());
 app.use(express.json());
 
-var cpUpload = upload.fields([{ name: "fileContrato" }, { name: "fileBI" }]);
-var cpUpload2 = upload.fields([{ name: "fileContrato" }]);
+var cpUpload = upload.fields([
+  { name: "fileContrato" },
+  { name: "fileBI" },
+  { name: "file3" },
+  { name: "file4" },
+  { name: "file5" },
+  { name: "file6" },
+]);
+var cpUpload2 = upload.fields([
+  { name: "fileContrato" },
+  { name: "file3" },
+  { name: "file4" },
+  { name: "file5" },
+  { name: "file6" },
+]);
 var upload_file_acta = upload.fields([{ name: "fileActa" }]);
 app.post("/nova_duvida", QueixaController.novaQuestao);
 app.post("/nova_resposta", QueixaController.novaResposta);
