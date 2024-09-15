@@ -210,6 +210,53 @@ module.exports = {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  async alterarSenha(req, res) {
+    try {
+      const {
+        senha_antiga_reg,
+        senha_antiga_dig,
+        nova_senha,
+        nova_senha_confirmada,
+        contaID,
+      } = req.body;
+
+      // Comparando a senha antiga fornecida com a registrada
+      const result = await bcrypt.compare(senha_antiga_dig, senha_antiga_reg);
+
+      if (!result) {
+        throw new Error("A Senha antiga não existe");
+      }
+
+      // Verificando se as novas senhas coincidem
+      if (nova_senha !== nova_senha_confirmada) {
+        throw new Error("As senhas não combinam");
+      }
+
+      // Gerando novo hash para a nova senha
+      const salt = await bcrypt.genSalt(12);
+      const passwordHashNovo = await bcrypt.hash(nova_senha, salt);
+
+      // Atualizando a senha no banco de dados
+      await Conta.update(
+        { senha: passwordHashNovo },
+        {
+          where: {
+            id: contaID,
+          },
+        }
+      );
+
+      // Resposta de sucesso
+      res
+        .status(200)
+        .json({ msg: "A palavra-passe foi atualizada com sucesso" });
+    } catch (error) {
+      console.error("Error:", error.message);
+
+      // Enviando a mensagem de erro personalizada ao client
+      res.status(400).json({ error: error.message });
+    }
+  },
   async update(req, res) {},
   async delete(req, res) {},
 };

@@ -102,6 +102,8 @@ app.post(
   cpUpload2,
   QueixaController.add_empregador_queixa
 );
+app.put("/alterar_senha", ContaController.alterarSenha);
+
 app.put("/atualizarStatusConta", ContaController.update_tentativa);
 app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
 app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
