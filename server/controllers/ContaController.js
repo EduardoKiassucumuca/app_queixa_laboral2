@@ -34,7 +34,14 @@ module.exports = {
       //console.log(conta);
       if (conta) {
         trabalhador = await Trabalhador.findOne({
-          attributes: ["id", "cargo", "localizacao_office", "tipo", "pessoaID"],
+          attributes: [
+            "id",
+            "cargo",
+            "localizacao_office",
+            "tipo",
+            "pessoaID",
+            "area_departamento",
+          ],
           where: { contaID: conta.id },
         });
         empresa = await Empresa.findOne({
@@ -51,12 +58,36 @@ module.exports = {
       //console.log(trabalhador);
       if (trabalhador) {
         pessoa = await Pessoa.findOne({
-          attributes: ["id", "nome", "sobrenome", "biID"],
+          attributes: [
+            "id",
+            "nome",
+            "sobrenome",
+            "biID",
+            "enderecoID",
+            "naturalidade",
+            "estado_civil",
+            "altura",
+            "sexo",
+            "data_nascimento",
+          ],
           where: { id: trabalhador.pessoaID },
         });
         bi = await BI.findOne({
-          attributes: ["id", "numeroBI"],
+          attributes: ["id", "numeroBI", "file", "emitido_em", "valido_ate"],
           where: { id: pessoa.biID },
+        });
+        endereco_pessoa = await Endereco.findOne({
+          attributes: [
+            "id",
+            "bairro",
+            "rua",
+            "casa",
+            "edificio",
+            "provincia",
+            "telefone_principal",
+            "telefone_alternativo",
+          ],
+          where: { id: pessoa.enderecoID },
         });
         /*queixa = await Queixa.findOne({
                     attributes: ['id', 'facto', 'estado', 'empresaID', 'url_file_contrato'],
@@ -137,6 +168,7 @@ module.exports = {
               trabalhador,
               pessoa,
               endereco,
+              endereco_pessoa,
               bi,
               igt_funcionario,
               empresa,

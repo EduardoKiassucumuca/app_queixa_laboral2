@@ -20,7 +20,7 @@ const noticiaController = require("./controllers/noticiaController.js");
 const eventoController = require("./controllers/eventoController.js");
 const ArtigoController = require("./controllers/ArtigoController.js");
 const EsclarecimentoController = require("./controllers/EsclarecimentoController.js");
-
+const PessoaController = require("./controllers/PessoaController.js");
 const server = http.createServer(app);
 const io = socketIo(server, { cors: { origin: "http://localhost:3000" } });
 
@@ -62,6 +62,8 @@ var cpUpload2 = upload.fields([
   { name: "file6" },
 ]);
 var upload_file_acta = upload.fields([{ name: "fileActa" }]);
+var upload_file_BI = upload.fields([{ name: "fileBI" }]);
+
 app.post("/nova_duvida", QueixaController.novaQuestao);
 app.post("/nova_resposta", QueixaController.novaResposta);
 
@@ -107,6 +109,8 @@ app.put("/alterar_senha", ContaController.alterarSenha);
 app.put("/atualizarStatusConta", ContaController.update_tentativa);
 app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
 app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
+app.put("/editar_perfil", upload_file_BI, PessoaController.update);
+
 app.put("/editar_queixa2", QueixaController.update_queixa2);
 app.put("/editar_status_duvida", QueixaController.update_status_divida);
 app.put("/editar_reuniao", ReuniaoController.update);
@@ -127,6 +131,8 @@ app.post("/salvar_nota", NotaController.store);
 app.get("/listar_notas", NotaController.index);
 app.get("/mudancas_queixas", QueixaController.getHistorico);
 app.get("/download_contrato", QueixaController.download_contrato);
+app.get("/previewDocument", QueixaController.previewDocument);
+
 app.get("/reuniao_queixoso", ReuniaoController.getReuniaoQueixoso);
 app.get("/noticias", noticiaController.index);
 app.get("/eventos", eventoController.index);

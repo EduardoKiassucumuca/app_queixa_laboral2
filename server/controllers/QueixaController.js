@@ -19,6 +19,7 @@ const Comentario = require("../models/comentario.js");
 const { clear } = require("console");
 const funcionarioIGT = require("../models/FuncionarioIGT.js");
 const tentativa = 0;
+const mime = require("mime-types");
 
 module.exports = {
   async index(req, res) {
@@ -1832,6 +1833,29 @@ module.exports = {
     res.download(filePath, function (erro) {
       if (erro) console.log(erro);
       else console.log("good");
+    });
+  },
+  async previewDocument(req, res) {
+    const { _filenameContrato } = req.query;
+
+    // Caminho completo para o arquivo
+    const filePath = path.resolve("uploads", _filenameContrato);
+
+    // Detecta automaticamente o tipo de conteúdo com base na extensão do arquivo
+    const contentType = mime.lookup(filePath);
+
+    if (contentType) {
+      res.setHeader("Content-Type", contentType);
+    }
+
+    // Envia o arquivo para o cliente, permitindo pré-visualização
+    res.sendFile(filePath, function (erro) {
+      if (erro) {
+        console.log(erro);
+        res.status(404).send("Arquivo não encontrado");
+      } else {
+        console.log("Arquivo enviado com sucesso");
+      }
     });
   },
   async novaQuestao(req, res) {
