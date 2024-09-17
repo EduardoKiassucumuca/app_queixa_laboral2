@@ -45,7 +45,16 @@ module.exports = {
           where: { contaID: conta.id },
         });
         empresa = await Empresa.findOne({
-          attributes: ["id", "nome_empresa", "tipo", "nif", "enderecoID"],
+          attributes: [
+            "id",
+            "nome_empresa",
+            "tipo",
+            "nif",
+            "enderecoID",
+            "email",
+            "url_website",
+            "designacao",
+          ],
           where: { fk_conta: conta.id },
         });
         if (empresa) {

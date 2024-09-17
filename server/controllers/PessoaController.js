@@ -42,43 +42,54 @@ module.exports = {
   },
   async update(req, res) {
     const {
-      nome,
-      sobrenome,
-      bairro,
-      rua,
-      casaEdificio,
-      telefone_principal,
-      telefone_alternativo,
-      numeroBI,
-      emitidoEm,
-      validoAte,
-      naturalidade,
-      altura,
-      estado_civil,
-      data_nascimento,
-      genero,
-      cargo,
-      departamento,
-      email,
-      provincia,
+      _nome,
+      _sobrenome,
+      _bairro,
+      _rua,
+      _casaEdificio,
+      _telefone_principal,
+      _telefone_alternativo,
+      _BI,
+      _emitidoEm,
+      _validoAte,
+      _naturalidade,
+      _altura,
+      _estado_civil,
+      _data_nascimento,
+      _genero,
+      _cargo,
+      _departamento,
+      _email,
+      _provincia,
       biID,
       pessoaID,
       enderecoID,
       trabalhadorID,
       contaID,
     } = req.body;
-    const fileBI = req.files["fileBI"][0].path.split("/")[1];
-
+    let fileBI;
+    if (
+      req?.files &&
+      req.files["fileBI"] &&
+      req.files["fileBI"][0] &&
+      req.files["fileBI"][0].path
+    ) {
+      const filePath = req.files["fileBI"][0].path;
+      const pathParts = filePath.split("/");
+      if (pathParts.length > 1) {
+        fileBI = pathParts[1];
+      }
+    }
     await Pessoa.update(
       {
-        nome: nome,
-        sobrenome: sobrenome,
-        altura: altura,
-        naturalidade: naturalidade,
-        sexo: genero,
-        estado_civil: estado_civil,
-        data_nascimento: data_nascimento,
-        naturalidade: naturalidade,
+        nome: _nome,
+        sobrenome: _sobrenome,
+        altura: _altura,
+        naturalidade: _naturalidade,
+        sexo: _genero,
+        estado_civil: _estado_civil,
+        data_nascimento: _data_nascimento,
+        naturalidade: _naturalidade,
       },
       {
         where: {
@@ -88,9 +99,10 @@ module.exports = {
     );
     await BI.update(
       {
-        numeroBI: numeroBI,
-        emitido_em: emitidoEm,
-        valido_ate: validoAte,
+        numeroBI: _BI,
+        emitido_em: _emitidoEm,
+        valido_ate: _validoAte,
+        file: fileBI,
       },
       {
         where: {
@@ -100,12 +112,12 @@ module.exports = {
     );
     await Endereco.update(
       {
-        bairro: bairro,
-        rua: rua,
-        casa: casaEdificio,
-        provincia: provincia,
-        telefone_principal: telefone_principal,
-        telefone_alternativo: telefone_alternativo,
+        bairro: _bairro,
+        rua: _rua,
+        casa: _casaEdificio,
+        provincia: _provincia,
+        telefone_principal: _telefone_principal,
+        telefone_alternativo: _telefone_alternativo,
       },
       {
         where: {
@@ -115,8 +127,8 @@ module.exports = {
     );
     await Trabalhador.update(
       {
-        cargo: cargo,
-        area_departamento: departamento,
+        cargo: _cargo,
+        area_departamento: _departamento,
       },
       {
         where: {
@@ -126,7 +138,7 @@ module.exports = {
     );
     await Conta.update(
       {
-        email: email,
+        email: _email,
       },
       {
         where: {
