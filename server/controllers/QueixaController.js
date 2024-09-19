@@ -242,6 +242,10 @@ module.exports = {
           "modo",
           "url_file_contrato",
           "created_at",
+          "file3",
+          "file4",
+          "file5",
+          "file6",
         ],
         required: true,
         include: [

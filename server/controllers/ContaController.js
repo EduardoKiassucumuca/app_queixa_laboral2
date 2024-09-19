@@ -59,7 +59,14 @@ module.exports = {
         });
         if (empresa) {
           endereco = await Endereco.findOne({
-            attributes: ["id", "provincia", "bairro", "rua"],
+            attributes: [
+              "id",
+              "provincia",
+              "bairro",
+              "rua",
+              "edificio",
+              "telefone_principal",
+            ],
             where: { id: empresa.enderecoID },
           });
         }

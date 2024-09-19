@@ -1,4 +1,5 @@
 const Conta = require("../models/Conta");
+const Empresa = require("../models/Empresa");
 const Trabalhador = require("../models/Trabalhador");
 const BI = require("../models/bi");
 const Endereco = require("../models/endereco");
@@ -163,5 +164,56 @@ module.exports = {
       status: 1,
       message: "Pessoa apagada com sucesso!",
     });
+  },
+  async updateEmpresa(req, res) {
+    const {
+      _nome_empresa,
+      _nif,
+      _designacao,
+      _bairroEmpresa,
+      _localizacaoEmpresa,
+      _ruaEmpresa,
+      _website,
+      _telefoneEmpresa,
+      _emailEmpresa,
+      _enderecoID,
+      _empresaID,
+      _edificio,
+    } = req.body;
+
+    await Endereco.update(
+      {
+        bairro: _bairroEmpresa,
+        rua: _ruaEmpresa,
+        telefone_principal: _telefoneEmpresa,
+        email: _emailEmpresa,
+        provincia: _localizacaoEmpresa,
+        edificio: _edificio,
+      },
+      {
+        where: {
+          id: _enderecoID,
+        },
+      }
+    );
+    await Empresa.update(
+      {
+        nome_empresa: _nome_empresa,
+        nif: _nif,
+        designacao: _designacao,
+        website: _website,
+      },
+      {
+        where: {
+          id: _empresaID,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      status: 1,
+      message: "Dados da empresa atualizado com sucesso!",
+    });
+    return;
   },
 };

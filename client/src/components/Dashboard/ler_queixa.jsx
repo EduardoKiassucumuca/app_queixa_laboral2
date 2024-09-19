@@ -25,6 +25,10 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { FaFileDownload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { FaFileAlt } from "react-icons/fa";
+import Tooltip from "react-bootstrap/Tooltip";
 
 const LerQueixa = () => {
   const { id_queixa } = useParams();
@@ -44,6 +48,7 @@ const LerQueixa = () => {
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [displayStyle3, setDisplayStyle3] = useState("none");
+  const [showUploadContrato, setShowUploadContrato] = React.useState(false);
 
   const navigate = useNavigate();
   const toggleDisplay = () => {
@@ -67,6 +72,16 @@ const LerQueixa = () => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const renderTooltip1 = (props) => (
+    <Tooltip id="button-tooltip1" {...props}>
+      Editar
+    </Tooltip>
+  );
+  const renderTooltip2 = (props) => (
+    <Tooltip id="button-tooltip2" {...props}>
+      Ver
+    </Tooltip>
+  );
   const popover = (
     <Popover id="popover-basic" style={{ minWidth: 290 }}>
       <Popover.Header as="h3">Queixa</Popover.Header>
@@ -89,13 +104,14 @@ const LerQueixa = () => {
   function editar_queixa(id) {
     const formData = new FormData();
     file_contrato = document.querySelector("#file_contrato");
-    if (file_contrato.files[0]) {
+    if (file_contrato?.files[0]) {
       console.log("aaaa");
 
       formData.append("id_queixa", conflito.id);
       formData.append("_modo", modo);
       formData.append("assunto", assunto);
       formData.append("facto", descricao);
+
       formData.append("fileContrato", file_contrato.files[0]);
       Axios.put("http://localhost:3001/editar_queixa", formData, {
         headers: {
@@ -218,6 +234,18 @@ const LerQueixa = () => {
       navigate("/empregador");
     }
   }
+  function showUploadInput() {
+    if (showUploadContrato) {
+      setShowUploadContrato(false);
+    } else {
+      setShowUploadContrato(true);
+    }
+  }
+  const handleNavigate = (url_file) => {
+    // Navega para a nova rota, passando a URL do arquivo como parâmetro
+    const previewUrl = `/previewDoc?file=${encodeURIComponent(url_file)}`;
+    window.open(previewUrl, "_blank"); // '_blank' abre em uma nova aba/janela
+  };
   return (
     <>
       <MySideNav />
@@ -325,6 +353,76 @@ const LerQueixa = () => {
                     <FaDownload style={{ marginLeft: 5 }} />
                   </a>
                 </li>
+
+                {conflito?.file3 ? (
+                  <>
+                    <br />{" "}
+                    <li>
+                      <a
+                        href="#"
+                        onClick={(e) => handleDownload(conflito?.file3)}
+                        style={{ color: "rgb(220, 195, 119)" }}
+                      >
+                        {conflito?.file3}
+                        <FaDownload style={{ marginLeft: 5 }} />
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file4 ? (
+                  <>
+                    {" "}
+                    <br />
+                    <li>
+                      <a
+                        href="#"
+                        onClick={(e) => handleDownload(conflito?.file4)}
+                        style={{ color: "rgb(220, 195, 119)" }}
+                      >
+                        {conflito?.file4}
+                        <FaDownload style={{ marginLeft: 5 }} />
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file5 ? (
+                  <>
+                    <br />
+                    <li>
+                      <a
+                        href="#"
+                        onClick={(e) => handleDownload(conflito?.file5)}
+                        style={{ color: "rgb(220, 195, 119)" }}
+                      >
+                        {conflito?.file5}
+                        <FaDownload style={{ marginLeft: 5 }} />
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file6 ? (
+                  <>
+                    <br />
+                    <li>
+                      <a
+                        href="#"
+                        onClick={(e) => handleDownload(conflito?.file6)}
+                        style={{ color: "rgb(220, 195, 119)" }}
+                      >
+                        {conflito?.file6}
+                        <FaDownload style={{ marginLeft: 5 }} />
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <></>
+                )}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -376,7 +474,7 @@ const LerQueixa = () => {
                     </Alert>*/}
 
       <div id="myModal" class="modal" style={{ display: displayStyle }}>
-        <div class="modal-content">
+        <div class="modal-content" style={{ minWidth: "600px" }}>
           <span
             class="close"
             style={{ textAlign: "right" }}
@@ -413,11 +511,66 @@ const LerQueixa = () => {
                   id="descr-queixa"
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  style={{ height: "100px" }}
+                  style={{ height: "190px" }}
                 />
               </FloatingLabel>
-              <p>
-                {/*<FaFilePdf />*/}
+              <Card style={{ marginTop: 16 }}>
+                <Card.Body>
+                  <a
+                    href="#"
+                    style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {conflito?.url_file_contrato}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() =>
+                        handleNavigate(conflito?.url_file_contrato)
+                      }
+                    >
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip1}
+                  >
+                    <Button
+                      variant="warning"
+                      style={{ float: "right" }}
+                      onClick={showUploadInput}
+                    >
+                      <FaRegEdit />
+                    </Button>
+                  </OverlayTrigger>
+                </Card.Body>
+              </Card>{" "}
+              {showUploadContrato ? (
+                <>
+                  <Form.Label>Editar Contrato de Trabalho</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="file_contrato"
+                    id="file_contrato"
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+              {/* <p>
+                {/*<FaFilePdf />
                 <a
                   href="#"
                   onClick={(e) => handleDownload(conflito.url_file_contrato)}
@@ -427,7 +580,6 @@ const LerQueixa = () => {
                   <FaDownload style={{ marginLeft: 5 }} />
                 </a>
               </p>
-
               <Col md={6}>
                 <Form.Label>Editar Contrato de Trabalho</Form.Label>
                 <Form.Control
@@ -435,7 +587,7 @@ const LerQueixa = () => {
                   name="file_contrato"
                   id="file_contrato"
                 />
-              </Col>
+              </Col> */}
             </Row>
             <Form.Label>Modo</Form.Label>
 

@@ -110,6 +110,7 @@ app.put("/atualizarStatusConta", ContaController.update_tentativa);
 app.post("/historico_queixa", cpUpload2, QueixaController.criar_historico);
 app.put("/editar_queixa", cpUpload2, QueixaController.update_queixa);
 app.put("/editar_perfil", upload_file_BI, PessoaController.update);
+app.put("/editar_perfil_empresa", PessoaController.updateEmpresa);
 
 app.put("/editar_queixa2", QueixaController.update_queixa2);
 app.put("/editar_status_duvida", QueixaController.update_status_divida);
