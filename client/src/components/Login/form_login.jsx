@@ -207,9 +207,9 @@ function Login() {
                   )}{" "}
                 </div>
                 <p></p>
-                <div className="text-center">
-                  <a className="criar-conta" href="/">
-                    Não tenho conta
+                <div className="text-center" style={{ marginTop: 15 }}>
+                  <a className="criar-conta" href="/esqueceu_senha">
+                    Esqueci a palavra-passe
                   </a>
                 </div>
               </MDBCardBody>

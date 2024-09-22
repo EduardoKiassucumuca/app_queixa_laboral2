@@ -39,6 +39,7 @@ import HomeMaisDetalhesNoticias from "./components/Noticias/homeMaisDetalhesNoti
 import QueixasAdmin from "./components/Dashboard/queixas_admin";
 import QueixasPorEstado from "./components/Dashboard/queixas_por_estado";
 import PreviewDoc from "./components/Dashboard/previewdoc";
+import EsqueceuSenha from "./components/Login/esqueceu_senha";
 
 function App() {
   const [show, setShow] = useState("Empregador");
@@ -106,6 +107,7 @@ function App() {
         <Route path="/queixas_admin" element={<QueixasAdmin />} />
         <Route path="/queixas_admin/:estado" element={<QueixasPorEstado />} />
         <Route path="/previewDoc" element={<PreviewDoc />} />
+        <Route path="/esqueceu_senha" element={<EsqueceuSenha />} />
       </Routes>
     </Router>
   );

@@ -12,6 +12,36 @@ const BI = require("../models/bi");
 const Endereco = require("../models/endereco");
 const { v4: uuidv4 } = require("uuid");
 
+function gerarSenha(tamanho = 8) {
+  const letrasMinusculas = "abcdefghijklmnopqrstuvwxyz";
+  const letrasMaiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numeros = "0123456789";
+  const caracteresEspeciais = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+
+  const todosCaracteres =
+    letrasMinusculas + letrasMaiusculas + numeros + caracteresEspeciais;
+
+  // Garantir pelo menos um de cada tipo de caractere
+  let senha = "";
+  senha +=
+    letrasMaiusculas[Math.floor(Math.random() * letrasMaiusculas.length)];
+  senha += numeros[Math.floor(Math.random() * numeros.length)];
+  senha +=
+    caracteresEspeciais[Math.floor(Math.random() * caracteresEspeciais.length)];
+
+  // Completar o restante da senha
+  for (let i = senha.length; i < tamanho; i++) {
+    senha +=
+      todosCaracteres[Math.floor(Math.random() * todosCaracteres.length)];
+  }
+
+  // Embaralhar a senha para evitar uma ordem previsível
+  return senha
+    .split("")
+    .sort(() => 0.5 - Math.random())
+    .join("");
+}
+
 module.exports = {
   async logar(req, res) {
     try {
@@ -303,6 +333,64 @@ module.exports = {
 
       // Enviando a mensagem de erro personalizada ao client
       res.status(400).json({ error: error.message });
+    }
+  },
+  async recuperarSenha(req, res) {
+    try {
+      const { _email } = req.body;
+
+      const conta = await Conta.findOne({
+        attributes: ["id", "email"],
+        where: { email: _email },
+      });
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "marciocristiano105@gmail.com",
+          pass: "opmnzjabkdexosfe",
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+      const novaSenha = gerarSenha(8);
+      const salt = await bcrypt.genSalt(12);
+      const passwordHashNovo = await bcrypt.hash(novaSenha, salt);
+
+      // Atualizando a senha no banco de dados
+      await Conta.update(
+        { senha: passwordHashNovo },
+        {
+          where: {
+            id: conta.id,
+          },
+        }
+      );
+      var mailOptions = {
+        from: "marciocristiano105@gmail.com",
+        to: _email,
+        subject: "IGT | Queixa laboral",
+        text: "Olá aqui tens a tua nova palavra-passe:" + novaSenha,
+      };
+      console.log(novaSenha);
+      //res.status(200).send({ auth: true, token });
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          res.json({
+            msg: "Falha, Verifique sua conexao com a internet",
+          });
+        } else {
+          res.status(200).json({
+            sucesso:
+              "Olá foi enviado a nova palavra-passe para o seu email, por favor verifique!",
+            nova_senha: novaSenha,
+          });
+        }
+      });
+    } catch (error) {
+      res.json({
+        error: "Falha, Verifique sua conexao com a internet",
+      });
     }
   },
   async update(req, res) {},
