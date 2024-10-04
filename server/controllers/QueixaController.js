@@ -20,7 +20,18 @@ const { clear } = require("console");
 const funcionarioIGT = require("../models/FuncionarioIGT.js");
 const tentativa = 0;
 const mime = require("mime-types");
+var nodemailer = require("nodemailer");
 
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "marciocristiano105@gmail.com",
+    pass: "opmnzjabkdexosfe",
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 module.exports = {
   async index(req, res) {
     let queixas = [];
@@ -399,7 +410,7 @@ module.exports = {
       const { _emitidoEm } = req.body;
 
       const { _validoAte } = req.body;
-      const _fileBI = req.files["fileBI"][0].path;
+      const _fileBI = req.files["fileBI"][0]?.path?.split("/")[1];
       const { _nBI } = req.body;
 
       const novoBI = await BI.create({
@@ -579,11 +590,11 @@ module.exports = {
 
       const data_queixa = new Date();
       const data_alteracao_queixa = new Date();
-      const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-      const _file3 = req.files["file3"][0].path.split("/")[1];
-      const _file4 = req.files["file4"][0].path.split("/")[1];
-      const _file5 = req.files["file5"][0].path.split("/")[1];
-      const _file6 = req.files["file6"][0].path.split("/")[1];
+      const _fileContrato = req?.files["fileContrato"][0]?.path?.split("/")[1];
+      const _file3 = req?.files?.["file3"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file4 = req?.files?.["file4"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file5 = req?.files?.["file5"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file6 = req?.files?.["file6"]?.[0]?.path?.split("/")[1] ?? "null";
 
       if (queixante === "Trabalhador") {
         queixanteID = novoTrabalhador.id;
@@ -986,7 +997,9 @@ module.exports = {
       let fileBI = "";
       const { _validoAte } = req.body;
       if (queixoso === "Trabalhador") {
-        fileBI = req.files["fileBI"][0].path.split("/")[1];
+        fileBI = req?.files["fileBI"]
+          ? req?.files["fileBI"][0].path.split("/")[1]
+          : null;
       }
       const { _nBI } = req.body;
 
@@ -1080,7 +1093,7 @@ module.exports = {
 
         _email = _email_pessoal;
 
-        _nome_empresa = _empresa.split("-")[0].trimEnd();
+        _nome_empresa = _empresa?.split("-")[0].trimEnd();
         empresaEncontrada = await Empresa.findOne({
           attributes: ["id", "nome_empresa", "enderecoID"],
           where: { nome_empresa: _nome_empresa },
@@ -1738,14 +1751,47 @@ module.exports = {
     try {
       const { id_chefe } = req.body.params;
       const { id_queixa } = req.body.params;
+      const { recepcionistaID } = req.body.params;
+
+      let pessoa;
       const funcionario = await funcionarioIGT.findOne({
         attributes: ["id", "trabalhadorID"],
         where: { trabalhadorID: id_chefe },
       });
+      const trabalhador = await Trabalhador.findOne({
+        attributes: ["id", "contaID"],
+        where: { id: funcionario.trabalhadorID },
+      });
+      const conta = await Conta.findOne({
+        attributes: ["id", "email"],
+        where: { id: trabalhador.contaID },
+      });
+      const emailTo = conta?.email;
+      console.log(emailTo);
+      const queixa = await Queixa.findOne({
+        attributes: ["id", "assunto", "queixosoID"],
+        where: { id: id_queixa },
+      });
+      const queixoso = await Trabalhador.findOne({
+        attributes: ["id", "pessoaID"],
+        where: { id: queixa.queixosoID },
+      });
+      const queixosoEmp = await Empresa.findOne({
+        attributes: ["id", "nome_empresa"],
+        where: { id: queixa.queixosoID },
+      });
+      if (queixoso) {
+        pessoa = await Pessoa.findOne({
+          attributes: ["id", "nome", "sobrenome"],
+          where: { id: queixoso?.pessoaID },
+        });
+      }
+
       const updated_queixa = await Queixa.update(
         {
           funcionarioigtID: funcionario.id,
-          estado: "Encaminhada ao Chefe dos Serviços Provinciais",
+          estado: "encaminhada_chefe",
+          recepcionistaID: recepcionistaID,
         },
         {
           where: {
@@ -1753,6 +1799,33 @@ module.exports = {
           },
         }
       );
+      var mailOptions = {
+        from: "marciocristiano105@gmail.com",
+        to: emailTo,
+        subject: "IGT | Queixa laboral",
+        text:
+          "Olá note que foi encaminhada a queixa " +
+          queixa.id +
+          " de " +
+          pessoa.nome +
+          " " +
+          pessoa.sobrenome +
+          " para analise.",
+      };
+      //res.status(200).send({ auth: true, token });
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          res.json({
+            msg: "Falha, Verifique sua conexao com a internet",
+          });
+        } else {
+          res.status(200).json({
+            sucesso:
+              "Olá foi enviado a nova palavra-passe para o seu email, por favor verifique!",
+            nova_senha: novaSenha,
+          });
+        }
+      });
 
       return res.status(200).send({
         status: 1,
@@ -1763,6 +1836,94 @@ module.exports = {
       console.log(error);
     }
   },
+
+  async retrocederQueixa(req, res) {
+    try {
+      const { id_chefe } = req.body.params;
+      const { id_queixa } = req.body.params;
+      let pessoa;
+      const funcionario = await funcionarioIGT.findOne({
+        attributes: ["id", "trabalhadorID"],
+        where: { trabalhadorID: id_chefe },
+      });
+      const trabalhador = await Trabalhador.findOne({
+        attributes: ["id", "contaID"],
+        where: { id: funcionario.trabalhadorID },
+      });
+      const conta = await Conta.findOne({
+        attributes: ["id", "email"],
+        where: { id: trabalhador.contaID },
+      });
+      const emailTo = conta?.email;
+      console.log(emailTo);
+      const queixa = await Queixa.findOne({
+        attributes: ["id", "assunto", "queixosoID"],
+        where: { id: id_queixa },
+      });
+      const queixoso = await Trabalhador.findOne({
+        attributes: ["id", "pessoaID"],
+        where: { id: queixa.queixosoID },
+      });
+      const queixosoEmp = await Empresa.findOne({
+        attributes: ["id", "nome_empresa"],
+        where: { id: queixa.queixosoID },
+      });
+      if (queixoso) {
+        pessoa = await Pessoa.findOne({
+          attributes: ["id", "nome", "sobrenome"],
+          where: { id: queixoso?.pessoaID },
+        });
+      }
+
+      const updated_queixa = await Queixa.update(
+        {
+          funcionarioigtID: funcionario.id,
+          estado: "encaminhada_chefe",
+        },
+        {
+          where: {
+            id: id_queixa,
+          },
+        }
+      );
+      var mailOptions = {
+        from: "marciocristiano105@gmail.com",
+        to: emailTo,
+        subject: "IGT | Queixa laboral",
+        text:
+          "Olá note que foi encaminhada a queixa " +
+          queixa.id +
+          " de " +
+          pessoa.nome +
+          " " +
+          pessoa.sobrenome +
+          " para analise.",
+      };
+      //res.status(200).send({ auth: true, token });
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          res.json({
+            msg: "Falha, Verifique sua conexao com a internet",
+          });
+        } else {
+          res.status(200).json({
+            sucesso:
+              "Olá foi enviado a nova palavra-passe para o seu email, por favor verifique!",
+            nova_senha: novaSenha,
+          });
+        }
+      });
+
+      return res.status(200).send({
+        status: 1,
+        message: "Chefe dos serviços nomeado com sucesso!",
+        updated_queixa,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async anotarObservacao(req, res) {
     try {
       const { observacao } = req.body.params;

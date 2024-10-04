@@ -12,15 +12,15 @@ const BI = db.define("BI", {
     type: Sequelize.DATE,
     allowNull: false,
   },
-   valido_ate: {
+  valido_ate: {
     type: Sequelize.DATE,
     allowNull: false,
   },
   file: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   },
-   numeroBI: {
+  numeroBI: {
     type: Sequelize.STRING,
     allowNull: true,
     unique: false,
