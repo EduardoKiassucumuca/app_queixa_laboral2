@@ -143,6 +143,8 @@ app.post("/nova_inquietacao", EsclarecimentoController.store);
 app.get("/ver_esclarecimentos", EsclarecimentoController.index);
 app.delete("/apagar_queixa", QueixaController.delete);
 app.post("/esqueci_senha", ContaController.recuperarSenha);
+app.put("/retroceder_queixa", QueixaController.retrocederQueixa);
+app.put("/retirar_queixa", QueixaController.retirarQueixa);
 
 /*app.post('/login', (req, res) => {
     const { username } = req.body;

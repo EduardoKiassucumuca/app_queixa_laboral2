@@ -75,12 +75,6 @@ const Queixa = db.define("Queixa", {
   },
   recepcionistaID: {
     type: Sequelize.INTEGER,
-    references: {
-      model: {
-        tableName: "Recepcionista",
-      },
-      key: "id",
-    },
     allowNull: true,
   },
   funcionarioigtID: {
@@ -164,11 +158,6 @@ Inspector.hasMany(Queixa, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Recepcionista.hasMany(Queixa, {
-  foreignkey: "recepcionistaID",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
 
 funcionarioIGT.hasMany(Queixa, {
   foreignkey: "funcionarioigtID",
@@ -184,7 +173,6 @@ Testemunha.hasMany(Queixa, {
 Queixa.belongsTo(Empresa);
 Queixa.belongsTo(Trabalhador);
 Queixa.belongsTo(Inspector);
-Queixa.belongsTo(Recepcionista);
 Queixa.belongsTo(funcionarioIGT);
 Queixa.belongsTo(Testemunha);
 

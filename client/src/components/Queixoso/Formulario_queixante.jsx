@@ -121,7 +121,7 @@ const FormQueixante = () => {
   function isValidFile(file) {
     const allowedTypes = ["application/pdf"]; // Tipos MIME para PDF e Word
 
-    return allowedTypes.includes(file.type);
+    return allowedTypes.includes(file?.type);
   }
   function queixar() {
     const submissao_queixa = data;
@@ -146,305 +146,295 @@ const FormQueixante = () => {
       }
 
       formData.append("_empresa", submissao_queixa.empresa2);
-      if (
-        !isValidFile(file_contrato?.files[0]) ||
-        !isValidFile(file3?.files[0]) ||
-        !isValidFile(file4?.files[0]) ||
-        !isValidFile(file5?.files[0]) ||
-        !isValidFile(file6?.files[0]) ||
-        !isValidFile(file_BI?.files[0])
-      ) {
-        setErro("Suporte apenas para documentos PDF.");
+      // if (
+      //   !isValidFile(file_contrato?.files[0]) ||
+      //   !isValidFile(file3?.files[0]) ||
+      //   !isValidFile(file4?.files[0]) ||
+      //   !isValidFile(file5?.files[0]) ||
+      //   !isValidFile(file6?.files[0]) ||
+      //   !isValidFile(file_BI?.files[0])
+      // ) {
+      //   setErro("Suporte apenas para documentos PDF.");
+      // } else {
+      formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
+
+      formData.append("queixoso", "Trabalhador");
+      formData.append("queixante", "Empresa");
+      Axios.post("http://localhost:3001/add_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then((resposta) => {
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+          }
+
+          //sessionStorage.setItem("resposta", JSON.stringify(resposta));
+          //navigate("/Entrar");
+          /*const [showModal, setShowModal] = useState(true);
+        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+      // }
+    }
+    if ((myDataTrab || novoTrabalhadorID) && data.empresa2 === "outra") {
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
+      formData.append("nome_empresa", submissao_queixa.empresa);
+      formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
+      formData.append("_designacao", submissao_queixa.designacao);
+      formData.append("_nif", submissao_queixa.nif);
+      formData.append("_edificio", submissao_queixa.edificio);
+      formData.append("_ruaEmp", submissao_queixa.ruaEmp);
+      formData.append("_bairroEmp", submissao_queixa.bairroEmp);
+      formData.append("_website_empresa", submissao_queixa.websiteEmp);
+      formData.append("_email_empresa", submissao_queixa.emailEmp);
+      formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
+      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+      formData.append("_modo", modo);
+      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
+      if (novoTrabalhadorID) {
+        formData.append("_trabalhadorID", novoTrabalhadorID);
       } else {
-        formData.append("fileContrato", file_contrato.files[0]);
-        formData.append("_fileContrato", submissao_queixa.fileContrato);
-
-        if (file3.files[0]) {
-          formData.append("file3", file3.files[0]);
-        }
-        if (file4.files[0]) {
-          formData.append("file4", file4.files[0]);
-        }
-        if (file5.files[0]) {
-          formData.append("file5", file5.files[0]);
-        }
-        if (file6.files[0]) {
-          formData.append("file6", file6.files[0]);
-        }
-
-        formData.append("queixoso", "Trabalhador");
-        formData.append("queixante", "Empresa");
-        Axios.post("http://localhost:3001/add_queixa", formData, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          },
-        })
-          .then((resposta) => {
-            if (sessionStorage.getItem("dashboard_queixoso")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-              //setRedirect("/dashboard_queixoso");
-            } else if (sessionStorage.getItem("email")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else if (sessionStorage.getItem("data_recepcionista")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else {
-              setAlert(resposta.data.message);
-              toggleDisplay();
-            }
-
-            //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-            //navigate("/Entrar");
-            /*const [showModal, setShowModal] = useState(true);
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-          })
-          .catch((resposta) => {
-            console.log("error", resposta);
-          });
-        // }
+        formData.append("_trabalhadorID", myDataTrab.Trabalhador.id);
+      } //formData.append("_empresa", submissao_queixa.empresa2);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("queixoso", "Trabalhador");
+      formData.append("queixante", "Empresa");
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
       }
-      if ((myDataTrab || novoTrabalhadorID) && data.empresa2 === "outra") {
-        formData.append("_cargo", submissao_queixa.cargo);
-        formData.append(
-          "_area_departamento",
-          submissao_queixa.area_departamento
-        );
-        formData.append("nome_empresa", submissao_queixa.empresa);
-        formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
-        formData.append("_designacao", submissao_queixa.designacao);
-        formData.append("_nif", submissao_queixa.nif);
-        formData.append("_edificio", submissao_queixa.edificio);
-        formData.append("_ruaEmp", submissao_queixa.ruaEmp);
-        formData.append("_bairroEmp", submissao_queixa.bairroEmp);
-        formData.append("_website_empresa", submissao_queixa.websiteEmp);
-        formData.append("_email_empresa", submissao_queixa.emailEmp);
-        formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
-        formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
-        formData.append("_modo", modo);
-        formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-        if (novoTrabalhadorID) {
-          formData.append("_trabalhadorID", novoTrabalhadorID);
-        } else {
-          formData.append("_trabalhadorID", myDataTrab.Trabalhador.id);
-        } //formData.append("_empresa", submissao_queixa.empresa2);
-        formData.append("_fileContrato", submissao_queixa.fileContrato);
-        formData.append("fileContrato", file_contrato.files[0]);
-        formData.append("queixoso", "Trabalhador");
-        formData.append("queixante", "Empresa");
-        if (file3.files[0]) {
-          formData.append("file3", file3.files[0]);
-        }
-        if (file4.files[0]) {
-          formData.append("file4", file4.files[0]);
-        }
-        if (file5.files[0]) {
-          formData.append("file5", file5.files[0]);
-        }
-        if (file6.files[0]) {
-          formData.append("file6", file6.files[0]);
-        }
-        Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          },
-        })
-          .then((resposta) => {
-            if (sessionStorage.getItem("dashboard_queixoso")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-              //setRedirect("/dashboard_queixoso");
-            } else if (sessionStorage.getItem("email")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else if (sessionStorage.getItem("data_recepcionista")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else {
-              setAlert(resposta.data.message);
-              toggleDisplay();
-            }
-          })
-          .catch((resposta) => {
-            console.log("error", resposta);
-          });
-      } else if (
-        (myDataTrab || !novoTrabalhadorID) &&
-        data.empresa2 !== "outra"
-      ) {
-        console.log("entrei sem outra");
-        formData.append("_nome", submissao_queixa.nome);
-        formData.append("_sobrenome", submissao_queixa.sobrenome);
-        formData.append("_nomePai", submissao_queixa.nomePai);
-        formData.append("_nomeMae", submissao_queixa.nomeMae);
-        formData.append("_bairro", submissao_queixa.bairro);
-        formData.append("_rua", submissao_queixa.rua);
-        formData.append("_casaEdificio", submissao_queixa.casaEdificio);
-        formData.append("_estado_civil", submissao_queixa.ecivil);
-        formData.append("_nBI", BIv);
-        formData.append("_sexo", submissao_queixa.sexo);
-        formData.append("_validoAte", submissao_queixa.validoAte);
-        formData.append("_emitidoEm", submissao_queixa.emitidoEm);
-        formData.append("_naturalidade", submissao_queixa.naturalidade);
-        formData.append("_provincia", submissao_queixa.provincia);
-        formData.append("_altura", submissao_queixa.altura);
-        formData.append("_data_nascimento", submissao_queixa.dtNascimento);
-        formData.append(
-          "_contacto_principal",
-          submissao_queixa.contacto_principal
-        );
-        formData.append(
-          "_contacto_alternativo",
-          submissao_queixa.contacto_alternativo
-        );
-        formData.append("_cargo", submissao_queixa.cargo);
-        formData.append(
-          "_area_departamento",
-          submissao_queixa.area_departamento
-        );
-        formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
-        formData.append("_modo", modo);
-        formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-        formData.append("_empresa", submissao_queixa.empresa2);
-        formData.append("_fileContrato", submissao_queixa.fileContrato);
-        formData.append("fileContrato", file_contrato.files[0]);
-        formData.append("fileBI", file_BI.files[0]);
-        formData.append("_email_pessoal", submissao_queixa.email_pessoal);
-        formData.append("senha", submissao_queixa.password);
-        formData.append("queixoso", "Trabalhador");
-        formData.append("queixante", "Empresa");
-        if (file3.files[0]) {
-          formData.append("file3", file3.files[0]);
-        }
-        if (file4.files[0]) {
-          formData.append("file4", file4.files[0]);
-        }
-        if (file5.files[0]) {
-          formData.append("file5", file5.files[0]);
-        }
-        if (file6.files[0]) {
-          formData.append("file6", file6.files[0]);
-        }
-        Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          },
-        })
-          .then((resposta) => {
-            if (sessionStorage.getItem("dashboard_queixoso")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-              //setRedirect("/dashboard_queixoso");
-            } else if (sessionStorage.getItem("email")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else if (sessionStorage.getItem("data_recepcionista")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else {
-              setAlert(resposta.data.message);
-              toggleDisplay();
-            }
-          })
-          .catch((resposta) => {
-            console.log("error", resposta);
-          });
-      } else if (
-        (myDataTrab || !novoTrabalhadorID) &&
-        data.empresa2 === "outra"
-      ) {
-        formData.append("_nome", submissao_queixa.nome);
-        formData.append("_sobrenome", submissao_queixa.sobrenome);
-        formData.append("_nomePai", submissao_queixa.nomePai);
-        formData.append("_nomeMae", submissao_queixa.nomeMae);
-        formData.append("_bairro", submissao_queixa.bairro);
-        formData.append("_rua", submissao_queixa.rua);
-        formData.append("_casaEdificio", submissao_queixa.casaEdificio);
-        formData.append("_estado_civil", submissao_queixa.ecivil);
-        formData.append("_nBI", BIv);
-        formData.append("_sexo", submissao_queixa.sexo);
-        formData.append("_validoAte", submissao_queixa.validoAte);
-        formData.append("_emitidoEm", submissao_queixa.emitidoEm);
-        formData.append("_naturalidade", submissao_queixa.naturalidade);
-        formData.append("_provincia", submissao_queixa.provincia);
-        formData.append("_altura", submissao_queixa.altura);
-        formData.append("_data_nascimento", submissao_queixa.dtNascimento);
-        formData.append(
-          "_contacto_principal",
-          submissao_queixa.contacto_principal
-        );
-        formData.append(
-          "_contacto_alternativo",
-          submissao_queixa.contacto_alternativo
-        );
-        formData.append("_cargo", submissao_queixa.cargo);
-        formData.append(
-          "_area_departamento",
-          submissao_queixa.area_departamento
-        );
-        formData.append("_empresa", submissao_queixa.empresa);
-        formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
-        formData.append("_designacao", submissao_queixa.designacao);
-        formData.append("_nif", submissao_queixa.nif);
-        formData.append("_edificio", submissao_queixa.edificio);
-        formData.append("_ruaEmp", submissao_queixa.ruaEmp);
-        formData.append("_bairroEmp", submissao_queixa.bairroEmp);
-        formData.append("_website_empresa", submissao_queixa.websiteEmp);
-        formData.append("_email_empresa", submissao_queixa.emailEmp);
-        formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
-        formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
-        formData.append("_modo", modo);
-        formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
-        formData.append("_fileContrato", submissao_queixa.fileContrato);
-        formData.append("fileContrato", file_contrato.files[0]);
-        formData.append("fileBI", file_BI.files[0]);
-        formData.append("queixante", "Empregador");
-        formData.append("queixoso", "Trabalhador");
-        formData.append("_email_pessoal", submissao_queixa.email_pessoal);
-        formData.append("senha", submissao_queixa.password);
-        if (file3.files[0]) {
-          formData.append("file3", file3.files[0]);
-        }
-        if (file4.files[0]) {
-          formData.append("file4", file4.files[0]);
-        }
-        if (file5.files[0]) {
-          formData.append("file5", file5.files[0]);
-        }
-        if (file6.files[0]) {
-          formData.append("file6", file6.files[0]);
-        }
-        Axios.post("http://localhost:3001/guardar_queixa", formData, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-          },
-        })
-          .then((resposta) => {
-            if (sessionStorage.getItem("dashboard_queixoso")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-              //setRedirect("/dashboard_queixoso");
-            } else if (sessionStorage.getItem("email")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else if (sessionStorage.getItem("data_recepcionista")) {
-              setAlert("Queixa registrada com sucesso!");
-              toggleDisplay();
-            } else {
-              setAlert(resposta.data.message);
-              toggleDisplay();
-            }
-            //setShowModal(true);
-            //sessionStorage.setItem("resposta", JSON.stringify(resposta));
-
-            /*const [showModal, setShowModal] = useState(true);
-        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
-          })
-          .catch((resposta) => {
-            console.log("error", resposta);
-          });
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
       }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
+      Axios.post("http://localhost:3001/add_empresa_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then((resposta) => {
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+          }
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    } else if (
+      (myDataTrab || !novoTrabalhadorID) &&
+      data.empresa2 !== "outra"
+    ) {
+      console.log("entrei sem outra");
+      formData.append("_nome", submissao_queixa.nome);
+      formData.append("_sobrenome", submissao_queixa.sobrenome);
+      formData.append("_nomePai", submissao_queixa.nomePai);
+      formData.append("_nomeMae", submissao_queixa.nomeMae);
+      formData.append("_bairro", submissao_queixa.bairro);
+      formData.append("_rua", submissao_queixa.rua);
+      formData.append("_casaEdificio", submissao_queixa.casaEdificio);
+      formData.append("_estado_civil", submissao_queixa.ecivil);
+      formData.append("_nBI", BIv);
+      formData.append("_sexo", submissao_queixa.sexo);
+      formData.append("_validoAte", submissao_queixa.validoAte);
+      formData.append("_emitidoEm", submissao_queixa.emitidoEm);
+      formData.append("_naturalidade", submissao_queixa.naturalidade);
+      formData.append("_provincia", submissao_queixa.provincia);
+      formData.append("_altura", submissao_queixa.altura);
+      formData.append("_data_nascimento", submissao_queixa.dtNascimento);
+      formData.append(
+        "_contacto_principal",
+        submissao_queixa.contacto_principal
+      );
+      formData.append(
+        "_contacto_alternativo",
+        submissao_queixa.contacto_alternativo
+      );
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
+      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+      formData.append("_modo", modo);
+      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
+      formData.append("_empresa", submissao_queixa.empresa2);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato?.files[0]);
+      formData.append("fileBI", file_BI?.files[0]);
+      formData.append("_email_pessoal", submissao_queixa.email_pessoal);
+      formData.append("senha", submissao_queixa.password);
+      formData.append("queixoso", "Trabalhador");
+      formData.append("queixante", "Empresa");
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
+      Axios.post("http://localhost:3001/add_queixoso_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then((resposta) => {
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+          }
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    } else if (
+      (myDataTrab || !novoTrabalhadorID) &&
+      data.empresa2 === "outra"
+    ) {
+      formData.append("_nome", submissao_queixa.nome);
+      formData.append("_sobrenome", submissao_queixa.sobrenome);
+      formData.append("_nomePai", submissao_queixa.nomePai);
+      formData.append("_nomeMae", submissao_queixa.nomeMae);
+      formData.append("_bairro", submissao_queixa.bairro);
+      formData.append("_rua", submissao_queixa.rua);
+      formData.append("_casaEdificio", submissao_queixa.casaEdificio);
+      formData.append("_estado_civil", submissao_queixa.ecivil);
+      formData.append("_nBI", BIv);
+      formData.append("_sexo", submissao_queixa.sexo);
+      formData.append("_validoAte", submissao_queixa.validoAte);
+      formData.append("_emitidoEm", submissao_queixa.emitidoEm);
+      formData.append("_naturalidade", submissao_queixa.naturalidade);
+      formData.append("_provincia", submissao_queixa.provincia);
+      formData.append("_altura", submissao_queixa.altura);
+      formData.append("_data_nascimento", submissao_queixa.dtNascimento);
+      formData.append(
+        "_contacto_principal",
+        submissao_queixa.contacto_principal
+      );
+      formData.append(
+        "_contacto_alternativo",
+        submissao_queixa.contacto_alternativo
+      );
+      formData.append("_cargo", submissao_queixa.cargo);
+      formData.append("_area_departamento", submissao_queixa.area_departamento);
+      formData.append("_empresa", submissao_queixa.empresa);
+      formData.append("_provincia_empresa", submissao_queixa.localizacaoEmp);
+      formData.append("_designacao", submissao_queixa.designacao);
+      formData.append("_nif", submissao_queixa.nif);
+      formData.append("_edificio", submissao_queixa.edificio);
+      formData.append("_ruaEmp", submissao_queixa.ruaEmp);
+      formData.append("_bairroEmp", submissao_queixa.bairroEmp);
+      formData.append("_website_empresa", submissao_queixa.websiteEmp);
+      formData.append("_email_empresa", submissao_queixa.emailEmp);
+      formData.append("_contacto_empresa", submissao_queixa.contacto_empresa);
+      formData.append("_assunto_queixa", submissao_queixa.assunto_queixa);
+      formData.append("_modo", modo);
+      formData.append("_descricao_queixa", submissao_queixa.descricao_queixa);
+      formData.append("_fileContrato", submissao_queixa.fileContrato);
+      formData.append("fileContrato", file_contrato.files[0]);
+      formData.append("fileBI", file_BI.files[0]);
+      formData.append("queixante", "Empregador");
+      formData.append("queixoso", "Trabalhador");
+      formData.append("_email_pessoal", submissao_queixa.email_pessoal);
+      formData.append("senha", submissao_queixa.password);
+      if (file3.files[0]) {
+        formData.append("file3", file3.files[0]);
+      }
+      if (file4.files[0]) {
+        formData.append("file4", file4.files[0]);
+      }
+      if (file5.files[0]) {
+        formData.append("file5", file5.files[0]);
+      }
+      if (file6.files[0]) {
+        formData.append("file6", file6.files[0]);
+      }
+      Axios.post("http://localhost:3001/guardar_queixa", formData, {
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      })
+        .then((resposta) => {
+          if (sessionStorage.getItem("dashboard_queixoso")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+            //setRedirect("/dashboard_queixoso");
+          } else if (sessionStorage.getItem("email")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else if (sessionStorage.getItem("data_recepcionista")) {
+            setAlert("Queixa registrada com sucesso!");
+            toggleDisplay();
+          } else {
+            setAlert(resposta.data.message);
+            toggleDisplay();
+          }
+          //setShowModal(true);
+          //sessionStorage.setItem("resposta", JSON.stringify(resposta));
+
+          /*const [showModal, setShowModal] = useState(true);
+        <ModalConfirmacao show={showModal} setShow={setShowModal} close={() => setShowModal(false)}/>*/
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
     }
   }
 
@@ -481,8 +471,21 @@ const FormQueixante = () => {
       );
     } else if (validoAte <= today) {
       setErro("Bilhete de identidade vencido");
-    } else if (validade < 5) {
+    } else if (
+      emitidoEm.getFullYear() > validoAte.getFullYear() ||
+      (emitidoEm.getFullYear() === validoAte.getFullYear() &&
+        emitidoEm.getMonth() > validoAte.getMonth())
+    ) {
       setErro("Por favor verifique as datas de emissão e validade do BI");
+    } else if (
+      validoAte.getFullYear() < today.getFullYear() ||
+      (validoAte.getFullYear() === today.getFullYear() &&
+        validoAte.getMonth() < today.getMonth()) ||
+      (validoAte.getFullYear() === today.getFullYear() &&
+        validoAte.getMonth() === today.getMonth() &&
+        validoAte.getDay() < today.getDay())
+    ) {
+      setErro("Bilhete de Identidade vencido.");
     } else if (
       data.nif === BIv &&
       data.nif !== undefined &&

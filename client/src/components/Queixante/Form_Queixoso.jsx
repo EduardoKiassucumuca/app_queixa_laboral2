@@ -380,8 +380,21 @@ const FormQueixoso = () => {
       );
     } else if (validoAte <= today) {
       setErro("Bilhete de identidade vencido");
-    } else if (validade < 5) {
+    } else if (
+      emitidoEm.getFullYear() > validoAte.getFullYear() ||
+      (emitidoEm.getFullYear() === validoAte.getFullYear() &&
+        emitidoEm.getMonth() > validoAte.getMonth())
+    ) {
       setErro("Por favor verifique as datas de emissão e validade do BI");
+    } else if (
+      validoAte.getFullYear() < today.getFullYear() ||
+      (validoAte.getFullYear() === today.getFullYear() &&
+        validoAte.getMonth() < today.getMonth()) ||
+      (validoAte.getFullYear() === today.getFullYear() &&
+        validoAte.getMonth() === today.getMonth() &&
+        validoAte.getDay() < today.getDay())
+    ) {
+      setErro("Bilhete de Identidade vencido.");
     } else if (
       (data.nBI === nifv || data.nBI === NIF2) &&
       data.nBI !== undefined &&

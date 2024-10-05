@@ -300,3 +300,6 @@
 .custom-dropdown-toggle::after {
   display: none !important;
 }
+.download-button {
+  background-color: #daa316 !important;
+}

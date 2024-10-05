@@ -57,6 +57,7 @@ module.exports = {
           "created_at",
           "obs",
           "funcionarioigtID",
+          "recepcionistaID",
         ],
         required: false,
         include: [
@@ -257,6 +258,7 @@ module.exports = {
           "file4",
           "file5",
           "file6",
+          "recepcionistaID",
         ],
         required: true,
         include: [
@@ -1605,12 +1607,16 @@ module.exports = {
       const { facto } = req.body;
       const { _modo } = req.body;
       const { fileContrato } = req.body;
-      const filename = fileContrato.toString().split("/")[1];
+      const filename = fileContrato?.toString()?.split("/")[1];
       const data_queixa = new Date();
+      const _file3 = req?.files?.["file3"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file4 = req?.files?.["file4"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file5 = req?.files?.["file5"]?.[0]?.path?.split("/")[1] ?? "null";
+      const _file6 = req?.files?.["file6"]?.[0]?.path?.split("/")[1] ?? "null";
+
       //const filename = path.basename(fileContrato);
 
       //const fileContrato2 = req.files["fileContrato"][0].path;
-      console.log(assunto);
       const novoHistorico = await historico_queixa.create({
         queixaID: id_queixa,
         assunto: assunto,
@@ -1618,6 +1624,10 @@ module.exports = {
         data: data_queixa,
         modo: _modo,
         url_file_contrato: filename,
+        file3: _file3,
+        file4: _file4,
+        file5: _file5,
+        file6: _file6,
       });
       return res.status(200).send({
         status: 1,
@@ -1659,13 +1669,21 @@ module.exports = {
     const { facto } = req.body;
     const { _modo } = req.body;
     const fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-    console.log(fileContrato, assunto, facto);
+    const _file3 = req?.files?.["file3"]?.[0]?.path?.split("/")[1] ?? "null";
+    const _file4 = req?.files?.["file4"]?.[0]?.path?.split("/")[1] ?? "null";
+    const _file5 = req?.files?.["file5"]?.[0]?.path?.split("/")[1] ?? "null";
+    const _file6 = req?.files?.["file6"]?.[0]?.path?.split("/")[1] ?? "null";
+
     await Queixa.update(
       {
         assunto: assunto,
         facto: facto,
         modo: _modo,
         url_file_contrato: fileContrato,
+        file3: _file3,
+        file4: _file4,
+        file5: _file5,
+        file6: _file6,
       },
       {
         where: {
@@ -1839,26 +1857,31 @@ module.exports = {
 
   async retrocederQueixa(req, res) {
     try {
-      const { id_chefe } = req.body.params;
-      const { id_queixa } = req.body.params;
+      const {
+        id_recepcionista,
+        chefe_servicosID,
+        queixaID,
+        estado_actual,
+        nota_actual,
+      } = req.body;
       let pessoa;
-      const funcionario = await funcionarioIGT.findOne({
+
+      const chefe = await funcionarioIGT.findOne({
         attributes: ["id", "trabalhadorID"],
-        where: { trabalhadorID: id_chefe },
+        where: { trabalhadorID: chefe_servicosID },
       });
       const trabalhador = await Trabalhador.findOne({
         attributes: ["id", "contaID"],
-        where: { id: funcionario.trabalhadorID },
+        where: { id: id_recepcionista },
       });
       const conta = await Conta.findOne({
         attributes: ["id", "email"],
         where: { id: trabalhador.contaID },
       });
       const emailTo = conta?.email;
-      console.log(emailTo);
       const queixa = await Queixa.findOne({
         attributes: ["id", "assunto", "queixosoID"],
-        where: { id: id_queixa },
+        where: { id: queixaID },
       });
       const queixoso = await Trabalhador.findOne({
         attributes: ["id", "pessoaID"],
@@ -1877,12 +1900,12 @@ module.exports = {
 
       const updated_queixa = await Queixa.update(
         {
-          funcionarioigtID: funcionario.id,
-          estado: "encaminhada_chefe",
+          funcionarioigtID: chefe.id,
+          estado: "Aberto",
         },
         {
           where: {
-            id: id_queixa,
+            id: queixaID,
           },
         }
       );
@@ -1891,14 +1914,19 @@ module.exports = {
         to: emailTo,
         subject: "IGT | Queixa laboral",
         text:
-          "Olá note que foi encaminhada a queixa " +
+          "Olá, note que foi devolvida a queixa " +
           queixa.id +
           " de " +
-          pessoa.nome +
-          " " +
-          pessoa.sobrenome +
-          " para analise.",
+          (queixoso
+            ? pessoa?.nome + " " + pessoa.sobrenome
+            : queixosoEmp
+            ? queixosoEmp.nome_empresa
+            : "") +
+          " para análise.\n\n" + // Quebra de linha para melhorar a legibilidade
+          "Nota: " +
+          nota_actual, // Aqui você inclui a nota
       };
+
       //res.status(200).send({ auth: true, token });
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
@@ -1943,6 +1971,32 @@ module.exports = {
       return res.status(200).send({
         status: 1,
         message: "A Observação foi guardada com sucesso!",
+        updated_obs,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async retirarQueixa(req, res) {
+    try {
+      const { observacao } = req.body.params;
+      const { queixaID } = req.body.params;
+
+      const updated_obs = await Queixa.update(
+        {
+          obs: observacao,
+          estado: "Desistente",
+        },
+        {
+          where: {
+            id: queixaID,
+          },
+        }
+      );
+
+      return res.status(200).send({
+        status: 1,
+        message: "A queixa foi retirada com sucesso!",
         updated_obs,
       });
     } catch (error) {

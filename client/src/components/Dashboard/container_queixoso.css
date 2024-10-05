@@ -7,7 +7,14 @@
   margin-left: 67px;
   margin-bottom: 5px;
 }
-
+.btn-retirar-queixa {
+  background-color: white;
+  color: black;
+}
+.btn-retirar-queixa:hover {
+  background-color: white;
+  color: black;
+}
 .card-queixas-queixoso {
   margin-left: 67px;
 }

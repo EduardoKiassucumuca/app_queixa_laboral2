@@ -49,6 +49,13 @@ const LerQueixa = () => {
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [showUploadContrato, setShowUploadContrato] = React.useState(false);
+  const [displayStyle4, setDisplayStyle4] = useState("none");
+  const [motivo, setMotivo] = useState("");
+  const [displayStyle7, setDisplayStyle7] = useState("none");
+  const [showUploadfile3, setShowUploadfile3] = React.useState(false);
+  const [showUploadfile4, setShowUploadfile4] = React.useState(false);
+  const [showUploadfile5, setShowUploadfile5] = React.useState(false);
+  const [showUploadfile6, setShowUploadfile6] = React.useState(false);
 
   const navigate = useNavigate();
   const toggleDisplay = () => {
@@ -62,6 +69,20 @@ const LerQueixa = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle3((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay4 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle4((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay7 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle7((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -104,6 +125,23 @@ const LerQueixa = () => {
   function editar_queixa(id) {
     const formData = new FormData();
     file_contrato = document.querySelector("#file_contrato");
+    const file3 = document.querySelector("#file3");
+    const file4 = document.querySelector("#file4");
+    const file5 = document.querySelector("#file5");
+    const file6 = document.querySelector("#file6");
+
+    if (file3?.files[0]) {
+      formData.append("file3", file3.files[0]);
+    }
+    if (file4?.files[0]) {
+      formData.append("file4", file4?.files[0]);
+    }
+    if (file5?.files[0]) {
+      formData.append("file5", file5?.files[0]);
+    }
+    if (file6?.files[0]) {
+      formData.append("file6", file6?.files[0]);
+    }
     if (file_contrato?.files[0]) {
       console.log("aaaa");
 
@@ -163,15 +201,38 @@ const LerQueixa = () => {
   };
   function criar_historico(e) {
     e.preventDefault();
+    const formData = new FormData();
+    const file_contrato = document.querySelector("#file_contrato");
+    const file3 = document.querySelector("#file3");
+    const file4 = document.querySelector("#file4");
+    const file5 = document.querySelector("#file5");
+    const file6 = document.querySelector("#file6");
 
+    if (file3?.files[0]) {
+      formData.append("file3", file3.files[0]);
+    }
+    if (file_contrato?.files[0]) {
+      formData.append("fileContrato", file_contrato?.files[0]);
+    }
+    if (file4?.files[0]) {
+      formData.append("file4", file4?.files[0]);
+    }
+    if (file5?.files[0]) {
+      formData.append("file5", file5?.files[0]);
+    }
+    if (file6?.files[0]) {
+      formData.append("file6", file6?.files[0]);
+    }
     //const file_BI = document.querySelector("#file_BI");
+    formData.append("assunto", conflito.assunto);
+    formData.append("_modo", conflito.modo);
+    formData.append("facto", conflito.facto);
+    formData.append("id_queixa", conflito.id);
 
-    Axios.post("http://localhost:3001/historico_queixa", {
-      id_queixa: conflito.id,
-      assunto: conflito.assunto,
-      facto: conflito.facto,
-      _modo: conflito.modo,
-      fileContrato: conflito.url_file_contrato,
+    Axios.post("http://localhost:3001/historico_queixa", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
     })
       .then((resposta) => {
         editar_queixa(conflito.id);
@@ -241,11 +302,60 @@ const LerQueixa = () => {
       setShowUploadContrato(true);
     }
   }
+  function showUploadFile3() {
+    if (showUploadfile3) {
+      setShowUploadfile3(false);
+    } else {
+      setShowUploadfile3(true);
+    }
+  }
+  function showUploadFile4() {
+    if (showUploadfile4) {
+      setShowUploadfile4(false);
+    } else {
+      setShowUploadfile4(true);
+    }
+  }
+  function showUploadFile5() {
+    if (showUploadfile4) {
+      setShowUploadfile5(false);
+    } else {
+      setShowUploadfile5(true);
+    }
+  }
+  function showUploadFile6() {
+    if (showUploadfile6) {
+      setShowUploadfile6(false);
+    } else {
+      setShowUploadfile6(true);
+    }
+  }
   const handleNavigate = (url_file) => {
     // Navega para a nova rota, passando a URL do arquivo como parâmetro
     const previewUrl = `/previewDoc?file=${encodeURIComponent(url_file)}`;
     window.open(previewUrl, "_blank"); // '_blank' abre em uma nova aba/janela
   };
+  function reload_page() {
+    window.location.reload();
+  }
+  function retirarQueixa(event) {
+    event.preventDefault();
+    Axios.put("http://localhost:3001/retirar_queixa", {
+      params: {
+        observacao: motivo,
+        queixaID: conflito.id,
+      },
+    })
+      .then(function (response) {
+        if (response) {
+          toggleDisplay4();
+          toggleDisplay7();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   return (
     <>
       <MySideNav />
@@ -304,7 +414,8 @@ const LerQueixa = () => {
                   className="estado me-1"
                   color={
                     conflito.estado === "Encerrado" ||
-                    conflito.estado === "tribunal"
+                    conflito.estado === "Tribunal" ||
+                    conflito.estado === "Desistente"
                       ? "red"
                       : conflito.estado === "encaminhada_inspector"
                       ? "yellow"
@@ -354,7 +465,7 @@ const LerQueixa = () => {
                   </a>
                 </li>
 
-                {conflito?.file3 ? (
+                {conflito?.file3 !== "null" && conflito?.file3 !== undefined ? (
                   <>
                     <br />{" "}
                     <li>
@@ -371,7 +482,7 @@ const LerQueixa = () => {
                 ) : (
                   <></>
                 )}
-                {conflito?.file4 ? (
+                {conflito?.file4 !== "null" && conflito?.file4 !== undefined ? (
                   <>
                     {" "}
                     <br />
@@ -389,7 +500,7 @@ const LerQueixa = () => {
                 ) : (
                   <></>
                 )}
-                {conflito?.file5 ? (
+                {conflito?.file5 !== "null" && conflito?.file5 !== undefined ? (
                   <>
                     <br />
                     <li>
@@ -406,7 +517,7 @@ const LerQueixa = () => {
                 ) : (
                   <></>
                 )}
-                {conflito?.file6 ? (
+                {conflito?.file6 !== "null" && conflito?.file6 !== undefined ? (
                   <>
                     <br />
                     <li>
@@ -473,6 +584,49 @@ const LerQueixa = () => {
         </small>
                     </Alert>*/}
 
+      <div id="myModal" class="modal" style={{ display: displayStyle4 }}>
+        <div class="modal-content" style={{ minWidth: "600px" }}>
+          <span
+            class="close"
+            style={{ textAlign: "right" }}
+            onClick={toggleDisplay4}
+          >
+            &times;
+          </span>
+
+          <form
+            onSubmit={(e) => retirarQueixa(e)}
+            enctype="multipart/form-data"
+          >
+            <Row className="mb-3">
+              <h3 style={{ fontSize: 22, marginBottom: 20 }}>
+                Retirar a queixa
+              </h3>
+              <p></p>
+              <FloatingLabel
+                controlId="floatingTextarea2"
+                label="Descreva o motivo"
+              >
+                <Form.Control
+                  as="textarea"
+                  placeholder="Queixa"
+                  name="motivo"
+                  id="motivo"
+                  onChange={(e) => setMotivo(e.target.value)}
+                  style={{ height: "190px" }}
+                />
+              </FloatingLabel>
+
+              <div class="modal-footer">
+                <Button variant="warning" type="submit">
+                  {" "}
+                  Retirar
+                </Button>
+              </div>
+            </Row>
+          </form>
+        </div>
+      </div>
       <div id="myModal" class="modal" style={{ display: displayStyle }}>
         <div class="modal-content" style={{ minWidth: "600px" }}>
           <span
@@ -569,6 +723,230 @@ const LerQueixa = () => {
               ) : (
                 <></>
               )}
+              <Card style={{ marginTop: 16 }}>
+                <Card.Header style={{ fontWeight: "bold" }}>Outros</Card.Header>
+                {conflito?.file3 !== "null" && conflito?.file3 !== undefined ? (
+                  <>
+                    <Card.Body>
+                      <a
+                        href="#"
+                        style={{
+                          color: "rgb(220, 195, 119)",
+                          fontSize: 13,
+                        }}
+                      >
+                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                        {conflito?.file3}
+                      </a>{" "}
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip2}
+                      >
+                        <Button
+                          variant="dark"
+                          style={{
+                            float: "right",
+                            marginLeft: 3,
+                            color: "#ffc107",
+                          }}
+                          onClick={() => handleNavigate(conflito?.file3)}
+                        >
+                          <FaEye />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip2}
+                      >
+                        <Button
+                          variant="warning"
+                          style={{ float: "right" }}
+                          onClick={showUploadFile3}
+                        >
+                          <FaRegEdit />
+                        </Button>
+                      </OverlayTrigger>
+                    </Card.Body>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file4 !== "null" && conflito?.file4 !== undefined ? (
+                  <>
+                    <Card.Body>
+                      <a
+                        href="#"
+                        style={{
+                          color: "rgb(220, 195, 119)",
+                          fontSize: 13,
+                        }}
+                      >
+                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                        {conflito?.file4}
+                      </a>{" "}
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip2}
+                      >
+                        <Button
+                          variant="dark"
+                          style={{
+                            float: "right",
+                            marginLeft: 3,
+                            color: "#ffc107",
+                          }}
+                          onClick={() => handleNavigate(conflito?.file4)}
+                        >
+                          <FaEye />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip1}
+                      >
+                        <Button
+                          variant="warning"
+                          style={{ float: "right" }}
+                          onClick={showUploadFile4}
+                        >
+                          <FaRegEdit />
+                        </Button>
+                      </OverlayTrigger>
+                    </Card.Body>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file5 !== "null" && conflito?.file5 !== undefined ? (
+                  <>
+                    <Card.Body>
+                      <a
+                        href="#"
+                        style={{
+                          color: "rgb(220, 195, 119)",
+                          fontSize: 13,
+                        }}
+                      >
+                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                        {conflito?.file5}
+                      </a>{" "}
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip2}
+                      >
+                        <Button
+                          variant="dark"
+                          style={{
+                            float: "right",
+                            marginLeft: 3,
+                            color: "#ffc107",
+                          }}
+                          onClick={() => handleNavigate(conflito?.file5)}
+                        >
+                          <FaEye />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip1}
+                      >
+                        <Button
+                          variant="warning"
+                          style={{ float: "right" }}
+                          onClick={showUploadFile5}
+                        >
+                          <FaRegEdit />
+                        </Button>
+                      </OverlayTrigger>
+                    </Card.Body>
+                  </>
+                ) : (
+                  <></>
+                )}
+                {conflito?.file6 !== "null" && conflito?.file6 !== undefined ? (
+                  <>
+                    <Card.Body>
+                      <a
+                        href="#"
+                        style={{
+                          color: "rgb(220, 195, 119)",
+                          fontSize: 13,
+                        }}
+                      >
+                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                        {conflito?.file6}
+                      </a>{" "}
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip2}
+                      >
+                        <Button
+                          variant="dark"
+                          style={{
+                            float: "right",
+                            marginLeft: 3,
+                            color: "#ffc107",
+                          }}
+                          onClick={() => handleNavigate(conflito?.file6)}
+                        >
+                          <FaEye />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 40 }}
+                        overlay={renderTooltip1}
+                      >
+                        <Button
+                          variant="warning"
+                          style={{ float: "right" }}
+                          onClick={showUploadFile6}
+                        >
+                          <FaRegEdit />
+                        </Button>
+                      </OverlayTrigger>
+                    </Card.Body>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Card>{" "}
+              <br />
+              {showUploadfile3 ? (
+                <>
+                  <Form.Control type="file" name="file3" id="file3" />
+                </>
+              ) : (
+                <></>
+              )}
+              {showUploadfile4 ? (
+                <>
+                  <Form.Control type="file" name="file4" id="file4" />
+                </>
+              ) : (
+                <></>
+              )}
+              {showUploadfile5 ? (
+                <>
+                  <Form.Control type="file" name="file5" id="file5" />
+                </>
+              ) : (
+                <></>
+              )}
+              {showUploadfile6 ? (
+                <>
+                  <Form.Control type="file" name="file6" id="file6" />
+                </>
+              ) : (
+                <></>
+              )}
               {/* <p>
                 {/*<FaFilePdf />
                 <a
@@ -612,6 +990,32 @@ const LerQueixa = () => {
           </form>
         </div>
       </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle7,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20, fontWeight: "bold" }}>
+            Confirnação
+          </h3>
+          <br />A queixa foi retirada com sucesso!
+          <div class="modal-footer">
+            <Button
+              variant="default"
+              onClick={reload_page}
+              style={{ backgroundColor: "#ffc107", color: "black" }}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
       <div id="myModal" class="modal" style={{ display: displayStyle2 }}>
         <div class="modal-content">
           <p>{alert}</p>
@@ -623,27 +1027,52 @@ const LerQueixa = () => {
           </div>
         </div>
       </div>
-      {conflito.estado === "Encerrado" || conflito.estado === "tribunal" ? (
-        <Button
-          variant="warning"
-          onClick={toggleDisplay}
-          className="fw-bold btn-nova-queixa"
-          type="button"
-          style={{ marginLeft: 75 }}
-          disabled
-        >
-          Editar queixa
-        </Button>
+      {conflito.estado === "Encerrado" ||
+      conflito.estado === "Tribunal" ||
+      conflito.estado === "Desistente" ? (
+        <>
+          <Button
+            variant="warning"
+            onClick={toggleDisplay}
+            className="fw-bold btn-nova-queixa"
+            type="button"
+            style={{ marginLeft: 75 }}
+            disabled
+          >
+            Editar queixa
+          </Button>
+          <Button
+            variant="default"
+            className="fw-bold btn-retirar-queixa"
+            type="button"
+            style={{ marginLeft: 15 }}
+            disabled
+          >
+            Retirar queixa
+          </Button>
+        </>
       ) : (
-        <Button
-          variant="warning"
-          onClick={toggleDisplay}
-          className="fw-bold btn-nova-queixa"
-          type="button"
-          style={{ marginLeft: 75 }}
-        >
-          Editar queixa
-        </Button>
+        <>
+          {" "}
+          <Button
+            variant="warning"
+            onClick={toggleDisplay}
+            className="fw-bold btn-nova-queixa"
+            type="button"
+            style={{ marginLeft: 75 }}
+          >
+            Editar queixa
+          </Button>
+          <Button
+            variant="default"
+            className="fw-bold btn-retirar-queixa"
+            type="button"
+            style={{ marginLeft: 15 }}
+            onClick={toggleDisplay4}
+          >
+            Retirar queixa
+          </Button>
+        </>
       )}
     </>
   );

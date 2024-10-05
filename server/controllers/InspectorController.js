@@ -149,6 +149,11 @@ module.exports = {
           "url_file_contrato",
           "url_file_acta",
           "created_at",
+          "recepcionistaID",
+          "file3",
+          "file4",
+          "file5",
+          "file6",
         ],
         required: true,
         include: [

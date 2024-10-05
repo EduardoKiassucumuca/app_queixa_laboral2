@@ -171,7 +171,8 @@ const Container_queixoso = () => {
               marginBottom: 25,
               opacity:
                 conflito.estado === "Encerrado" ||
-                conflito.estado === "tribunal"
+                conflito.estado === "Tribunal" ||
+                conflito.estado === "Desistente"
                   ? 0.5
                   : conflito.estado === "encaminhada_inspector"
                   ? 1
@@ -227,7 +228,8 @@ const Container_queixoso = () => {
                   className="estado me-1"
                   color={
                     conflito.estado === "Encerrado" ||
-                    conflito.estado === "Tribunal"
+                    conflito.estado === "Tribunal" ||
+                    conflito.estado === "Desistente"
                       ? "red"
                       : conflito.estado === "encaminhada_inspector"
                       ? "yellow"

@@ -21,6 +21,12 @@ import { Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FaDownload } from "react-icons/fa";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import { FaEye } from "react-icons/fa";
+import { FaFileAlt } from "react-icons/fa";
+import Tooltip from "react-bootstrap/Tooltip";
+import { JsonToExcel } from "react-json-to-excel";
 
 const formTemplate = {
   review: "",
@@ -49,9 +55,15 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const [displayStyle8, setDisplayStyle8] = useState("none");
   const [displayStyle10, setDisplayStyle10] = useState("none");
   const [displayStyle11, setDisplayStyle11] = useState("none");
+  const [displayStyle12, setDisplayStyle12] = useState("none");
+  const [displayStyle13, setDisplayStyle13] = useState("none");
+  const [displayStyle14, setDisplayStyle14] = useState("none");
+  const [displayStyle15, setDisplayStyle15] = useState("none");
+  const [displayStyle16, setDisplayStyle16] = useState("none");
+
   const [emailInspector, setEmailInspector] = useState("");
   const [emailTestemunha, setEmailTestemunha] = useState("");
-
+  const [nota, setNota] = useState("");
   const [displayStyle9, setDisplayStyle9] = useState("none");
   const [detalhesSelec, setDetalhesSelec] = useState("");
   const [currentPageModal, setCurrentPageModal] = useState(1);
@@ -62,6 +74,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const currentItems = conflitos.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const itemsPerPageModal = 5; // Número de itens por página
+  const [myData, setMyData] = useState([{}]);
 
   // Calcular o índice do último e do primeiro item na página atual
   const indexOfLastItemModal = currentPage * itemsPerPage;
@@ -127,15 +140,51 @@ const ContainerChefeServicos = ({ onSearch }) => {
       </Popover.Body>
     </Popover>
   );
+
+  const renderTooltip2 = (props) => (
+    <Tooltip id="button-tooltip2" {...props}>
+      Ver
+    </Tooltip>
+  );
   const toggleDisplay4 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle4((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const toggleDisplay15 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle15((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay12 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle12((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay13 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle13((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay16 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle16((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   const toggleDisplay2 = () => {
     // Toggle between 'none' and 'block'
     setDisplayStyle2((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay14 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle14((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -208,18 +257,58 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
         //console.log("data.queixas");
         const queixas_selecionadas = data.queixas.filter(
-          (queixa) => queixa.provincia === data2.trabalhador.localizacao_office
+          (queixa) =>
+            queixa.provincia === data2.trabalhador.localizacao_office &&
+            queixa?.estado?.toLowerCase() !== "aberto"
         );
         setQueixaSelecProv(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas);
-        console.log(data.queixas);
+        let myQueixas = [];
 
+        queixas_selecionadas.forEach((queixa) => {
+          const myQueixa = {
+            "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
+              "pt-BR"
+            ),
+            Trabalhador:
+              queixa.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Trabalhador.Pessoa.sobrenome +
+              " (" +
+              queixa.Trabalhador.tipo +
+              ")",
+            Empregador:
+              queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+            Inspector:
+              queixa.Inspector.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+            Testemunha:
+              queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
+              " " +
+              queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
+            Provincia: queixa.Trabalhador.localizacao_office,
+            Assunto: queixa.assunto,
+            Facto: queixa.facto,
+            Estado:
+              queixa.estado === "encaminhada_chefe"
+                ? "Encaminhada ao chefe dos serviços provinciais"
+                : queixa.estado === "encaminhada_inspector"
+                ? "Encaminhada ao Inspector"
+                : queixa.estado === "Tribunal"
+                ? "Encerrada e encaminhada ao tribunal"
+                : queixa.estado,
+          };
+          myQueixas.push(myQueixa);
+        });
+        setMyData(myQueixas);
         //console.log(lista_queixa.minha_queixa)
       })
       .catch((res) => {
         console.log(res);
       });
+
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
         setQueixas(data.queixas);
@@ -247,6 +336,9 @@ const ContainerChefeServicos = ({ onSearch }) => {
   ).length;
   const qtd_queixa_encaminhadasTribunal = queixas_selecprovincia.filter(
     (queixa) => queixa.estado === "Tribunal"
+  ).length;
+  const qtd_queixa_por_desistencia = queixas_selecprovincia.filter(
+    (queixa) => queixa.estado === "Desistente"
   ).length;
 
   const [inspector, setInspector] = useState("");
@@ -409,6 +501,20 @@ const ContainerChefeServicos = ({ onSearch }) => {
     setDetalhesSelec(detalhes);
     toggleDisplay9();
   }
+  function retrocederForm(conflito) {
+    setDetalhesSelec(conflito);
+    console.log(conflito);
+    toggleDisplay13();
+  }
+  function documentosForm(conflito) {
+    setDetalhesSelec(conflito);
+    toggleDisplay15();
+  }
+  function detalhesFinal(conflito) {
+    setDetalhesSelec(conflito);
+    console.log(conflito);
+    toggleDisplay16();
+  }
   function detalhesInspector(conflito_selecionado) {
     setDetalhesSelec(conflito_selecionado);
     console.log(conflito_selecionado);
@@ -454,13 +560,577 @@ const ContainerChefeServicos = ({ onSearch }) => {
       toggleDisplay11();
     }
   }
+  function retrocederQueixa() {
+    if (detalhesSelec?.estado === "encaminhada_chefe") {
+      Axios.put("http://localhost:3001/retroceder_queixa", {
+        queixaID: detalhesSelec?.id,
+        estado_actual: detalhesSelec?.estado,
+        nota_actual: nota,
+        id_recepcionista: detalhesSelec.recepcionistaID,
+        chefe_servicosID: user_logado.trabalhador.id,
+      })
+        .then(({ data }) => {
+          toggleDisplay13();
+          toggleDisplay14();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+  const handleNavigate = (url_file) => {
+    // Navega para a nova rota, passando a URL do arquivo como parâmetro
+    const previewUrl = `/previewDoc?file=${encodeURIComponent(url_file)}`;
+    window.open(previewUrl, "_blank"); // '_blank' abre em uma nova aba/janela
+  };
   return (
     <>
+      <div id="myModal15" class="modal" style={{ display: displayStyle15 }}>
+        <div class="modal-content" style={{ minWidth: "600px" }}>
+          <span
+            class="close"
+            style={{ textAlign: "right" }}
+            onClick={toggleDisplay15}
+          >
+            &times;
+          </span>
+          <p style={{ fontSize: 20 }}>Documentos anexados a queixa</p>
+
+          <Row className="mb-3">
+            <Card style={{ marginTop: 16 }}>
+              <Card.Header style={{ fontWeight: "bold" }}>
+                Contrato de trabalho
+              </Card.Header>
+              <Card.Body>
+                <a
+                  href="#"
+                  style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                >
+                  <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                  {detalhesSelec?.url_file_contrato}
+                </a>{" "}
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 250, hide: 40 }}
+                  overlay={renderTooltip2}
+                >
+                  <Button
+                    variant="dark"
+                    style={{
+                      float: "right",
+                      marginLeft: 3,
+                      color: "#ffc107",
+                    }}
+                    onClick={() =>
+                      handleNavigate(detalhesSelec?.url_file_contrato)
+                    }
+                  >
+                    <FaEye />
+                  </Button>
+                </OverlayTrigger>
+              </Card.Body>
+            </Card>{" "}
+            <Card style={{ marginTop: 16 }}>
+              <Card.Header style={{ fontWeight: "bold" }}>
+                Acta da mediação
+              </Card.Header>
+              <Card.Body>
+                {detalhesSelec?.url_file_acta ? (
+                  <>
+                    {" "}
+                    <a
+                      href="#"
+                      style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                    >
+                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                      {detalhesSelec?.url_file_acta}
+                    </a>{" "}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 40 }}
+                      overlay={renderTooltip2}
+                    >
+                      <Button
+                        variant="dark"
+                        style={{
+                          float: "right",
+                          marginLeft: 3,
+                          color: "#ffc107",
+                        }}
+                        onClick={() =>
+                          handleNavigate(detalhesSelec?.url_file_acta)
+                        }
+                      >
+                        <FaEye />
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                ) : (
+                  <p>Acta indisponivel de momento!</p>
+                )}
+              </Card.Body>
+            </Card>{" "}
+            {!detalhesSelec?.file3 &&
+            !detalhesSelec?.file4 &&
+            !detalhesSelec?.file5 &&
+            !detalhesSelec?.file6 ? (
+              <></>
+            ) : (
+              <>
+                <Card style={{ marginTop: 16 }}>
+                  <Card.Header style={{ fontWeight: "bold" }}>
+                    Outros
+                  </Card.Header>
+                  {detalhesSelec?.file3 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file3}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file3)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file4 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file4}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file4)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file5 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file5}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file5)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file6 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file6}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file6)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </Card>{" "}
+              </>
+            )}
+          </Row>
+        </div>
+      </div>
+      <div id="myModal16" class="modal" style={{ display: displayStyle16 }}>
+        <div class="modal-content" style={{ minWidth: "600px" }}>
+          <span
+            class="close"
+            style={{ textAlign: "right" }}
+            onClick={toggleDisplay16}
+          >
+            &times;
+          </span>
+          <p style={{ fontSize: 20 }}>Todos detalhes da queixa</p>
+          <br />
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Assunto:{" "}
+            <span style={{ fontWeight: 500, fontSize: 15 }}>
+              {detalhesSelec.assunto}
+            </span>
+          </strong>
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Descrição:{" "}
+            <span style={{ fontWeight: 500, fontSize: 15 }}>
+              {detalhesSelec.facto}
+            </span>
+          </strong>
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Inspector:{" "}
+            <span style={{ fontWeight: 500, fontSize: 15 }}>
+              {detalhesSelec.Inspector?.Trabalhador?.Pessoa?.nome +
+                " " +
+                detalhesSelec.Inspector?.Trabalhador?.Pessoa?.sobrenome}
+            </span>
+          </strong>
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Queixoso:{" "}
+            {detalhesSelec?.Trabalhador?.tipo === "queixoso" ? (
+              <>
+                {" "}
+                <span style={{ fontWeight: 500, fontSize: 15 }}>
+                  {detalhesSelec?.Trabalhador?.Pessoa?.nome +
+                    " " +
+                    detalhesSelec?.Trabalhador?.Pessoa?.sobrenome}
+                </span>
+              </>
+            ) : (
+              <>
+                {" "}
+                <span style={{ fontWeight: 500, fontSize: 15 }}>
+                  {detalhesSelec?.Empresa?.nome_empresa}
+                </span>
+              </>
+            )}
+          </strong>
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Queixante:{" "}
+            {detalhesSelec?.Trabalhador?.tipo === "queixante" ? (
+              <>
+                {" "}
+                <span style={{ fontWeight: 500, fontSize: 15 }}>
+                  {detalhesSelec?.Trabalhador?.Pessoa?.nome +
+                    " " +
+                    detalhesSelec?.Trabalhador?.Pessoa?.sobrenome}
+                </span>
+              </>
+            ) : (
+              <>
+                {" "}
+                <span style={{ fontWeight: 500, fontSize: 15 }}>
+                  {detalhesSelec?.Empresa?.nome_empresa}
+                </span>
+              </>
+            )}
+          </strong>
+          <strong style={{ fontSize: 17, marginBottom: 8 }}>
+            Estado:{" "}
+            <span style={{ fontWeight: 500, fontSize: 15 }}>
+              {detalhesSelec?.estado === "Tribunal"
+                ? "Encerrado e encaminhado ao tribunal"
+                : detalhesSelec?.estado}
+            </span>
+          </strong>
+          <Row className="mb-3">
+            <Card style={{ marginTop: 16 }}>
+              <Card.Header style={{ fontWeight: "bold" }}>
+                Contrato de trabalho
+              </Card.Header>
+              <Card.Body>
+                <a
+                  href="#"
+                  style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                >
+                  <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                  {detalhesSelec?.url_file_contrato}
+                </a>{" "}
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 250, hide: 40 }}
+                  overlay={renderTooltip2}
+                >
+                  <Button
+                    variant="dark"
+                    style={{
+                      float: "right",
+                      marginLeft: 3,
+                      color: "#ffc107",
+                    }}
+                    onClick={() =>
+                      handleNavigate(detalhesSelec?.url_file_contrato)
+                    }
+                  >
+                    <FaEye />
+                  </Button>
+                </OverlayTrigger>
+              </Card.Body>
+            </Card>{" "}
+            <Card style={{ marginTop: 16 }}>
+              <Card.Header style={{ fontWeight: "bold" }}>
+                Acta da mediação
+              </Card.Header>
+              <Card.Body>
+                {detalhesSelec?.url_file_acta ? (
+                  <>
+                    {" "}
+                    <a
+                      href="#"
+                      style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                    >
+                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                      {detalhesSelec?.url_file_acta}
+                    </a>{" "}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 40 }}
+                      overlay={renderTooltip2}
+                    >
+                      <Button
+                        variant="dark"
+                        style={{
+                          float: "right",
+                          marginLeft: 3,
+                          color: "#ffc107",
+                        }}
+                        onClick={() =>
+                          handleNavigate(detalhesSelec?.url_file_acta)
+                        }
+                      >
+                        <FaEye />
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                ) : (
+                  <p>Acta indisponivel de momento!</p>
+                )}
+              </Card.Body>
+            </Card>{" "}
+            {!detalhesSelec?.file3 &&
+            !detalhesSelec?.file4 &&
+            !detalhesSelec?.file5 &&
+            !detalhesSelec?.file6 ? (
+              <></>
+            ) : (
+              <>
+                <Card style={{ marginTop: 16 }}>
+                  <Card.Header style={{ fontWeight: "bold" }}>
+                    Outros
+                  </Card.Header>
+                  {detalhesSelec?.file3 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file3}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file3)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file4 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file4}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file4)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file5 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file5}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file5)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {detalhesSelec?.file6 ? (
+                    <>
+                      <Card.Body>
+                        <a
+                          href="#"
+                          style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                        >
+                          <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                          {detalhesSelec?.file6}
+                        </a>{" "}
+                        <OverlayTrigger
+                          placement="top"
+                          delay={{ show: 250, hide: 40 }}
+                          overlay={renderTooltip2}
+                        >
+                          <Button
+                            variant="dark"
+                            style={{
+                              float: "right",
+                              marginLeft: 3,
+                              color: "#ffc107",
+                            }}
+                            onClick={() => handleNavigate(detalhesSelec?.file6)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+                      </Card.Body>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </Card>{" "}
+              </>
+            )}
+          </Row>
+        </div>
+      </div>
+
       <div id="myModal4" class="modal" style={{ display: displayStyle4 }}>
         <div class="modal-content">
           <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
           <br />
           <p>Testemunha Nomeada com sucesso!</p>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={(e) => update_view()}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div id="myModal12" class="modal" style={{ display: displayStyle12 }}>
+        <div class="modal-content">
+          <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
+          <br />
+          <p>O processo foi devolvido com sucesso!</p>
           <div class="modal-footer">
             <Button variant="warning" onClick={(e) => update_view()}>
               OK
@@ -479,6 +1149,56 @@ const ContainerChefeServicos = ({ onSearch }) => {
           <div class="modal-footer">
             <Button variant="warning" onClick={(e) => update_view()}>
               OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div id="myModal14" class="modal" style={{ display: displayStyle14 }}>
+        <div class="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Confirmação</h5>
+          </div>
+          <div className="modal-body">
+            <p style={{ fontSize: "1.0rem" }}>Queixa devolvida com sucesso!</p>
+          </div>
+          <div class="modal-footer">
+            <Button variant="warning" onClick={(e) => update_view()}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div id="myModal13" class="modal" style={{ display: displayStyle13 }}>
+        <div class="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Retroceder a queixa</h5>
+          </div>
+          <div className="modal-body">
+            <FloatingLabel
+              controlId="floatingTextarea2"
+              label="Adicionar uma nota"
+            >
+              <Form.Control
+                as="textarea"
+                placeholder="Nota"
+                name="nota"
+                id="descr-queixa"
+                onChange={(e) => setNota(e.target.value)}
+                style={{ height: "100px" }}
+              />{" "}
+              <br />
+            </FloatingLabel>{" "}
+          </div>
+          <div class="modal-footer">
+            <Button
+              variant="default"
+              style={{ border: "1px solid #daa316", color: "#daa316" }}
+              onClick={toggleDisplay13}
+            >
+              Cancelar
+            </Button>
+            <Button variant="warning" onClick={retrocederQueixa}>
+              Retroceder
             </Button>
           </div>
         </div>
@@ -779,7 +1499,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
           queixa={conflito_selec}
           inspector={inspectores}
         />
-
         <ModalTestemunhas
           show={showModal3}
           setShow={setShowModal3}
@@ -916,22 +1635,41 @@ const ContainerChefeServicos = ({ onSearch }) => {
                   {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
                     ?.telefone_alternativo ?? ""}
                 </span>
-                <br />
-                <strong>Bilhete de Identidade </strong>
-                <p>
-                  <a
-                    href="#"
-                    onClick={(e) =>
-                      handleDownload(
-                        detalhesSelec.Trabalhador?.Pessoa?.BI?.file
-                      )
-                    }
-                    style={{ color: "rgb(201 152 6)" }}
-                  >
-                    {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
-                    <FaDownload style={{ marginLeft: 5 }} />
-                  </a>
-                </p>
+                <Card style={{ marginTop: 16 }}>
+                  <Card.Header style={{ fontWeight: "bold" }}>
+                    Bilhete de Identidade
+                  </Card.Header>
+                  <Card.Body>
+                    <a
+                      href="#"
+                      style={{ color: "rgb(220, 195, 119)", fontSize: 14 }}
+                    >
+                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                      {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
+                    </a>{" "}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 40 }}
+                      overlay={renderTooltip2}
+                    >
+                      <Button
+                        variant="dark"
+                        style={{
+                          float: "right",
+                          marginLeft: 3,
+                          color: "#ffc107",
+                        }}
+                        onClick={() =>
+                          handleNavigate(
+                            detalhesSelec.Trabalhador?.Pessoa?.BI?.file
+                          )
+                        }
+                      >
+                        <FaEye />
+                      </Button>
+                    </OverlayTrigger>
+                  </Card.Body>
+                </Card>{" "}
                 <div class="modal-footer">
                   <Button variant="warning" onClick={toggleDisplay8}>
                     OK
@@ -1078,20 +1816,41 @@ const ContainerChefeServicos = ({ onSearch }) => {
                   {detalhesSelec?.Trabalhador?.Pessoa?.Endereco
                     ?.telefone_alternativo ?? ""}
                 </span>
-                <br />
-                <strong>Bilhete de Identidade </strong>
-                <p>
-                  <a
-                    href="#"
-                    onClick={(e) =>
-                      handleDownload(detalhesSelec.url_file_contrato)
-                    }
-                    style={{ color: "rgb(201 152 6)" }}
-                  >
-                    {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
-                    <FaDownload style={{ marginLeft: 5 }} />
-                  </a>
-                </p>
+                <Card style={{ marginTop: 16 }}>
+                  <Card.Header style={{ fontWeight: "bold" }}>
+                    Bilhete de Identidade
+                  </Card.Header>
+                  <Card.Body>
+                    <a
+                      href="#"
+                      style={{ color: "rgb(220, 195, 119)", fontSize: 14 }}
+                    >
+                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                      {detalhesSelec.Trabalhador?.Pessoa?.BI?.file}
+                    </a>{" "}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 40 }}
+                      overlay={renderTooltip2}
+                    >
+                      <Button
+                        variant="dark"
+                        style={{
+                          float: "right",
+                          marginLeft: 3,
+                          color: "#ffc107",
+                        }}
+                        onClick={() =>
+                          handleNavigate(
+                            detalhesSelec.Trabalhador?.Pessoa?.BI?.file
+                          )
+                        }
+                      >
+                        <FaEye />
+                      </Button>
+                    </OverlayTrigger>
+                  </Card.Body>
+                </Card>{" "}
                 {/*<FaFilePdf />*/}
                 <div class="modal-footer">
                   <Button variant="warning" onClick={toggleDisplay9}>
@@ -1223,6 +1982,23 @@ const ContainerChefeServicos = ({ onSearch }) => {
             </div>
           </Link>
         </div>
+        <div class="col-md-3 col-sm-6">
+          <Link
+            className="link-queixa-queixoso"
+            to={`/queixasFiltradas/Desistente`}
+          >
+            <h5 className="status-qtd-queixas">Desistentes</h5>
+            <div class="progress blue">
+              <span class="progress-left">
+                <span class="progress-bar"></span>
+              </span>
+              <span class="progress-right">
+                <span class="progress-bar"></span>
+              </span>
+              <div class="progress-value">{qtd_queixa_por_desistencia}</div>
+            </div>
+          </Link>
+        </div>
         <h1
           style={{
             color: "#daa316",
@@ -1281,8 +2057,16 @@ const ContainerChefeServicos = ({ onSearch }) => {
             {data2?.trabalhador?.localizacao_office}
           </p>
         </Col>
-
-        <Col md={12} style={{ marginTop: 15 }}>
+        <br />{" "}
+        <JsonToExcel
+          title="Exportar"
+          data={myData}
+          fileName={`queixa${new Date().toLocaleDateString(
+            "pt-BR"
+          )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+          btnClassName="btn btn-primary"
+        />
+        <Col md={12} style={{ marginTop: 25 }}>
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
@@ -1322,13 +2106,12 @@ const ContainerChefeServicos = ({ onSearch }) => {
                           <></>
                         )
                       }
-                      rootClose
                     >
                       <Button
                         style={{
                           cursor: "default",
                           borderRadius: "20px",
-                          fontSize: "12px",
+                          fontSize: "14px",
                         }}
                         variant={
                           {
@@ -1349,16 +2132,35 @@ const ContainerChefeServicos = ({ onSearch }) => {
                     </OverlayTrigger>
                   </td>
 
-                  {conflito.estado === "Encerrado" ? (
+                  {conflito.estado === "Encerrado" ||
+                  conflito.estado === "Tribunal" ||
+                  conflito.estado === "Desistente" ? (
                     <td>
-                      <Button
+                      {/* <Button
                         variant="dark"
                         className="fw-bold btn-nova-queixa"
                         type="button"
                         onClick={(e) => ver_detalhes(conflito)}
                       >
-                        Ver detalhes
-                      </Button>
+                        Ver
+                      </Button> */}
+                      <Dropdown id="dropdown-basic-button">
+                        <Dropdown.Toggle
+                          variant="warning"
+                          id="dropdown-basic-button"
+                        >
+                          <FontAwesomeIcon icon={faCog} />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            href="#/action-3"
+                            onClick={() => detalhesFinal(conflito)}
+                          >
+                            Ver todos detalhes
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </td>
                   ) : (
                     <>
@@ -1407,6 +2209,18 @@ const ContainerChefeServicos = ({ onSearch }) => {
                               onClick={() => detalhesEmpregador(conflito)}
                             >
                               Ver o perfil do queixante
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => retrocederForm(conflito)}
+                            >
+                              Retroceder a queixa
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => documentosForm(conflito)}
+                            >
+                              Ver documentos
                             </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
