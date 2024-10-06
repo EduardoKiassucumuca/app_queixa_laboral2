@@ -63,6 +63,7 @@ var cpUpload2 = upload.fields([
 ]);
 var upload_file_acta = upload.fields([{ name: "fileActa" }]);
 var upload_file_BI = upload.fields([{ name: "fileBI" }]);
+var upload_file_artigo = upload.fields([{ name: "_file_artigo" }]);
 
 app.post("/nova_duvida", QueixaController.novaQuestao);
 app.post("/nova_resposta", QueixaController.novaResposta);
@@ -74,7 +75,12 @@ app.post(
   QueixaController.add_queixoso_queixa
 );
 app.post("/anexa_acta", upload_file_acta, QueixaController.anexa_acta);
-
+app.post(
+  "/publicar_artigo",
+  upload_file_artigo,
+  ArtigoController.publicar_artigo
+);
+app.put("/editar_artigo", upload_file_artigo, ArtigoController.publicar_artigo);
 app.post("/registar/conta", ContaController.store);
 app.post("/auth", ContaController.logar);
 app.get("/queixas", QueixaController.index);

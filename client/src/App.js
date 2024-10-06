@@ -40,6 +40,7 @@ import QueixasAdmin from "./components/Dashboard/queixas_admin";
 import QueixasPorEstado from "./components/Dashboard/queixas_por_estado";
 import PreviewDoc from "./components/Dashboard/previewdoc";
 import EsqueceuSenha from "./components/Login/esqueceu_senha";
+import ArtigosDashboard from "./components/artigos/artigos_dashboard";
 
 function App() {
   const [show, setShow] = useState("Empregador");
@@ -100,6 +101,8 @@ function App() {
         />
         <Route path="/noticias" element={<HomeMaisNoticias />} />
         <Route path="/artigos" element={<HomeMaisArtigos />} />
+        <Route path="/gerir_artigos" element={<ArtigosDashboard />} />
+
         <Route
           path="/saiba_mais/:cod_noticia"
           element={<HomeMaisDetalhesNoticias />}

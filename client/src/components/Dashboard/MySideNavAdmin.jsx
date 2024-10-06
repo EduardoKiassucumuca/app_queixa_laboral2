@@ -48,6 +48,22 @@ function MySideNavAdmin() {
             <a href="/queixas_admin">Queixas</a>
           </NavText>
         </NavItem>
+        <NavItem eventKey="Artigos">
+          <NavIcon>
+            <MdAnnouncement style={{ fontSize: "1.75em" }} />
+          </NavIcon>
+          <NavText>
+            <a href="/gerir_artigos">Artigos</a>
+          </NavText>
+        </NavItem>
+        <NavItem eventKey="Noticias">
+          <NavIcon>
+            <MdAnnouncement style={{ fontSize: "1.75em" }} />
+          </NavIcon>
+          <NavText>
+            <a href="/gerir_noticias">Noticias</a>
+          </NavText>
+        </NavItem>
       </SideNav.Nav>
     </SideNav>
   );
