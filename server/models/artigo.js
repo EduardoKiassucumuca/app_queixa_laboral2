@@ -21,6 +21,11 @@ const Artigo = db.define("artigo", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+
+  estado: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Artigo;

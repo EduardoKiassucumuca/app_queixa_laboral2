@@ -32,6 +32,10 @@ const Noticia = db.define("noticia", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  estado: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Noticia;

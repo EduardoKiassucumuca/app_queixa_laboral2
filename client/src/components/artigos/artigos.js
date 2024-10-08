@@ -23,7 +23,9 @@ function Artigos() {
     axios
       .get("http://localhost:3001/artigos")
       .then((resposta) => {
-        setArtigos(resposta.data);
+        setArtigos(
+          resposta.data.filter((artigo) => artigo.estado === "online")
+        );
         console.log(resposta.data);
       })
       .catch((res) => {

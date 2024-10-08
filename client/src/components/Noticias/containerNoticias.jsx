@@ -15,22 +15,26 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Card from "react-bootstrap/Card";
 
-function ArtigosPanel() {
-  const [artigos, setArtigos] = useState([]);
+function NoticiasPanel() {
+  const [noticias, setNoticias] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [titulo, setTitulo] = useState("");
+  const [dataPublicacao, setDataPublicacao] = useState("");
+  const [horaPublicacao, setHoraPublicacao] = useState("");
+  const [tipoPublicacao, setTipoPublicacao] = useState("");
+
   const [descricao, setDescricao] = useState("");
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [displayStyle3, setDisplayStyle3] = useState("none");
-  const [artigo_selecionado, setArtigoSelecionado] = useState({});
+  const [img_selecionado, setImgSelecionado] = useState({});
   const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = artigos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = noticias.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const [showUploadArtigo, setShowUploadArtigo] = React.useState(false);
-  const [artigoID, setArtigoID] = useState(0);
+  const [showUploadNoticia, setShowUploadNoticia] = React.useState(false);
+  const [noticiaID, setNoticiaID] = useState(0);
   const [displayStyle4, setDisplayStyle4] = useState("none");
 
   const toggleDisplay = () => {
@@ -68,30 +72,33 @@ function ArtigosPanel() {
   );
   const renderTooltip2 = (props) => (
     <Tooltip id="button-tooltip2" {...props}>
-      Ver
+      Baixar
     </Tooltip>
   );
   React.useEffect(() => {
     axios
-      .get("http://localhost:3001/artigos")
+      .get("http://localhost:3001/noticias")
       .then((resposta) => {
-        setArtigos(resposta.data);
+        setNoticias(resposta.data);
+        console.log(resposta.data);
       })
       .catch((res) => {
         console.log(res);
       });
   }, []);
 
-  function publicar_artigo(e) {
+  function publicar_noticia(e) {
     e.preventDefault();
     const formData = new FormData();
-    const file_artigo = document.querySelector("#file_artigo");
+    const file_noticia = document.querySelector("#file_noticia");
     formData.append("_titulo", titulo);
     formData.append("_descricao", descricao);
-    formData.append("_file_artigo", file_artigo?.files[0]);
-    console.log(file_artigo?.files[0]);
+    formData.append("_data", dataPublicacao);
+    formData.append("_hora", horaPublicacao);
+    formData.append("_tipo", tipoPublicacao);
+    formData.append("_file_noticia", file_noticia?.files[0]);
     axios
-      .post("http://localhost:3001/publicar_artigo", formData, {
+      .post("http://localhost:3001/publicar_noticia", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         },
@@ -116,7 +123,7 @@ function ArtigosPanel() {
     axios
       .put(
         "http://localhost:3001/eliminar_publicacao",
-        { _estado: "offline", id_artigo: artigoID },
+        { _estado: "offline", id_noticia: noticiaID },
         {
           headers: {
             "Content-Type": "application/json",
@@ -131,18 +138,18 @@ function ArtigosPanel() {
         console.log("error", erro);
       });
   }
-  function editar_artigo(e) {
+  function editar_noticia(e) {
     e.preventDefault();
     const formData = new FormData();
-    const file_artigo = document.querySelector("#file_artigo_edit");
+    const file_noticia = document.querySelector("#file_noticia_edit");
     formData.append("_titulo", titulo);
     formData.append("_descricao", descricao);
-    formData.append("id_artigo", artigoID);
+    formData.append("id_noticia", noticiaID);
 
-    formData.append("_file_artigo", file_artigo?.files[0]);
+    formData.append("_file_noticia", file_noticia?.files[0]);
     console.log(formData);
     axios
-      .put("http://localhost:3001/editar_artigo", formData, {
+      .put("http://localhost:3001/editar_noticia", formData, {
         headers: {
           "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
         },
@@ -155,22 +162,22 @@ function ArtigosPanel() {
         console.log("error", resposta);
       });
   }
-  function editarArtigoForm(artigo) {
-    setArtigoSelecionado(artigo);
-    setTitulo(artigo.titulo);
-    setDescricao(artigo.descricao);
-    setArtigoID(artigo.id);
+  function editarNoticiaForm(noticia) {
+    setImgSelecionado(noticia);
+    setTitulo(noticia.titulo);
+    setDescricao(noticia.descricao);
+    setNoticiaID(noticia.id);
     toggleDisplay3();
   }
-  function confirmacaoFom(artigo) {
-    setArtigoID(artigo.id);
+  function confirmacaoFom(noticia) {
+    setNoticiaID(noticia.id);
     toggleDisplay4();
   }
   function showUploadInput() {
-    if (showUploadArtigo) {
-      setShowUploadArtigo(false);
+    if (showUploadNoticia) {
+      setShowUploadNoticia(false);
     } else {
-      setShowUploadArtigo(true);
+      setShowUploadNoticia(true);
     }
   }
   return (
@@ -186,8 +193,8 @@ function ArtigosPanel() {
           </span>
 
           <form
-            id="publicar-artigo"
-            onSubmit={(e) => publicar_artigo(e)}
+            id="publicar-noticia"
+            onSubmit={(e) => publicar_noticia(e)}
             enctype="multipart/form-data"
           >
             <Row className="mb-3">
@@ -215,8 +222,30 @@ function ArtigosPanel() {
                   style={{ height: "190px" }}
                 />
               </FloatingLabel>
-              <Form.Label>Escolher artigo</Form.Label>
-              <Form.Control type="file" name="file_artigo" id="file_artigo" />
+              <Form.Label>Data</Form.Label>
+              <Form.Control
+                type="date"
+                name="data"
+                id="data"
+                onChange={(e) => setDataPublicacao(e.target.value)}
+              />
+              <Form.Label>Hora</Form.Label>
+              <Form.Control
+                type="time"
+                name="hora"
+                id="hora"
+                onChange={(e) => setHoraPublicacao(e.target.value)}
+              />
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => setTipoPublicacao(e.target.value)}
+              >
+                <option>Tipo de imagem</option>
+                <option value="destaque">destaque</option>
+                <option value="normali">normal</option>
+              </Form.Select>
+              <Form.Label>Escolher noticia</Form.Label>
+              <Form.Control type="file" name="file_noticia" id="file_noticia" />
             </Row>
 
             <div class="modal-footer">
@@ -239,8 +268,8 @@ function ArtigosPanel() {
           </span>
 
           <form
-            id="editar-artigo"
-            onSubmit={(e) => editar_artigo(e)}
+            id="editar-noticia"
+            onSubmit={(e) => editar_noticia(e)}
             enctype="multipart/form-data"
           >
             <Row className="mb-3">
@@ -278,7 +307,7 @@ function ArtigosPanel() {
                   style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
                 >
                   <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                  {artigo_selecionado?.url_artigo}
+                  {img_selecionado?.url_noticia}
                 </a>{" "}
                 <OverlayTrigger
                   placement="top"
@@ -292,9 +321,7 @@ function ArtigosPanel() {
                       marginLeft: 3,
                       color: "#ffc107",
                     }}
-                    onClick={() =>
-                      handleNavigate(artigo_selecionado?.url_artigo)
-                    }
+                    onClick={() => handleNavigate(img_selecionado?.url_noticia)}
                   >
                     <FaEye />
                   </Button>
@@ -315,13 +342,13 @@ function ArtigosPanel() {
               </Card.Body>
             </Card>{" "}
             <br />
-            {showUploadArtigo ? (
+            {showUploadNoticia ? (
               <>
-                <Form.Label>Escolher artigo</Form.Label>
+                <Form.Label>Escolher noticia</Form.Label>
                 <Form.Control
                   type="file"
-                  name="file_artigo_edit"
-                  id="file_artigo_edit"
+                  name="file_noticia_edit"
+                  id="file_noticia_edit"
                 />
               </>
             ) : (
@@ -402,7 +429,7 @@ function ArtigosPanel() {
         type="button"
         onClick={toggleDisplay}
       >
-        Novo Artigo
+        Nova noticia
       </Button>
       <table
         class="table table-striped table-responsive table-white"
@@ -421,15 +448,17 @@ function ArtigosPanel() {
           </tr>
         </thead>
         <tbody>
-          {currentItems?.reverse().map((artigo) => (
+          {currentItems?.reverse().map((noticia) => (
             <tr>
-              <th scope="row">{artigo.id}</th>
-              <td>{artigo?.titulo}</td>
-              <td>{artigo?.descricao}</td>
+              <th scope="row">{noticia.id}</th>
+              <td>{noticia?.titulo}</td>
+              <td>{noticia?.descricao}</td>
               <td
-                style={{ color: artigo.estado === "offline" ? "red" : "green" }}
+                style={{
+                  color: noticia.estado === "offline" ? "red" : "green",
+                }}
               >
-                {artigo?.estado}
+                {noticia?.estado}
               </td>
 
               <td>
@@ -441,22 +470,22 @@ function ArtigosPanel() {
                   <Dropdown.Menu>
                     <Dropdown.Item
                       href="#/action-1"
-                      onClick={() => editarArtigoForm(artigo)}
+                      onClick={() => editarNoticiaForm(noticia)}
                     >
                       Editar
                     </Dropdown.Item>
                     <Dropdown.Item
                       href="#/action-2"
-                      onClick={() => confirmacaoFom(artigo)}
+                      onClick={() => confirmacaoFom(noticia)}
                     >
                       Eliminar
                     </Dropdown.Item>
 
                     <Dropdown.Item
                       href="#/action-3"
-                      onClick={() => handleNavigate(artigo.url_artigo)}
+                      onClick={() => handleNavigate(noticia.url_img_noticia)}
                     >
-                      Ver artigo
+                      Ver imagem
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -470,7 +499,7 @@ function ArtigosPanel() {
         style={{ marginTop: 10, paddingBottom: 10 }}
       >
         {Array.from({
-          length: Math.ceil(artigos.length / itemsPerPage),
+          length: Math.ceil(noticias.length / itemsPerPage),
         }).map((_, index) => (
           <Pagination.Item
             key={index}
@@ -484,4 +513,4 @@ function ArtigosPanel() {
     </>
   );
 }
-export default ArtigosPanel;
+export default NoticiasPanel;

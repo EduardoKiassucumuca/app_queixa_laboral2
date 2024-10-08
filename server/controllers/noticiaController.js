@@ -12,6 +12,7 @@ module.exports = {
           "data",
           "hora",
           "tipo",
+          "estado",
         ],
       });
       return res.json(noticias);
@@ -31,12 +32,35 @@ module.exports = {
           "data",
           "hora",
           "tipo",
+          "estado",
         ],
         where: { id: id_noticia },
       });
       return res.json(noticia);
     } catch (error) {
       console.log("Error", error);
+    }
+  },
+  async publicar_noticia(req, res) {
+    try {
+      const _file_noticia = req?.files["_file_noticia"][0]?.path?.split("/")[1];
+      const { _titulo, _descricao, _data, _hora, _tipo } = req.body;
+
+      const nova_noticia = await Noticia.create({
+        titulo: _titulo,
+        descricao: _descricao,
+        data: _data,
+        hora: _hora,
+        tipo: _tipo,
+        url_img_noticia: _file_noticia,
+        estado: "online",
+      });
+      return res.status(200).send({
+        status: 1,
+        message: "Noticia guardada com sucesso!",
+      });
+    } catch (error) {
+      console.log(error);
     }
   },
 };
