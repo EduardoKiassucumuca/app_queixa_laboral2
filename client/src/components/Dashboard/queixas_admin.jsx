@@ -91,6 +91,8 @@ const QueixasAdmin = ({ onSearch }) => {
   const [showUploadfile4, setShowUploadfile4] = React.useState(false);
   const [showUploadfile5, setShowUploadfile5] = React.useState(false);
   const [showUploadfile6, setShowUploadfile6] = React.useState(false);
+  const [emailChefe, setEmailChefe] = useState("");
+  const [displayStyle17, setDisplayStyle17] = useState("none");
 
   const popover = (
     <Popover id="popover-basic" style={{ minWidth: 290 }}>
@@ -229,6 +231,12 @@ const QueixasAdmin = ({ onSearch }) => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const toggleDisplay17 = () => {
+    // Toggle between 'none' and 'block'
+    setDisplayStyle17((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
   function showUploadInput() {
     if (showUploadContrato) {
       setShowUploadContrato(false);
@@ -337,6 +345,12 @@ const QueixasAdmin = ({ onSearch }) => {
               queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
               " " +
               queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
+            "Chefe dos serviços provinciais":
+              queixa?.funcionarioigt === null
+                ? "Nenhum"
+                : queixa?.funcionarioigt?.Trabalhador?.Pessoa?.nome +
+                  " " +
+                  queixa?.funcionarioigt?.Trabalhador?.Pessoa?.sobrenome,
             Provincia: queixa.Trabalhador.localizacao_office,
             Assunto: queixa.assunto,
             Facto: queixa.facto,
@@ -754,6 +768,30 @@ const QueixasAdmin = ({ onSearch }) => {
   function documentosForm(conflito) {
     setDetalhesSelec(conflito);
     toggleDisplay15();
+  }
+  function ver_chefeServicos(conflito_selecionado) {
+    setDetalhesSelec(conflito_selecionado);
+    console.log(conflito_selecionado);
+    if (conflito_selecionado?.funcionarioigt !== null) {
+      Axios.get("http://localhost:3001/buscar_email", {
+        params: {
+          contaID: conflito_selecionado?.funcionarioigt?.Trabalhador?.contaID,
+        },
+      })
+        .then(({ data }) => {
+          console.log(data.email);
+
+          setEmailChefe(data.email);
+          toggleDisplay17();
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else {
+      toggleDisplay17();
+    }
+
+    //console.log(lista_queixa.minha_queixa)
   }
   return (
     <>
@@ -1528,6 +1566,69 @@ const QueixasAdmin = ({ onSearch }) => {
 
           <div class="modal-footer">
             <Button variant="warning" onClick={toggleDisplay11}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle17,
+          position: "fixed",
+          top: "150px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          {detalhesSelec?.funcionarioigt === null ||
+          detalhesSelec?.funcionarioigt === undefined ? (
+            <>
+              <h3
+                style={{ color: "#ffc107", fontSize: 20, fontWeight: "bold" }}
+              >
+                Aviso
+              </h3>
+              <br />
+              <h3 style={{}}>
+                Nenhum Chefe dos serviços provinciais foi adicionado a esta
+                queixa
+              </h3>
+            </>
+          ) : (
+            <>
+              {" "}
+              <h4 style={{ color: "", fontSize: 30, fontWeight: "bold" }}>
+                {detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa.nome +
+                  " " +
+                  detalhesSelec?.funcionarioigt?.Trabalhador?.Pessoa
+                    .sobrenome ?? "Nenhum"}
+              </h4>
+              <br />{" "}
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Departamento:
+                </span>{" "}
+                {detalhesSelec?.funcionarioigt?.Trabalhador?.departamento ??
+                  "Nenhum"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>Cargo:</span>{" "}
+                {detalhesSelec?.funcionarioigt?.Trabalhador?.cargo ===
+                "chefe_servicos"
+                  ? "Chefe dos Serviços Provinciais"
+                  : "Nenhum"}
+              </span>
+              <span style={{ marginBottom: 10 }}>
+                <span style={{ fontSize: 15, fontWeight: "bold" }}>Email:</span>{" "}
+                {emailChefe}
+              </span>
+            </>
+          )}
+
+          <div class="modal-footer">
+            <Button variant="warning" onClick={toggleDisplay17}>
               OK
             </Button>
           </div>
@@ -2690,6 +2791,12 @@ const QueixasAdmin = ({ onSearch }) => {
                               onClick={() => detalhesTestemunha(conflito)}
                             >
                               Ver o perfil da testemunha
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => ver_chefeServicos(conflito)}
+                            >
+                              Ver o perfil do chefe dos serviços provinciais
                             </Dropdown.Item>
                             <Dropdown.Item
                               href="#/action-3"
