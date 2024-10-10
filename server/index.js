@@ -86,8 +86,15 @@ app.post(
   upload_file_noticia,
   noticiaController.publicar_noticia
 );
+app.put(
+  "/editar_noticia",
+  upload_file_noticia,
+  noticiaController.editar_noticia
+);
+
 app.put("/editar_artigo", upload_file_artigo, ArtigoController.editar_artigo);
 app.put("/eliminar_publicacao", ArtigoController.eliminar_publicacao);
+app.put("/eliminar_publicacao_n", noticiaController.eliminar_publicacao);
 
 app.post("/registar/conta", ContaController.store);
 app.post("/auth", ContaController.logar);

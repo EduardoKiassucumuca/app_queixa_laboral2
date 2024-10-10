@@ -975,7 +975,7 @@ const LerQueixa = () => {
             >
               <option value={modo}>{modo}</option>
 
-              {conflito.modo === "normal" ? (
+              {conflito?.modo === "normal" ? (
                 <option value="anonimo">anonimo</option>
               ) : (
                 <option value="normal">normal</option>

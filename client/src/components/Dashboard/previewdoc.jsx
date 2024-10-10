@@ -22,18 +22,21 @@ function PreviewDoc() {
         responseType: "blob", // Recebe o arquivo como blob
       });
 
-      // Cria uma URL temporária para pré-visualização
-      if (response.data.type === "application/pdf") {
+      // Verifica o tipo de arquivo para pré-visualização
+      const fileType = response.data.type;
+
+      if (fileType === "application/pdf" || fileType.startsWith("image/")) {
         // Cria uma URL temporária para pré-visualização
         const previewUrl = URL.createObjectURL(response.data);
         setFileUrl(previewUrl);
       } else {
-        setError("O arquivo não é um PDF.");
+        setError("O arquivo não é um PDF ou uma imagem suportada.");
       }
     } catch (error) {
       console.error("Erro ao buscar o arquivo: ", error);
     }
   };
+
   React.useEffect(() => {
     fetchFile();
   }, [location.search]);

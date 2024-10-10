@@ -512,7 +512,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
   }
   function detalhesFinal(conflito) {
     setDetalhesSelec(conflito);
-    console.log(conflito);
     toggleDisplay16();
   }
   function detalhesInspector(conflito_selecionado) {
@@ -1585,7 +1584,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 </div>
               </div>
             </>
-          ) : detalhesSelec?.Trabalhador?.tipo.toLowerCase() === "queixoso" ? (
+          ) : (
             <>
               {" "}
               <div class="modal-content">
@@ -1677,8 +1676,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 </div>
               </div>
             </>
-          ) : (
-            <></>
           )}
         </div>
         <div
@@ -1760,7 +1757,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 </div>
               </div>
             </>
-          ) : detalhesSelec?.Trabalhador?.tipo.toLowerCase() === "queixante" ? (
+          ) : (
             <>
               {" "}
               <div class="modal-content">
@@ -1859,8 +1856,6 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 </div>
               </div>
             </>
-          ) : (
-            <></>
           )}
         </div>
         <div class="row status-queixa">

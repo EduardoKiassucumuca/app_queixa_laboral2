@@ -18,7 +18,7 @@ const Noticia = db.define("noticia", {
   },
   url_img_noticia: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   data: {
     type: DataTypes.DATE,

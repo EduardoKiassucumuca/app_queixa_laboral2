@@ -72,7 +72,7 @@ function NoticiasPanel() {
   );
   const renderTooltip2 = (props) => (
     <Tooltip id="button-tooltip2" {...props}>
-      Baixar
+      Ver
     </Tooltip>
   );
   React.useEffect(() => {
@@ -122,8 +122,8 @@ function NoticiasPanel() {
   function eliminar_publicacao() {
     axios
       .put(
-        "http://localhost:3001/eliminar_publicacao",
-        { _estado: "offline", id_noticia: noticiaID },
+        "http://localhost:3001/eliminar_publicacao_n",
+        { id_noticia: noticiaID },
         {
           headers: {
             "Content-Type": "application/json",
@@ -144,6 +144,10 @@ function NoticiasPanel() {
     const file_noticia = document.querySelector("#file_noticia_edit");
     formData.append("_titulo", titulo);
     formData.append("_descricao", descricao);
+    formData.append("_data", dataPublicacao);
+    formData.append("_hora", horaPublicacao);
+    formData.append("_tipo", tipoPublicacao);
+
     formData.append("id_noticia", noticiaID);
 
     formData.append("_file_noticia", file_noticia?.files[0]);
@@ -166,6 +170,9 @@ function NoticiasPanel() {
     setImgSelecionado(noticia);
     setTitulo(noticia.titulo);
     setDescricao(noticia.descricao);
+    setDataPublicacao(noticia.data);
+    setHoraPublicacao(noticia.hora);
+    setTipoPublicacao(noticia.tipo);
     setNoticiaID(noticia.id);
     toggleDisplay3();
   }
@@ -242,7 +249,7 @@ function NoticiasPanel() {
               >
                 <option>Tipo de imagem</option>
                 <option value="destaque">destaque</option>
-                <option value="normali">normal</option>
+                <option value="normal">normal</option>
               </Form.Select>
               <Form.Label>Escolher noticia</Form.Label>
               <Form.Control type="file" name="file_noticia" id="file_noticia" />
@@ -299,6 +306,31 @@ function NoticiasPanel() {
                   style={{ height: "190px" }}
                 />
               </FloatingLabel>
+              <Form.Label>Data</Form.Label>
+              <Form.Control
+                type="date"
+                name="data"
+                id="data"
+                value={dataPublicacao}
+                onChange={(e) => setDataPublicacao(e.target.value)}
+              />
+              <Form.Label>Hora</Form.Label>
+              <Form.Control
+                type="time"
+                name="hora"
+                id="hora"
+                value={horaPublicacao}
+                onChange={(e) => setHoraPublicacao(e.target.value)}
+              />
+              <Form.Select
+                aria-label="Default select example"
+                value={tipoPublicacao}
+                onChange={(e) => setTipoPublicacao(e.target.value)}
+              >
+                <option>Tipo de imagem</option>
+                <option value="destaque">destaque</option>
+                <option value="normal">normal</option>
+              </Form.Select>
             </Row>
             <Card style={{ marginTop: 16 }}>
               <Card.Body>
@@ -307,7 +339,7 @@ function NoticiasPanel() {
                   style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
                 >
                   <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                  {img_selecionado?.url_noticia}
+                  {img_selecionado?.url_img_noticia}
                 </a>{" "}
                 <OverlayTrigger
                   placement="top"
@@ -321,7 +353,9 @@ function NoticiasPanel() {
                       marginLeft: 3,
                       color: "#ffc107",
                     }}
-                    onClick={() => handleNavigate(img_selecionado?.url_noticia)}
+                    onClick={() =>
+                      handleNavigate(img_selecionado?.url_img_noticia)
+                    }
                   >
                     <FaEye />
                   </Button>
@@ -478,14 +512,7 @@ function NoticiasPanel() {
                       href="#/action-2"
                       onClick={() => confirmacaoFom(noticia)}
                     >
-                      Eliminar
-                    </Dropdown.Item>
-
-                    <Dropdown.Item
-                      href="#/action-3"
-                      onClick={() => handleNavigate(noticia.url_img_noticia)}
-                    >
-                      Ver imagem
+                      Eliminar publicação
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>

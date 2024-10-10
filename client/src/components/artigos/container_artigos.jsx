@@ -449,7 +449,7 @@ function ArtigosPanel() {
                       href="#/action-2"
                       onClick={() => confirmacaoFom(artigo)}
                     >
-                      Eliminar
+                      Eliminar publicação
                     </Dropdown.Item>
 
                     <Dropdown.Item

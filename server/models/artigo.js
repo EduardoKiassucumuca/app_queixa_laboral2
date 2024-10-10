@@ -19,7 +19,7 @@ const Artigo = db.define("artigo", {
 
   url_artigo: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 
   estado: {

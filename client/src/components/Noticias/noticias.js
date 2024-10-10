@@ -15,7 +15,9 @@ function Noticias() {
     axios
       .get("http://localhost:3001/noticias")
       .then((resposta) => {
-        setNoticias(resposta.data);
+        setNoticias(
+          resposta.data.filter((noticia) => noticia.estado === "online")
+        );
         console.log(resposta.data);
       })
       .catch((res) => {

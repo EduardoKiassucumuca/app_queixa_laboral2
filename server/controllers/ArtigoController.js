@@ -32,7 +32,12 @@ module.exports = {
   },
   async editar_artigo(req, res) {
     try {
-      const _file_artigo = req?.files["_file_artigo"][0]?.path?.split("/")[1];
+      let _file_artigo;
+      if (req?.files?.["_file_artigo"] && req.files["_file_artigo"][0]?.path) {
+        _file_artigo = req.files["_file_artigo"][0].path.split("/")[1];
+      } else {
+        _file_artigo = null; // ou outro valor que faça sentido para o seu caso
+      }
       const { _titulo, _descricao, id_artigo } = req.body;
 
       const novo_artigo = await Artigo.update(

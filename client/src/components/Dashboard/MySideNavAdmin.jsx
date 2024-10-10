@@ -7,7 +7,8 @@ import SideNav, {
 } from "@trendmicro/react-sidenav";
 import { MdAnnouncement } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
-
+import { FaBook } from "react-icons/fa";
+import { FaNewspaper } from "react-icons/fa";
 // Be sure to include styles at some point, probably during your bootstraping
 import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 import { Link } from "react-router-dom";
@@ -50,7 +51,7 @@ function MySideNavAdmin() {
         </NavItem>
         <NavItem eventKey="Artigos">
           <NavIcon>
-            <MdAnnouncement style={{ fontSize: "1.75em" }} />
+            <FaBook style={{ fontSize: "1.75em" }} />
           </NavIcon>
           <NavText>
             <a href="/gerir_artigos">Artigos</a>
@@ -58,7 +59,7 @@ function MySideNavAdmin() {
         </NavItem>
         <NavItem eventKey="Noticias">
           <NavIcon>
-            <MdAnnouncement style={{ fontSize: "1.75em" }} />
+            <FaNewspaper style={{ fontSize: "1.75em" }} />
           </NavIcon>
           <NavText>
             <a href="/gerir_noticias">Noticias</a>
