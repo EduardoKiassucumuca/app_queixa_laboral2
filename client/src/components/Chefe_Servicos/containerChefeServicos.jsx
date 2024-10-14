@@ -27,6 +27,7 @@ import { FaEye } from "react-icons/fa";
 import { FaFileAlt } from "react-icons/fa";
 import Tooltip from "react-bootstrap/Tooltip";
 import { JsonToExcel } from "react-json-to-excel";
+import { useNavigate } from "react-router-dom";
 
 const formTemplate = {
   review: "",
@@ -75,6 +76,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const itemsPerPageModal = 5; // Número de itens por página
   const [myData, setMyData] = useState([{}]);
+  const navigate = useNavigate();
 
   // Calcular o índice do último e do primeiro item na página atual
   const indexOfLastItemModal = currentPage * itemsPerPage;
@@ -251,6 +253,29 @@ const ContainerChefeServicos = ({ onSearch }) => {
     window.location.href = "/chefe_servicos";
   }
   React.useEffect(() => {
+    if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
+    ) {
+      navigate("/dashboard_queixoso");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
+    ) {
+      navigate("/recepcionista");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
+    ) {
+      navigate("/chefe_servicos");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
+    ) {
+      navigate("/inspector");
+    } else {
+      navigate("/Entrar");
+    }
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
         // const todas_queixas = data.queixas[0].concat(data.queixas[1])

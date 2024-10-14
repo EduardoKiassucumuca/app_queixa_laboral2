@@ -72,6 +72,29 @@ const Container_queixoso = () => {
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
     //console.log("ok");
+    if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
+    ) {
+      navigate("/dashboard_queixoso");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
+    ) {
+      navigate("/recepcionista");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
+    ) {
+      navigate("/chefe_servicos");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
+    ) {
+      navigate("/inspector");
+    } else {
+      navigate("/Entrar");
+    }
     Axios.get("http://localhost:3001/queixas_do_queixoso", {
       params: {
         queixosoID: id_queixoso,

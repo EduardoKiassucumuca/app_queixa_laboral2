@@ -143,47 +143,46 @@ const LerQueixa = () => {
       formData.append("file6", file6?.files[0]);
     }
     if (file_contrato?.files[0]) {
-      console.log("aaaa");
-
-      formData.append("id_queixa", conflito.id);
-      formData.append("_modo", modo);
-      formData.append("assunto", assunto);
-      formData.append("facto", descricao);
-
       formData.append("fileContrato", file_contrato.files[0]);
-      Axios.put("http://localhost:3001/editar_queixa", formData, {
-        headers: {
-          "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
-        },
-      })
-        .then(function (response) {
-          //console.log(response);
-          toggleDisplay2();
-          //window.location.href = '/chefe_servicos';
-          alert("Queixa editada com sucesso");
-          window.location.href = "/ler_queixa/" + conflito.id;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      Axios.put("http://localhost:3001/editar_queixa2", {
-        id_queixa: conflito.id,
-        assunto: assunto,
-        facto: descricao,
-        _modo: modo,
-        fileContrato: conflito.url_file_contrato,
-      })
-        .then(function (response) {
-          //console.log(response);
-          toggleDisplay2();
-          alert("Queixa editada com sucesso");
-          window.location.href = "/ler_queixa/" + conflito.id;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
     }
+    formData.append("id_queixa", conflito.id);
+    formData.append("_modo", modo);
+    formData.append("assunto", assunto);
+    formData.append("facto", descricao);
+
+    Axios.patch("http://localhost:3001/editar_queixa", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data;boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        //console.log(response);
+        toggleDisplay2();
+        //window.location.href = '/chefe_servicos';
+        alert("Queixa editada com sucesso");
+        window.location.href = "/ler_queixa/" + conflito.id;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // } else {
+    //   Axios.put("http://localhost:3001/editar_queixa2", {
+    //     id_queixa: conflito.id,
+    //     assunto: assunto,
+    //     facto: descricao,
+    //     _modo: modo,
+    //     fileContrato: conflito.url_file_contrato,
+    //   })
+    //     .then(function (response) {
+    //       //console.log(response);
+    //       toggleDisplay2();
+    //       alert("Queixa editada com sucesso");
+    //       window.location.href = "/ler_queixa/" + conflito.id;
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     });
+    // }
   }
   const handleDownload = async (url_file) => {
     const filename = url_file.split("\\").pop();
@@ -725,198 +724,178 @@ const LerQueixa = () => {
               )}
               <Card style={{ marginTop: 16 }}>
                 <Card.Header style={{ fontWeight: "bold" }}>Outros</Card.Header>
-                {conflito?.file3 !== "null" && conflito?.file3 !== undefined ? (
-                  <>
-                    <Card.Body>
-                      <a
-                        href="#"
-                        style={{
-                          color: "rgb(220, 195, 119)",
-                          fontSize: 13,
-                        }}
-                      >
-                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                        {conflito?.file3}
-                      </a>{" "}
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="dark"
-                          style={{
-                            float: "right",
-                            marginLeft: 3,
-                            color: "#ffc107",
-                          }}
-                          onClick={() => handleNavigate(conflito?.file3)}
-                        >
-                          <FaEye />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="warning"
-                          style={{ float: "right" }}
-                          onClick={showUploadFile3}
-                        >
-                          <FaRegEdit />
-                        </Button>
-                      </OverlayTrigger>
-                    </Card.Body>
-                  </>
-                ) : (
-                  <></>
-                )}
-                {conflito?.file4 !== "null" && conflito?.file4 !== undefined ? (
-                  <>
-                    <Card.Body>
-                      <a
-                        href="#"
-                        style={{
-                          color: "rgb(220, 195, 119)",
-                          fontSize: 13,
-                        }}
-                      >
-                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                        {conflito?.file4}
-                      </a>{" "}
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="dark"
-                          style={{
-                            float: "right",
-                            marginLeft: 3,
-                            color: "#ffc107",
-                          }}
-                          onClick={() => handleNavigate(conflito?.file4)}
-                        >
-                          <FaEye />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip1}
-                      >
-                        <Button
-                          variant="warning"
-                          style={{ float: "right" }}
-                          onClick={showUploadFile4}
-                        >
-                          <FaRegEdit />
-                        </Button>
-                      </OverlayTrigger>
-                    </Card.Body>
-                  </>
-                ) : (
-                  <></>
-                )}
-                {conflito?.file5 !== "null" && conflito?.file5 !== undefined ? (
-                  <>
-                    <Card.Body>
-                      <a
-                        href="#"
-                        style={{
-                          color: "rgb(220, 195, 119)",
-                          fontSize: 13,
-                        }}
-                      >
-                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                        {conflito?.file5}
-                      </a>{" "}
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="dark"
-                          style={{
-                            float: "right",
-                            marginLeft: 3,
-                            color: "#ffc107",
-                          }}
-                          onClick={() => handleNavigate(conflito?.file5)}
-                        >
-                          <FaEye />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip1}
-                      >
-                        <Button
-                          variant="warning"
-                          style={{ float: "right" }}
-                          onClick={showUploadFile5}
-                        >
-                          <FaRegEdit />
-                        </Button>
-                      </OverlayTrigger>
-                    </Card.Body>
-                  </>
-                ) : (
-                  <></>
-                )}
-                {conflito?.file6 !== "null" && conflito?.file6 !== undefined ? (
-                  <>
-                    <Card.Body>
-                      <a
-                        href="#"
-                        style={{
-                          color: "rgb(220, 195, 119)",
-                          fontSize: 13,
-                        }}
-                      >
-                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                        {conflito?.file6}
-                      </a>{" "}
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="dark"
-                          style={{
-                            float: "right",
-                            marginLeft: 3,
-                            color: "#ffc107",
-                          }}
-                          onClick={() => handleNavigate(conflito?.file6)}
-                        >
-                          <FaEye />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip1}
-                      >
-                        <Button
-                          variant="warning"
-                          style={{ float: "right" }}
-                          onClick={showUploadFile6}
-                        >
-                          <FaRegEdit />
-                        </Button>
-                      </OverlayTrigger>
-                    </Card.Body>
-                  </>
-                ) : (
-                  <></>
-                )}
+
+                <Card.Body>
+                  <a
+                    href="#"
+                    style={{
+                      color: "rgb(220, 195, 119)",
+                      fontSize: 13,
+                    }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {conflito?.file3}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() => handleNavigate(conflito?.file3)}
+                    >
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="warning"
+                      style={{ float: "right" }}
+                      onClick={showUploadFile3}
+                    >
+                      <FaRegEdit />
+                    </Button>
+                  </OverlayTrigger>
+                </Card.Body>
+
+                <Card.Body>
+                  <a
+                    href="#"
+                    style={{
+                      color: "rgb(220, 195, 119)",
+                      fontSize: 13,
+                    }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {conflito?.file4}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() => handleNavigate(conflito?.file4)}
+                    >
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip1}
+                  >
+                    <Button
+                      variant="warning"
+                      style={{ float: "right" }}
+                      onClick={showUploadFile4}
+                    >
+                      <FaRegEdit />
+                    </Button>
+                  </OverlayTrigger>
+                </Card.Body>
+
+                <Card.Body>
+                  <a
+                    href="#"
+                    style={{
+                      color: "rgb(220, 195, 119)",
+                      fontSize: 13,
+                    }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {conflito?.file5}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() => handleNavigate(conflito?.file5)}
+                    >
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip1}
+                  >
+                    <Button
+                      variant="warning"
+                      style={{ float: "right" }}
+                      onClick={showUploadFile5}
+                    >
+                      <FaRegEdit />
+                    </Button>
+                  </OverlayTrigger>
+                </Card.Body>
+
+                <Card.Body>
+                  <a
+                    href="#"
+                    style={{
+                      color: "rgb(220, 195, 119)",
+                      fontSize: 13,
+                    }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {conflito?.file6}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() => handleNavigate(conflito?.file6)}
+                    >
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip1}
+                  >
+                    <Button
+                      variant="warning"
+                      style={{ float: "right" }}
+                      onClick={showUploadFile6}
+                    >
+                      <FaRegEdit />
+                    </Button>
+                  </OverlayTrigger>
+                </Card.Body>
               </Card>{" "}
               <br />
               {showUploadfile3 ? (

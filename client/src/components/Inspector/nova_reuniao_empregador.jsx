@@ -136,7 +136,7 @@ function NovaReuniaoEmpregador(props) {
                   <Form.Control
                     placeholder="Queixa"
                     name="assunto_queixa"
-                    pattern="[a-zA-Z0-9]*"
+                    // pattern="[a-zA-Z0-9]*"
                     id="assunto-queixa"
                     style={{ padding: "2px" }}
                     required

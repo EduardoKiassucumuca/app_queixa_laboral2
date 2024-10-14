@@ -70,6 +70,29 @@ const ContainerInspector = ({ onSearch }) => {
     );
   };
   React.useEffect(() => {
+    if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
+    ) {
+      navigate("/dashboard_queixoso");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
+    ) {
+      navigate("/recepcionista");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
+    ) {
+      navigate("/chefe_servicos");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
+    ) {
+      navigate("/inspector");
+    } else {
+      navigate("/Entrar");
+    }
     if (sessionStorage.getItem("email")) {
       Axios.get("http://localhost:3001/queixas_inspectores2", {
         params: {
@@ -283,7 +306,8 @@ const ContainerInspector = ({ onSearch }) => {
               marginBottom: 25,
               opacity:
                 conflito.estado === "Encerrado" ||
-                conflito.estado === "tribunal"
+                conflito.estado === "Tribunal" ||
+                conflito?.estado === "Desistente"
                   ? 0.5
                   : conflito.estado === "encaminhada_inspector"
                   ? 1

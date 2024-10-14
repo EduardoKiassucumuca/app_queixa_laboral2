@@ -1663,38 +1663,45 @@ module.exports = {
     }
   },
   async update_queixa(req, res) {
-    const { id_queixa } = req.body;
-    const { assunto } = req.body;
-    const { facto } = req.body;
-    const { _modo } = req.body;
-    const fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-    const _file3 = req?.files?.["file3"]?.[0]?.path?.split("/")[1] ?? "null";
-    const _file4 = req?.files?.["file4"]?.[0]?.path?.split("/")[1] ?? "null";
-    const _file5 = req?.files?.["file5"]?.[0]?.path?.split("/")[1] ?? "null";
-    const _file6 = req?.files?.["file6"]?.[0]?.path?.split("/")[1] ?? "null";
+    try {
+      const { id_queixa, assunto, facto, _modo } = req.body;
 
-    await Queixa.update(
-      {
-        assunto: assunto,
-        facto: facto,
-        modo: _modo,
-        url_file_contrato: fileContrato,
-        file3: _file3,
-        file4: _file4,
-        file5: _file5,
-        file6: _file6,
-      },
-      {
+      // Verifica se os arquivos foram enviados e define os nomes, ou mantém os valores atuais.
+      const filename = req?.files?.["fileContrato"]?.[0]?.path?.split("/")[1];
+      const _file3 = req?.files?.["file3"]?.[0]?.path?.split("/")[1] ?? null;
+      const _file4 = req?.files?.["file4"]?.[0]?.path?.split("/")[1] ?? null;
+      const _file5 = req?.files?.["file5"]?.[0]?.path?.split("/")[1] ?? null;
+      const _file6 = req?.files?.["file6"]?.[0]?.path?.split("/")[1] ?? null;
+
+      // Cria um objeto de atualização apenas com os campos que foram fornecidos.
+      const updateData = {};
+      if (assunto) updateData.assunto = assunto;
+      if (facto) updateData.facto = facto;
+      if (_modo) updateData.modo = _modo;
+      if (filename) updateData.url_file_contrato = filename;
+      if (_file3) updateData.file3 = _file3;
+      if (_file4) updateData.file4 = _file4;
+      if (_file5) updateData.file5 = _file5;
+      if (_file6) updateData.file6 = _file6;
+
+      // Executa a atualização no banco de dados apenas com os campos que realmente mudaram.
+      await Queixa.update(updateData, {
         where: {
           id: id_queixa,
         },
-      }
-    );
+      });
 
-    return res.status(200).send({
-      status: 1,
-      message: "Queixa editada com sucesso!",
-    });
+      return res.status(200).send({
+        status: 1,
+        message: "Queixa editada com sucesso!",
+      });
+    } catch (error) {
+      return res.status(500).send({
+        status: 0,
+        message: "Erro ao editar a queixa.",
+        error: error.message,
+      });
+    }
   },
   async update_queixa2(req, res) {
     const { id_queixa } = req.body;
@@ -1822,13 +1829,13 @@ module.exports = {
         subject: "IGT | Queixa laboral",
         text:
           "Olá note que foi encaminhada a queixa " +
-          queixa.id +
-          " de " +
-          pessoa.nome +
-          " " +
-          pessoa.sobrenome +
-          " para analise.",
+            queixa.id +
+            " de " +
+            pessoa?.nome && pessoa?.sobrenome
+            ? `${pessoa.nome} ${pessoa.sobrenome}`
+            : `${queixosoEmp?.nome_empresa} para análise.`,
       };
+
       //res.status(200).send({ auth: true, token });
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {

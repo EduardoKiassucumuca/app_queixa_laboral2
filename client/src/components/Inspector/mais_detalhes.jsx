@@ -309,7 +309,8 @@ const MaisDetalhes = () => {
                   className="estado"
                   color={
                     conflito.estado === "Encerrado" ||
-                    conflito.estado === "Tribunal"
+                    conflito.estado === "Tribunal" ||
+                    conflito?.estado === "Desistente"
                       ? "red"
                       : conflito.estado === "encaminhada_inspector"
                       ? "yellow"
@@ -411,7 +412,8 @@ const MaisDetalhes = () => {
                     <FaPhone className="footer-nota" /> Inspencção geral do
                     trabalho
                     {conflito.estado === "Encerrado" ||
-                    conflito.estado === "Tribunal" ? (
+                    conflito.estado === "Tribunal" ||
+                    conflito?.estado === "Desistente" ? (
                       <Button
                         variant="dark"
                         border="secondary"
@@ -446,7 +448,9 @@ const MaisDetalhes = () => {
               <p></p>
             </>
           ))}
-          {conflito.estado === "Encerrado" || conflito.estado === "Tribunal" ? (
+          {conflito.estado === "Encerrado" ||
+          conflito.estado === "Tribunal" ||
+          conflito?.estado === "Desistente" ? (
             <>
               <Button
                 variant="dark"

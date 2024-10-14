@@ -154,6 +154,7 @@ module.exports = {
           "file4",
           "file5",
           "file6",
+          "funcionarioigtID",
         ],
         required: true,
         include: [
@@ -226,6 +227,22 @@ module.exports = {
                   {
                     association: "BI",
                     required: true,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            association: "funcionarioigt",
+            required: false,
+            include: [
+              {
+                association: "Trabalhador",
+                required: false,
+                include: [
+                  {
+                    association: "Pessoa",
+                    required: false,
                   },
                 ],
               },
