@@ -316,6 +316,18 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
     //console.log(conflitos);
   }
+  function persquisarPorData(bi_pesquisado) {
+    setBI(bi_pesquisado);
+    console.log(BI);
+    setConflitos(
+      queixas_selecprovincia.filter((queixa_pesquisada) =>
+        queixa_pesquisada.Trabalhador.Pessoa.BI.numeroBI
+          .toLowerCase()
+          .includes(bi_pesquisado.toLowerCase())
+      )
+    );
+    //console.log(conflitos);
+  }
   function buscaNIF(nif_pesquisado) {
     setNif(nif_pesquisado);
     setConflitos(
@@ -493,7 +505,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
       </h1>
 
       <Row className="queixas_recepcionista">
-        <Col md={2}>
+        <Col md={3}>
           <OverlayTrigger
             trigger="click"
             placement="bottom"
@@ -511,7 +523,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaCodigo(e.target.value)}
           />
         </Col>
-        <Col md={3}>
+        <Col md={2}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Bilhete de Identificação"
@@ -519,7 +531,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaBI(e.target.value)}
           />
         </Col>
-        <Col md={3}>
+        <Col md={2}>
           <Search
             className="pesquisa2"
             placeholder="Procurar pelo NIF"
@@ -527,7 +539,24 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaNIF(e.target.value)}
           />
         </Col>
-
+        {/* <Col md={2}>
+          <Form.Label>Data de inicio</Form.Label>
+          <Form.Control
+            className="pesquisa-startDate"
+            placeholder="Procurar pelo NIF"
+            type="date"
+            onChange={(e) => buscaNIF(e.target.value)}
+          />
+        </Col>
+        <Col md={2}>
+          <Form.Label>Data de final</Form.Label>
+          <Form.Control
+            className="pesquisa-startDate"
+            placeholder="Procurar pelo NIF"
+            type="date"
+            onChange={(e) => buscaNIF(e.target.value)}
+          />
+        </Col> */}
         <Col md={2}>
           {" "}
           <p className="p-localizacao" style={{ fontWeight: "bold" }}>
@@ -1122,7 +1151,6 @@ const ContainerRecepcionista = ({ onSearch }) => {
             </Row>
           </div>
         </div>
-
         <div
           id="myModal"
           class="modal"
@@ -1788,14 +1816,18 @@ const ContainerRecepcionista = ({ onSearch }) => {
           </div>
         </div>
         <br />
-        <JsonToExcel
-          title="Exportar"
-          data={myData}
-          fileName={`queixa${new Date().toLocaleDateString(
-            "pt-BR"
-          )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-          btnClassName="btn btn-primary"
-        />
+        <Row>
+          {" "}
+          <JsonToExcel
+            title="Exportar"
+            data={myData}
+            fileName={`queixa${new Date().toLocaleDateString(
+              "pt-BR"
+            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+            btnClassName="btn btn-primary"
+          />
+        </Row>
+
         <Col md={12} style={{ marginTop: 5 }}>
           <table
             class="table table-striped table-responsive "
@@ -1804,6 +1836,8 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col"> Data</th>
+                <th scope="col"> Empregador</th>
                 <th scope="col"> Trabalhador</th>
                 <th scope="col"> Empregador</th>
                 <th scope="col">Assunto</th>
@@ -1816,6 +1850,10 @@ const ContainerRecepcionista = ({ onSearch }) => {
               {currentItems?.reverse().map((conflito) => (
                 <tr>
                   <th scope="row">{conflito?.id}</th>
+                  <th scope="row">
+                    {new Date(conflito?.created_at).toLocaleDateString()}
+                  </th>
+
                   <th scope="row"> {conflito?.Trabalhador?.Pessoa?.nome} </th>
                   <th scope="row">{conflito?.Empresa?.nome_empresa}</th>
 
