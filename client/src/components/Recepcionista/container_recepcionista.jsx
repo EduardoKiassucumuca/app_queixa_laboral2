@@ -199,6 +199,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
   //console.log(queixas_selecprovincia);
   const [codigo, setCodigo] = useState("");
   const [BI, setBI] = useState("");
+  const [assunto, setAssunto] = useState("");
+  const [multa, setMulta] = useState("");
+  const [dataInicio, setDataInicio] = useState(null);
+  const [dataFim, setDataFim] = useState(formatarData(new Date()));
+  const [estado_selecionado, setEstadoSelecionado] = useState("");
+  const [isMulta, setIsMulta] = useState("");
+
+  const [estado, setEstado] = useState("");
   const [nif, setNif] = useState("");
   const [detalhesSelec, setDetalhesSelec] = useState("");
   const [displayStyle16, setDisplayStyle16] = useState("none");
@@ -222,6 +230,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
   };
   React.useEffect(() => {
+    setQueixas(conflitos);
     if (
       sessionStorage?.getItem("email") &&
       sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
@@ -255,6 +264,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
         setQueixaSelecProv(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas);
+
         let myQueixas = [];
         console.log(queixas_selecionadas);
         queixas_selecionadas.forEach((queixa) => {
@@ -316,7 +326,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
     //console.log(conflitos);
   }
-  function persquisarPorData(bi_pesquisado) {
+  function persquisarPorBI(bi_pesquisado) {
     setBI(bi_pesquisado);
     console.log(BI);
     setConflitos(
@@ -328,6 +338,30 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
     //console.log(conflitos);
   }
+  function formatarData(date) {
+    const d = new Date(date);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0"); // getMonth() retorna de 0 a 11
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  function pesquisarPorData(data_inicio, data_fim) {
+    // if (!data_inicio || !data_fim) return;
+
+    const inicio = formatarData(data_inicio);
+    const fim = formatarData(data_fim);
+
+    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
+    setConflitos(
+      queixas.filter((queixa) => {
+        const dataQueixa = formatarData(queixa.created_at);
+        console.log("Data Queixa:", dataQueixa);
+        return dataQueixa >= inicio && dataQueixa <= fim;
+      })
+    );
+  }
+
   function buscaNIF(nif_pesquisado) {
     setNif(nif_pesquisado);
     setConflitos(
@@ -349,6 +383,40 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
     if (codigo_pesquisado === "") setConflitos(queixas_selecprovincia);
     //console.log(conflitos);
+  }
+  function persquisarPorEstado(estado_selecionado) {
+    if (estado_selecionado === "Estado") {
+      setConflitos(queixas);
+    } else {
+      setEstadoSelecionado(estado_selecionado);
+      setConflitos(
+        queixas_selecprovincia.filter((queixa_pesquisada) =>
+          queixa_pesquisada.estado
+            .toLowerCase()
+            .includes(estado_selecionado.toLowerCase())
+        )
+      );
+    }
+  }
+  function persquisarPorMulta() {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseInt(queixa_pesquisada.multa) !== 0 &&
+          queixa_pesquisada.multa != null &&
+          queixa_pesquisada.multa !== " "
+      )
+    );
+  }
+  function persquisarSemMulta(isMulta = 0) {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseFloat(queixa_pesquisada.multa) === 0 ||
+          queixa_pesquisada.multa === "" ||
+          queixa_pesquisada.multa === "null"
+      )
+    );
   }
   function ver_queixa(conflito_selecionado) {
     setDetalhesQueixa(conflito_selecionado);
@@ -505,16 +573,6 @@ const ContainerRecepcionista = ({ onSearch }) => {
       </h1>
 
       <Row className="queixas_recepcionista">
-        <Col md={3}>
-          <OverlayTrigger
-            trigger="click"
-            placement="bottom"
-            overlay={popover}
-            rootClose
-          >
-            <Button variant="warning">Queixar entidade</Button>
-          </OverlayTrigger>
-        </Col>
         <Col md={2}>
           <Search
             className="pesquisa1"
@@ -523,7 +581,16 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaCodigo(e.target.value)}
           />
         </Col>
-        <Col md={2}>
+        <Col md={3}>
+          <Search
+            className="pesquisa1"
+            placeholder="Procurar por assunto"
+            value={BI}
+            onChange={(e) => buscaBI(e.target.value)}
+          />
+        </Col>
+
+        <Col md={3}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Bilhete de Identificação"
@@ -531,7 +598,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaBI(e.target.value)}
           />
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <Search
             className="pesquisa2"
             placeholder="Procurar pelo NIF"
@@ -539,6 +606,63 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaNIF(e.target.value)}
           />
         </Col>
+        <Col md={2} style={{ marginTop: "10px" }}>
+          <Form.Group>
+            <Form.Label>Data Início</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataInicio"
+              value={dataInicio}
+              onChange={(e) => {
+                setDataInicio(e.target.value);
+                pesquisarPorData(e.target.value, dataFim);
+              }}
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md={2} style={{ marginTop: "10px", marginBottom: "10px" }}>
+          <Form.Group>
+            <Form.Label>Data Final</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataFinal"
+              value={dataFim}
+              onChange={(e) => {
+                setDataFim(e.target.value);
+                pesquisarPorData(dataInicio, e.target.value);
+              }}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={2} style={{ marginTop: "50px" }}>
+          <Form.Select
+            aria-label="Default select example"
+            value={estado_selecionado}
+            onChange={(e) => persquisarPorEstado(e.target.value)}
+          >
+            <option value="Estado">Estado</option>
+            <option value="Aberto">Aberto</option>
+            <option value="encaminhada_chefe">
+              Encaminhado ao Chefe dos Serviços Provinciais
+            </option>
+            <option value="encaminhada_inspector">
+              Encaminhado ao Inspector
+            </option>
+            <option value="Desistente">Destistente</option>
+            <option value="Tribunal">Tribunal</option>
+            <option value="Encerrado">Encerrado</option>
+          </Form.Select>
+        </Col>
+        <Col md={2} style={{ marginTop: "50px" }}>
+          <Button variant="secondary" onClick={persquisarPorMulta}>
+            Multa
+          </Button>{" "}
+          <Button variant="secondary" onClick={persquisarSemMulta}>
+            Sem Multa
+          </Button>
+        </Col>
+
         {/* <Col md={2}>
           <Form.Label>Data de inicio</Form.Label>
           <Form.Control
@@ -557,12 +681,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             onChange={(e) => buscaNIF(e.target.value)}
           />
         </Col> */}
-        <Col md={2}>
-          {" "}
-          <p className="p-localizacao" style={{ fontWeight: "bold" }}>
-            {data2?.trabalhador?.localizacao_office}
-          </p>
-        </Col>
+
         <div id="myModal15" class="modal" style={{ display: displayStyle15 }}>
           <div class="modal-content" style={{ minWidth: "600px" }}>
             <span
@@ -1818,14 +1937,32 @@ const ContainerRecepcionista = ({ onSearch }) => {
         <br />
         <Row>
           {" "}
-          <JsonToExcel
-            title="Exportar"
-            data={myData}
-            fileName={`queixa${new Date().toLocaleDateString(
-              "pt-BR"
-            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-            btnClassName="btn btn-primary"
-          />
+          <Col md={10}>
+            <JsonToExcel
+              title="Exportar"
+              data={myData}
+              fileName={`queixa${new Date().toLocaleDateString(
+                "pt-BR"
+              )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+              btnClassName="btn btn-primary"
+            />
+          </Col>
+          <Col md={2}>
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={popover}
+              rootClose
+            >
+              <Button variant="warning">Queixar entidade</Button>
+            </OverlayTrigger>
+          </Col>
+          {/* <Col md={2}>
+            {" "}
+            <p className="p-localizacao" style={{ fontWeight: "bold" }}>
+              {data2?.trabalhador?.localizacao_office}
+            </p>
+          </Col> */}
         </Row>
 
         <Col md={12} style={{ marginTop: 5 }}>
@@ -1839,9 +1976,9 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 <th scope="col"> Data</th>
                 <th scope="col"> Empregador</th>
                 <th scope="col"> Trabalhador</th>
-                <th scope="col"> Empregador</th>
                 <th scope="col">Assunto</th>
                 <th scope="col">Facto</th>
+                <th scope="col">Multa</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Opção</th>
               </tr>
@@ -1860,6 +1997,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   <td>{conflito?.assunto}</td>
 
                   <td>{conflito?.facto}</td>
+                  <td>{conflito?.multa}</td>
                   <td>
                     <OverlayTrigger
                       trigger="hover"
