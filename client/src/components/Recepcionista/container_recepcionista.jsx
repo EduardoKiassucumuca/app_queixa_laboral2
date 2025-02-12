@@ -665,11 +665,12 @@ const ContainerRecepcionista = ({ onSearch }) => {
           </Form.Group>
         </Col>
 
-        <Col md={3} style={{ marginTop: "50px" }}>
+        <Col md={3} style={{ marginTop: "42px" }}>
           <Form.Select
             aria-label="Default select example"
             value={estado_selecionado}
             onChange={(e) => persquisarPorEstado(e.target.value)}
+            style={{ height: "47px" }}
           >
             <option value="Todos">Todos</option>
             <option value="Aberto">Aberto</option>
@@ -684,13 +685,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <option value="Encerrado">Encerrado</option>
           </Form.Select>
         </Col>
-        <Col md={3} style={{ marginTop: "50px" }}>
+        <Col md={3} style={{ marginTop: "42px" }}>
           <Button
             className="btn-multa"
             variant={
               activeButton === "multa" ? "outline-light" : "outline-secondary"
             }
             onClick={() => handleClick("multa")}
+            style={{ height: "47px" }}
           >
             Multa
           </Button>{" "}
@@ -702,6 +704,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
                 : "outline-secondary"
             }
             onClick={() => handleClick("semMulta")}
+            style={{ height: "47px" }}
           >
             Sem Multa
           </Button>

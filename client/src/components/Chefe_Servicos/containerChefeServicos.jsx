@@ -61,7 +61,11 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const [displayStyle14, setDisplayStyle14] = useState("none");
   const [displayStyle15, setDisplayStyle15] = useState("none");
   const [displayStyle16, setDisplayStyle16] = useState("none");
-
+  const [dataInicio, setDataInicio] = useState(null);
+  const [dataFim, setDataFim] = useState(formatarData(new Date()));
+  const [estado_selecionado, setEstadoSelecionado] = useState("");
+  const [isMulta, setIsMulta] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
   const [emailInspector, setEmailInspector] = useState("");
   const [emailTestemunha, setEmailTestemunha] = useState("");
   const [nota, setNota] = useState("");
@@ -77,6 +81,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
   const itemsPerPageModal = 5; // Número de itens por página
   const [myData, setMyData] = useState([{}]);
   const navigate = useNavigate();
+  const [activeButton, setActiveButton] = useState("multa");
 
   // Calcular o índice do último e do primeiro item na página atual
   const indexOfLastItemModal = currentPage * itemsPerPage;
@@ -252,6 +257,14 @@ const ContainerChefeServicos = ({ onSearch }) => {
   function update_view() {
     window.location.href = "/chefe_servicos";
   }
+  const handleClick = (type) => {
+    setActiveButton(type);
+    if (type === "multa") {
+      persquisarPorMulta();
+    } else {
+      persquisarSemMulta();
+    }
+  };
   React.useEffect(() => {
     if (
       sessionStorage?.getItem("email") &&
@@ -287,6 +300,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
             queixa?.estado?.toLowerCase() !== "aberto"
         );
         setQueixaSelecProv(queixas_selecionadas);
+        setQueixas(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas);
         let myQueixas = [];
@@ -412,6 +426,79 @@ const ContainerChefeServicos = ({ onSearch }) => {
       )
     );
     //console.log(conflitos);
+  }
+  function pesquisarPorQualquerTermo(pesquisa) {
+    setPesquisa(pesquisa);
+
+    setConflitos(
+      queixas_selecprovincia.filter((queixa_pesquisada) => {
+        // Transforma o objeto em uma string única
+        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+
+        // Verifica se a pesquisa está presente nos dados da queixa
+        return dadosQueixa.includes(pesquisa.toLowerCase());
+      })
+    );
+  }
+  function formatarData(date) {
+    const d = new Date(date);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0"); // getMonth() retorna de 0 a 11
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  function pesquisarPorData(data_inicio, data_fim) {
+    // if (!data_inicio || !data_fim) return;
+
+    const inicio = formatarData(data_inicio);
+    const fim = formatarData(data_fim);
+
+    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
+    setConflitos(
+      queixas.filter((queixa) => {
+        const dataQueixa = formatarData(queixa.created_at);
+        console.log("Data Queixa:", dataQueixa);
+        return dataQueixa >= inicio && dataQueixa <= fim;
+      })
+    );
+  }
+  function persquisarPorEstado(estado_selecionado) {
+    setEstadoSelecionado(estado_selecionado);
+
+    if (estado_selecionado === "Todos") {
+      setConflitos(queixas);
+      return;
+    } else {
+      setEstadoSelecionado(estado_selecionado);
+      setConflitos(
+        queixas_selecprovincia.filter((queixa_pesquisada) =>
+          queixa_pesquisada.estado
+            .toLowerCase()
+            .includes(estado_selecionado.toLowerCase())
+        )
+      );
+    }
+  }
+  function persquisarPorMulta() {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseInt(queixa_pesquisada.multa) !== 0 &&
+          queixa_pesquisada.multa != null &&
+          queixa_pesquisada.multa !== " "
+      )
+    );
+  }
+  function persquisarSemMulta(isMulta = 0) {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseFloat(queixa_pesquisada.multa) === 0 ||
+          queixa_pesquisada.multa === "" ||
+          queixa_pesquisada.multa === "null"
+      )
+    );
   }
   function ver_inspectores(conflito_selecionado) {
     setConflitoSelec(conflito_selecionado);
@@ -2027,7 +2114,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
             marginTop: "5%",
           }}
         >
-          Queixas
+          {/* Queixas */}
         </h1>
         {/* <Col md={3}>
           <Button
@@ -2039,7 +2126,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
             Nova Queixa
           </Button>
       </Col>*/}
-        <Col md={2} style={{ marginLeft: "12%" }}>
+        {/* <Col md={2} style={{ marginLeft: "12%" }}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Código"
@@ -2070,32 +2157,126 @@ const ContainerChefeServicos = ({ onSearch }) => {
             value={nif}
             onChange={(e) => buscaNIF(e.target.value)}
           />
+        </Col> */}
+        <Col md={3} style={{ marginTop: "10px" }}>
+          <Form.Group>
+            <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataInicio"
+              value={dataInicio}
+              onChange={(e) => {
+                setDataInicio(e.target.value);
+                pesquisarPorData(e.target.value, dataFim);
+              }}
+            />
+          </Form.Group>
         </Col>
-        <Col md={2}>
-          {" "}
-          <p className="p-localizacao" style={{ fontWeight: "bold" }}>
-            {data2?.trabalhador?.localizacao_office}
-          </p>
+        <Col md={3} style={{ marginTop: "10px", marginBottom: "10px" }}>
+          <Form.Group>
+            <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataFinal"
+              value={dataFim}
+              onChange={(e) => {
+                setDataFim(e.target.value);
+                pesquisarPorData(dataInicio, e.target.value);
+              }}
+            />
+          </Form.Group>
         </Col>
-        <br />{" "}
-        <JsonToExcel
-          title="Exportar"
-          data={myData}
-          fileName={`queixa${new Date().toLocaleDateString(
-            "pt-BR"
-          )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-          btnClassName="btn btn-primary"
-        />
+        <Col md={3} style={{ marginTop: "42px" }}>
+          <Form.Select
+            aria-label="Default select example"
+            value={estado_selecionado}
+            onChange={(e) => persquisarPorEstado(e.target.value)}
+            style={{ height: "36px" }}
+          >
+            <option value="Todos">Todos</option>
+            <option value="Aberto">Aberto</option>
+            <option value="encaminhada_chefe">
+              Encaminhado ao Chefe dos Serviços Provinciais
+            </option>
+            <option value="encaminhada_inspector">
+              Encaminhado ao Inspector
+            </option>
+            <option value="Desistente">Destistente</option>
+            <option value="Tribunal">Tribunal</option>
+            <option value="Encerrado">Encerrado</option>
+          </Form.Select>
+        </Col>
+        <Col md={3} style={{ marginTop: "42px" }}>
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "multa" ? "outline-light" : "outline-secondary"
+            }
+            onClick={() => handleClick("multa")}
+            style={{ height: "37px" }}
+          >
+            Multa
+          </Button>{" "}
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "semMulta"
+                ? "outline-light"
+                : "outline-secondary"
+            }
+            onClick={() => handleClick("semMulta")}
+            style={{ height: "37px" }}
+          >
+            Sem Multa
+          </Button>
+        </Col>
+        <Row>
+          <Col md={1} style={{ marginTop: "10px" }}>
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={popover}
+              rootClose
+            >
+              <Button variant="warning">Queixar</Button>
+            </OverlayTrigger>
+          </Col>
+          <Col md={10} style={{ marginTop: "10px" }}>
+            <Search
+              className="pesquisa1"
+              placeholder="Procurar"
+              value={pesquisa}
+              onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
+            />
+          </Col>
+          <Col md={1}>
+            <JsonToExcel
+              title="Exportar"
+              data={myData}
+              fileName={`queixa${new Date().toLocaleDateString(
+                "pt-BR"
+              )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+              btnClassName="btn btn-primary small-btn text-black"
+            />
+          </Col>
+          {/* <Col md={2}>
+            {" "}
+            <p className="p-localizacao" style={{ fontWeight: "bold" }}>
+              {data2?.trabalhador?.localizacao_office}
+            </p>
+          </Col> */}
+        </Row>
         <Col md={12} style={{ marginTop: 25 }}>
           <table class="table table-striped table-responsive">
             <thead>
               <tr>
                 <th scope="col">#</th>
-
+                <th scope="col"> Data</th>
                 <th scope="col"> Trabalhador</th>
+                <th scope="col">BI</th>
                 <th scope="col"> Empregador</th>
+                <th scope="col">NIF</th>
                 <th scope="col">Assunto</th>
-
                 <th scope="col">Facto</th>
                 <th scope="col">Estado</th>
               </tr>
@@ -2104,8 +2285,16 @@ const ContainerChefeServicos = ({ onSearch }) => {
               {currentItems?.reverse().map((conflito) => (
                 <tr>
                   <th scope="row">{conflito.id}</th>
+                  <th scope="row">
+                    {new Date(conflito?.created_at).toLocaleDateString()}
+                  </th>
                   <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
+                  <th scope="row">
+                    {conflito.Trabalhador?.Pessoa?.BI?.numeroBI}
+                  </th>
                   <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                  <th scope="row">{conflito?.Empresa?.nif}</th>
+
                   <td>{conflito.assunto}</td>
 
                   <td>{conflito.facto}</td>

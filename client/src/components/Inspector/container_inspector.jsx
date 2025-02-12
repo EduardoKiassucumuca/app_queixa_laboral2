@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./container_inspector.css";
 import Button from "react-bootstrap/Button";
-
+import Form from "react-bootstrap/Form";
 import Axios from "axios";
 import { FaUser } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa6";
@@ -46,6 +46,12 @@ const ContainerInspector = ({ onSearch }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const [displayStyle9, setDisplayStyle9] = useState("none");
   const [displayStyle10, setDisplayStyle10] = useState("none");
+  const [dataInicio, setDataInicio] = useState(null);
+  const [dataFim, setDataFim] = useState(formatarData(new Date()));
+  const [estado_selecionado, setEstadoSelecionado] = useState("");
+  const [isMulta, setIsMulta] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
+  const [activeButton, setActiveButton] = useState("multa");
 
   const navigate = useNavigate();
 
@@ -105,7 +111,7 @@ const ContainerInspector = ({ onSearch }) => {
           //console.log("data.queixas");
 
           setQueixaSelecProv(data.queixas);
-
+          setQueixas(data.queixas);
           setConflitos(data.queixas);
           console.log(data.queixas);
 
@@ -169,6 +175,79 @@ const ContainerInspector = ({ onSearch }) => {
     );
     //console.log(conflitos);
   }
+  function pesquisarPorQualquerTermo(pesquisa) {
+    setPesquisa(pesquisa);
+
+    setConflitos(
+      queixas_selecprovincia.filter((queixa_pesquisada) => {
+        // Transforma o objeto em uma string única
+        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+
+        // Verifica se a pesquisa está presente nos dados da queixa
+        return dadosQueixa.includes(pesquisa.toLowerCase());
+      })
+    );
+  }
+  function formatarData(date) {
+    const d = new Date(date);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0"); // getMonth() retorna de 0 a 11
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  function pesquisarPorData(data_inicio, data_fim) {
+    // if (!data_inicio || !data_fim) return;
+
+    const inicio = formatarData(data_inicio);
+    const fim = formatarData(data_fim);
+
+    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
+    setConflitos(
+      queixas.filter((queixa) => {
+        const dataQueixa = formatarData(queixa.created_at);
+        console.log("Data Queixa:", dataQueixa);
+        return dataQueixa >= inicio && dataQueixa <= fim;
+      })
+    );
+  }
+  function persquisarPorEstado(estado_selecionado) {
+    setEstadoSelecionado(estado_selecionado);
+
+    if (estado_selecionado === "Todos") {
+      setConflitos(queixas);
+      return;
+    } else {
+      setEstadoSelecionado(estado_selecionado);
+      setConflitos(
+        queixas_selecprovincia.filter((queixa_pesquisada) =>
+          queixa_pesquisada.estado
+            .toLowerCase()
+            .includes(estado_selecionado.toLowerCase())
+        )
+      );
+    }
+  }
+  function persquisarPorMulta() {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseInt(queixa_pesquisada.multa) !== 0 &&
+          queixa_pesquisada.multa != null &&
+          queixa_pesquisada.multa !== " "
+      )
+    );
+  }
+  function persquisarSemMulta(isMulta = 0) {
+    setConflitos(
+      queixas_selecprovincia.filter(
+        (queixa_pesquisada) =>
+          parseFloat(queixa_pesquisada.multa) === 0 ||
+          queixa_pesquisada.multa === "" ||
+          queixa_pesquisada.multa === "null"
+      )
+    );
+  }
   function ver_inspectores(conflito_selecionado) {
     setConflitoSelec(conflito_selecionado);
     Axios.get("http://localhost:3001/inspectores")
@@ -229,6 +308,15 @@ const ContainerInspector = ({ onSearch }) => {
       FileDownload(res.data, filename);
     });
   };
+
+  const handleClick = (type) => {
+    setActiveButton(type);
+    if (type === "multa") {
+      persquisarPorMulta();
+    } else {
+      persquisarSemMulta();
+    }
+  };
   return (
     <>
       <ModalConfirmacao
@@ -237,7 +325,7 @@ const ContainerInspector = ({ onSearch }) => {
         close={() => setShowModal2(false)}
       />
       <Row className="queixas_recepcionista">
-        <Col md={2}>
+        {/* <Col md={2}>
           {/*<Button
             variant="warning"
             onClick={() => setShowModal2(true)}
@@ -245,42 +333,89 @@ const ContainerInspector = ({ onSearch }) => {
             type="submit"
           >
             Nova Queixa
-          </Button>*/}
-        </Col>
+          </Button>
+        </Col> */}
         <br />
-        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
+        <Col md={3} style={{ marginTop: "10px" }}>
+          <Form.Group>
+            <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataInicio"
+              value={dataInicio}
+              onChange={(e) => {
+                setDataInicio(e.target.value);
+                pesquisarPorData(e.target.value, dataFim);
+              }}
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md={3} style={{ marginTop: "10px", marginBottom: "10px" }}>
+          <Form.Group>
+            <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataFinal"
+              value={dataFim}
+              onChange={(e) => {
+                setDataFim(e.target.value);
+                pesquisarPorData(dataInicio, e.target.value);
+              }}
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md={3} style={{ marginTop: "42px" }}>
+          <Form.Select
+            aria-label="Default select example"
+            value={estado_selecionado}
+            onChange={(e) => persquisarPorEstado(e.target.value)}
+            style={{ height: "38px" }}
+          >
+            <option value="Todos">Todos</option>
+            <option value="Aberto">Aberto</option>
+            <option value="encaminhada_chefe">
+              Encaminhado ao Chefe dos Serviços Provinciais
+            </option>
+            <option value="encaminhada_inspector">
+              Encaminhado ao Inspector
+            </option>
+            <option value="Desistente">Destistente</option>
+            <option value="Tribunal">Tribunal</option>
+            <option value="Encerrado">Encerrado</option>
+          </Form.Select>
+        </Col>
+        <Col md={3} style={{ marginTop: "42px" }}>
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "multa" ? "outline-light" : "outline-secondary"
+            }
+            onClick={() => handleClick("multa")}
+            style={{ height: "40px" }}
+          >
+            Multa
+          </Button>{" "}
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "semMulta"
+                ? "outline-light"
+                : "outline-secondary"
+            }
+            onClick={() => handleClick("semMulta")}
+            style={{ height: "40px" }}
+          >
+            Sem Multa
+          </Button>
+        </Col>
+        <Col md={3} style={{ marginTop: "40px" }}>
           <Search
             className="pesquisa1"
-            placeholder="Procurar pelo Código"
-            value={codigo}
-            onChange={(e) => buscaCodigo(e.target.value)}
-          />
-        </Col>
-
-        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
-          <Search
-            className="pesquisa"
-            placeholder="Procurar pelo Inspector"
-            value={inspector}
-            onChange={(e) => buscaInspector(e.target.value)}
-          />
-        </Col>
-
-        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
-          <Search
-            className="pesquisa1"
-            placeholder="Procurar pelo Bilhete de Identificação"
-            value={BI}
-            onChange={(e) => buscaBI(e.target.value)}
-          />
-        </Col>
-
-        <Col md={2} style={{ marginLeft: 13, marginBottom: 5 }}>
-          <Search
-            className="pesquisa2"
-            placeholder="Procurar pelo NIF"
-            value={nif}
-            onChange={(e) => buscaNIF(e.target.value)}
+            placeholder="Procurar"
+            value={pesquisa}
+            onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
           />
         </Col>
         <br />
