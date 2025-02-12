@@ -205,11 +205,13 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const [dataFim, setDataFim] = useState(formatarData(new Date()));
   const [estado_selecionado, setEstadoSelecionado] = useState("");
   const [isMulta, setIsMulta] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
 
   const [estado, setEstado] = useState("");
   const [nif, setNif] = useState("");
   const [detalhesSelec, setDetalhesSelec] = useState("");
   const [displayStyle16, setDisplayStyle16] = useState("none");
+  const [activeButton, setActiveButton] = useState("multa");
 
   const toggleDisplay16 = () => {
     // Toggle between 'none' and 'block'
@@ -326,6 +328,21 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
     //console.log(conflitos);
   }
+  function pesquisarPorQualquerTermo(pesquisa) {
+    setPesquisa(pesquisa);
+
+    setConflitos(
+      queixas_selecprovincia
+        .filter((queixa_pesquisada) => {
+          // Transforma o objeto em uma string única
+          const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+
+          // Verifica se a pesquisa está presente nos dados da queixa
+          return dadosQueixa.includes(pesquisa.toLowerCase());
+        })
+        .reverse()
+    );
+  }
   function persquisarPorBI(bi_pesquisado) {
     setBI(bi_pesquisado);
     console.log(BI);
@@ -385,8 +402,11 @@ const ContainerRecepcionista = ({ onSearch }) => {
     //console.log(conflitos);
   }
   function persquisarPorEstado(estado_selecionado) {
-    if (estado_selecionado === "Estado") {
+    setEstadoSelecionado(estado_selecionado);
+
+    if (estado_selecionado === "Todos") {
       setConflitos(queixas);
+      return;
     } else {
       setEstadoSelecionado(estado_selecionado);
       setConflitos(
@@ -552,6 +572,15 @@ const ContainerRecepcionista = ({ onSearch }) => {
     console.log(conflito);
     toggleDisplay16();
   }
+
+  const handleClick = (type) => {
+    setActiveButton(type);
+    if (type === "multa") {
+      persquisarPorMulta();
+    } else {
+      persquisarSemMulta();
+    }
+  };
   return (
     <>
       <ModalConfirmacao
@@ -573,7 +602,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
       </h1>
 
       <Row className="queixas_recepcionista">
-        <Col md={2}>
+        {/* <Col md={2}>
           <Search
             className="pesquisa1"
             placeholder="Procurar pelo Código"
@@ -605,10 +634,10 @@ const ContainerRecepcionista = ({ onSearch }) => {
             value={nif}
             onChange={(e) => buscaNIF(e.target.value)}
           />
-        </Col>
-        <Col md={2} style={{ marginTop: "10px" }}>
+        </Col> */}
+        <Col md={3} style={{ marginTop: "10px" }}>
           <Form.Group>
-            <Form.Label>Data Início</Form.Label>
+            <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
             <Form.Control
               type="date"
               name="dataInicio"
@@ -621,9 +650,9 @@ const ContainerRecepcionista = ({ onSearch }) => {
           </Form.Group>
         </Col>
 
-        <Col md={2} style={{ marginTop: "10px", marginBottom: "10px" }}>
+        <Col md={3} style={{ marginTop: "10px", marginBottom: "10px" }}>
           <Form.Group>
-            <Form.Label>Data Final</Form.Label>
+            <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
             <Form.Control
               type="date"
               name="dataFinal"
@@ -635,13 +664,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
             />
           </Form.Group>
         </Col>
-        <Col md={2} style={{ marginTop: "50px" }}>
+
+        <Col md={3} style={{ marginTop: "50px" }}>
           <Form.Select
             aria-label="Default select example"
             value={estado_selecionado}
             onChange={(e) => persquisarPorEstado(e.target.value)}
           >
-            <option value="Estado">Estado</option>
+            <option value="Todos">Todos</option>
             <option value="Aberto">Aberto</option>
             <option value="encaminhada_chefe">
               Encaminhado ao Chefe dos Serviços Provinciais
@@ -654,11 +684,25 @@ const ContainerRecepcionista = ({ onSearch }) => {
             <option value="Encerrado">Encerrado</option>
           </Form.Select>
         </Col>
-        <Col md={2} style={{ marginTop: "50px" }}>
-          <Button variant="secondary" onClick={persquisarPorMulta}>
+        <Col md={3} style={{ marginTop: "50px" }}>
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "multa" ? "outline-light" : "outline-secondary"
+            }
+            onClick={() => handleClick("multa")}
+          >
             Multa
           </Button>{" "}
-          <Button variant="secondary" onClick={persquisarSemMulta}>
+          <Button
+            className="btn-multa"
+            variant={
+              activeButton === "semMulta"
+                ? "outline-light"
+                : "outline-secondary"
+            }
+            onClick={() => handleClick("semMulta")}
+          >
             Sem Multa
           </Button>
         </Col>
@@ -1936,26 +1980,33 @@ const ContainerRecepcionista = ({ onSearch }) => {
         </div>
         <br />
         <Row>
-          {" "}
-          <Col md={10}>
-            <JsonToExcel
-              title="Exportar"
-              data={myData}
-              fileName={`queixa${new Date().toLocaleDateString(
-                "pt-BR"
-              )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-              btnClassName="btn btn-primary"
-            />
-          </Col>
-          <Col md={2}>
+          <Col md={1} style={{ marginTop: "10px" }}>
             <OverlayTrigger
               trigger="click"
               placement="bottom"
               overlay={popover}
               rootClose
             >
-              <Button variant="warning">Queixar entidade</Button>
+              <Button variant="warning">Queixar</Button>
             </OverlayTrigger>
+          </Col>
+          <Col md={10} style={{ marginTop: "10px" }}>
+            <Search
+              className="pesquisa1"
+              placeholder="Procurar"
+              value={pesquisa}
+              onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
+            />
+          </Col>
+          <Col md={1}>
+            <JsonToExcel
+              title="Exportar"
+              data={myData}
+              fileName={`queixa${new Date().toLocaleDateString(
+                "pt-BR"
+              )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+              btnClassName="btn btn-primary small-btn text-black"
+            />
           </Col>
           {/* <Col md={2}>
             {" "}
@@ -1974,8 +2025,14 @@ const ContainerRecepcionista = ({ onSearch }) => {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col"> Data</th>
-                <th scope="col"> Empregador</th>
                 <th scope="col"> Trabalhador</th>
+
+                <th scope="col">BI</th>
+
+                <th scope="col"> Empregador</th>
+
+                <th scope="col">NIF</th>
+
                 <th scope="col">Assunto</th>
                 <th scope="col">Facto</th>
                 <th scope="col">Multa</th>
@@ -1992,7 +2049,11 @@ const ContainerRecepcionista = ({ onSearch }) => {
                   </th>
 
                   <th scope="row"> {conflito?.Trabalhador?.Pessoa?.nome} </th>
+                  <th scope="row">
+                    {conflito.Trabalhador?.Pessoa?.BI?.numeroBI}
+                  </th>
                   <th scope="row">{conflito?.Empresa?.nome_empresa}</th>
+                  <th scope="row">{conflito?.Empresa?.nif}</th>
 
                   <td>{conflito?.assunto}</td>
 
