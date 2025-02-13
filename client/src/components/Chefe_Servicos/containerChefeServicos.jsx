@@ -303,46 +303,77 @@ const ContainerChefeServicos = ({ onSearch }) => {
         setQueixas(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas);
-        let myQueixas = [];
+        // let myQueixas = [];
 
-        queixas_selecionadas.forEach((queixa) => {
-          const myQueixa = {
-            "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
-              "pt-BR"
-            ),
-            Trabalhador:
-              queixa.Trabalhador.Pessoa.nome +
-              " " +
-              queixa.Trabalhador.Pessoa.sobrenome +
-              " (" +
-              queixa.Trabalhador.tipo +
-              ")",
-            Empregador:
-              queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
-            Inspector:
-              queixa.Inspector.Trabalhador.Pessoa.nome +
-              " " +
-              queixa.Inspector.Trabalhador.Pessoa.sobrenome,
-            Testemunha:
-              queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
-              " " +
-              queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
-            Provincia: queixa.Trabalhador.localizacao_office,
-            Assunto: queixa.assunto,
-            Facto: queixa.facto,
-            Estado:
-              queixa.estado === "encaminhada_chefe"
-                ? "Encaminhada ao chefe dos serviços provinciais"
-                : queixa.estado === "encaminhada_inspector"
-                ? "Encaminhada ao Inspector"
-                : queixa.estado === "Tribunal"
-                ? "Encerrada e encaminhada ao tribunal"
-                : queixa.estado,
-          };
-          myQueixas.push(myQueixa);
-        });
-        setMyData(myQueixas);
+        // queixas_selecionadas.forEach((queixa) => {
+        //   const myQueixa = {
+        //     "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
+        //       "pt-BR"
+        //     ),
+        //     Trabalhador:
+        //       queixa.Trabalhador.Pessoa.nome +
+        //       " " +
+        //       queixa.Trabalhador.Pessoa.sobrenome +
+        //       " (" +
+        //       queixa.Trabalhador.tipo +
+        //       ")",
+        //     Empregador:
+        //       queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+        //     Inspector:
+        //       queixa.Inspector.Trabalhador.Pessoa.nome +
+        //       " " +
+        //       queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+        //     Testemunha:
+        //       queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
+        //       " " +
+        //       queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
+        //     Provincia: queixa.Trabalhador.localizacao_office,
+        //     Assunto: queixa.assunto,
+        //     Facto: queixa.facto,
+        //     Estado:
+        //       queixa.estado === "encaminhada_chefe"
+        //         ? "Encaminhada ao chefe dos serviços provinciais"
+        //         : queixa.estado === "encaminhada_inspector"
+        //         ? "Encaminhada ao Inspector"
+        //         : queixa.estado === "Tribunal"
+        //         ? "Encerrada e encaminhada ao tribunal"
+        //         : queixa.estado,
+        //   };
+        //   myQueixas.push(myQueixa);
+        // });
+        // setMyData(myQueixas);
         //console.log(lista_queixa.minha_queixa)
+        setMyData([
+          {
+            "Quantidade de queixas sem atendimento ou abertas":
+              queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "Aberto"
+              ).length,
+            "Quantidade de queixas encaminhadas ao Chefe dos serviços provinciais":
+              queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "encaminhada_chefe"
+              ).length,
+            "Quantidade de queixas encaminhadas ao Inspector":
+              queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "encaminhada_inspector"
+              ).length,
+            "Quantidade de queixas encaminhadas ao tribunal":
+              queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "Tribunal"
+              ).length,
+            "Quantidade de queixas dadas como desistentes":
+              queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "Desistente"
+              ).length,
+            "Quantidade de queixas encerradas": queixas_selecionadas.filter(
+              (conflito) => conflito.estado === "Encerrado"
+            ).length,
+            Provincia: data2.trabalhador.localizacao_office,
+            Mês: new Date()
+              .toLocaleString("pt-BR", { month: "long" })
+              .replace(/^./, (char) => char.toUpperCase()),
+          },
+        ]);
       })
       .catch((res) => {
         console.log(res);

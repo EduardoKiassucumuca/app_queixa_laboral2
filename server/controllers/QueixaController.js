@@ -241,6 +241,34 @@ module.exports = {
     }
   },
 
+  // async queixas_do_queixoso(req, res) {
+  //   const { queixosoID } = req.query;
+
+  //   try {
+  //     const queixas = await Queixa.findAll({
+  //       attributes: [
+  //         "id",
+  //         "assunto",
+  //         "facto",
+  //         "provincia",
+  //         "estado",
+  //         "modo",
+  //         "multa",
+  //         "url_file_contrato",
+  //         "created_at",
+  //       ],
+  //       required: true,
+
+  //       where: {
+  //         estado: "Aberto",
+  //       },
+  //     });
+  //     //console.log(queixas);
+  //     res.status(200).json({ queixas });
+  //   } catch (error) {
+  //     console.log("Error", error);
+  //   }
+  // },
   async ler_queixa(req, res) {
     try {
       const { id_queixa } = req.query;
