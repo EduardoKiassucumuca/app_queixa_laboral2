@@ -17,11 +17,13 @@ import ModalReuniao from "./modal_reuniao";
 import { Form } from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
+import { right } from "@popperjs/core";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
   //console.log(id_queixa)
   const [conflito, setConflito] = useState({});
+  const [reunioes, setReunioes] = useState({});
 
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -111,6 +113,21 @@ const MaisDetalhes = () => {
         setServerPath(data.serverPath);
         console.log(conflito);
         //console.log(lista_queixa.minha_queixa)
+      })
+      .catch(({ res }) => {
+        console.log(res);
+      });
+  };
+  const getReunioes = async () => {
+    await Axios.get("http://localhost:3001/reunioes", {
+      params: {
+        id_queixa: id_queixa,
+      },
+    })
+      .then(({ data }) => {
+        setReunioes(data.reunioes);
+        setServerPath(data.serverPath);
+        console.log(data);
       })
       .catch(({ res }) => {
         console.log(res);
@@ -232,6 +249,7 @@ const MaisDetalhes = () => {
   function goNovaReuniaoTrabalhador() {
     localStorage.setItem("id_queixa", conflito.id);
     localStorage.setItem("id_trabalhador", conflito.Trabalhador.id);
+    localStorage.setItem("id_empresa", conflito.Empresa.id);
 
     window.location.href = "/nova_reuniao";
   }
@@ -239,6 +257,7 @@ const MaisDetalhes = () => {
     getQueixa();
     getNotas();
     getMudancas();
+    getReunioes();
     console.log(conflito);
   }, [id_queixa]);
   let data = "";
@@ -275,7 +294,7 @@ const MaisDetalhes = () => {
       <MenuInspector />
 
       <Row className="row-detalhes">
-        <Col md={7}>
+        <Col md={6}>
           <Card
             bg="dark"
             border="secondary"
@@ -324,7 +343,7 @@ const MaisDetalhes = () => {
             </Card.Footer>
           </Card>
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <Card
             bg="dark"
             border=""
@@ -360,11 +379,52 @@ const MaisDetalhes = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Col md={3} style={{ marginTop: 5 }}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="white"
+            className="card-queixas-queixoso"
+          >
+            <Card.Header style={{ color: "#ffc107" }}>
+              Historico das queixas
+            </Card.Header>
+            <Card.Body>
+              {historicos.map((historico) => (
+                <>
+                  <Card.Title>
+                    {" "}
+                    <small>
+                      {historico.Queixa.Trabalhador.Pessoa.nome +
+                        " " +
+                        historico.Queixa.Trabalhador.Pessoa.sobrenome}
+                      <span style={{ float: "right", color: "#ffc107" }}>
+                        {historico.data}
+                      </span>
+                    </small>
+                    <p></p>
+                  </Card.Title>
+                  <Card.Text>
+                    {" "}
+                    <p
+                      className="text-muted"
+                      style={{ color: "#cdd9e5 !important" }}
+                    >
+                      {historico.facto}
+                    </p>
+                    <hr />
+                  </Card.Text>
+                </>
+              ))}
+              ;
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
       <p></p>
 
       <Row className="notas">
-        <Col md={7} style={{ marginLeft: "1%" }}>
+        <Col md={6} style={{ marginLeft: "3px" }}>
           {notas.map((my_note) => (
             <>
               <Alert
@@ -453,18 +513,9 @@ const MaisDetalhes = () => {
           conflito?.estado === "Desistente" ? (
             <>
               <Button
-                variant="dark"
-                border="secondary"
-                type="button"
-                style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
-                onClick={() => verificarQueixaEncerrada(conflito)}
-              >
-                Agendar reunião
-              </Button>
-
-              <Button
                 variant="outline-warning"
                 onClick={() => verificarQueixaEncerrada(conflito)}
+                style={{ borderColor: "#ddd", marginLeft: 77 }}
               >
                 Encerrar
               </Button>
@@ -473,63 +524,155 @@ const MaisDetalhes = () => {
             <>
               {" "}
               <Button
-                variant="dark"
-                border="secondary"
-                type="button"
-                onClick={() => toggleDisplay()}
-                style={{ borderColor: "#ddd", marginRight: 7, marginLeft: 77 }}
-              >
-                Agendar reunião
-              </Button>
-              <Button
                 variant="outline-warning"
                 onClick={() => toggleDisplay2()}
+                style={{ borderColor: "#ddd", marginLeft: 77 }}
               >
                 Encerrar
               </Button>
             </>
           )}
         </Col>
-        <Col md={4} style={{ marginTop: 50 }}>
-          <Card
-            bg="dark"
-            border="secondary"
-            text="white"
-            className="card-queixas-queixoso"
+        <Col
+          md={3}
+          style={{
+            marginTop: 10,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Container dos Cards com Scroll */}
+          <Alert variant="dark" style={{ width: "80%", marginLeft: "18%" }}>
+            Reuniões
+          </Alert>
+          <div
+            style={{
+              maxHeight: "400px", // Limite de altura
+              overflowY: "auto", // Ativa a rolagem vertical
+              padding: "3px",
+              borderRadius: "10px",
+              flexGrow: 1, // Ocupa o espaço disponível
+            }}
           >
-            <Card.Header style={{ color: "#ffc107" }}>
-              Historico das queixas
-            </Card.Header>
-            <Card.Body>
-              {historicos.map((historico) => (
-                <>
+            {reunioes.map((reuniao) => (
+              <Card
+                bg="default"
+                border=""
+                text="dark"
+                className="card-queixas-queixoso"
+                key={reuniao.id} // Evita warnings do React
+                style={{ marginBottom: "10px" }}
+              >
+                <Card.Header
+                  style={{
+                    color: "#ffc107",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>Reunião {reuniao.id}</span>
+                  <Button
+                    style={{
+                      cursor: "default",
+                      borderRadius: "20px",
+                      fontSize: "12px",
+                    }}
+                    variant={
+                      reuniao.estado === "1"
+                        ? "primary"
+                        : reuniao.estado === "2"
+                        ? "success"
+                        : reuniao.estado === "3"
+                        ? "danger"
+                        : reuniao.estado === "4"
+                        ? "warning"
+                        : "secondary"
+                    }
+                  >
+                    {reuniao.estado === "1"
+                      ? "Agendada"
+                      : reuniao.estado === "2"
+                      ? "Realizada"
+                      : reuniao.estado === "3"
+                      ? "Não realizada"
+                      : reuniao.estado === "4"
+                      ? "Pendente"
+                      : "Sem estado"}
+                  </Button>
+                </Card.Header>
+
+                <Card.Body>
                   <Card.Title>
-                    {" "}
                     <small>
-                      {historico.Queixa.Trabalhador.Pessoa.nome +
-                        " " +
-                        historico.Queixa.Trabalhador.Pessoa.sobrenome}
-                      <span style={{ float: "right", color: "#ffc107" }}>
-                        {historico.data}
+                      {reuniao.assunto}
+                      <span
+                        style={{
+                          float: "right",
+                          color: "#ffc107",
+                          fontSize: 12,
+                        }}
+                      >
+                        {reuniao.data} {reuniao.hora}
                       </span>
                     </small>
-                    <p></p>
                   </Card.Title>
+                  <hr style={{ border: "1px solid black" }} />
                   <Card.Text>
-                    {" "}
-                    <p
-                      className="text-muted"
-                      style={{ color: "#cdd9e5 !important" }}
+                    <Button
+                      style={{
+                        cursor: "pointer",
+                        float: "right",
+                      }}
+                      variant="dark"
                     >
-                      {historico.facto}
-                    </p>
-                    <hr />
+                      Ver mais
+                    </Button>
                   </Card.Text>
-                </>
-              ))}
-              ;
-            </Card.Body>
-          </Card>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+
+          {/* Botão Fixo Fora da Scrollagem */}
+          <div
+            style={{
+              marginTop: "10px",
+              textAlign: "center",
+            }}
+          >
+            {conflito.estado === "Encerrado" ||
+            conflito.estado === "Tribunal" ||
+            conflito?.estado === "Desistente" ? (
+              <Button
+                variant="dark"
+                border="secondary"
+                type="button"
+                style={{
+                  borderColor: "#ddd",
+                  marginLeft: "18%",
+                  width: "80%",
+                }}
+                onClick={() => verificarQueixaEncerrada(conflito)}
+              >
+                Agendar reunião
+              </Button>
+            ) : (
+              <Button
+                variant="dark"
+                border="secondary"
+                type="button"
+                onClick={() => toggleDisplay()}
+                style={{
+                  borderColor: "#ddd",
+                  marginLeft: "18%",
+                  width: "80%",
+                }}
+              >
+                Agendar reunião
+              </Button>
+            )}
+          </div>
         </Col>
       </Row>
       <div

@@ -19,6 +19,8 @@ function NovaReuniao(props) {
   const [displayStyle, setDisplayStyle] = useState("none");
   const [conflitoID, setConflitoID] = useState(0);
   const [trabalhadorID, setTrabalhadorID] = useState(0);
+  const [empresaID, setEmpresaID] = useState(0);
+
   const [showModal, setShowModal] = useState(false);
   const [alert, setAlert] = useState("");
   const [msgErro, setMsgErro] = useState("");
@@ -27,6 +29,7 @@ function NovaReuniao(props) {
   React.useEffect(() => {
     setConflitoID(localStorage?.getItem("id_queixa"));
     setTrabalhadorID(localStorage?.getItem("id_trabalhador"));
+    setEmpresaID(localStorage.getItem("id_empresa"));
     console.log(trabalhadorID);
     //console.log(JSON.parse(localStorage.getItem("data_queixa")));
   }, []);
@@ -72,6 +75,7 @@ function NovaReuniao(props) {
         _obs: obs,
         fk_queixa: conflitoID,
         fk_trabalhador: trabalhadorID,
+        fk_empresa: empresaID,
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
@@ -120,7 +124,7 @@ function NovaReuniao(props) {
       </div>
       <Row className="justify-content-md-center form-func">
         <div className="p-2 text-center bg-trabalhador">
-          <h3 className="mb-3 h1-queixa">Agendar reunião com o Trabalhador</h3>
+          <h3 className="mb-3 h1-queixa">Agendar reunião</h3>
         </div>
         <div class="card">
           <div class="card-header" style={{ fontSize: 18 }}>

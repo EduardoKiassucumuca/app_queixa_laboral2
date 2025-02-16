@@ -152,6 +152,28 @@ module.exports = {
       console.log("Error", error);
     }
   },
+  async getReunieoes(req, res) {
+    try {
+      const { id_queixa } = req.query;
+      const reunioes = await Reuniao.findAll({
+        attributes: [
+          "id",
+          "assunto",
+          "local",
+          "data",
+          "hora",
+          "estado",
+          "queixaID",
+          "queixosoID",
+          "obs",
+        ],
+        where: { queixaID: id_queixa },
+      });
+      res.status(200).json({ reunioes });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  },
   async store(req, res) {
     const { _assunto } = req.body;
     const { _local } = req.body;
@@ -160,6 +182,7 @@ module.exports = {
     const { _obs } = req.body;
     const { fk_queixa } = req.body;
     const { fk_trabalhador } = req.body;
+    const { fk_empresa } = req.body;
 
     const reuniao = await Reuniao.create({
       assunto: _assunto,
@@ -171,6 +194,7 @@ module.exports = {
       queixaID: fk_queixa,
       trabalhadorID: fk_trabalhador,
       queixosoID: fk_trabalhador,
+      empresaID: fk_empresa,
     });
     return res.status(200).send({
       status: 1,

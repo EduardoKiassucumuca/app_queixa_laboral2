@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FaDownload } from "react-icons/fa";
 import FileDownload from "js-file-download";
+import { JsonToExcel } from "react-json-to-excel";
 
 const formTemplate = {
   review: "",
@@ -52,6 +53,7 @@ const ContainerInspector = ({ onSearch }) => {
   const [isMulta, setIsMulta] = useState("");
   const [pesquisa, setPesquisa] = useState("");
   const [activeButton, setActiveButton] = useState("multa");
+  const [myData, setMyData] = useState([{}]);
 
   const navigate = useNavigate();
 
@@ -109,12 +111,41 @@ const ContainerInspector = ({ onSearch }) => {
           // const todas_queixas = data.queixas[0].concat(data.queixas[1])
 
           //console.log("data.queixas");
-
+          const queixas_selecionadas = data.queixas;
           setQueixaSelecProv(data.queixas);
           setQueixas(data.queixas);
           setConflitos(data.queixas);
-          console.log(data.queixas);
-
+          setMyData([
+            {
+              "Quantidade de queixas sem atendimento ou abertas":
+                queixas_selecionadas.filter(
+                  (conflito) => conflito.estado === "Aberto"
+                ).length,
+              "Quantidade de queixas encaminhadas ao Chefe dos serviços provinciais":
+                queixas_selecionadas.filter(
+                  (conflito) => conflito.estado === "encaminhada_chefe"
+                ).length,
+              "Quantidade de queixas encaminhadas ao Inspector":
+                queixas_selecionadas.filter(
+                  (conflito) => conflito.estado === "encaminhada_inspector"
+                ).length,
+              "Quantidade de queixas encaminhadas ao tribunal":
+                queixas_selecionadas.filter(
+                  (conflito) => conflito.estado === "Tribunal"
+                ).length,
+              "Quantidade de queixas dadas como desistentes":
+                queixas_selecionadas.filter(
+                  (conflito) => conflito.estado === "Desistente"
+                ).length,
+              "Quantidade de queixas encerradas": queixas_selecionadas.filter(
+                (conflito) => conflito.estado === "Encerrado"
+              ).length,
+              Provincia: queixas_selecionadas[0].provincia,
+              Mês: new Date()
+                .toLocaleString("pt-BR", { month: "long" })
+                .replace(/^./, (char) => char.toUpperCase()),
+            },
+          ]);
           //console.log(lista_queixa.minha_queixa)
         })
         .catch((res) => {
@@ -418,6 +449,17 @@ const ContainerInspector = ({ onSearch }) => {
             onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
           />
         </Col>
+        <Col md={1} style={{ marginTop: "30px", textAlign: "right" }}>
+          <JsonToExcel
+            title="Exportar"
+            data={myData}
+            fileName={`queixa${new Date().toLocaleDateString(
+              "pt-BR"
+            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
+            btnClassName="btn btn-primary small-btn text-black"
+          />
+        </Col>
+
         <br />
 
         <Col md={2}>
