@@ -23,7 +23,7 @@ const MaisDetalhes = () => {
   const { id_queixa } = useParams();
   //console.log(id_queixa)
   const [conflito, setConflito] = useState({});
-  const [reunioes, setReunioes] = useState({});
+  const [reunioes, setReunioes] = useState([{}]);
 
   const [showModal2, setShowModal2] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -126,8 +126,8 @@ const MaisDetalhes = () => {
     })
       .then(({ data }) => {
         setReunioes(data.reunioes);
-        setServerPath(data.serverPath);
-        console.log(data);
+        console.log(data.reunioes);
+        return data;
       })
       .catch(({ res }) => {
         console.log(res);
@@ -389,11 +389,10 @@ const MaisDetalhes = () => {
             <Card.Header style={{ color: "#ffc107" }}>
               Historico das queixas
             </Card.Header>
-            <Card.Body>
-              {historicos.map((historico) => (
-                <>
+            <Card.Body style={{ maxHeight: "300px", overflowY: "auto" }}>
+              {historicos.map((historico, index) => (
+                <div key={index}>
                   <Card.Title>
-                    {" "}
                     <small>
                       {historico.Queixa.Trabalhador.Pessoa.nome +
                         " " +
@@ -402,10 +401,8 @@ const MaisDetalhes = () => {
                         {historico.data}
                       </span>
                     </small>
-                    <p></p>
                   </Card.Title>
                   <Card.Text>
-                    {" "}
                     <p
                       className="text-muted"
                       style={{ color: "#cdd9e5 !important" }}
@@ -414,9 +411,8 @@ const MaisDetalhes = () => {
                     </p>
                     <hr />
                   </Card.Text>
-                </>
+                </div>
               ))}
-              ;
             </Card.Body>
           </Card>
         </Col>
@@ -554,84 +550,86 @@ const MaisDetalhes = () => {
               flexGrow: 1, // Ocupa o espaço disponível
             }}
           >
-            {reunioes.map((reuniao) => (
-              <Card
-                bg="default"
-                border=""
-                text="dark"
-                className="card-queixas-queixoso"
-                key={reuniao.id} // Evita warnings do React
-                style={{ marginBottom: "10px" }}
-              >
-                <Card.Header
-                  style={{
-                    color: "#ffc107",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
+            {reunioes &&
+              reunioes?.map((reuniao) => (
+                <Card
+                  bg="light"
+                  border=""
+                  text="dark"
+                  className="card-queixas-queixoso"
+                  key={reuniao?.id} // Evita warnings do React
+                  style={{ marginBottom: "10px" }}
                 >
-                  <span>Reunião {reuniao.id}</span>
-                  <Button
+                  <Card.Header
                     style={{
-                      cursor: "default",
-                      borderRadius: "20px",
-                      fontSize: "12px",
+                      color: "#ffc107",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
-                    variant={
-                      reuniao.estado === "1"
-                        ? "primary"
-                        : reuniao.estado === "2"
-                        ? "success"
-                        : reuniao.estado === "3"
-                        ? "danger"
-                        : reuniao.estado === "4"
-                        ? "warning"
-                        : "secondary"
-                    }
                   >
-                    {reuniao.estado === "1"
-                      ? "Agendada"
-                      : reuniao.estado === "2"
-                      ? "Realizada"
-                      : reuniao.estado === "3"
-                      ? "Não realizada"
-                      : reuniao.estado === "4"
-                      ? "Pendente"
-                      : "Sem estado"}
-                  </Button>
-                </Card.Header>
-
-                <Card.Body>
-                  <Card.Title>
-                    <small>
-                      {reuniao.assunto}
-                      <span
-                        style={{
-                          float: "right",
-                          color: "#ffc107",
-                          fontSize: 12,
-                        }}
-                      >
-                        {reuniao.data} {reuniao.hora}
-                      </span>
-                    </small>
-                  </Card.Title>
-                  <hr style={{ border: "1px solid black" }} />
-                  <Card.Text>
+                    <span>Reunião {reuniao?.id}</span>
                     <Button
                       style={{
-                        cursor: "pointer",
-                        float: "right",
+                        cursor: "default",
+                        borderRadius: "20px",
+                        fontSize: "12px",
                       }}
-                      variant="dark"
+                      variant={
+                        reuniao?.estado === "1"
+                          ? "primary"
+                          : reuniao?.estado === "2"
+                          ? "success"
+                          : reuniao?.estado === "3"
+                          ? "danger"
+                          : reuniao?.estado === "4"
+                          ? "warning"
+                          : "secondary"
+                      }
                     >
-                      Ver mais
+                      {reuniao?.estado === "1"
+                        ? "Agendada"
+                        : reuniao?.estado === "2"
+                        ? "Realizada"
+                        : reuniao?.estado === "3"
+                        ? "Não realizada"
+                        : reuniao?.estado === "4"
+                        ? "Pendente"
+                        : "Sem estado"}
                     </Button>
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            ))}
+                  </Card.Header>
+
+                  <Card.Body>
+                    <Card.Title>
+                      <small>
+                        {reuniao?.assunto}
+                        <span
+                          style={{
+                            float: "right",
+                            color: "#ffc107",
+                            fontSize: 12,
+                          }}
+                        >
+                          {reuniao?.data} {reuniao?.hora}
+                        </span>
+                      </small>
+                    </Card.Title>
+                    <hr style={{ border: "1px solid black" }} />
+                    <Card.Text>
+                      <Button
+                        style={{
+                          cursor: "pointer",
+                          float: "right",
+                        }}
+                        variant="dark"
+                        size="small"
+                      >
+                        Ver mais
+                      </Button>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              ))}
           </div>
 
           {/* Botão Fixo Fora da Scrollagem */}
@@ -641,8 +639,8 @@ const MaisDetalhes = () => {
               textAlign: "center",
             }}
           >
-            {conflito.estado === "Encerrado" ||
-            conflito.estado === "Tribunal" ||
+            {conflito?.estado === "Encerrado" ||
+            conflito?.estado === "Tribunal" ||
             conflito?.estado === "Desistente" ? (
               <Button
                 variant="dark"
