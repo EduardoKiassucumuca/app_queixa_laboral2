@@ -14,7 +14,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
-import { Form } from "react-bootstrap";
+import { Badge, Form } from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
@@ -37,6 +37,7 @@ const MaisDetalhes = () => {
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [multa, setMulta] = useState("");
   const [status, setStatus] = useState("");
+  const [displayStyle6, setDisplayStyle6] = useState("none");
 
   const [inputFields, setInputFields] = useState([{ value: "" }]);
 
@@ -44,6 +45,7 @@ const MaisDetalhes = () => {
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [filePreview, setFilePreview] = useState(null); // Armazenar o preview do arquivo
   const [showPreview, setShowPreview] = useState(false); // Controlar a exibição do preview
+  const [detalhes_reuniao, setDetalhesReuniao] = useState({});
 
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
@@ -63,6 +65,13 @@ const MaisDetalhes = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle2((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay6 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle6((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -288,10 +297,62 @@ const MaisDetalhes = () => {
       toggleDisplay2();
     }
   }
+
+  function mais_detalhes(reuniao) {
+    setDetalhesReuniao(reuniao);
+    toggleDisplay6();
+  }
+
   return (
     <>
       <SideNavInspector />
       <MenuInspector />
+      <div id="myModal" class="modal" style={{ display: displayStyle6 }}>
+      <div class="modal-content">
+        <h1 style={{ fontSize: "20px", color: "#ffc107", marginBottom: "30px" }}>
+          Mais detalhes
+        </h1>
+
+        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+          <span style={{ fontWeight: "bold" }}>Assunto:</span>
+          <span>{detalhes_reuniao?.assunto}</span>
+        </div>
+        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+          <span style={{ fontWeight: "bold" }}>Local:</span>
+          <span>{detalhes_reuniao?.local}</span>
+        </div>
+        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+          <span style={{ fontWeight: "bold" }}>Data:</span>
+          <span>{detalhes_reuniao?.data}</span>
+        </div>
+        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+          <span style={{ fontWeight: "bold" }}>Hora:</span>
+          <span>{detalhes_reuniao?.hora}</span>
+        </div>
+        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+          <span style={{ fontWeight: "bold" }}>Estado:</span>
+          <span>{detalhes_reuniao?.estado === "1"
+                        ? "Agendada"
+                        : detalhes_reuniao?.estado === "2"
+                        ? "Realizada"
+                        : detalhes_reuniao?.estado === "3"
+                        ? "Não realizada"
+                        : detalhes_reuniao?.estado === "4"
+                        ? "Pendente"
+                        : "Sem estado"}</span>
+        </div>
+        <div style={{ display: "flex", gap: "5px" }}>
+          <span style={{ fontWeight: "bold" }}>OBS:</span>
+          <span>{detalhes_reuniao?.obs}</span>
+        </div>
+        
+        <div class="modal-footer">
+          <Button variant="warning" type="button" onClick={toggleDisplay6}>
+            OK
+          </Button>
+        </div>
+      </div>
+    </div>
 
       <Row className="row-detalhes">
         <Col md={6}>
@@ -553,12 +614,12 @@ const MaisDetalhes = () => {
             {reunioes &&
               reunioes?.map((reuniao) => (
                 <Card
-                  bg="light"
+                  bg="dark"
                   border=""
-                  text="dark"
+                  text="white"
                   className="card-queixas-queixoso"
                   key={reuniao?.id} // Evita warnings do React
-                  style={{ marginBottom: "10px" }}
+                  style={{ marginBottom: "10px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)" }}
                 >
                   <Card.Header
                     style={{
@@ -569,25 +630,23 @@ const MaisDetalhes = () => {
                     }}
                   >
                     <span>Reunião {reuniao?.id}</span>
-                    <Button
-                      style={{
-                        cursor: "default",
-                        borderRadius: "20px",
-                        fontSize: "12px",
-                      }}
-                      variant={
+                    <small className="text-muted" style={{fontSize:12}}>
+
+                    <FaCircle
+                      className="estado"
+                      color={
                         reuniao?.estado === "1"
-                          ? "primary"
-                          : reuniao?.estado === "2"
-                          ? "success"
-                          : reuniao?.estado === "3"
-                          ? "danger"
-                          : reuniao?.estado === "4"
-                          ? "warning"
-                          : "secondary"
+                        ? "primary"
+                        : reuniao?.estado === "2"
+                        ? "#198754"
+                        : reuniao?.estado === "3"
+                        ? "danger"
+                        : reuniao?.estado === "4"
+                        ? "warning"
+                        : "secondary"
                       }
-                    >
-                      {reuniao?.estado === "1"
+                />                {" "}
+                {reuniao?.estado === "1"
                         ? "Agendada"
                         : reuniao?.estado === "2"
                         ? "Realizada"
@@ -596,9 +655,8 @@ const MaisDetalhes = () => {
                         : reuniao?.estado === "4"
                         ? "Pendente"
                         : "Sem estado"}
-                    </Button>
+                </small>
                   </Card.Header>
-
                   <Card.Body>
                     <Card.Title>
                       <small>
@@ -616,17 +674,26 @@ const MaisDetalhes = () => {
                     </Card.Title>
                     <hr style={{ border: "1px solid black" }} />
                     <Card.Text>
+                    <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
                       <Button
-                        style={{
-                          cursor: "pointer",
-                          float: "right",
-                        }}
-                        variant="dark"
+                        style={{ cursor: "pointer" }}
+                        variant="secondary"
                         size="small"
+                        onClick={() => mais_detalhes(reuniao)}
                       >
                         Ver mais
                       </Button>
-                    </Card.Text>
+                      <Button
+                        style={{ cursor: "pointer" }}
+                        variant="outline-secondary"
+                        size="small"
+                        onClick={() => mais_detalhes()}
+                      >
+                        Editar
+                      </Button>
+                    </div>
+                  </Card.Text>
+
                   </Card.Body>
                 </Card>
               ))}
