@@ -14,7 +14,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
-import { Badge, Form } from "react-bootstrap";
+import { Badge, FloatingLabel, Form } from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
@@ -34,13 +34,23 @@ const MaisDetalhes = () => {
   const [historicos, setHistorico] = useState([]);
   const [showModalActa, setShowModalActa] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
+  const [displayStyle7, setDisplayStyle7] = useState("none");
+
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [multa, setMulta] = useState("");
   const [status, setStatus] = useState("");
   const [displayStyle6, setDisplayStyle6] = useState("none");
-
+  const [assunto, setAssunto] = useState("");
+  const [local, setLocal] = useState("");
+  const [date, setDate] = useState("");
+  const [hora, setHora] = useState("");
+  const [obs, setOBS] = useState("");
   const [inputFields, setInputFields] = useState([{ value: "" }]);
-
+  const [conflitoID, setConflitoID] = useState(0);
+  const [trabalhadorID, setTrabalhadorID] = useState(0);
+  const [empresaID, setEmpresaID] = useState(0);
+  const [alert, setAlert] = useState("");
+  const [msgErro, setMsgErro] = useState("");
   const [displayStyle3, setDisplayStyle3] = useState("none");
   const [displayStyle4, setDisplayStyle4] = useState("none");
   const [filePreview, setFilePreview] = useState(null); // Armazenar o preview do arquivo
@@ -72,6 +82,13 @@ const MaisDetalhes = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle6((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay7 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle7((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -134,7 +151,7 @@ const MaisDetalhes = () => {
       },
     })
       .then(({ data }) => {
-        setReunioes(data.reunioes);
+        setReunioes(data.reunioes.reverse());
         console.log(data.reunioes);
         return data;
       })
@@ -302,7 +319,57 @@ const MaisDetalhes = () => {
     setDetalhesReuniao(reuniao);
     toggleDisplay6();
   }
+  const agendar_reuniao = (e) => {
+    e.preventDefault();
+    const today = new Date();
+    const dateMeetObj = new Date(date);
+    const year = dateMeetObj.getFullYear();
+    const mes = dateMeetObj.getMonth();
+    const dia = dateMeetObj.getDay();
+    const hora_d = hora.split(":")[0];
+    const minuto_d = hora.split(":")[1];
+    const time_now = new Date();
+    const currentHour = time_now.getHours();
+    const currentMinute = time_now.getMinutes();
 
+    if (
+      today.getFullYear() > year ||
+      today.getMonth() > mes ||
+      today.getDay() > dia
+    ) {
+      setMsgErro("Data inválida");
+    } else if (
+      today.getFullYear() === year &&
+      today.getMonth() === mes &&
+      today.getDay() === dia &&
+      currentHour > hora_d
+    ) {
+      setMsgErro("Hora inválida");
+    } else {
+      Axios.post("http://localhost:3001/nova_reuniao", {
+        _assunto: assunto,
+        _local: local,
+        _data: date,
+        _hora: hora,
+        _obs: obs,
+        fk_queixa: id_queixa,
+        fk_trabalhador: conflito.Trabalhador.id,
+        fk_empresa: conflito.Empresa.id,
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          toggleDisplay();
+          toggleDisplay7();
+          //setRedireciona("/dashboard_admin");
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    }
+  };
+  function refreshPage() {
+    window.location.reload();
+  }
   return (
     <>
       <SideNavInspector />
@@ -355,7 +422,7 @@ const MaisDetalhes = () => {
     </div>
 
       <Row className="row-detalhes">
-        <Col md={6}>
+        <Col md={5}>
           <Card
             bg="dark"
             border="secondary"
@@ -404,7 +471,7 @@ const MaisDetalhes = () => {
             </Card.Footer>
           </Card>
         </Col>
-        <Col md={3}>
+        <Col md={4}>
           <Card
             bg="dark"
             border=""
@@ -481,7 +548,7 @@ const MaisDetalhes = () => {
       <p></p>
 
       <Row className="notas">
-        <Col md={6} style={{ marginLeft: "3px" }}>
+        <Col md={5} style={{ marginLeft: "23px" }}>
           {notas.map((my_note) => (
             <>
               <Alert
@@ -591,7 +658,7 @@ const MaisDetalhes = () => {
           )}
         </Col>
         <Col
-          md={3}
+          md={4}
           style={{
             marginTop: 10,
             display: "flex",
@@ -658,20 +725,17 @@ const MaisDetalhes = () => {
                 </small>
                   </Card.Header>
                   <Card.Body>
-                    <Card.Title>
-                      <small>
+                  <Card.Title>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <small className="text-muted" style={{ fontSize: 12 }}>
                         {reuniao?.assunto}
-                        <span
-                          style={{
-                            float: "right",
-                            color: "#ffc107",
-                            fontSize: 12,
-                          }}
-                        >
-                          {reuniao?.data} {reuniao?.hora}
-                        </span>
                       </small>
-                    </Card.Title>
+                      <small style={{ color: "#ffc107", fontSize: 12 }}>
+                        {reuniao?.data} {reuniao?.hora}
+                      </small>
+                    </div>
+                  </Card.Title>
+
                     <hr style={{ border: "1px solid black" }} />
                     <Card.Text>
                     <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
@@ -744,9 +808,34 @@ const MaisDetalhes = () => {
         id="myModal"
         class="modal"
         style={{
+          display: displayStyle7,
+          position: "fixed",
+          top: "0px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Aviso</h3>
+          <br />
+          <p>A reunião foi agendada com sucesso </p>
+          <div class="modal-footer">
+            <Button
+              type="button"
+              className="btn btn-warning"
+              onClick={refreshPage}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
           display: displayStyle,
           position: "fixed",
-          top: "150px",
+          top: "0px",
           boxShadow: "10px 10px 5px #888888",
         }}
         onClick={(e) => {
@@ -764,21 +853,81 @@ const MaisDetalhes = () => {
             &times;
           </a>
           <div className="modal-header">
-            <h5 className="modal-title">Reunião</h5>
+            <h5 className="modal-title">Agendar Reunião</h5>
           </div>
           <div className="modal-body">
-            <p style={{ fontSize: "1.0rem" }}>Agendar reunião com?</p>
+          <Form onSubmit={(e) => agendar_reuniao(e)}>
+              <Row className="mb-3">
+                <FloatingLabel controlId="floatingTextarea2" label="Assunto">
+                  <Form.Control
+                    placeholder="Queixa"
+                    name="assunto_queixa"
+                    id="assunto-queixa"
+                    style={{ padding: "2px" }}
+                    onChange={(e) => setAssunto(e.target.value)}
+                  />
+                  <br />
+                </FloatingLabel>
+                <Col md={12}>
+                  <FloatingLabel controlId="floatingTextarea2" label="Local">
+                    <Form.Control
+                      placeholder="Local"
+                      name="local_reuniao"
+                      id="local"
+                      style={{ padding: "2px" }}
+                      onChange={(e) => setLocal(e.target.value)}
+                    />
+                  </FloatingLabel>
+                </Col>
+                <br />{" "}
+              
+                <Col md={6}>
+                  <Form.Label>Data da Reunião</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="data"
+                    id="data_reuniao"
+                    required
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </Col>
+                <br />{" "}
+                <Col md={6}>
+                  <Form.Label>Hora da Reunião</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="hora"
+                    id="hora_reuniao"
+                    onChange={(e) => setHora(e.target.value)}
+                    required
+                  />
+                  <br />{" "}
+                </Col>
+                <FloatingLabel controlId="floatingTextarea2" label="Observação">
+                  <Form.Control
+                    as="textarea"
+                    placeholder="OBS"
+                    name="obs"
+                    id="obs"
+                    style={{ height: "100px" }}
+                    onChange={(e) => setOBS(e.target.value)}
+                  />
+                </FloatingLabel>
+              </Row>
+              <br />{" "}
+              <Button
+                variant="warning"
+                type="submit"
+                style={{ float: "right" }}
+              >
+                Salvar
+              </Button>
+            </Form>   
           </div>
           <br />
-          <div class="modal-footer">
-            <Button variant="warning" onClick={goNovaReuniaoEmpregador}>
-              Empregador
-            </Button>
-            ou
-            <Button className="btn btn-dark" onClick={goNovaReuniaoTrabalhador}>
-              Trabalhador
-            </Button>
-          </div>
+          {/* <div class="modal-footer">
+          
+          </div> */}
         </div>
       </div>
       <div
