@@ -196,7 +196,7 @@ module.exports = {
       include: [
         {
           association: "Conta",
-          required: true,
+          required: false,
           attributes: ["email"],
         },
         {
@@ -211,8 +211,7 @@ module.exports = {
     if (!trabalhador) {
       throw new Error("Trabalhador não encontrado.");
     }
-    
-    
+
     const reuniao = await Reuniao.create({
       assunto: _assunto,
       local: _local,
@@ -233,14 +232,15 @@ module.exports = {
     if(reuniao){
       var mailOptions = {
         from: "marciocristiano105@gmail.com",
-        to: [trabalhador.email, /*empresa.email*/, "kiassucristiano@hotmail.com"],
+        to: [trabalhador.Conta.email, /*empresa.email*/, "kiassucristiano@hotmail.com"],
         subject: "IGT | Agendamento de Reunião",
         text:
           `Prezado(a) ${trabalhador.Pessoa.nome + " "+ trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
-          `Informamos que uma reunião foi agendada para discutir o assunto relacionado a <strong>${_assunto}</strong>, visando uma solução adequada para todas as partes envolvidas.\n\n` +
+          `Informamos que uma reunião foi agendada para  o assunto relacionado a <strong>${_assunto}</strong>, visando uma solução adequada para todas as partes envolvidas.\n\n` +
           `📅 Data: ${_data}\n` +
           `⏰ Horário: ${_hora}\n` +
           `📍 Local: ${_local}\n\n` +
+          ` OBS: ${_obs}\n\n` +
           `A sua presença é essencial para garantir um diálogo construtivo e a busca por uma solução adequada. ` +
           `Pedimos a gentileza de confirmar sua participação.\n\n` +
           `Caso tenha alguma dúvida ou necessidade de reagendamento, por favor, entre em contato através desse email.\n\n` +
