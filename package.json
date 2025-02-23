@@ -4,6 +4,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "react-json-to-excel": "^1.0.8",
-    "react-to-pdf": "^1.0.1"
+    "react-to-pdf": "^1.0.1",
+    "twilio": "^5.4.5"
   }
 }

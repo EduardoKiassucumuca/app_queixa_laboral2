@@ -56,11 +56,19 @@ const MaisDetalhes = () => {
   const [filePreview, setFilePreview] = useState(null); // Armazenar o preview do arquivo
   const [showPreview, setShowPreview] = useState(false); // Controlar a exibição do preview
   const [detalhes_reuniao, setDetalhesReuniao] = useState({});
+  const [displayStyle8, setDisplayStyle8] = useState("none");
 
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay8 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle8((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -317,9 +325,64 @@ const MaisDetalhes = () => {
 
   function mais_detalhes(reuniao) {
     setDetalhesReuniao(reuniao);
-    toggleDisplay6();
+    setAssunto(reuniao.assunto);
+    setLocal(reuniao.local);
+    setDate(reuniao.Data);
+    setHora(reuniao.hora);
+    setOBS(reuniao.obs);
+    toggleDisplay8();
   }
   const agendar_reuniao = (e) => {
+    e.preventDefault();
+    console.log("asala");
+    const today = new Date();
+    const dateMeetObj = new Date(date);
+    const year = dateMeetObj.getFullYear();
+    const mes = dateMeetObj.getMonth();
+    const dia = dateMeetObj.getDay();
+    const hora_d = hora.split(":")[0];
+    const minuto_d = hora.split(":")[1];
+    const time_now = new Date();
+    const currentHour = time_now.getHours();
+    const currentMinute = time_now.getMinutes();
+
+    if (
+      today.getFullYear() > year ||
+      today.getMonth() > mes ||
+      today.getDay() > dia
+    ) {
+      setMsgErro("Data inválida");
+    } else if (
+      today.getFullYear() === year &&
+      today.getMonth() === mes &&
+      today.getDay() === dia &&
+      currentHour > hora_d
+    ) {
+      setMsgErro("Hora inválida");
+    } else {
+      console.log("ent");
+      Axios.post("http://localhost:3001/nova_reuniao", {
+        _assunto: assunto,
+        _local: local,
+        _data: date,
+        _hora: hora,
+        _obs: obs,
+        fk_queixa: id_queixa,
+        fk_trabalhador: conflito.Trabalhador.id,
+        fk_empresa: conflito.Empresa.id,
+      })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          toggleDisplay();
+          toggleDisplay7();
+          //setRedireciona("/dashboard_admin");
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    }
+  };
+  const editar_reuniao = (e) => {
     e.preventDefault();
     const today = new Date();
     const dateMeetObj = new Date(date);
@@ -346,19 +409,21 @@ const MaisDetalhes = () => {
     ) {
       setMsgErro("Hora inválida");
     } else {
-      Axios.post("http://localhost:3001/nova_reuniao", {
+      console.log("ent");
+      Axios.post("http://localhost:3001/editar_reuniao", {
+        reuniaoID: detalhes_reuniao.id,
         _assunto: assunto,
         _local: local,
         _data: date,
         _hora: hora,
         _obs: obs,
-        fk_queixa: id_queixa,
-        fk_trabalhador: conflito.Trabalhador.id,
-        fk_empresa: conflito.Empresa.id,
+        queixaID: id_queixa,
+        trabalhadorID: conflito.Trabalhador.id,
+        empresaID: conflito.Empresa.id,
       })
         .then((resposta) => {
           setAlert(resposta.data.message);
-          toggleDisplay();
+          toggleDisplay8();
           toggleDisplay7();
           //setRedireciona("/dashboard_admin");
         })
@@ -375,51 +440,55 @@ const MaisDetalhes = () => {
       <SideNavInspector />
       <MenuInspector />
       <div id="myModal" class="modal" style={{ display: displayStyle6 }}>
-      <div class="modal-content">
-        <h1 style={{ fontSize: "20px", color: "#ffc107", marginBottom: "30px" }}>
-          Mais detalhes
-        </h1>
+        <div class="modal-content">
+          <h1
+            style={{ fontSize: "20px", color: "#ffc107", marginBottom: "30px" }}
+          >
+            Mais detalhes
+          </h1>
 
-        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-          <span style={{ fontWeight: "bold" }}>Assunto:</span>
-          <span>{detalhes_reuniao?.assunto}</span>
-        </div>
-        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-          <span style={{ fontWeight: "bold" }}>Local:</span>
-          <span>{detalhes_reuniao?.local}</span>
-        </div>
-        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-          <span style={{ fontWeight: "bold" }}>Data:</span>
-          <span>{detalhes_reuniao?.data}</span>
-        </div>
-        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-          <span style={{ fontWeight: "bold" }}>Hora:</span>
-          <span>{detalhes_reuniao?.hora}</span>
-        </div>
-        <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
-          <span style={{ fontWeight: "bold" }}>Estado:</span>
-          <span>{detalhes_reuniao?.estado === "1"
-                        ? "Agendada"
-                        : detalhes_reuniao?.estado === "2"
-                        ? "Realizada"
-                        : detalhes_reuniao?.estado === "3"
-                        ? "Não realizada"
-                        : detalhes_reuniao?.estado === "4"
-                        ? "Pendente"
-                        : "Sem estado"}</span>
-        </div>
-        <div style={{ display: "flex", gap: "5px" }}>
-          <span style={{ fontWeight: "bold" }}>OBS:</span>
-          <span>{detalhes_reuniao?.obs}</span>
-        </div>
-        
-        <div class="modal-footer">
-          <Button variant="warning" type="button" onClick={toggleDisplay6}>
-            OK
-          </Button>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>Assunto:</span>
+            <span>{detalhes_reuniao?.assunto}</span>
+          </div>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>Local:</span>
+            <span>{detalhes_reuniao?.local}</span>
+          </div>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>Data:</span>
+            <span>{detalhes_reuniao?.data}</span>
+          </div>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>Hora:</span>
+            <span>{detalhes_reuniao?.hora}</span>
+          </div>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>Estado:</span>
+            <span>
+              {detalhes_reuniao?.estado === "1"
+                ? "Agendada"
+                : detalhes_reuniao?.estado === "2"
+                ? "Realizada"
+                : detalhes_reuniao?.estado === "3"
+                ? "Não realizada"
+                : detalhes_reuniao?.estado === "4"
+                ? "Pendente"
+                : "Sem estado"}
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: "5px" }}>
+            <span style={{ fontWeight: "bold" }}>OBS:</span>
+            <span>{detalhes_reuniao?.obs}</span>
+          </div>
+
+          <div class="modal-footer">
+            <Button variant="warning" type="button" onClick={toggleDisplay6}>
+              OK
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
 
       <Row className="row-detalhes">
         <Col md={5}>
@@ -686,7 +755,10 @@ const MaisDetalhes = () => {
                   text="white"
                   className="card-queixas-queixoso"
                   key={reuniao?.id} // Evita warnings do React
-                  style={{ marginBottom: "10px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)" }}
+                  style={{
+                    marginBottom: "10px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+                  }}
                 >
                   <Card.Header
                     style={{
@@ -697,23 +769,22 @@ const MaisDetalhes = () => {
                     }}
                   >
                     <span>Reunião {reuniao?.id}</span>
-                    <small className="text-muted" style={{fontSize:12}}>
-
-                    <FaCircle
-                      className="estado"
-                      color={
-                        reuniao?.estado === "1"
-                        ? "primary"
-                        : reuniao?.estado === "2"
-                        ? "#198754"
-                        : reuniao?.estado === "3"
-                        ? "danger"
-                        : reuniao?.estado === "4"
-                        ? "warning"
-                        : "secondary"
-                      }
-                />                {" "}
-                {reuniao?.estado === "1"
+                    <small className="text-muted" style={{ fontSize: 12 }}>
+                      <FaCircle
+                        className="estado"
+                        color={
+                          reuniao?.estado === "1"
+                            ? "primary"
+                            : reuniao?.estado === "2"
+                            ? "#198754"
+                            : reuniao?.estado === "3"
+                            ? "danger"
+                            : reuniao?.estado === "4"
+                            ? "warning"
+                            : "secondary"
+                        }
+                      />{" "}
+                      {reuniao?.estado === "1"
                         ? "Agendada"
                         : reuniao?.estado === "2"
                         ? "Realizada"
@@ -722,42 +793,53 @@ const MaisDetalhes = () => {
                         : reuniao?.estado === "4"
                         ? "Pendente"
                         : "Sem estado"}
-                </small>
+                    </small>
                   </Card.Header>
                   <Card.Body>
-                  <Card.Title>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <small className="text-muted" style={{ fontSize: 12 }}>
-                        {reuniao?.assunto}
-                      </small>
-                      <small style={{ color: "#ffc107", fontSize: 12 }}>
-                        {reuniao?.data} {reuniao?.hora}
-                      </small>
-                    </div>
-                  </Card.Title>
+                    <Card.Title>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <small className="text-muted" style={{ fontSize: 12 }}>
+                          {reuniao?.assunto}
+                        </small>
+                        <small style={{ color: "#ffc107", fontSize: 12 }}>
+                          {reuniao?.data} {reuniao?.hora}
+                        </small>
+                      </div>
+                    </Card.Title>
 
                     <hr style={{ border: "1px solid black" }} />
                     <Card.Text>
-                    <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                      <Button
-                        style={{ cursor: "pointer" }}
-                        variant="secondary"
-                        size="small"
-                        onClick={() => mais_detalhes(reuniao)}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: "10px",
+                        }}
                       >
-                        Ver mais
-                      </Button>
-                      <Button
-                        style={{ cursor: "pointer" }}
-                        variant="outline-secondary"
-                        size="small"
-                        onClick={() => mais_detalhes()}
-                      >
-                        Editar
-                      </Button>
-                    </div>
-                  </Card.Text>
-
+                        <Button
+                          style={{ cursor: "pointer" }}
+                          variant="secondary"
+                          size="small"
+                          onClick={() => mais_detalhes(reuniao)}
+                        >
+                          Ver mais
+                        </Button>
+                        <Button
+                          style={{ cursor: "pointer" }}
+                          variant="outline-secondary"
+                          size="small"
+                          onClick={() => mais_detalhes(reuniao)}
+                        >
+                          Editar
+                        </Button>
+                      </div>
+                    </Card.Text>
                   </Card.Body>
                 </Card>
               ))}
@@ -817,7 +899,7 @@ const MaisDetalhes = () => {
         <div class="modal-content">
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Aviso</h3>
           <br />
-          <p>A reunião foi agendada com sucesso </p>
+          <p>Operação Efectuada com sucesso </p>
           <div class="modal-footer">
             <Button
               type="button"
@@ -856,7 +938,7 @@ const MaisDetalhes = () => {
             <h5 className="modal-title">Agendar Reunião</h5>
           </div>
           <div className="modal-body">
-          <Form onSubmit={(e) => agendar_reuniao(e)}>
+            <Form onSubmit={(e) => agendar_reuniao(e)}>
               <Row className="mb-3">
                 <FloatingLabel controlId="floatingTextarea2" label="Assunto">
                   <Form.Control
@@ -880,7 +962,6 @@ const MaisDetalhes = () => {
                   </FloatingLabel>
                 </Col>
                 <br />{" "}
-              
                 <Col md={6}>
                   <Form.Label>Data da Reunião</Form.Label>
                   <Form.Control
@@ -922,7 +1003,112 @@ const MaisDetalhes = () => {
               >
                 Salvar
               </Button>
-            </Form>   
+            </Form>
+          </div>
+          <br />
+          {/* <div class="modal-footer">
+          
+          </div> */}
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle8,
+          position: "fixed",
+          top: "0px",
+          boxShadow: "10px 10px 5px #888888",
+        }}
+        onClick={(e) => {
+          if (e.target.id === "myModal") {
+            toggleDisplay();
+          }
+        }}
+      >
+        <div class="modal-content">
+          <a
+            onClick={toggleDisplay8}
+            class="w3-button w3-display-topright"
+            style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
+          >
+            &times;
+          </a>
+          <div className="modal-header">
+            <h5 className="modal-title">Editar Reunião</h5>
+          </div>
+          <div className="modal-body">
+            <Form onSubmit={(e) => agendar_reuniao(e)}>
+              <Row className="mb-3">
+                <FloatingLabel controlId="floatingTextarea2" label="Assunto">
+                  <Form.Control
+                    placeholder="Queixa"
+                    name="assunto_queixa"
+                    id="assunto-queixa"
+                    style={{ padding: "2px" }}
+                    value={assunto}
+                    onChange={(e) => setAssunto(e.target.value)}
+                  />
+                  <br />
+                </FloatingLabel>
+                <Col md={12}>
+                  <FloatingLabel controlId="floatingTextarea2" label="Local">
+                    <Form.Control
+                      placeholder="Local"
+                      name="local_reuniao"
+                      id="local"
+                      style={{ padding: "2px" }}
+                      value={local}
+                      onChange={(e) => setLocal(e.target.value)}
+                    />
+                  </FloatingLabel>
+                </Col>
+                <br />{" "}
+                <Col md={6}>
+                  <Form.Label>Data da Reunião</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="data"
+                    id="data_reuniao"
+                    required
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </Col>
+                <br />{" "}
+                <Col md={6}>
+                  <Form.Label>Hora da Reunião</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="hora"
+                    id="hora_reuniao"
+                    value={hora}
+                    onChange={(e) => setHora(e.target.value)}
+                    required
+                  />
+                  <br />{" "}
+                </Col>
+                <FloatingLabel controlId="floatingTextarea2" label="Observação">
+                  <Form.Control
+                    as="textarea"
+                    placeholder="OBS"
+                    name="obs"
+                    id="obs"
+                    style={{ height: "100px" }}
+                    value={obs}
+                    onChange={(e) => setOBS(e.target.value)}
+                  />
+                </FloatingLabel>
+              </Row>
+              <br />{" "}
+              <Button
+                variant="warning"
+                type="submit"
+                style={{ float: "right" }}
+              >
+                Salvar
+              </Button>
+            </Form>
           </div>
           <br />
           {/* <div class="modal-footer">
