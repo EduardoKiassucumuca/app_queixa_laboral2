@@ -4,6 +4,24 @@ const Reuniao = require("../models/reuniao");
 const { where } = require("sequelize");
 const { Op } = require("sequelize");
 const Trabalhador = require("../models/Trabalhador");
+
+const twilio = require("twilio");
+
+const client = twilio(accountSid, authToken);
+
+async function enviarSMS(numeroDestino, mensagem) {
+  try {
+    const message = await client.messages.create({
+      body: mensagem,
+      from: twilioPhoneNumber, // Número do Twilio
+      to: numeroDestino, // Número do destinatário (com DDD e código do país)
+    });
+
+    console.log("SMS enviado com sucesso! SID:", message.sid);
+  } catch (erro) {
+    console.error("Erro ao enviar SMS:", erro.message);
+  }
+}
 module.exports = {
   async index(req, res) {
     try {
@@ -177,39 +195,48 @@ module.exports = {
     }
   },
   async store(req, res) {
-    const { _assunto } = req.body;
-    const { _local } = req.body;
-    const { _data } = req.body;
-    const { _hora } = req.body;
-    const { _obs } = req.body;
-    const { fk_queixa } = req.body;
-    const { fk_trabalhador } = req.body;
-    const { fk_empresa } = req.body;
+    console.log("Iniciando agendamento de reunião...");
 
-    const empresa = await Empresa.findOne({
-      attributes:["id","nome_empresa","email"],
-      where: {id: fk_empresa},
-    })
+    const {
+      _assunto,
+      _local,
+      _data,
+      _hora,
+      _obs,
+      fk_queixa,
+      fk_trabalhador,
+      fk_empresa,
+    } = req.body;
 
-    const trabalhador = await Trabalhador.findOne({
-      attributes: ["id", "contaID", "pessoaID"],
-      include: [
-        {
-          association: "Conta",
-          required: false,
-          attributes: ["email"],
-        },
-        {
-          association: "Pessoa",
-          required: true,
-          attributes: ["nome", "sobrenome"],
-        },
-      ],
-      where: { id: fk_trabalhador },
-    });
-    
+    // Buscar empresa e trabalhador simultaneamente para melhor desempenho
+    const [empresa, trabalhador] = await Promise.all([
+      Empresa.findOne({
+        attributes: ["id", "nome_empresa", "email"],
+        where: { id: fk_empresa },
+      }),
+      Trabalhador.findOne({
+        attributes: ["id", "contaID", "pessoaID"],
+        include: [
+          {
+            association: "Pessoa",
+            required: true,
+            attributes: ["nome", "sobrenome"],
+          },
+        ],
+        where: { id: fk_trabalhador },
+      }),
+    ]);
+
     if (!trabalhador) {
-      throw new Error("Trabalhador não encontrado.");
+      return res
+        .status(404)
+        .json({ status: 0, message: "Trabalhador não encontrado." });
+    }
+
+    if (!empresa) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Empresa não encontrada." });
     }
 
     const reuniao = await Reuniao.create({
@@ -224,45 +251,46 @@ module.exports = {
       queixosoID: fk_trabalhador,
       empresaID: fk_empresa,
     });
-    return res.status(200).send({
-      status: 1,
-      message: "Reunião agendada com sucesso!",
-    });
 
-    if(reuniao){
-      var mailOptions = {
-        from: "marciocristiano105@gmail.com",
-        to: [trabalhador.Conta.email, /*empresa.email*/, "kiassucristiano@hotmail.com"],
-        subject: "IGT | Agendamento de Reunião",
-        text:
-          `Prezado(a) ${trabalhador.Pessoa.nome + " "+ trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
-          `Informamos que uma reunião foi agendada para  o assunto relacionado a <strong>${_assunto}</strong>, visando uma solução adequada para todas as partes envolvidas.\n\n` +
-          `📅 Data: ${_data}\n` +
-          `⏰ Horário: ${_hora}\n` +
-          `📍 Local: ${_local}\n\n` +
-          ` OBS: ${_obs}\n\n` +
-          `A sua presença é essencial para garantir um diálogo construtivo e a busca por uma solução adequada. ` +
-          `Pedimos a gentileza de confirmar sua participação.\n\n` +
-          `Caso tenha alguma dúvida ou necessidade de reagendamento, por favor, entre em contato através desse email.\n\n` +
-          `Atenciosamente,\n` +
-          `Inspecção geral do trabalho`
-      };
-  
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          res.json({
-            msg: "Falha, Verifique sua conexao com a internet",
-          });
-        } else {
-          res.status(200).json({
-            sucesso:
-              "Email enviado!",
-            nova_senha: novaSenha,
-          });
-        }
-      });
+    if (!reuniao) {
+      return res
+        .status(500)
+        .json({ status: 0, message: "Erro ao criar reunião." });
     }
-   
+
+    console.log("Reunião criada com sucesso.");
+
+    // Enviar SMS após a criação da reunião
+    enviarSMS(
+      "+244930340539",
+      `Prezado(a) ${trabalhador.Pessoa.nome} ${trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
+        `Informamos que uma reunião foi agendada para discutir o assunto: ${_assunto}.\n\n` +
+        `📅 Data: ${_data}\n⏰ Horário: ${_hora}\n📍 Local: ${_local}\n\n` +
+        `OBS: ${_obs}\n\nAtenciosamente,\nInspecção Geral do Trabalho`
+    );
+
+    // Simulação do envio de e-mail (descomentar se necessário)
+    // const mailOptions = {
+    //     from: "marciocristiano105@gmail.com",
+    //     to: [trabalhador.Conta.email, empresa.email, "kiassucristiano@hotmail.com"],
+    //     subject: "IGT | Agendamento de Reunião",
+    //     text: `Prezado(a) ${trabalhador.Pessoa.nome} ${trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
+    //           `Informamos que uma reunião foi agendada para discutir o assunto: ${_assunto}.\n\n` +
+    //           `📅 Data: ${_data}\n⏰ Horário: ${_hora}\n📍 Local: ${_local}\n\n` +
+    //           `OBS: ${_obs}\n\nAtenciosamente,\nInspecção Geral do Trabalho`,
+    // };
+
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //         console.error("Erro ao enviar e-mail:", error);
+    //     } else {
+    //         console.log("E-mail enviado com sucesso:", info.response);
+    //     }
+    // });
+
+    return res
+      .status(200)
+      .json({ status: 1, message: "Reunião agendada com sucesso!" });
   },
   async nova_reuniao_empregador(req, res) {
     const { _assunto } = req.body;
@@ -293,22 +321,24 @@ module.exports = {
     const {
       reuniaoID,
       queixaID,
-      assunto,
-      data,
-      hora,
-      local,
-      estado,
+      _assunto,
+      _data,
+      _hora,
+      _local,
+      // estado,
       trabalhadorID,
+      empresaID,
     } = req.body;
 
     await Reuniao.update(
       {
-        assunto: assunto,
+        assunto: _assunto,
         queixaID: queixaID,
-        data: data,
-        hora: hora,
-        local: local,
-        estado: estado,
+        data: _data,
+        hora: _hora,
+        local: _local,
+        // estado: estado,
+        empresaID: empresaID,
         trabalhadorID: trabalhadorID,
       },
       {
