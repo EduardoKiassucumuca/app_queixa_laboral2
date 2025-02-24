@@ -18,6 +18,7 @@ import { Badge, FloatingLabel, Form } from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
+import Search from "antd/es/transfer/search";
 
 const MaisDetalhes = () => {
   const { id_queixa } = useParams();
@@ -57,7 +58,17 @@ const MaisDetalhes = () => {
   const [showPreview, setShowPreview] = useState(false); // Controlar a exibição do preview
   const [detalhes_reuniao, setDetalhesReuniao] = useState({});
   const [displayStyle8, setDisplayStyle8] = useState("none");
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState(formatarData(new Date()));
+  const [pesquisa, setPesquisa] = useState("");
 
+  function formatarData(date) {
+    const d = new Date(date);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0"); // getMonth() retorna de 0 a 11
+    const dia = String(d.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
   const toggleDisplay = () => {
     // Toggle between 'none' and 'block'
 
@@ -292,9 +303,8 @@ const MaisDetalhes = () => {
     getNotas();
     getMudancas();
     getReunioes();
-    console.log(date);
+    console.log(conflito);
   }, [id_queixa]);
-  
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -325,12 +335,10 @@ const MaisDetalhes = () => {
   }
 
   function mais_detalhes(reuniao) {
-
-    // const date = new Date(reuniao.data)
     setDetalhesReuniao(reuniao);
     setAssunto(reuniao.assunto);
     setLocal(reuniao.local);
-    setDate(reuniao.data);
+    setDate(reuniao.Data);
     setHora(reuniao.hora);
     setOBS(reuniao.obs);
     toggleDisplay8();
@@ -738,9 +746,47 @@ const MaisDetalhes = () => {
           }}
         >
           {/* Container dos Cards com Scroll */}
-          <Alert variant="dark" style={{ width: "80%", marginLeft: "18%" }}>
+          <Alert variant="dark" style={{ width: "85%", marginLeft: "11%" }}>
             Reuniões
           </Alert>
+          <Row style={{ marginLeft: 50 }}>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dataInicio"
+                  value={dataInicio}
+                  onChange={(e) => {
+                    setDataInicio(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dataFinal"
+                  value={dataFim}
+                  onChange={(e) => {
+                    setDataFim(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12} style={{ marginTop: 15, marginBottom: 15 }}>
+              <Search
+                className="pesquisa1"
+                placeholder="Procurar"
+                value={pesquisa}
+                onChange={(e) => setPesquisa(e.target.value)}
+              />
+            </Col>
+          </Row>
+
           <div
             style={{
               maxHeight: "400px", // Limite de altura
@@ -751,101 +797,115 @@ const MaisDetalhes = () => {
             }}
           >
             {reunioes &&
-              reunioes?.map((reuniao) => (
-                <Card
-                  bg="dark"
-                  border=""
-                  text="white"
-                  className="card-queixas-queixoso"
-                  key={reuniao?.id} // Evita warnings do React
-                  style={{
-                    marginBottom: "10px",
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
-                  }}
-                >
-                  <Card.Header
+              reunioes
+                ?.filter(
+                  (rn) =>
+                    (rn.data >= formatarData(dataInicio) &&
+                      rn.data <= formatarData(dataFim)) ||
+                    Object.values(rn).some(
+                      (value) =>
+                        typeof value === "string" &&
+                        value.toLowerCase().includes(pesquisa.toLowerCase())
+                    )
+                )
+                .map((reuniao) => (
+                  <Card
+                    bg="dark"
+                    border=""
+                    text="white"
+                    className="card-queixas-queixoso"
+                    key={reuniao?.id} // Evita warnings do React
                     style={{
-                      color: "#ffc107",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      marginBottom: "10px",
+                      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
                     }}
                   >
-                    <span>Reunião {reuniao?.id}</span>
-                    <small className="text-muted" style={{ fontSize: 12 }}>
-                      <FaCircle
-                        className="estado"
-                        color={
-                          reuniao?.estado === "1"
-                            ? "primary"
-                            : reuniao?.estado === "2"
-                            ? "#198754"
-                            : reuniao?.estado === "3"
-                            ? "danger"
-                            : reuniao?.estado === "4"
-                            ? "warning"
-                            : "secondary"
-                        }
-                      />{" "}
-                      {reuniao?.estado === "1"
-                        ? "Agendada"
-                        : reuniao?.estado === "2"
-                        ? "Realizada"
-                        : reuniao?.estado === "3"
-                        ? "Não realizada"
-                        : reuniao?.estado === "4"
-                        ? "Pendente"
-                        : "Sem estado"}
-                    </small>
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Title>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <small className="text-muted" style={{ fontSize: 12 }}>
-                          {reuniao?.assunto}
-                        </small>
-                        <small style={{ color: "#ffc107", fontSize: 12 }}>
-                          {reuniao?.data} {reuniao?.hora}
-                        </small>
-                      </div>
-                    </Card.Title>
+                    <Card.Header
+                      style={{
+                        color: "#ffc107",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Reunião {reuniao?.id}</span>
+                      <small className="text-muted" style={{ fontSize: 12 }}>
+                        <FaCircle
+                          className="estado"
+                          color={
+                            reuniao?.estado === "1"
+                              ? "primary"
+                              : reuniao?.estado === "2"
+                              ? "#198754"
+                              : reuniao?.estado === "3"
+                              ? "danger"
+                              : reuniao?.estado === "4"
+                              ? "warning"
+                              : "secondary"
+                          }
+                        />{" "}
+                        {reuniao?.estado === "1"
+                          ? "Agendada"
+                          : reuniao?.estado === "2"
+                          ? "Realizada"
+                          : reuniao?.estado === "3"
+                          ? "Não realizada"
+                          : reuniao?.estado === "4"
+                          ? "Pendente"
+                          : "Sem estado"}
+                      </small>
+                    </Card.Header>
+                    <Card.Body>
+                      <Card.Title>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <small
+                            className="text-muted"
+                            style={{ fontSize: 12 }}
+                          >
+                            {reuniao?.assunto}
+                          </small>
+                          <small style={{ color: "#ffc107", fontSize: 12 }}>
+                            {reuniao?.data} {reuniao?.hora}
+                          </small>
+                        </div>
+                      </Card.Title>
 
-                    <hr style={{ border: "1px solid black" }} />
-                    <Card.Text>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          style={{ cursor: "pointer" }}
-                          variant="secondary"
-                          size="small"
-                          onClick={() => mais_detalhes(reuniao)}
+                      <hr style={{ border: "1px solid black" }} />
+                      <Card.Text>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            gap: "10px",
+                          }}
                         >
-                          Ver mais
-                        </Button>
-                        <Button
-                          style={{ cursor: "pointer" }}
-                          variant="outline-secondary"
-                          size="small"
-                          onClick={() => mais_detalhes(reuniao)}
-                        >
-                          Editar
-                        </Button>
-                      </div>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              ))}
+                          <Button
+                            style={{ cursor: "pointer" }}
+                            variant="secondary"
+                            size="small"
+                            onClick={() => mais_detalhes(reuniao)}
+                          >
+                            Ver mais
+                          </Button>
+                          <Button
+                            style={{ cursor: "pointer" }}
+                            variant="outline-secondary"
+                            size="small"
+                            onClick={() => mais_detalhes(reuniao)}
+                          >
+                            Editar
+                          </Button>
+                        </div>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                ))}
           </div>
 
           {/* Botão Fixo Fora da Scrollagem */}
@@ -1109,7 +1169,7 @@ const MaisDetalhes = () => {
                 type="submit"
                 style={{ float: "right" }}
               >
-                Editar
+                Salvar
               </Button>
             </Form>
           </div>
