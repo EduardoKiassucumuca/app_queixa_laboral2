@@ -292,8 +292,9 @@ const MaisDetalhes = () => {
     getNotas();
     getMudancas();
     getReunioes();
-    console.log(conflito);
+    console.log(date);
   }, [id_queixa]);
+  
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -324,10 +325,12 @@ const MaisDetalhes = () => {
   }
 
   function mais_detalhes(reuniao) {
+
+    // const date = new Date(reuniao.data)
     setDetalhesReuniao(reuniao);
     setAssunto(reuniao.assunto);
     setLocal(reuniao.local);
-    setDate(reuniao.Data);
+    setDate(reuniao.data);
     setHora(reuniao.hora);
     setOBS(reuniao.obs);
     toggleDisplay8();
@@ -1106,7 +1109,7 @@ const MaisDetalhes = () => {
                 type="submit"
                 style={{ float: "right" }}
               >
-                Salvar
+                Editar
               </Button>
             </Form>
           </div>

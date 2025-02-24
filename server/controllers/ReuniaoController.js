@@ -7,6 +7,9 @@ const Trabalhador = require("../models/Trabalhador");
 
 const twilio = require("twilio");
 
+const accountSid = "";
+const authToken = "";
+
 const client = twilio(accountSid, authToken);
 
 async function enviarSMS(numeroDestino, mensagem) {
@@ -258,7 +261,6 @@ module.exports = {
         .json({ status: 0, message: "Erro ao criar reunião." });
     }
 
-    console.log("Reunião criada com sucesso.");
 
     // Enviar SMS após a criação da reunião
     enviarSMS(
@@ -301,6 +303,7 @@ module.exports = {
     const { fk_queixa } = req.body;
     const { fk_empregador } = req.body;
 
+    
     const reuniao = await Reuniao.create({
       assunto: _assunto,
       local: _local,
@@ -312,6 +315,8 @@ module.exports = {
       empresaID: fk_empregador,
       queixosoID: fk_empregador,
     });
+
+
     return res.status(200).send({
       status: 1,
       message: "Reunião agendada com sucesso!",
@@ -330,7 +335,36 @@ module.exports = {
       empresaID,
     } = req.body;
 
-    await Reuniao.update(
+    const [empresa, trabalhador] = await Promise.all([
+      Empresa.findOne({
+        attributes: ["id", "nome_empresa", "email"],
+        where: { id: empresaID },
+      }),
+      Trabalhador.findOne({
+        attributes: ["id", "contaID", "pessoaID"],
+        include: [
+          {
+            association: "Pessoa",
+            required: true,
+            attributes: ["nome", "sobrenome"],
+          },
+        ],
+        where: { id: trabalhadorID },
+      }),
+    ]);
+
+    if (!trabalhador) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Trabalhador não encontrado." });
+    }
+
+    if (!empresa) {
+      return res
+        .status(404)
+        .json({ status: 0, message: "Empresa não encontrada." });
+    }
+   const reuniao = await Reuniao.update(
       {
         assunto: _assunto,
         queixaID: queixaID,
@@ -347,11 +381,26 @@ module.exports = {
         },
       }
     );
+    if (!reuniao) {
+      return res
+        .status(500)
+        .json({ status: 0, message: "Erro ao criar reunião." });
+    }
 
+
+    // Enviar SMS após a criação da reunião
+    enviarSMS(
+      "+244930340539",
+      `Prezado(a) ${trabalhador.Pessoa.nome} ${trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
+        `Informamos que houve uma alteração na reunião agendada para discutir o assunto sobre: ${_assunto}.\n\n` +
+        `📅 Data: ${_data}\n⏰ Horário: ${_hora}\n📍 Local: ${_local}\n\n` +
+        `OBS: ${_obs}\n\nAtenciosamente,\nInspecção Geral do Trabalho`
+    );
     return res.status(200).send({
       status: 1,
       message: "Reuniao atualizada com sucesso!",
     });
+    
   },
   async update_empregadores(req, res) {
     const {
