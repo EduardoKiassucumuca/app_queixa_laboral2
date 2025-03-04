@@ -189,6 +189,7 @@ module.exports = {
           "queixaID",
           "queixosoID",
           "obs",
+          "url_file_acta"
         ],
         where: { queixaID: id_queixa },
       });
@@ -434,6 +435,26 @@ module.exports = {
     return res.status(200).send({
       status: 1,
       message: "Reuniao atualizada com sucesso!",
+    });
+  },
+  async finalisar_reuniao(req, res) {
+  const fileActaFinal = req.files["fileActaFinal"][0].path.split("\\")[1];
+  const { id_reuniao} = req.body;
+console.log(id_reuniao)
+    await Reuniao.update(
+      {
+        url_file_acta: fileActaFinal,
+        estado:"2"
+      },
+      {
+        where: {
+          id: id_reuniao,
+        },
+      }
+    );
+    return res.status(200).send({
+      status: 1,
+      message: "Reuniao encerrada com sucesso!",
     });
   },
   async delete(req, res) {

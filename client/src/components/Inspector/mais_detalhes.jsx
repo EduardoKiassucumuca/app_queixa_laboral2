@@ -12,15 +12,19 @@ import { FaPhone } from "react-icons/fa6";
 import "./mais_detalhes.css";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import { FaFilePdf } from "react-icons/fa";
+import { FaDownload, FaEye, FaFileAlt, FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
-import { Badge, FloatingLabel, Form } from "react-bootstrap";
+import { Badge, FloatingLabel, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
 import Search from "antd/es/transfer/search";
 
 const MaisDetalhes = () => {
+
+  const umaSemanaAtras = new Date();
+  umaSemanaAtras.setDate(umaSemanaAtras.getDate() - 7);
+
   const { id_queixa } = useParams();
   //console.log(id_queixa)
   const [conflito, setConflito] = useState({});
@@ -36,7 +40,7 @@ const MaisDetalhes = () => {
   const [showModalActa, setShowModalActa] = useState(false);
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle7, setDisplayStyle7] = useState("none");
-
+  const [displayStyle9, setDisplayStyle9] = useState("none");
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [multa, setMulta] = useState("");
   const [status, setStatus] = useState("");
@@ -58,7 +62,7 @@ const MaisDetalhes = () => {
   const [showPreview, setShowPreview] = useState(false); // Controlar a exibição do preview
   const [detalhes_reuniao, setDetalhesReuniao] = useState({});
   const [displayStyle8, setDisplayStyle8] = useState("none");
-  const [dataInicio, setDataInicio] = useState("");
+  const [dataInicio, setDataInicio] = useState(formatarData(umaSemanaAtras));
   const [dataFim, setDataFim] = useState(formatarData(new Date()));
   const [pesquisa, setPesquisa] = useState("");
 
@@ -80,6 +84,13 @@ const MaisDetalhes = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle8((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay9 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle9((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -303,8 +314,8 @@ const MaisDetalhes = () => {
     getNotas();
     getMudancas();
     getReunioes();
-    console.log(conflito);
-  }, [id_queixa]);
+    console.log(dataInicio,dataFim);
+  }, [id_queixa,dataInicio,dataFim]);
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -336,6 +347,10 @@ const MaisDetalhes = () => {
 
   function mais_detalhes(reuniao) {
     setDetalhesReuniao(reuniao);
+    toggleDisplay6();
+  }
+  function mais_detalhes_para_atualizar(reuniao) {
+    setDetalhesReuniao(reuniao);
     setAssunto(reuniao.assunto);
     setLocal(reuniao.local);
     setDate(reuniao.Data);
@@ -343,6 +358,30 @@ const MaisDetalhes = () => {
     setOBS(reuniao.obs);
     toggleDisplay8();
   }
+  const finalizar_reuniao = (e) => {
+    e.preventDefault();
+   const formData = new FormData();
+   const file_acta = document.querySelector("#fileActaFinal");
+   formData.append("id_reuniao", detalhes_reuniao.id);
+   formData.append("fileActaFinal", file_acta.files[0]);
+
+      console.log(formData)
+      Axios.post("http://localhost:3001/terminar_reuniao", formData, {
+       headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+        .then((resposta) => {
+          setAlert(resposta.data.message);
+          toggleDisplay9();
+          toggleDisplay7();
+          //setRedireciona("/dashboard_admin");
+        })
+        .catch((resposta) => {
+          console.log("error", resposta);
+        });
+    
+  };
   const agendar_reuniao = (e) => {
     e.preventDefault();
     console.log("asala");
@@ -446,6 +485,21 @@ const MaisDetalhes = () => {
   function refreshPage() {
     window.location.reload();
   }
+  function formTerminar(reuniao) {
+setDetalhesReuniao(reuniao)
+    toggleDisplay9()
+    
+  }
+  const handleNavigate = (url_file) => {
+    // Navega para a nova rota, passando a URL do arquivo como parâmetro
+    const previewUrl = `/previewDoc?file=${encodeURIComponent(url_file)}`;
+    window.open(previewUrl, "_blank"); // '_blank' abre em uma nova aba/janela
+  };
+  const renderTooltip2 = (props) => (
+    <Tooltip id="button-tooltip2" {...props}>
+      Ver
+    </Tooltip>
+  );
   return (
     <>
       <SideNavInspector />
@@ -492,7 +546,46 @@ const MaisDetalhes = () => {
             <span style={{ fontWeight: "bold" }}>OBS:</span>
             <span>{detalhes_reuniao?.obs}</span>
           </div>
-
+          <Card style={{ marginTop: 16 }}>
+              <Card.Header style={{ fontWeight: "bold" }}>
+                Acta da reunião
+              </Card.Header>
+              <Card.Body>
+                {detalhes_reuniao?.url_file_acta ? (
+                  <>
+                    {" "}
+                    <a
+                      href="#"
+                      style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                    >
+                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                      {detalhes_reuniao?.url_file_acta}
+                    </a>{" "}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 40 }}
+                      overlay={renderTooltip2}
+                    >
+                      <Button
+                        variant="dark"
+                        style={{
+                          float: "right",
+                          marginLeft: 3,
+                          color: "#ffc107",
+                        }}
+                        onClick={() =>
+                          handleNavigate(detalhes_reuniao?.url_file_acta)
+                        }
+                      >
+                        <FaEye />
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                ) : (
+                  <p>Acta indisponivel de momento!</p>
+                )}
+              </Card.Body>
+            </Card>{" "}
           <div class="modal-footer">
             <Button variant="warning" type="button" onClick={toggleDisplay6}>
               OK
@@ -800,8 +893,8 @@ const MaisDetalhes = () => {
               reunioes
                 ?.filter(
                   (rn) =>
-                    (rn.data >= formatarData(dataInicio) &&
-                      rn.data <= formatarData(dataFim)) ||
+                    (formatarData(rn.data) >= formatarData(dataInicio) &&
+                      formatarData(rn.data) <= formatarData(dataFim)) ||
                     Object.values(rn).some(
                       (value) =>
                         typeof value === "string" &&
@@ -895,12 +988,23 @@ const MaisDetalhes = () => {
                           </Button>
                           <Button
                             style={{ cursor: "pointer" }}
-                            variant="outline-secondary"
+                            variant="secondary"
                             size="small"
-                            onClick={() => mais_detalhes(reuniao)}
+                            disabled={reuniao.estado === "2" ? true : false}
+                            onClick={() => mais_detalhes_para_atualizar(reuniao)}
                           >
                             Editar
                           </Button>
+                               <Button
+                            style={{ cursor: "pointer" }}
+                            variant="secondary"
+                            size="small"
+                            disabled={reuniao.estado === "2"? true : false}
+                            onClick={(e)=>formTerminar(reuniao)}
+                          >
+                            Terminar
+                          </Button>
+                          
                         </div>
                       </Card.Text>
                     </Card.Body>
@@ -1057,6 +1161,56 @@ const MaisDetalhes = () => {
                     onChange={(e) => setOBS(e.target.value)}
                   />
                 </FloatingLabel>
+              </Row>
+              <br />{" "}
+              <Button
+                variant="warning"
+                type="submit"
+                style={{ float: "right" }}
+              >
+                Salvar
+              </Button>
+            </Form>
+          </div>
+          <br />
+          {/* <div class="modal-footer">
+          
+          </div> */}
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle9,
+          position: "fixed",
+          top: "0px",
+          boxShadow: "10px 10px 5px #888888",
+        }}
+        onClick={(e) => {
+          if (e.target.id === "myModal") {
+            toggleDisplay9();
+          }
+        }}
+      >
+        <div class="modal-content">
+          <a
+            onClick={toggleDisplay9}
+            class="w3-button w3-display-topright"
+            style={{ cursor: "pointer", textAlign: "right", fontSize: 24 }}
+          >
+            &times;
+          </a>
+          <div className="modal-header">
+            <h5 className="modal-title">Finalizar Reunião</h5>
+          </div>
+          <div className="modal-body">
+            <Form onSubmit={(e) => finalizar_reuniao(e)}>
+              <Row className="mb-3">
+                <Form.Label>Anexar a acta da reunião</Form.Label>
+                
+                <Form.Control type="file" name="fileActaFinal" id="fileActaFinal" required />
+                
               </Row>
               <br />{" "}
               <Button
