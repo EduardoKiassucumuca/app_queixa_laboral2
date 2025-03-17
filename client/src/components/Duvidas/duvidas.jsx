@@ -70,7 +70,7 @@ function Duvidas() {
     axios
       .get("http://localhost:3001/duvidas")
       .then(({ data }) => {
-        setDuvidas(data.duvidas);
+        setDuvidas(data.duvidas.reverse());
         console.log(data);
       })
       .catch((res) => {
@@ -159,11 +159,17 @@ function Duvidas() {
                         class="float-left"
                         href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
                       >
-                        <strong>{duvida.username}</strong>
+                        <strong style={{ fontSize: 22 }}>
+                          {duvida.username}
+                        </strong>
                       </a>
                     </p>
-                    <div class="clearfix"></div>
-                    <p>{duvida.descricao}</p>
+                    <div class="clearfix" style={{ marginBottom: "10px" }}>
+                      <span style={{ fontWeight: "bold", fontSize: 16 }}>
+                        {duvida.assunto}
+                      </span>
+                    </div>
+                    <p style={{ marginLeft: 15 }}>{duvida.descricao}</p>
                     <p style={{ marginLeft: 20, marginTop: 20 }}>
                       {" "}
                       <i

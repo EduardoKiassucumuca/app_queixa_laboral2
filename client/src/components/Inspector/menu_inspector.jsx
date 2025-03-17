@@ -16,7 +16,7 @@ import { FaPowerOff } from "react-icons/fa6";
 import { useNavigate, Link } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
 import Toast from "react-bootstrap/Toast";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -31,6 +31,7 @@ const MenuInspector = () => {
   const toggleShowA = () => setShowA(!showA);
   const toggleShowB = () => setShowB(!showB);
   const [duvidas, setDuvidas] = useState([]);
+  const toastRef = useRef(null);
 
   const navigate = useNavigate();
   let data = "";
@@ -57,12 +58,22 @@ const MenuInspector = () => {
     axios
       .get("http://localhost:3001/duvidas")
       .then(({ data }) => {
-        setDuvidas(data.duvidas);
+        setDuvidas(data.duvidas.reverse());
         console.log(data);
       })
       .catch((res) => {
         console.log("res");
       });
+
+    function handleClickOutside(event) {
+      if (toastRef.current && !toastRef.current.contains(event.target)) {
+        setShowB(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
   function goDetalhesDuvidas(id_duvida) {
     window.location.href = "/detalhesDuvidas/" + id_duvida;
@@ -134,6 +145,7 @@ const MenuInspector = () => {
             style={{ zIndex: 1 }}
           >
             <div
+              ref={toastRef}
               style={{
                 backgroundColor: "white",
                 border: "1px solid #ddd",
@@ -141,11 +153,11 @@ const MenuInspector = () => {
               }}
             >
               {duvidas.map((duvida) => (
-                <Link to={`/detalhesDuvidas/${duvida.id}`}>
+                <Link key={duvida.id} to={`/detalhesDuvidas/${duvida.id}`}>
                   <Toast
                     show={showB}
                     style={{
-                      marginBottom: "15px !important",
+                      marginBottom: "15px",
                       cursor: "pointer",
                     }}
                   >
@@ -162,13 +174,11 @@ const MenuInspector = () => {
                           width: 13,
                           marginRight: 5,
                           borderRadius: 10,
-                          float: right,
+                          float: "right",
                           display:
                             duvida.status === "lida" ? "none" : "inline-block",
                         }}
-                      >
-                        {" "}
-                      </Badge>
+                      />
                     </Toast.Body>
                   </Toast>
                 </Link>
