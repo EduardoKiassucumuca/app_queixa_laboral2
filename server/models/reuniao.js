@@ -37,7 +37,7 @@ const Reuniao = db.define("reuniao", {
   },
   url_file_acta: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   queixosoID: {
     type: DataTypes.INTEGER,

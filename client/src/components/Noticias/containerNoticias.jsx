@@ -248,7 +248,7 @@ function NoticiasPanel() {
                 onChange={(e) => setTipoPublicacao(e.target.value)}
               >
                 <option>Tipo de imagem</option>
-                <option value="destaque">destaque</option>
+                {/* <option value="destaque">destaque</option> */}
                 <option value="normal">normal</option>
               </Form.Select>
               <Form.Label>Escolher noticia</Form.Label>
@@ -328,7 +328,7 @@ function NoticiasPanel() {
                 onChange={(e) => setTipoPublicacao(e.target.value)}
               >
                 <option>Tipo de imagem</option>
-                <option value="destaque">destaque</option>
+                {/* <option value="destaque">destaque</option> */}
                 <option value="normal">normal</option>
               </Form.Select>
             </Row>

@@ -14,14 +14,20 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import { FaDownload, FaEye, FaFileAlt, FaFilePdf } from "react-icons/fa";
 import ModalReuniao from "./modal_reuniao";
-import { Badge, FloatingLabel, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Badge,
+  FloatingLabel,
+  Form,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import ModalActa from "./modal_acta";
 import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
 import Search from "antd/es/transfer/search";
+import { Pagination } from "react-bootstrap";
 
 const MaisDetalhes = () => {
-
   const umaSemanaAtras = new Date();
   umaSemanaAtras.setDate(umaSemanaAtras.getDate() - 7);
 
@@ -41,6 +47,8 @@ const MaisDetalhes = () => {
   const [displayStyle, setDisplayStyle] = useState("none");
   const [displayStyle7, setDisplayStyle7] = useState("none");
   const [displayStyle9, setDisplayStyle9] = useState("none");
+  const [displayStyle10, setDisplayStyle10] = useState("none");
+
   const [displayStyle2, setDisplayStyle2] = useState("none");
   const [multa, setMulta] = useState("");
   const [status, setStatus] = useState("");
@@ -65,7 +73,17 @@ const MaisDetalhes = () => {
   const [dataInicio, setDataInicio] = useState(formatarData(umaSemanaAtras));
   const [dataFim, setDataFim] = useState(formatarData(new Date()));
   const [pesquisa, setPesquisa] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const itemsPerPage = 8; // Número de itens por página
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = reunioes.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const currentReunioes = reunioes.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Função para mudar de página
+  const paginateModal = (pageNumber) => setCurrentPage(pageNumber);
   function formatarData(date) {
     const d = new Date(date);
     const ano = d.getFullYear();
@@ -126,6 +144,13 @@ const MaisDetalhes = () => {
     // Toggle between 'none' and 'block'
 
     setDisplayStyle3((prevDisplayStyle) =>
+      prevDisplayStyle === "none" ? "block" : "none"
+    );
+  };
+  const toggleDisplay10 = () => {
+    // Toggle between 'none' and 'block'
+
+    setDisplayStyle10((prevDisplayStyle) =>
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
@@ -314,8 +339,8 @@ const MaisDetalhes = () => {
     getNotas();
     getMudancas();
     getReunioes();
-    console.log(dataInicio,dataFim);
-  }, [id_queixa,dataInicio,dataFim]);
+    console.log(dataInicio, dataFim);
+  }, [id_queixa, dataInicio, dataFim]);
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -338,11 +363,27 @@ const MaisDetalhes = () => {
     window.location.reload();
   }
   function verificarQueixaEncerrada(conflito) {
+    reunioes.forEach((reuniao) => {
+      if (reuniao.estado === "1") {
+        alert("Por-favor feche as reuniões abertas");
+        return;
+      }
+    });
     if (conflito.estado === "Encerrado" || conflito.estado === "Tribunal") {
       toggleDisplay4();
     } else {
       toggleDisplay2();
     }
+  }
+  function verificarReuniaoAberta() {
+    const temReuniaoAberta = reunioes.some((reuniao) => reuniao.estado === "1");
+
+    if (temReuniaoAberta) {
+      toggleDisplay10();
+      return; // Sai da função sem chamar toggleDisplay2()
+    }
+
+    toggleDisplay2();
   }
 
   function mais_detalhes(reuniao) {
@@ -360,27 +401,26 @@ const MaisDetalhes = () => {
   }
   const finalizar_reuniao = (e) => {
     e.preventDefault();
-   const formData = new FormData();
-   const file_acta = document.querySelector("#fileActaFinal");
-   formData.append("id_reuniao", detalhes_reuniao.id);
-   formData.append("fileActaFinal", file_acta.files[0]);
+    const formData = new FormData();
+    const file_acta = document.querySelector("#fileActaFinal");
+    formData.append("id_reuniao", detalhes_reuniao.id);
+    formData.append("fileActaFinal", file_acta.files[0]);
 
-      console.log(formData)
-      Axios.post("http://localhost:3001/terminar_reuniao", formData, {
-       headers: {
+    console.log(detalhes_reuniao.id);
+    Axios.put("http://localhost:3001/terminar_reuniao", formData, {
+      headers: {
         "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
       },
     })
-        .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay9();
-          toggleDisplay7();
-          //setRedireciona("/dashboard_admin");
-        })
-        .catch((resposta) => {
-          console.log("error", resposta);
-        });
-    
+      .then((resposta) => {
+        setAlert(resposta.data.message);
+        toggleDisplay9();
+        toggleDisplay7();
+        //setRedireciona("/dashboard_admin");
+      })
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
   };
   const agendar_reuniao = (e) => {
     e.preventDefault();
@@ -396,41 +436,41 @@ const MaisDetalhes = () => {
     const currentHour = time_now.getHours();
     const currentMinute = time_now.getMinutes();
 
-    if (
-      today.getFullYear() > year ||
-      today.getMonth() > mes ||
-      today.getDay() > dia
-    ) {
-      setMsgErro("Data inválida");
-    } else if (
-      today.getFullYear() === year &&
-      today.getMonth() === mes &&
-      today.getDay() === dia &&
-      currentHour > hora_d
-    ) {
-      setMsgErro("Hora inválida");
-    } else {
-      console.log("ent");
-      Axios.post("http://localhost:3001/nova_reuniao", {
-        _assunto: assunto,
-        _local: local,
-        _data: date,
-        _hora: hora,
-        _obs: obs,
-        fk_queixa: id_queixa,
-        fk_trabalhador: conflito.Trabalhador.id,
-        fk_empresa: conflito.Empresa.id,
+    // if (
+    //   today.getFullYear() > year ||
+    //   today.getMonth() > mes ||
+    //   today.getDay() > dia
+    // ) {
+    //   setMsgErro("Data inválida");
+    // } else if (
+    //   today.getFullYear() === year &&
+    //   today.getMonth() === mes &&
+    //   today.getDay() === dia &&
+    //   currentHour > hora_d
+    // ) {
+    //   setMsgErro("Hora inválida");
+    // } else {
+    console.log("ent");
+    Axios.post("http://localhost:3001/nova_reuniao", {
+      _assunto: assunto,
+      _local: local,
+      _data: date,
+      _hora: hora,
+      _obs: obs,
+      fk_queixa: id_queixa,
+      fk_trabalhador: conflito.Trabalhador.id,
+      fk_empresa: conflito.Empresa.id,
+    })
+      .then((resposta) => {
+        setAlert(resposta.data.message);
+        toggleDisplay();
+        toggleDisplay7();
+        //setRedireciona("/dashboard_admin");
       })
-        .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay();
-          toggleDisplay7();
-          //setRedireciona("/dashboard_admin");
-        })
-        .catch((resposta) => {
-          console.log("error", resposta);
-        });
-    }
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+    // }
   };
   const editar_reuniao = (e) => {
     e.preventDefault();
@@ -445,50 +485,49 @@ const MaisDetalhes = () => {
     const currentHour = time_now.getHours();
     const currentMinute = time_now.getMinutes();
 
-    if (
-      today.getFullYear() > year ||
-      today.getMonth() > mes ||
-      today.getDay() > dia
-    ) {
-      setMsgErro("Data inválida");
-    } else if (
-      today.getFullYear() === year &&
-      today.getMonth() === mes &&
-      today.getDay() === dia &&
-      currentHour > hora_d
-    ) {
-      setMsgErro("Hora inválida");
-    } else {
-      console.log("ent");
-      Axios.post("http://localhost:3001/editar_reuniao", {
-        reuniaoID: detalhes_reuniao.id,
-        _assunto: assunto,
-        _local: local,
-        _data: date,
-        _hora: hora,
-        _obs: obs,
-        queixaID: id_queixa,
-        trabalhadorID: conflito.Trabalhador.id,
-        empresaID: conflito.Empresa.id,
+    // if (
+    //   today.getFullYear() > year ||
+    //   today.getMonth() > mes ||
+    //   today.getDay() > dia
+    // ) {
+    //   setMsgErro("Data inválida");
+    // } else if (
+    //   today.getFullYear() === year &&
+    //   today.getMonth() === mes &&
+    //   today.getDay() === dia &&
+    //   currentHour > hora_d
+    // ) {
+    //   setMsgErro("Hora inválida");
+    // } else {
+    console.log("ent");
+    Axios.post("http://localhost:3001/editar_reuniao", {
+      reuniaoID: detalhes_reuniao.id,
+      _assunto: assunto,
+      _local: local,
+      _data: date,
+      _hora: hora,
+      _obs: obs,
+      queixaID: id_queixa,
+      trabalhadorID: conflito.Trabalhador.id,
+      empresaID: conflito.Empresa.id,
+    })
+      .then((resposta) => {
+        setAlert(resposta.data.message);
+        toggleDisplay8();
+        toggleDisplay7();
+        //setRedireciona("/dashboard_admin");
       })
-        .then((resposta) => {
-          setAlert(resposta.data.message);
-          toggleDisplay8();
-          toggleDisplay7();
-          //setRedireciona("/dashboard_admin");
-        })
-        .catch((resposta) => {
-          console.log("error", resposta);
-        });
-    }
+      .catch((resposta) => {
+        console.log("error", resposta);
+      });
+    // }
   };
   function refreshPage() {
     window.location.reload();
   }
   function formTerminar(reuniao) {
-setDetalhesReuniao(reuniao)
-    toggleDisplay9()
-    
+    setDetalhesReuniao(reuniao);
+    toggleDisplay9();
   }
   const handleNavigate = (url_file) => {
     // Navega para a nova rota, passando a URL do arquivo como parâmetro
@@ -511,7 +550,6 @@ setDetalhesReuniao(reuniao)
           >
             Mais detalhes
           </h1>
-
           <div style={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
             <span style={{ fontWeight: "bold" }}>Assunto:</span>
             <span>{detalhes_reuniao?.assunto}</span>
@@ -547,45 +585,45 @@ setDetalhesReuniao(reuniao)
             <span>{detalhes_reuniao?.obs}</span>
           </div>
           <Card style={{ marginTop: 16 }}>
-              <Card.Header style={{ fontWeight: "bold" }}>
-                Acta da reunião
-              </Card.Header>
-              <Card.Body>
-                {detalhes_reuniao?.url_file_acta ? (
-                  <>
-                    {" "}
-                    <a
-                      href="#"
-                      style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+            <Card.Header style={{ fontWeight: "bold" }}>
+              Acta da reunião
+            </Card.Header>
+            <Card.Body>
+              {detalhes_reuniao?.url_file_acta ? (
+                <>
+                  {" "}
+                  <a
+                    href="#"
+                    style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+                  >
+                    <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
+                    {detalhes_reuniao?.url_file_acta}
+                  </a>{" "}
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 40 }}
+                    overlay={renderTooltip2}
+                  >
+                    <Button
+                      variant="dark"
+                      style={{
+                        float: "right",
+                        marginLeft: 3,
+                        color: "#ffc107",
+                      }}
+                      onClick={() =>
+                        handleNavigate(detalhes_reuniao?.url_file_acta)
+                      }
                     >
-                      <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                      {detalhes_reuniao?.url_file_acta}
-                    </a>{" "}
-                    <OverlayTrigger
-                      placement="top"
-                      delay={{ show: 250, hide: 40 }}
-                      overlay={renderTooltip2}
-                    >
-                      <Button
-                        variant="dark"
-                        style={{
-                          float: "right",
-                          marginLeft: 3,
-                          color: "#ffc107",
-                        }}
-                        onClick={() =>
-                          handleNavigate(detalhes_reuniao?.url_file_acta)
-                        }
-                      >
-                        <FaEye />
-                      </Button>
-                    </OverlayTrigger>
-                  </>
-                ) : (
-                  <p>Acta indisponivel de momento!</p>
-                )}
-              </Card.Body>
-            </Card>{" "}
+                      <FaEye />
+                    </Button>
+                  </OverlayTrigger>
+                </>
+              ) : (
+                <p>Acta indisponivel de momento!</p>
+              )}
+            </Card.Body>
+          </Card>{" "}
           <div class="modal-footer">
             <Button variant="warning" type="button" onClick={toggleDisplay6}>
               OK
@@ -595,7 +633,7 @@ setDetalhesReuniao(reuniao)
       </div>
 
       <Row className="row-detalhes">
-        <Col md={5}>
+        <Col md={7}>
           <Card
             bg="dark"
             border="secondary"
@@ -643,7 +681,33 @@ setDetalhesReuniao(reuniao)
               </small>
             </Card.Footer>
           </Card>
+          <br />
+          {conflito.estado === "Encerrado" ||
+          conflito.estado === "Tribunal" ||
+          conflito?.estado === "Desistente" ? (
+            <>
+              <Button
+                variant="warning"
+                onClick={() => verificarQueixaEncerrada(conflito)}
+                style={{ borderColor: "#ddd", marginLeft: 65 }}
+              >
+                Encerrar
+              </Button>
+            </>
+          ) : (
+            <>
+              {" "}
+              <Button
+                variant="warning"
+                onClick={verificarReuniaoAberta}
+                style={{ borderColor: "#ddd", marginLeft: 65 }}
+              >
+                Encerrar
+              </Button>
+            </>
+          )}
         </Col>
+
         <Col md={4}>
           <Card
             bg="dark"
@@ -655,65 +719,42 @@ setDetalhesReuniao(reuniao)
             <Card.Body>
               <Card.Title></Card.Title>
               <Card.Text>
-                <p>
-                  <FaFilePdf style={{ border: "red" }} />
-                  <a
-                    href="#"
-                    onClick={(e) => handleDownload(conflito.url_file_contrato)}
-                    style={{ color: "rgb(220, 195, 119)" }}
-                  >
-                    {conflito.url_file_contrato}
-                  </a>
-                </p>
-                <hr />
-                <p>
-                  <FaFilePdf style={{ border: "red" }} />
-                  <a
-                    href="#"
-                    onClick={(e) => handleDownload(conflito.url_file_acta)}
-                    style={{ color: "rgb(220, 195, 119)" }}
-                  >
-                    {conflito.url_file_acta}
-                  </a>
-                </p>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={3} style={{ marginTop: 5 }}>
-          <Card
-            bg="dark"
-            border="secondary"
-            text="white"
-            className="card-queixas-queixoso"
-          >
-            <Card.Header style={{ color: "#ffc107" }}>
-              Historico das queixas
-            </Card.Header>
-            <Card.Body style={{ maxHeight: "300px", overflowY: "auto" }}>
-              {historicos.map((historico, index) => (
-                <div key={index}>
-                  <Card.Title>
-                    <small>
-                      {historico.Queixa.Trabalhador.Pessoa.nome +
-                        " " +
-                        historico.Queixa.Trabalhador.Pessoa.sobrenome}
-                      <span style={{ float: "right", color: "#ffc107" }}>
-                        {historico.data}
-                      </span>
-                    </small>
-                  </Card.Title>
-                  <Card.Text>
-                    <p
-                      className="text-muted"
-                      style={{ color: "#cdd9e5 !important" }}
-                    >
-                      {historico.facto}
+                {[
+                  { file: conflito.url_file_contrato },
+                  { file: conflito.url_file_acta },
+                  { file: conflito.file3 },
+                  { file: conflito.file4 },
+                  { file: conflito.file5 },
+                  { file: conflito.file6 },
+                ]
+                  .filter((item) => item.file) // Filtra apenas arquivos existentes
+                  .map((item, index) => (
+                    <p key={index}>
+                      <FaFilePdf style={{ color: "red", marginRight: "5px" }} />
+                      <a
+                        href="#"
+                        onClick={(e) => handleDownload(item.file)}
+                        style={{ color: "rgb(220, 195, 119)" }}
+                      >
+                        {item.file}
+                      </a>
                     </p>
-                    <hr />
-                  </Card.Text>
-                </div>
-              ))}
+                  ))}
+
+                {/* Se não houver arquivos, mostra a mensagem */}
+                {![
+                  conflito.url_file_contrato,
+                  conflito.url_file_acta,
+                  conflito.file3,
+                  conflito.file4,
+                  conflito.file5,
+                  conflito.file6,
+                ].some(Boolean) && (
+                  <p style={{ color: "gray", fontStyle: "italic" }}>
+                    Nenhum ficheiro encontrado
+                  </p>
+                )}
+              </Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -721,7 +762,292 @@ setDetalhesReuniao(reuniao)
       <p></p>
 
       <Row className="notas">
-        <Col md={5} style={{ marginLeft: "23px" }}>
+        <Col
+          md={12}
+          style={{
+            marginTop: 60,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Container dos Cards com Scroll */}
+          <Alert variant="secondary" style={{ width: "20%", marginLeft: "4%" }}>
+            Reuniões
+          </Alert>
+          <Row style={{ marginLeft: 50 }}>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dataInicio"
+                  value={dataInicio}
+                  onChange={(e) => {
+                    setDataInicio(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dataFinal"
+                  value={dataFim}
+                  onChange={(e) => {
+                    setDataFim(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12} style={{ marginTop: 15, marginBottom: 15 }}>
+              <Search
+                className="pesquisa1"
+                placeholder="Procurar"
+                value={pesquisa}
+                onChange={(e) => setPesquisa(e.target.value)}
+              />
+            </Col>
+          </Row>
+
+          {/* Container flexível para exibir reuniões em linha */}
+        </Col>
+
+        {currentItems && currentItems.length > 0 ? (
+          currentItems
+            .filter(
+              (rn) =>
+                (formatarData(rn.data) >= formatarData(dataInicio) &&
+                  formatarData(rn.data) <= formatarData(dataFim)) ||
+                Object.values(rn).some(
+                  (value) =>
+                    typeof value === "string" &&
+                    value.toLowerCase().includes(pesquisa.toLowerCase())
+                )
+            )
+            .map((reuniao) => (
+              <Col md={3} key={reuniao?.id}>
+                <Card
+                  bg="dark"
+                  border=""
+                  text="white"
+                  className="card-queixas-queixoso"
+                  style={{
+                    width: "58%",
+                    minWidth: "350px",
+                    marginBottom: "10px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  <Card.Header
+                    style={{
+                      color: "#ffc107",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span>Reunião {reuniao?.id}</span>
+                    <small className="text-muted" style={{ fontSize: 12 }}>
+                      <FaCircle
+                        className="estado"
+                        color={
+                          reuniao?.estado === "1"
+                            ? "primary"
+                            : reuniao?.estado === "2"
+                            ? "#198754"
+                            : reuniao?.estado === "3"
+                            ? "danger"
+                            : reuniao?.estado === "4"
+                            ? "warning"
+                            : "secondary"
+                        }
+                      />{" "}
+                      {reuniao?.estado === "1"
+                        ? "Agendada"
+                        : reuniao?.estado === "2"
+                        ? "Realizada"
+                        : reuniao?.estado === "3"
+                        ? "Não realizada"
+                        : reuniao?.estado === "4"
+                        ? "Pendente"
+                        : "Sem estado"}
+                    </small>
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Title>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <small className="text-muted" style={{ fontSize: 12 }}>
+                          {reuniao?.assunto}
+                        </small>
+                        <small style={{ color: "#ffc107", fontSize: 12 }}>
+                          {reuniao?.data} {reuniao?.hora}
+                        </small>
+                      </div>
+                    </Card.Title>
+
+                    <hr style={{ border: "1px solid black" }} />
+                    <Card.Text>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: "10px",
+                        }}
+                      >
+                        <Button
+                          style={{ cursor: "pointer" }}
+                          variant="secondary"
+                          size="small"
+                          onClick={() => mais_detalhes(reuniao)}
+                        >
+                          Ver mais
+                        </Button>
+                        <Button
+                          style={{ cursor: "pointer" }}
+                          variant="secondary"
+                          size="small"
+                          disabled={reuniao.estado === "2"}
+                          onClick={() => mais_detalhes_para_atualizar(reuniao)}
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          style={{ cursor: "pointer" }}
+                          variant="secondary"
+                          size="small"
+                          disabled={reuniao.estado === "2"}
+                          onClick={(e) => formTerminar(reuniao)}
+                        >
+                          Terminar
+                        </Button>
+                      </div>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+        ) : (
+          <p
+            style={{ color: "gray", fontStyle: "italic", textAlign: "center" }}
+          >
+            Nenhuma reunião encontrada.
+          </p>
+        )}
+
+        <Pagination
+          className="justify-content-center mb-0"
+          style={{ marginTop: 10, paddingBottom: 10 }}
+        >
+          {Array.from({
+            length: Math.ceil(reunioes.length / itemsPerPage),
+          }).map((_, index) => (
+            <Pagination.Item
+              key={index}
+              active={index + 1 === currentPage}
+              onClick={() => paginate(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
+        <div
+          style={{
+            marginTop: "10px",
+            textAlign: "center",
+          }}
+        >
+          {conflito?.estado === "Encerrado" ||
+          conflito?.estado === "Tribunal" ||
+          conflito?.estado === "Desistente" ? (
+            <Button
+              variant="dark"
+              border="secondary"
+              type="button"
+              style={{
+                borderColor: "#ddd",
+                float: "right",
+                width: "10%",
+              }}
+              onClick={() => verificarQueixaEncerrada(conflito)}
+            >
+              Agendar reunião
+            </Button>
+          ) : (
+            <Button
+              variant="dark"
+              border="secondary"
+              type="button"
+              onClick={() => toggleDisplay()}
+              style={{
+                borderColor: "#ddd",
+                float: "right",
+                width: "10%",
+              }}
+            >
+              Agendar reunião
+            </Button>
+          )}
+        </div>
+
+        <Col md={12} style={{ marginTop: 35 }}>
+          <Card
+            bg="dark"
+            border="secondary"
+            text="white"
+            className="card-queixas-queixoso"
+            style={{ minHeight: "60vh" }}
+          >
+            <Card.Header style={{ color: "#ffc107" }}>
+              Historico das queixas
+            </Card.Header>
+            <Card.Body
+              style={{
+                maxHeight: "800px",
+                overflowY: "auto",
+              }}
+            >
+              {historicos.length > 0 ? (
+                historicos.map((historico, index) => (
+                  <div key={index}>
+                    <Card.Title>
+                      <small>
+                        {historico.Queixa.Trabalhador.Pessoa.nome +
+                          " " +
+                          historico.Queixa.Trabalhador.Pessoa.sobrenome}
+                        <span style={{ float: "right", color: "#ffc107" }}>
+                          {historico.data}
+                        </span>
+                      </small>
+                    </Card.Title>
+                    <Card.Text>
+                      <p
+                        className="text-muted"
+                        style={{ color: "#cdd9e5 !important" }}
+                      >
+                        {historico.facto}
+                      </p>
+                      <hr />
+                    </Card.Text>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-muted">
+                  Nenhum registro encontrado
+                </p>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+        {/* <Col md={5} style={{ marginLeft: "23px" }}>
           {notas.map((my_note) => (
             <>
               <Alert
@@ -805,253 +1131,8 @@ setDetalhesReuniao(reuniao)
               <p></p>
             </>
           ))}
-          {conflito.estado === "Encerrado" ||
-          conflito.estado === "Tribunal" ||
-          conflito?.estado === "Desistente" ? (
-            <>
-              <Button
-                variant="outline-warning"
-                onClick={() => verificarQueixaEncerrada(conflito)}
-                style={{ borderColor: "#ddd", marginLeft: 77 }}
-              >
-                Encerrar
-              </Button>
-            </>
-          ) : (
-            <>
-              {" "}
-              <Button
-                variant="outline-warning"
-                onClick={() => toggleDisplay2()}
-                style={{ borderColor: "#ddd", marginLeft: 77 }}
-              >
-                Encerrar
-              </Button>
-            </>
-          )}
-        </Col>
-        <Col
-          md={4}
-          style={{
-            marginTop: 10,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {/* Container dos Cards com Scroll */}
-          <Alert variant="dark" style={{ width: "85%", marginLeft: "11%" }}>
-            Reuniões
-          </Alert>
-          <Row style={{ marginLeft: 50 }}>
-            <Col md={6}>
-              <Form.Group>
-                <Form.Label style={{ color: "white" }}>Data Início</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="dataInicio"
-                  value={dataInicio}
-                  onChange={(e) => {
-                    setDataInicio(e.target.value);
-                  }}
-                />
-              </Form.Group>
-            </Col>
 
-            <Col md={6}>
-              <Form.Group>
-                <Form.Label style={{ color: "white" }}>Data Final</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="dataFinal"
-                  value={dataFim}
-                  onChange={(e) => {
-                    setDataFim(e.target.value);
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={12} style={{ marginTop: 15, marginBottom: 15 }}>
-              <Search
-                className="pesquisa1"
-                placeholder="Procurar"
-                value={pesquisa}
-                onChange={(e) => setPesquisa(e.target.value)}
-              />
-            </Col>
-          </Row>
-
-          <div
-            style={{
-              maxHeight: "400px", // Limite de altura
-              overflowY: "auto", // Ativa a rolagem vertical
-              padding: "3px",
-              borderRadius: "10px",
-              flexGrow: 1, // Ocupa o espaço disponível
-            }}
-          >
-            {reunioes &&
-              reunioes
-                ?.filter(
-                  (rn) =>
-                    (formatarData(rn.data) >= formatarData(dataInicio) &&
-                      formatarData(rn.data) <= formatarData(dataFim)) ||
-                    Object.values(rn).some(
-                      (value) =>
-                        typeof value === "string" &&
-                        value.toLowerCase().includes(pesquisa.toLowerCase())
-                    )
-                )
-                .map((reuniao) => (
-                  <Card
-                    bg="dark"
-                    border=""
-                    text="white"
-                    className="card-queixas-queixoso"
-                    key={reuniao?.id} // Evita warnings do React
-                    style={{
-                      marginBottom: "10px",
-                      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
-                    }}
-                  >
-                    <Card.Header
-                      style={{
-                        color: "#ffc107",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span>Reunião {reuniao?.id}</span>
-                      <small className="text-muted" style={{ fontSize: 12 }}>
-                        <FaCircle
-                          className="estado"
-                          color={
-                            reuniao?.estado === "1"
-                              ? "primary"
-                              : reuniao?.estado === "2"
-                              ? "#198754"
-                              : reuniao?.estado === "3"
-                              ? "danger"
-                              : reuniao?.estado === "4"
-                              ? "warning"
-                              : "secondary"
-                          }
-                        />{" "}
-                        {reuniao?.estado === "1"
-                          ? "Agendada"
-                          : reuniao?.estado === "2"
-                          ? "Realizada"
-                          : reuniao?.estado === "3"
-                          ? "Não realizada"
-                          : reuniao?.estado === "4"
-                          ? "Pendente"
-                          : "Sem estado"}
-                      </small>
-                    </Card.Header>
-                    <Card.Body>
-                      <Card.Title>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <small
-                            className="text-muted"
-                            style={{ fontSize: 12 }}
-                          >
-                            {reuniao?.assunto}
-                          </small>
-                          <small style={{ color: "#ffc107", fontSize: 12 }}>
-                            {reuniao?.data} {reuniao?.hora}
-                          </small>
-                        </div>
-                      </Card.Title>
-
-                      <hr style={{ border: "1px solid black" }} />
-                      <Card.Text>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px",
-                          }}
-                        >
-                          <Button
-                            style={{ cursor: "pointer" }}
-                            variant="secondary"
-                            size="small"
-                            onClick={() => mais_detalhes(reuniao)}
-                          >
-                            Ver mais
-                          </Button>
-                          <Button
-                            style={{ cursor: "pointer" }}
-                            variant="secondary"
-                            size="small"
-                            disabled={reuniao.estado === "2" ? true : false}
-                            onClick={() => mais_detalhes_para_atualizar(reuniao)}
-                          >
-                            Editar
-                          </Button>
-                               <Button
-                            style={{ cursor: "pointer" }}
-                            variant="secondary"
-                            size="small"
-                            disabled={reuniao.estado === "2"? true : false}
-                            onClick={(e)=>formTerminar(reuniao)}
-                          >
-                            Terminar
-                          </Button>
-                          
-                        </div>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                ))}
-          </div>
-
-          {/* Botão Fixo Fora da Scrollagem */}
-          <div
-            style={{
-              marginTop: "10px",
-              textAlign: "center",
-            }}
-          >
-            {conflito?.estado === "Encerrado" ||
-            conflito?.estado === "Tribunal" ||
-            conflito?.estado === "Desistente" ? (
-              <Button
-                variant="dark"
-                border="secondary"
-                type="button"
-                style={{
-                  borderColor: "#ddd",
-                  marginLeft: "18%",
-                  width: "80%",
-                }}
-                onClick={() => verificarQueixaEncerrada(conflito)}
-              >
-                Agendar reunião
-              </Button>
-            ) : (
-              <Button
-                variant="dark"
-                border="secondary"
-                type="button"
-                onClick={() => toggleDisplay()}
-                style={{
-                  borderColor: "#ddd",
-                  marginLeft: "18%",
-                  width: "80%",
-                }}
-              >
-                Agendar reunião
-              </Button>
-            )}
-          </div>
-        </Col>
+        </Col> */}
       </Row>
       <div
         id="myModal"
@@ -1072,6 +1153,34 @@ setDetalhesReuniao(reuniao)
               type="button"
               className="btn btn-warning"
               onClick={refreshPage}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle10,
+          position: "fixed",
+          top: "0px",
+          boxShadow: "10px 10px 5px #888888;",
+        }}
+      >
+        <div class="modal-content">
+          <h3 style={{ color: "#ffc107", fontSize: 20 }}>Aviso</h3>
+          <br />
+          <p>
+            Por favor termine todas reuniões para prosseguir com o encerramento
+            da queixa
+          </p>
+          <div class="modal-footer">
+            <Button
+              type="button"
+              className="btn btn-warning"
+              onClick={toggleDisplay10}
             >
               OK
             </Button>
@@ -1208,9 +1317,13 @@ setDetalhesReuniao(reuniao)
             <Form onSubmit={(e) => finalizar_reuniao(e)}>
               <Row className="mb-3">
                 <Form.Label>Anexar a acta da reunião</Form.Label>
-                
-                <Form.Control type="file" name="fileActaFinal" id="fileActaFinal" required />
-                
+
+                <Form.Control
+                  type="file"
+                  name="fileActaFinal"
+                  id="fileActaFinal"
+                  required
+                />
               </Row>
               <br />{" "}
               <Button
@@ -1255,7 +1368,7 @@ setDetalhesReuniao(reuniao)
             <h5 className="modal-title">Editar Reunião</h5>
           </div>
           <div className="modal-body">
-            <Form onSubmit={(e) => agendar_reuniao(e)}>
+            <Form onSubmit={(e) => editar_reuniao(e)}>
               <Row className="mb-3">
                 <FloatingLabel controlId="floatingTextarea2" label="Assunto">
                   <Form.Control
@@ -1449,7 +1562,7 @@ setDetalhesReuniao(reuniao)
         <div class="modal-content">
           <h3 style={{ color: "#ffc107", fontSize: 20 }}>Acta</h3>
           <br />
-          <p>Acta anexada com sucesso</p>
+          <p>A queixa foi encerrada com sucesso</p>
           <div class="modal-footer">
             <Button
               type="button"

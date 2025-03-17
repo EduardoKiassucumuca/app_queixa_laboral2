@@ -78,7 +78,11 @@ app.post(
   QueixaController.add_queixoso_queixa
 );
 app.post("/anexa_acta", upload_file_acta, QueixaController.anexa_acta);
-app.post("/terminar_reuniao", upload_file_acta_final, ReuniaoController.finalisar_reuniao);
+app.put(
+  "/terminar_reuniao",
+  upload_file_acta_final,
+  ReuniaoController.finalisar_reuniao
+);
 
 app.post(
   "/publicar_artigo",

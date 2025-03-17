@@ -356,7 +356,7 @@ module.exports = {
       const novaSenha = gerarSenha(8);
       const salt = await bcrypt.genSalt(12);
       const passwordHashNovo = await bcrypt.hash(novaSenha, salt);
-
+      console.log(novaSenha);
       // Atualizando a senha no banco de dados
       await Conta.update(
         { senha: passwordHashNovo },
@@ -377,7 +377,7 @@ module.exports = {
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           res.json({
-            msg: "Falha, Verifique sua conexao com a internet",
+            msg: "Falha, Verifique sua conexao com a internet" + error,
           });
         } else {
           res.status(200).json({

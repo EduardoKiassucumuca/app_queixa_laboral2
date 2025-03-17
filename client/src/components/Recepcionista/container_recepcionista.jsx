@@ -269,7 +269,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
         );
         setQueixaSelecProv(queixas_selecionadas);
 
-        setConflitos(queixas_selecionadas);
+        setConflitos(queixas_selecionadas.reverse());
         // data2?.trabalhador?.localizacao_office;
 
         setMyData([
@@ -326,15 +326,13 @@ const ContainerRecepcionista = ({ onSearch }) => {
     setPesquisa(pesquisa);
 
     setConflitos(
-      queixas_selecprovincia
-        .filter((queixa_pesquisada) => {
-          // Transforma o objeto em uma string única
-          const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+      queixas_selecprovincia.filter((queixa_pesquisada) => {
+        // Transforma o objeto em uma string única
+        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
 
-          // Verifica se a pesquisa está presente nos dados da queixa
-          return dadosQueixa.includes(pesquisa.toLowerCase());
-        })
-        .reverse()
+        // Verifica se a pesquisa está presente nos dados da queixa
+        return dadosQueixa.includes(pesquisa.toLowerCase());
+      })
     );
   }
   function persquisarPorBI(bi_pesquisado) {
@@ -409,7 +407,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
             .toLowerCase()
             .includes(estado_selecionado.toLowerCase())
         )
-      );
+      ).reverse();
     }
   }
   function persquisarPorMulta() {
@@ -420,7 +418,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
           queixa_pesquisada.multa != null &&
           queixa_pesquisada.multa !== " "
       )
-    );
+    ).reverse();
   }
   function persquisarSemMulta(isMulta = 0) {
     setConflitos(
@@ -2038,7 +2036,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems?.reverse().map((conflito) => (
+              {currentItems?.map((conflito) => (
                 <tr>
                   <th scope="row">{conflito?.id}</th>
                   <th scope="row">

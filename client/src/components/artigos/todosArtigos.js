@@ -22,6 +22,12 @@ function TodosArtigos() {
         console.log(res);
       });
   }, []);
+
+  const handleNavigate = (url_file) => {
+    // Navega para a nova rota, passando a URL do arquivo como parâmetro
+    const previewUrl = `/previewDoc?file=${encodeURIComponent(url_file)}`;
+    window.open(previewUrl, "_blank"); // '_blank' abre em uma nova aba/janela
+  };
   return (
     <>
       <Row className="artigos">
@@ -46,6 +52,7 @@ function TodosArtigos() {
                 <Button
                   variant="warning"
                   className="btn fw-bold btn-baixar-artigo"
+                  onClick={() => handleNavigate(artigo?.url_artigo)}
                 >
                   Baixar
                 </Button>

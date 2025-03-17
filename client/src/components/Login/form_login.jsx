@@ -83,14 +83,14 @@ function Login() {
             expires: 1 / 24,
             sameSite: "strict",
           }); // Expires in 1 day
-
+          console.log(data);
           sessionStorage.setItem("data_login", JSON.stringify(data));
-          console.log(data.Trabalhador);
-          if (data.conta.tentativa === 0) {
-            navigate("/Validacao");
-          } else if (data.conta.tentativa === 1) {
-            navigate("/dashboard_queixoso");
-          }
+          navigate("/Validacao");
+
+          // if (data.conta.tentativa === 0) {
+          // } else if (data.conta.tentativa === 1) {
+          //   navigate("/dashboard_queixoso");
+          // }
         })
         .catch((res) => {
           console.log(res);

@@ -302,7 +302,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
         setQueixaSelecProv(queixas_selecionadas);
         setQueixas(queixas_selecionadas);
 
-        setConflitos(queixas_selecionadas);
+        setConflitos(queixas_selecionadas.reverse());
         // let myQueixas = [];
 
         // queixas_selecionadas.forEach((queixa) => {
@@ -381,7 +381,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
 
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
-        setQueixas(data.queixas);
+        setQueixas(data.queixas.reverse());
         //console.log(lista_queixa.minha_queixa)
       })
       .catch((res) => {
@@ -2313,7 +2313,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems?.reverse().map((conflito) => (
+              {currentItems?.map((conflito) => (
                 <tr>
                   <th scope="row">{conflito.id}</th>
                   <th scope="row">

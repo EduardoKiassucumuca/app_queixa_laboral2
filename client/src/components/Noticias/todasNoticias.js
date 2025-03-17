@@ -6,6 +6,7 @@ import img_noticia from "../../img/noticia1.jfif";
 import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
+import { Link } from "react-router-dom";
 function TodasNoticias() {
   const [noticias, setNoticias] = useState([]);
   React.useEffect(() => {
@@ -75,12 +76,14 @@ function TodasNoticias() {
                     {noticia.descricao.substr(0, 100)}
                     <div className="saber-mais">
                       {" "}
-                      <Button
-                        variant="outline-warning"
-                        className="btn-saberMais"
-                      >
-                        Saiba mais
-                      </Button>
+                      <Link to={`/saiba_mais/${noticia.id}`}>
+                        <Button
+                          variant="outline-warning"
+                          className="btn-saberMais"
+                        >
+                          Saiba mais
+                        </Button>
+                      </Link>
                     </div>
                   </span>
                 </Card>

@@ -189,7 +189,7 @@ module.exports = {
           "queixaID",
           "queixosoID",
           "obs",
-          "url_file_acta"
+          "url_file_acta",
         ],
         where: { queixaID: id_queixa },
       });
@@ -262,7 +262,6 @@ module.exports = {
         .json({ status: 0, message: "Erro ao criar reunião." });
     }
 
-
     // Enviar SMS após a criação da reunião
     enviarSMS(
       "+244930340539",
@@ -304,7 +303,6 @@ module.exports = {
     const { fk_queixa } = req.body;
     const { fk_empregador } = req.body;
 
-    
     const reuniao = await Reuniao.create({
       assunto: _assunto,
       local: _local,
@@ -316,7 +314,6 @@ module.exports = {
       empresaID: fk_empregador,
       queixosoID: fk_empregador,
     });
-
 
     return res.status(200).send({
       status: 1,
@@ -365,7 +362,7 @@ module.exports = {
         .status(404)
         .json({ status: 0, message: "Empresa não encontrada." });
     }
-   const reuniao = await Reuniao.update(
+    const reuniao = await Reuniao.update(
       {
         assunto: _assunto,
         queixaID: queixaID,
@@ -388,20 +385,18 @@ module.exports = {
         .json({ status: 0, message: "Erro ao criar reunião." });
     }
 
-
     // Enviar SMS após a criação da reunião
-    enviarSMS(
-      "+244930340539",
-      `Prezado(a) ${trabalhador.Pessoa.nome} ${trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
-        `Informamos que houve uma alteração na reunião agendada para discutir o assunto sobre: ${_assunto}.\n\n` +
-        `📅 Data: ${_data}\n⏰ Horário: ${_hora}\n📍 Local: ${_local}\n\n` +
-        `OBS: ${_obs}\n\nAtenciosamente,\nInspecção Geral do Trabalho`
-    );
+    // enviarSMS(
+    //   "+244930340539",
+    //   `Prezado(a) ${trabalhador.Pessoa.nome} ${trabalhador.Pessoa.sobrenome} e ${empresa.nome_empresa},\n\n` +
+    //     `Informamos que houve uma alteração na reunião agendada para discutir o assunto sobre: ${_assunto}.\n\n` +
+    //     `📅 Data: ${_data}\n⏰ Horário: ${_hora}\n📍 Local: ${_local}\n\n` +
+    //     `OBS: ${_obs}\n\nAtenciosamente,\nInspecção Geral do Trabalho`
+    // );
     return res.status(200).send({
       status: 1,
       message: "Reuniao atualizada com sucesso!",
     });
-    
   },
   async update_empregadores(req, res) {
     const {
@@ -438,13 +433,13 @@ module.exports = {
     });
   },
   async finalisar_reuniao(req, res) {
-  const fileActaFinal = req.files["fileActaFinal"][0].path.split("\\")[1];
-  const { id_reuniao} = req.body;
-console.log(id_reuniao)
+    const fileActaFinal = req.files["fileActaFinal"][0].filename;
+    const { id_reuniao } = req.body;
+    console.log(id_reuniao);
     await Reuniao.update(
       {
         url_file_acta: fileActaFinal,
-        estado:"2"
+        estado: "2",
       },
       {
         where: {

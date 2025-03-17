@@ -1946,6 +1946,7 @@ module.exports = {
           },
         }
       );
+      console.log(emailTo);
       var mailOptions = {
         from: "marciocristiano105@gmail.com",
         to: emailTo,
