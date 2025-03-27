@@ -19,7 +19,7 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FaDownload } from "react-icons/fa";
 import FileDownload from "js-file-download";
 import { JsonToExcel } from "react-json-to-excel";
-
+import { refreshPageInseconds } from "../Dashboard/container_queixoso";
 const formTemplate = {
   review: "",
   comment: "",
@@ -469,132 +469,113 @@ const ContainerInspector = ({ onSearch }) => {
       </Row>
       <br />
 
-      {currentItems
-        .reverse()
+      {currentItems.length > 0 ? (
+        currentItems
+          .slice() // Garante que a inversão não afeta o array original
+          .reverse()
+          .map((conflito) => (
+            <Card
+              key={conflito.id}
+              bg="dark"
+              border="secondary"
+              text="warning"
+              className="card-queixas-queixoso"
+              style={{
+                marginBottom: 25,
+                opacity:
+                  conflito.estado === "Encerrado" ||
+                  conflito.estado === "Tribunal" ||
+                  conflito?.estado === "Desistente"
+                    ? 0.5
+                    : 1,
+              }}
+            >
+              <Card.Body>
+                <Dropdown id="dropdown-basic-button" style={{ float: "right" }}>
+                  <Dropdown.Toggle variant="warning">
+                    <FontAwesomeIcon icon={faCog} />
+                  </Dropdown.Toggle>
 
-        .map((conflito) => (
-          <Card
-            key={conflito.id}
-            bg="dark"
-            border="secondary"
-            text="warning"
-            className="card-queixas-queixoso"
-            style={{
-              marginBottom: 25,
-              opacity:
-                conflito.estado === "Encerrado" ||
-                conflito.estado === "Tribunal" ||
-                conflito?.estado === "Desistente"
-                  ? 0.5
-                  : conflito.estado === "encaminhada_inspector"
-                  ? 1
-                  : 1,
-            }}
-          >
-            <Card.Body>
-              <Dropdown id="dropdown-basic-button" style={{ float: "right" }}>
-                <Dropdown.Toggle variant="warning" id="dropdown-basic-button">
-                  <FontAwesomeIcon icon={faCog} />
-                </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => detalhesQueixoso(conflito)}>
+                      Ver queixoso
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => detalhesQueixante(conflito)}>
+                      Ver queixante
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
 
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    href="#/action-3"
-                    onClick={() => detalhesQueixoso(conflito)}
-                  >
-                    Ver queixoso
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    href="#/action-3"
-                    onClick={() => detalhesQueixante(conflito)}
-                  >
-                    ver queixante
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Link
-                className="link-queixa-queixoso"
-                to={`/mais_detalhes/${conflito.id}`}
-              >
-                <Card.Title>
-                  {conflito.id} - {conflito.assunto}
-                </Card.Title>
-                <p className="text-warning" style={{ paddingLeft: "20px" }}></p>
-              </Link>
-            </Card.Body>
-            <Card.Footer>
-              <small
-                className="text-muted"
-                style={{ marginRight: 30, display: "inline-block" }}
-              >
-                {conflito?.created_at}
-              </small>
+                <Link
+                  className="link-queixa-queixoso"
+                  to={`/mais_detalhes/${conflito.id}`}
+                >
+                  <Card.Title>
+                    {conflito.id} - {conflito.assunto}
+                  </Card.Title>
+                </Link>
+              </Card.Body>
 
-              <small
-                className="text-muted d-flex align-items-center text-muted-queixoso"
-                style={{
-                  marginRight: 30,
-                  display: "inline-block",
-                  cursor: "pointer",
-                }}
-              >
-                <FaUser className="me-2" />
-                <span className="me-1">Queixoso:</span>
-                {conflito.Empresa.tipo === "queixoso"
-                  ? conflito.Empresa.nome_empresa
-                  : conflito.Trabalhador.tipo === "queixoso"
-                  ? conflito.Trabalhador.Pessoa.nome +
-                    " " +
-                    conflito.Trabalhador.Pessoa.sobrenome
-                  : ""}
-              </small>
-              <small
-                className="text-muted d-flex align-items-center text-muted-queixante"
-                style={{
-                  marginRight: 30,
-                  display: "inline-block",
-                  cursor: "pointer",
-                }}
-              >
-                <FaUser className="me-2" />
-                <span className="me-1">Queixante:</span>
-                {conflito.Trabalhador.tipo === "queixante"
-                  ? conflito.Trabalhador.Pessoa.nome +
-                    " " +
-                    conflito.Trabalhador.Pessoa.sobrenome
-                  : conflito.Trabalhador.tipo === "queixante"
-                  ? conflito.Empresa.nome_empresa
-                  : ""}
-              </small>
-              <small
-                className="text-muted text-muted-provincia"
-                style={{ marginRight: 30, display: "inline-block" }}
-              >
-                {conflito.provincia}
-              </small>
+              <Card.Footer>
+                <small className="text-muted" style={{ marginRight: 30 }}>
+                  {new Date(conflito?.created_at).toLocaleDateString()}
+                </small>
 
-              <small
-                className="text-muted d-flex align-items-center"
-                style={{ textAlign: "right", display: "inline-block" }}
-              >
-                <FaCircle
-                  className="estado me-1"
-                  color={
-                    conflito.estado === "Encerrado" ||
-                    conflito.estado === "Tribunal"
-                      ? "red"
-                      : conflito.estado === "encaminhada_inspector"
-                      ? "yellow"
-                      : ""
-                  }
-                />
-                {conflito.estado === "encaminhada_inspector"
-                  ? "Encaminhada ao Inspector"
-                  : conflito.estado}
-              </small>
-            </Card.Footer>
-          </Card>
-        ))}
+                <small
+                  className="text-muted d-flex align-items-center text-muted-queixoso"
+                  style={{ marginRight: 30 }}
+                >
+                  <FaUser className="me-2" />
+                  <span className="me-1">Queixoso:</span>
+                  {conflito.Empresa.tipo === "queixoso"
+                    ? conflito.Empresa.nome_empresa
+                    : `${conflito.Trabalhador.Pessoa.nome} ${conflito.Trabalhador.Pessoa.sobrenome}`}
+                </small>
+
+                <small
+                  className="text-muted d-flex align-items-center text-muted-queixante"
+                  style={{ marginRight: 30 }}
+                >
+                  <FaUser className="me-2" />
+                  <span className="me-1">Queixante:</span>
+                  {conflito.Trabalhador.tipo === "queixante"
+                    ? `${conflito.Trabalhador.Pessoa.nome} ${conflito.Trabalhador.Pessoa.sobrenome}`
+                    : conflito.Empresa.nome_empresa}
+                </small>
+
+                <small
+                  className="text-muted text-muted-provincia"
+                  style={{ marginRight: 30 }}
+                >
+                  {conflito.provincia}
+                </small>
+
+                <small className="text-muted d-flex align-items-center">
+                  <FaCircle
+                    className="estado me-1"
+                    color={
+                      conflito.estado === "Encerrado" ||
+                      conflito.estado === "Tribunal" ||
+                      conflito.estado === "Desistente"
+                        ? "red"
+                        : conflito.estado === "encaminhada_inspector"
+                        ? "yellow"
+                        : "green"
+                    }
+                  />
+                  {conflito.estado === "encaminhada_inspector"
+                    ? "Encaminhada ao Inspector"
+                    : conflito.estado}
+                </small>
+              </Card.Footer>
+            </Card>
+          ))
+      ) : (
+        <p className="text-center text-warning">
+          Nenhuma queixa encaminhada de momento.
+        </p>
+      )}
+
       <Pagination
         className="justify-content-center mb-0"
         style={{ marginTop: 10, paddingBottom: 10 }}

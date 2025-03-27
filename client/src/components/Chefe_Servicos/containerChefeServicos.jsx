@@ -2290,12 +2290,32 @@ const ContainerChefeServicos = ({ onSearch }) => {
               btnClassName="btn btn-primary small-btn text-black"
             />
           </Col>
-          {/* <Col md={2}>
+          <Col
+            md={6}
+            style={{
+              display: "flex",
+              flexDirection: "end",
+              marginTop: "30px",
+              marginBottom: "10px",
+            }}
+          >
             {" "}
-            <p className="p-localizacao" style={{ fontWeight: "bold" }}>
+            <span
+              style={{
+                marginRight: "10px",
+                color: "#daa316",
+                fontWeight: "bold",
+              }}
+            >
+              Provincia:{" "}
+            </span>
+            <p className="p-localizacao" style={{}}>
               {data2?.trabalhador?.localizacao_office}
             </p>
-          </Col> */}
+          </Col>
+          <Col md={3} style={{ marginTop: "25px", color: "#daa316" }}>
+            <h1 style={{ fontSize: 24, fontWeight: "bold" }}>Queixas</h1>
+          </Col>
         </Row>
         <Col md={12} style={{ marginTop: 25 }}>
           <table class="table table-striped table-responsive">
@@ -2313,151 +2333,124 @@ const ContainerChefeServicos = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems?.map((conflito) => (
-                <tr>
-                  <th scope="row">{conflito.id}</th>
-                  <th scope="row">
-                    {new Date(conflito?.created_at).toLocaleDateString()}
-                  </th>
-                  <th scope="row"> {conflito.Trabalhador.Pessoa.nome} </th>
-                  <th scope="row">
-                    {conflito.Trabalhador?.Pessoa?.BI?.numeroBI}
-                  </th>
-                  <th scope="row">{conflito.Empresa.nome_empresa}</th>
-                  <th scope="row">{conflito?.Empresa?.nif}</th>
-
-                  <td>{conflito.assunto}</td>
-
-                  <td>{conflito.facto}</td>
-                  <td>
-                    <OverlayTrigger
-                      trigger="hover"
-                      placement="bottom"
-                      overlay={
-                        conflito.estado === "Aberto" ? (
-                          popoverAberto
-                        ) : conflito.estado === "Encerrado" ? (
-                          popoverEncerrada
-                        ) : conflito.estado === "Tribunal" ? (
-                          popoverTribunal
-                        ) : conflito.estado === "encaminhada_chefe" ? (
-                          popover
-                        ) : (
-                          <></>
-                        )
-                      }
-                    >
-                      <Button
-                        style={{
-                          cursor: "default",
-                          borderRadius: "20px",
-                          fontSize: "14px",
-                        }}
-                        variant={
-                          {
-                            Aberto: "primary",
-                            encaminhada_chefe: "warning",
-                            encaminhada_inspector: "warning",
-                            tribunal: "danger",
-                            Encerrado: "danger",
-                          }[conflito.estado] || "secondary"
+              {currentItems?.length > 0 ? (
+                currentItems.map((conflito) => (
+                  <tr key={conflito.id}>
+                    <th scope="row">{conflito.id}</th>
+                    <th scope="row">
+                      {new Date(conflito?.created_at).toLocaleDateString()}
+                    </th>
+                    <th scope="row">{conflito.Trabalhador.Pessoa.nome}</th>
+                    <th scope="row">
+                      {conflito.Trabalhador?.Pessoa?.BI?.numeroBI}
+                    </th>
+                    <th scope="row">{conflito.Empresa.nome_empresa}</th>
+                    <th scope="row">{conflito?.Empresa?.nif}</th>
+                    <td>{conflito.assunto}</td>
+                    <td>{conflito.facto}</td>
+                    <td>
+                      <OverlayTrigger
+                        trigger="hover"
+                        placement="bottom"
+                        overlay={
+                          conflito.estado === "Aberto" ? (
+                            popoverAberto
+                          ) : conflito.estado === "Encerrado" ? (
+                            popoverEncerrada
+                          ) : conflito.estado === "Tribunal" ? (
+                            popoverTribunal
+                          ) : conflito.estado === "encaminhada_chefe" ? (
+                            popover
+                          ) : (
+                            <></>
+                          )
                         }
                       >
-                        {conflito.estado === "encaminhada_chefe"
-                          ? "Encaminhada ao Chefe"
-                          : conflito.estado === "encaminhada_inspector"
-                          ? "Encaminhada ao Inspector"
-                          : conflito.estado}
-                      </Button>
-                    </OverlayTrigger>
-                  </td>
-
-                  {conflito.estado === "Encerrado" ||
-                  conflito.estado === "Tribunal" ||
-                  conflito.estado === "Desistente" ? (
-                    <td>
-                      {/* <Button
-                        variant="dark"
-                        className="fw-bold btn-nova-queixa"
-                        type="button"
-                        onClick={(e) => ver_detalhes(conflito)}
-                      >
-                        Ver
-                      </Button> */}
-                      <Dropdown id="dropdown-basic-button">
-                        <Dropdown.Toggle
-                          variant="warning"
-                          id="dropdown-basic-button"
+                        <Button
+                          style={{
+                            cursor: "default",
+                            borderRadius: "20px",
+                            fontSize: "14px",
+                          }}
+                          variant={
+                            {
+                              Aberto: "primary",
+                              encaminhada_chefe: "warning",
+                              encaminhada_inspector: "warning",
+                              tribunal: "danger",
+                              Encerrado: "danger",
+                            }[conflito.estado] || "secondary"
+                          }
                         >
-                          <FontAwesomeIcon icon={faCog} />
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => detalhesFinal(conflito)}
-                          >
-                            Ver todos detalhes
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                          {conflito.estado === "encaminhada_chefe"
+                            ? "Encaminhada ao Chefe"
+                            : conflito.estado === "encaminhada_inspector"
+                            ? "Encaminhada ao Inspector"
+                            : conflito.estado}
+                        </Button>
+                      </OverlayTrigger>
                     </td>
-                  ) : (
-                    <>
+
+                    {["Encerrado", "Tribunal", "Desistente"].includes(
+                      conflito.estado
+                    ) ? (
                       <td>
                         <Dropdown id="dropdown-basic-button">
-                          <Dropdown.Toggle
-                            variant="warning"
-                            id="dropdown-basic-button"
-                          >
+                          <Dropdown.Toggle variant="warning">
                             <FontAwesomeIcon icon={faCog} />
                           </Dropdown.Toggle>
-
                           <Dropdown.Menu>
                             <Dropdown.Item
-                              href="#/action-3"
+                              onClick={() => detalhesFinal(conflito)}
+                            >
+                              Ver todos detalhes
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </td>
+                    ) : (
+                      <td>
+                        <Dropdown id="dropdown-basic-button">
+                          <Dropdown.Toggle variant="warning">
+                            <FontAwesomeIcon icon={faCog} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
                               onClick={() => ver_inspectores(conflito)}
                             >
                               Nomear Inspector
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => ver_testemunhas(conflito)}
                             >
                               Atribuir testemunhas
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => detalhesInspector(conflito)}
                             >
                               Ver o perfil do inspector
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => detalhesTestemunha(conflito)}
                             >
                               Ver o perfil da testemunha
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => detalhesTrabalhador(conflito)}
                             >
                               Ver o perfil do queixoso
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => detalhesEmpregador(conflito)}
                             >
                               Ver o perfil do queixante
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => retrocederForm(conflito)}
                             >
                               Retroceder a queixa
                             </Dropdown.Item>
                             <Dropdown.Item
-                              href="#/action-3"
                               onClick={() => documentosForm(conflito)}
                             >
                               Ver documentos
@@ -2465,10 +2458,16 @@ const ContainerChefeServicos = ({ onSearch }) => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </td>
-                    </>
-                  )}
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center">
+                    Nenhuma queixa encaminhada de momento.
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <Pagination

@@ -27,7 +27,9 @@ import { FaFileAlt } from "react-icons/fa";
 import Tooltip from "react-bootstrap/Tooltip";
 import { JsonToExcel } from "react-json-to-excel";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
+import { refreshPageInseconds } from "../Dashboard/container_queixoso";
 const formTemplate = {
   review: "",
   comment: "",
@@ -234,32 +236,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
     );
   };
 
-  React.useEffect(() => {
-    setQueixas(conflitos);
-
-    if (
-      sessionStorage?.getItem("email") &&
-      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
-    ) {
-      navigate("/dashboard_queixoso");
-    } else if (
-      sessionStorage?.getItem("email") &&
-      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
-    ) {
-      navigate("/recepcionista");
-    } else if (
-      sessionStorage?.getItem("email") &&
-      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
-    ) {
-      navigate("/chefe_servicos");
-    } else if (
-      sessionStorage?.getItem("email") &&
-      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
-    ) {
-      navigate("/inspector");
-    } else {
-      navigate("/Entrar");
-    }
+  const getQueixas = () => {
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
         // const todas_queixas = data.queixas[0].concat(data.queixas[1])
@@ -307,6 +284,39 @@ const ContainerRecepcionista = ({ onSearch }) => {
       .catch((res) => {
         console.log("res", res);
       });
+  };
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["relatorio"],
+  //   queryFn: getQueixas,
+  //   refetchInterval: 5000, // Atualiza a cada 5 segundos
+  // });
+  React.useEffect(() => {
+    setQueixas(conflitos);
+
+    if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
+    ) {
+      navigate("/dashboard_queixoso");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "recepcionista"
+    ) {
+      navigate("/recepcionista");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "chefe_servicos"
+    ) {
+      navigate("/chefe_servicos");
+    } else if (
+      sessionStorage?.getItem("email") &&
+      sessionStorage?.getItem("cargo")?.toLowerCase() === "inspector"
+    ) {
+      navigate("/inspector");
+    } else {
+      navigate("/Entrar");
+    }
+    getQueixas();
   }, []);
   console.log(queixas);
 
@@ -2003,12 +2013,32 @@ const ContainerRecepcionista = ({ onSearch }) => {
               btnClassName="btn btn-primary small-btn text-black"
             />
           </Col>
-          {/* <Col md={2}>
+          <Col
+            md={6}
+            style={{
+              display: "flex",
+              flexDirection: "end",
+              marginTop: "30px",
+              marginBottom: "10px",
+            }}
+          >
             {" "}
-            <p className="p-localizacao" style={{ fontWeight: "bold" }}>
+            <span
+              style={{
+                marginRight: "10px",
+                color: "#daa316",
+                fontWeight: "bold",
+              }}
+            >
+              Provincia:{" "}
+            </span>
+            <p className="p-localizacao" style={{}}>
               {data2?.trabalhador?.localizacao_office}
             </p>
-          </Col> */}
+          </Col>
+          <Col md={3} style={{ marginTop: "25px", color: "#daa316" }}>
+            <h1 style={{ fontSize: 24, fontWeight: "bold" }}>Queixas</h1>
+          </Col>
         </Row>
 
         <Col md={12} style={{ marginTop: 5 }}>
@@ -2036,156 +2066,152 @@ const ContainerRecepcionista = ({ onSearch }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems?.map((conflito) => (
-                <tr>
-                  <th scope="row">{conflito?.id}</th>
-                  <th scope="row">
-                    {new Date(conflito?.created_at).toLocaleDateString()}
-                  </th>
-
-                  <th scope="row"> {conflito?.Trabalhador?.Pessoa?.nome} </th>
-                  <th scope="row">
-                    {conflito.Trabalhador?.Pessoa?.BI?.numeroBI}
-                  </th>
-                  <th scope="row">{conflito?.Empresa?.nome_empresa}</th>
-                  <th scope="row">{conflito?.Empresa?.nif}</th>
-
-                  <td>{conflito?.assunto}</td>
-
-                  <td>{conflito?.facto}</td>
-                  <td>{conflito?.multa}</td>
-                  <td>
-                    <OverlayTrigger
-                      trigger="hover"
-                      placement="bottom"
-                      overlay={
-                        conflito.estado === "Aberto" ? (
-                          popoverAberto
-                        ) : conflito.estado === "Encerrado" ? (
-                          popoverEncerrada
-                        ) : conflito.estado === "Tribunal" ? (
-                          popoverTribunal
-                        ) : conflito.estado === "encaminhada_chefe" ? (
-                          popoverChefe
-                        ) : (
-                          <></>
-                        )
-                      }
-                      rootClose
-                    >
-                      <Button
-                        style={{
-                          cursor: "default",
-                          borderRadius: "20px",
-                          fontSize: "12px",
-                        }}
-                        variant={
-                          {
-                            Aberto: "primary",
-                            encaminhada_chefe: "warning",
-                            encaminhada_inspector: "warning",
-                            tribunal: "danger",
-                            Encerrado: "danger",
-                          }[conflito.estado] || "secondary"
+              {currentItems?.length > 0 ? (
+                currentItems.map((conflito) => (
+                  <tr key={conflito?.id}>
+                    <th scope="row">{conflito?.id}</th>
+                    <th scope="row">
+                      {new Date(conflito?.created_at).toLocaleDateString()}
+                    </th>
+                    <th scope="row">{conflito?.Trabalhador?.Pessoa?.nome}</th>
+                    <th scope="row">
+                      {conflito?.Trabalhador?.Pessoa?.BI?.numeroBI}
+                    </th>
+                    <th scope="row">{conflito?.Empresa?.nome_empresa}</th>
+                    <th scope="row">{conflito?.Empresa?.nif}</th>
+                    <td>{conflito?.assunto}</td>
+                    <td>{conflito?.facto}</td>
+                    <td>{conflito?.multa}</td>
+                    <td>
+                      <OverlayTrigger
+                        trigger="hover"
+                        placement="bottom"
+                        overlay={
+                          conflito.estado === "Aberto" ? (
+                            popoverAberto
+                          ) : conflito.estado === "Encerrado" ? (
+                            popoverEncerrada
+                          ) : conflito.estado === "Tribunal" ? (
+                            popoverTribunal
+                          ) : conflito.estado === "encaminhada_chefe" ? (
+                            popoverChefe
+                          ) : (
+                            <></>
+                          )
                         }
+                        rootClose
                       >
-                        {conflito.estado === "encaminhada_chefe"
-                          ? "Encaminhada ao Chefe"
-                          : conflito.estado === "encaminhada_inspector"
-                          ? "Encaminhada ao Inspector"
-                          : conflito.estado}
-                      </Button>
-                    </OverlayTrigger>
-                  </td>
-                  {conflito.estado === "Encerrado" ||
-                  conflito.estado === "Tribunal" ||
-                  conflito.estado === "Desistente" ? (
-                    <td>
-                      {/* <Button
-                        variant="dark"
-                        className="fw-bold btn-nova-queixa"
-                        type="button"
-                        onClick={(e) => ver_detalhes(conflito)}
-                      >
-                        Ver
-                      </Button> */}
-                      <Dropdown id="dropdown-basic-button">
-                        <Dropdown.Toggle
-                          variant="warning"
-                          id="dropdown-basic-button"
+                        <Button
+                          style={{
+                            cursor: "default",
+                            borderRadius: "20px",
+                            fontSize: "12px",
+                          }}
+                          variant={
+                            {
+                              Aberto: "primary",
+                              encaminhada_chefe: "warning",
+                              encaminhada_inspector: "warning",
+                              tribunal: "danger",
+                              Encerrado: "danger",
+                            }[conflito.estado] || "secondary"
+                          }
                         >
-                          <FontAwesomeIcon icon={faCog} />
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => detalhesFinal(conflito)}
-                          >
-                            Ver todos detalhes
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                          {conflito.estado === "encaminhada_chefe"
+                            ? "Encaminhada ao Chefe"
+                            : conflito.estado === "encaminhada_inspector"
+                            ? "Encaminhada ao Inspector"
+                            : conflito.estado}
+                        </Button>
+                      </OverlayTrigger>
                     </td>
-                  ) : (
-                    <td>
-                      <Dropdown id="dropdown-basic-button">
-                        <Dropdown.Toggle
-                          variant="warning"
-                          id="dropdown-basic-button"
-                        >
-                          <FontAwesomeIcon icon={faCog} />
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => detalhesTrabalhador(conflito)}
+                    {conflito.estado === "Encerrado" ||
+                    conflito.estado === "Tribunal" ||
+                    conflito.estado === "Desistente" ? (
+                      <td>
+                        <Dropdown id="dropdown-basic-button">
+                          <Dropdown.Toggle
+                            variant="warning"
+                            id="dropdown-basic-button"
                           >
-                            Ver perfil do queixoso
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => detalhesEmpregador(conflito)}
+                            <FontAwesomeIcon icon={faCog} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => detalhesFinal(conflito)}
+                            >
+                              Ver todos detalhes
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </td>
+                    ) : (
+                      <td>
+                        <Dropdown id="dropdown-basic-button">
+                          <Dropdown.Toggle
+                            variant="warning"
+                            id="dropdown-basic-button"
                           >
-                            Ver perfil do empregador
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => detalhesFinal(conflito)}
-                          >
-                            Ver detalhes
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => mostrar_formulario(conflito)}
-                          >
-                            Anotar Observação
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => ver_chefeServicos(conflito)}
-                          >
-                            Ver o perfil do chefe dos serviços provinciais
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => ver_chefes(conflito)}
-                          >
-                            Encaminhar ao Chefe dos serviços provinciais
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            href="#/action-3"
-                            onClick={() => documentosForm(conflito)}
-                          >
-                            Ver documentos
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  )}
-                </tr>
-              ))}
+                            <FontAwesomeIcon icon={faCog} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => detalhesTrabalhador(conflito)}
+                            >
+                              Ver perfil do queixoso
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => detalhesEmpregador(conflito)}
+                            >
+                              Ver perfil do queixante
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => detalhesFinal(conflito)}
+                            >
+                              Ver detalhes
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => mostrar_formulario(conflito)}
+                            >
+                              Anotar Observação
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => ver_chefeServicos(conflito)}
+                            >
+                              Ver o perfil do chefe dos serviços provinciais
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => ver_chefes(conflito)}
+                            >
+                              Encaminhar ao Chefe dos serviços provinciais
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              href="#/action-3"
+                              onClick={() => documentosForm(conflito)}
+                            >
+                              Ver documentos
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </td>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <td
+                  colSpan="10"
+                  className="text-center text-muted text-warning-custom"
+                >
+                  Nenhuma queixa submetida de momento
+                </td>
+              )}
             </tbody>
           </table>
           <Pagination

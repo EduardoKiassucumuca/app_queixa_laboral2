@@ -114,6 +114,22 @@ module.exports = {
               },
             ],
           },
+          {
+            association: "Inspector",
+            required: false,
+            include: [
+              {
+                association: "Trabalhador",
+                required: false,
+                include: [
+                  {
+                    association: "Pessoa",
+                    required: false,
+                  },
+                ],
+              },
+            ],
+          },
         ],
 
         where: {

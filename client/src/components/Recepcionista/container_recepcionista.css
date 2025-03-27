@@ -108,7 +108,7 @@
 }
 
 .p-localizacao {
-  color: #daa316;
+  color: white !important;
   float: right;
 }
 /* MyModal.css */
@@ -177,4 +177,7 @@
   height: 36px !important;
   min-width: auto !important;
   margin-top: 10px;
+}
+.text-warning-custom {
+  color: black !important;
 }

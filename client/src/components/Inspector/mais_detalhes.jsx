@@ -369,7 +369,11 @@ const MaisDetalhes = () => {
         return;
       }
     });
-    if (conflito.estado === "Encerrado" || conflito.estado === "Tribunal") {
+    if (
+      conflito.estado === "Encerrado" ||
+      conflito.estado === "Tribunal" ||
+      conflito.estado === "Desistente"
+    ) {
       toggleDisplay4();
     } else {
       toggleDisplay2();
@@ -1543,7 +1547,7 @@ const MaisDetalhes = () => {
               <br />
 
               <Button type="submit" className="btn btn-warning">
-                Anexar
+                Encerrar
               </Button>
             </Form>
           </div>

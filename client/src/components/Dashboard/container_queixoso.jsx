@@ -28,6 +28,15 @@ function calcularTempoTransacao(tempoTransacao) {
 
   return { horas, minutos, segundos };
 }
+
+const handleReload = () => {
+  window.location.reload();
+};
+
+export const refreshPageInseconds = () => {
+  const intervalId = setInterval(handleReload, 10000);
+  return () => clearInterval(intervalId);
+};
 const Container_queixoso = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -72,6 +81,7 @@ const Container_queixoso = () => {
   //console.log(data.trabalhador.id);
   React.useEffect(() => {
     //console.log("ok");
+
     if (
       sessionStorage?.getItem("email") &&
       sessionStorage?.getItem("tipo_user")?.toLowerCase() === "queixoso"
