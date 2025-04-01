@@ -2179,11 +2179,12 @@ module.exports = {
           "status",
           "resposta",
         ],
-      }).then((duvidas) => {
-        res.status(200).json({ duvidas });
       });
+
+      res.status(200).json({ duvidas });
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error:", error);
+      res.status(500).json({ error: "Erro ao buscar dúvidas" });
     }
   },
   async getDetalhesDuvidas(req, res) {

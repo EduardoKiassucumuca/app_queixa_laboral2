@@ -64,6 +64,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
   const [displayStyle16, setDisplayStyle16] = useState("none");
   const [nota, setNota] = useState("");
   const [displayStyle14, setDisplayStyle14] = useState("none");
+  const [myDataExcel, setMyDataExcel] = useState([{}]);
 
   const [displayStyle9, setDisplayStyle9] = useState("none");
   const [detalhesSelec, setDetalhesSelec] = useState("");
@@ -250,7 +251,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
             };
             myQueixas.push(myQueixa);
           });
-        setMyData(myQueixas);
+        setMyDataExcel(myQueixas);
         //console.log(lista_queixa.minha_queixa)
       })
       .catch((res) => {
@@ -1814,14 +1815,35 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
           queixa={conflito_selec}
           inspector={inspectores}
         />
-        <JsonToExcel
-          title="Exportar"
-          data={myData}
-          fileName={`queixa${new Date().toLocaleDateString(
-            "pt-BR"
-          )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-          btnClassName="btn btn-primary"
-        />
+        <Dropdown id="dropdown-basic-button">
+          <Dropdown.Toggle variant="warning">Relatório </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <JsonToExcel
+                title="Gerar Estatística"
+                data={myData}
+                fileName={`queixa${new Date().toLocaleDateString(
+                  "pt-BR"
+                )}${new Date().toLocaleTimeString("pt-BR", {
+                  hour12: false,
+                })}`}
+                btnClassName="btn-dropdown"
+              />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <JsonToExcel
+                title="Exportar como excel"
+                data={myDataExcel}
+                fileName={`queixa${new Date().toLocaleDateString(
+                  "pt-BR"
+                )}${new Date().toLocaleTimeString("pt-BR", {
+                  hour12: false,
+                })}`}
+                btnClassName="btn-dropdown"
+              />
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         <Col md={12} style={{ marginTop: 5 }}>
           <table class="table table-striped table-responsive">
             <thead>

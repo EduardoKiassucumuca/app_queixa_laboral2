@@ -101,7 +101,11 @@ const MenuInspector = () => {
                   onClick={toggleShowB}
                 />
                 <Badge
-                  count={duvidas?.length}
+                  count={
+                    duvidas?.filter(
+                      (duv) => duv.resposta === null || duv.resposta === ""
+                    ).length
+                  }
                   style={{
                     position: "absolute",
                     top: -5,
@@ -111,7 +115,11 @@ const MenuInspector = () => {
                   }}
                   bg="warning"
                 >
-                  {duvidas?.length}
+                  {
+                    duvidas?.filter(
+                      (duv) => duv.resposta === null || duv.resposta === ""
+                    ).length
+                  }
                 </Badge>
               </div>
               <Avatar shape="square" icon={<UserOutlined />} />
@@ -152,37 +160,41 @@ const MenuInspector = () => {
                 borderRadius: 10,
               }}
             >
-              {duvidas.map((duvida) => (
-                <Link key={duvida.id} to={`/detalhesDuvidas/${duvida.id}`}>
-                  <Toast
-                    show={showB}
-                    style={{
-                      marginBottom: "15px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <Toast.Header>
-                      <strong className="me-auto">{duvida.username}</strong>
-                      <small>11 mins ago</small>
-                    </Toast.Header>
-                    <Toast.Body>
-                      {duvida.assunto}{" "}
-                      <Badge
-                        bg="warning"
-                        style={{
-                          height: 13,
-                          width: 13,
-                          marginRight: 5,
-                          borderRadius: 10,
-                          float: "right",
-                          display:
-                            duvida.status === "lida" ? "none" : "inline-block",
-                        }}
-                      />
-                    </Toast.Body>
-                  </Toast>
-                </Link>
-              ))}
+              {duvidas
+                .filter((duv) => duv.resposta === null || duv.resposta === "")
+                .map((duvida) => (
+                  <Link key={duvida.id} to={`/detalhesDuvidas/${duvida.id}`}>
+                    <Toast
+                      show={showB}
+                      style={{
+                        marginBottom: "15px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Toast.Header>
+                        <strong className="me-auto">{duvida.username}</strong>
+                        <small>11 mins ago</small>
+                      </Toast.Header>
+                      <Toast.Body>
+                        {duvida.assunto}{" "}
+                        <Badge
+                          bg="warning"
+                          style={{
+                            height: 13,
+                            width: 13,
+                            marginRight: 5,
+                            borderRadius: 10,
+                            float: "right",
+                            display:
+                              duvida.status === "lida"
+                                ? "none"
+                                : "inline-block",
+                          }}
+                        />
+                      </Toast.Body>
+                    </Toast>
+                  </Link>
+                ))}
             </div>
           </ToastContainer>
         </Col>

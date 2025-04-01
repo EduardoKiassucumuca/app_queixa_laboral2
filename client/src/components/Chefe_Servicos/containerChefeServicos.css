@@ -303,3 +303,18 @@
 .download-button {
   background-color: #daa316 !important;
 }
+.btn-dropdown {
+  background-color: #f0f0f0 !important;
+  color: black;
+  border: 1px solid #f0f0f0;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+
+.btn-dropdown:hover {
+  background-color: #f0f0f0;
+}

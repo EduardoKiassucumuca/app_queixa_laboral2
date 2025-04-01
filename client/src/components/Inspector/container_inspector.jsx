@@ -54,6 +54,7 @@ const ContainerInspector = ({ onSearch }) => {
   const [pesquisa, setPesquisa] = useState("");
   const [activeButton, setActiveButton] = useState("multa");
   const [myData, setMyData] = useState([{}]);
+  const [myDataExcel, setMyDataExcel] = useState([{}]);
 
   const navigate = useNavigate();
 
@@ -115,6 +116,45 @@ const ContainerInspector = ({ onSearch }) => {
           setQueixaSelecProv(data.queixas);
           setQueixas(data.queixas);
           setConflitos(data.queixas);
+          let myQueixas = [];
+
+          queixas_selecionadas.forEach((queixa) => {
+            const myQueixa = {
+              "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
+                "pt-BR"
+              ),
+              Trabalhador:
+                queixa.Trabalhador.Pessoa.nome +
+                " " +
+                queixa.Trabalhador.Pessoa.sobrenome +
+                " (" +
+                queixa.Trabalhador.tipo +
+                ")",
+              Empregador:
+                queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+              Inspector:
+                queixa.Inspector.Trabalhador.Pessoa.nome +
+                " " +
+                queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+              Testemunha:
+                queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
+                " " +
+                queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
+              Provincia: queixa.Trabalhador.localizacao_office,
+              Assunto: queixa.assunto,
+              Facto: queixa.facto,
+              Estado:
+                queixa.estado === "encaminhada_chefe"
+                  ? "Encaminhada ao chefe dos serviços provinciais"
+                  : queixa.estado === "encaminhada_inspector"
+                  ? "Encaminhada ao Inspector"
+                  : queixa.estado === "Tribunal"
+                  ? "Encerrada e encaminhada ao tribunal"
+                  : queixa.estado,
+            };
+            myQueixas.push(myQueixa);
+          });
+          setMyDataExcel(myQueixas);
           setMyData([
             {
               "Quantidade de queixas sem atendimento ou abertas":
@@ -450,14 +490,35 @@ const ContainerInspector = ({ onSearch }) => {
           />
         </Col>
         <Col md={1} style={{ marginTop: "30px", textAlign: "right" }}>
-          <JsonToExcel
-            title="Exportar"
-            data={myData}
-            fileName={`queixa${new Date().toLocaleDateString(
-              "pt-BR"
-            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-            btnClassName="btn btn-primary small-btn text-black"
-          />
+          <Dropdown id="dropdown-basic-button">
+            <Dropdown.Toggle variant="warning">Relatório </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <JsonToExcel
+                  title="Gerar Estatística"
+                  data={myData}
+                  fileName={`queixa${new Date().toLocaleDateString(
+                    "pt-BR"
+                  )}${new Date().toLocaleTimeString("pt-BR", {
+                    hour12: false,
+                  })}`}
+                  btnClassName="btn-dropdown"
+                />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <JsonToExcel
+                  title="Exportar como excel"
+                  data={myDataExcel}
+                  fileName={`queixa${new Date().toLocaleDateString(
+                    "pt-BR"
+                  )}${new Date().toLocaleTimeString("pt-BR", {
+                    hour12: false,
+                  })}`}
+                  btnClassName="btn-dropdown"
+                />
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
 
         <br />
