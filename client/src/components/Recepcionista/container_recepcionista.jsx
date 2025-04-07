@@ -65,6 +65,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
   const itemsPerPageModal = 5; // Número de itens por página
   const [myData, setMyData] = useState([{}]);
   const [myReport, setMyReport] = useState([{}]);
+  const [myDataExcel, setMyDataExcel] = useState([{}]);
 
   const [displayStyle15, setDisplayStyle15] = useState("none");
   const navigate = useNavigate();
@@ -235,19 +236,55 @@ const ContainerRecepcionista = ({ onSearch }) => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
-
+  const formatarQueixaParaExcel = (queixa) => {
+    return {
+      "Data da queixa": new Date(queixa.created_at).toLocaleDateString("pt-BR"),
+      Trabalhador:
+        queixa.Trabalhador.Pessoa.nome +
+        " " +
+        queixa.Trabalhador.Pessoa.sobrenome +
+        " (" +
+        queixa.Trabalhador.tipo +
+        ")",
+      Empregador:
+        queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+      Inspector:
+        queixa.Inspector.Trabalhador.Pessoa.nome +
+        " " +
+        queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+      Testemunha:
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.nome +
+        " " +
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.sobrenome,
+      Provincia: queixa.Trabalhador.localizacao_office,
+      Assunto: queixa.assunto,
+      Facto: queixa.facto,
+      Estado:
+        queixa.estado === "encaminhada_chefe"
+          ? "Encaminhada ao chefe dos serviços provinciais"
+          : queixa.estado === "encaminhada_inspector"
+          ? "Encaminhada ao Inspector"
+          : queixa.estado === "Tribunal"
+          ? "Encerrada e encaminhada ao tribunal"
+          : queixa.estado,
+    };
+  };
+  
   const getQueixas = () => {
     Axios.get("http://localhost:3001/queixas")
       .then(({ data }) => {
         // const todas_queixas = data.queixas[0].concat(data.queixas[1])
-        console.log(data.queixas);
         const queixas_selecionadas = data.queixas.filter(
           (queixa) => queixa.provincia === data2.trabalhador.localizacao_office
         );
         setQueixaSelecProv(queixas_selecionadas);
+        setQueixas(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas.reverse());
         // data2?.trabalhador?.localizacao_office;
+        console.log(queixas_selecionadas)
+        const dadosFormatados = queixas_selecionadas.map(formatarQueixaParaExcel);
+        setMyDataExcel(dadosFormatados);
 
         setMyData([
           {
@@ -318,7 +355,6 @@ const ContainerRecepcionista = ({ onSearch }) => {
     }
     getQueixas();
   }, []);
-  console.log(queixas);
 
   function buscaBI(bi_pesquisado) {
     setBI(bi_pesquisado);
@@ -335,15 +371,15 @@ const ContainerRecepcionista = ({ onSearch }) => {
   function pesquisarPorQualquerTermo(pesquisa) {
     setPesquisa(pesquisa);
 
-    setConflitos(
-      queixas_selecprovincia.filter((queixa_pesquisada) => {
-        // Transforma o objeto em uma string única
-        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
-
-        // Verifica se a pesquisa está presente nos dados da queixa
-        return dadosQueixa.includes(pesquisa.toLowerCase());
-      })
-    );
+    const resultados = queixas_selecprovincia.filter((queixa_pesquisada) => {
+      const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+      return dadosQueixa.includes(pesquisa.toLowerCase());
+    });
+    
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
+    
   }
   function persquisarPorBI(bi_pesquisado) {
     setBI(bi_pesquisado);
@@ -371,7 +407,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
     const inicio = formatarData(data_inicio);
     const fim = formatarData(data_fim);
 
-    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
+    console.log("Data Início:", inicio, "Data Fim:", fim, queixas_selecprovincia);
     setConflitos(
       queixas.filter((queixa) => {
         const dataQueixa = formatarData(queixa.created_at);
@@ -411,34 +447,44 @@ const ContainerRecepcionista = ({ onSearch }) => {
       return;
     } else {
       setEstadoSelecionado(estado_selecionado);
-      setConflitos(
+      const resultados = 
         queixas_selecprovincia.filter((queixa_pesquisada) =>
           queixa_pesquisada.estado
             .toLowerCase()
             .includes(estado_selecionado.toLowerCase())
         )
-      ).reverse();
+      .reverse();
+      setConflitos(resultados);
+      const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+      setMyDataExcel(dadosFormatados);
     }
+   
   }
   function persquisarPorMulta() {
-    setConflitos(
+    const resultados = 
       queixas_selecprovincia.filter(
         (queixa_pesquisada) =>
           parseInt(queixa_pesquisada.multa) !== 0 &&
           queixa_pesquisada.multa != null &&
           queixa_pesquisada.multa !== " "
       )
-    ).reverse();
+    .reverse();
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarSemMulta(isMulta = 0) {
-    setConflitos(
+    const resultados = 
       queixas_selecprovincia.filter(
         (queixa_pesquisada) =>
           parseFloat(queixa_pesquisada.multa) === 0 ||
           queixa_pesquisada.multa === "" ||
           queixa_pesquisada.multa === "null"
       )
-    );
+      .reverse();
+      setConflitos(resultados);
+      const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+      setMyDataExcel(dadosFormatados);
   }
   function ver_queixa(conflito_selecionado) {
     setDetalhesQueixa(conflito_selecionado);
@@ -2003,7 +2049,7 @@ const ContainerRecepcionista = ({ onSearch }) => {
               onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
             />
           </Col>
-          <Col md={1}>
+          {/* <Col md={1}>
             <JsonToExcel
               title="Exportar"
               data={myData}
@@ -2012,7 +2058,38 @@ const ContainerRecepcionista = ({ onSearch }) => {
               )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
               btnClassName="btn btn-primary small-btn text-black"
             />
-          </Col>
+          </Col> */}
+          <Col md={1} style={{ marginTop: 6 }}>
+                      <Dropdown id="dropdown-basic-button">
+                        <Dropdown.Toggle variant="warning">Relatório </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          <Dropdown.Item>
+                            <JsonToExcel
+                              title="Gerar Estatística"
+                              data={myData}
+                              fileName={`queixa${new Date().toLocaleDateString(
+                                "pt-BR"
+                              )}${new Date().toLocaleTimeString("pt-BR", {
+                                hour12: false,
+                              })}`}
+                              btnClassName="btn-dropdown"
+                            />
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            <JsonToExcel
+                              title="Exportar como excel"
+                              data={myDataExcel}
+                              fileName={`queixa${new Date().toLocaleDateString(
+                                "pt-BR"
+                              )}${new Date().toLocaleTimeString("pt-BR", {
+                                hour12: false,
+                              })}`}
+                              btnClassName="btn-dropdown"
+                            />
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Col>
           <Col
             md={6}
             style={{
