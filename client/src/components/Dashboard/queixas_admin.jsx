@@ -98,6 +98,7 @@ const QueixasAdmin = ({ onSearch }) => {
   const [estado_selecionado, setEstadoSelecionado] = useState("");
   const [pesquisa, setPesquisa] = useState("");
   const [activeButton, setActiveButton] = useState("multa");
+  const [myDataExcel, setMyDataExcel] = useState([{}]);
 
   const popover = (
     <Popover id="popover-basic" style={{ minWidth: 290 }}>
@@ -329,13 +330,51 @@ const QueixasAdmin = ({ onSearch }) => {
   function update_view() {
     window.location.href = "/chefe_servicos";
   }
+  const formatarQueixaParaExcel = (queixa) => {
+    return {
+      "Data da queixa": new Date(queixa.created_at).toLocaleDateString("pt-BR"),
+      Trabalhador:
+        queixa.Trabalhador.Pessoa.nome +
+        " " +
+        queixa.Trabalhador.Pessoa.sobrenome +
+        " (" +
+        queixa.Trabalhador.tipo +
+        ")",
+      Empregador:
+        queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+      Inspector:
+        queixa.Inspector.Trabalhador.Pessoa.nome +
+        " " +
+        queixa.Inspector.Trabalhador.Pessoa.sobrenome,
+      Testemunha:
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.nome +
+        " " +
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.sobrenome,
+      Provincia: queixa.Trabalhador.localizacao_office,
+      Assunto: queixa.assunto,
+      Facto: queixa.facto,
+      Estado:
+        queixa.estado === "encaminhada_chefe"
+          ? "Encaminhada ao chefe dos serviços provinciais"
+          : queixa.estado === "encaminhada_inspector"
+          ? "Encaminhada ao Inspector"
+          : queixa.estado === "Tribunal"
+          ? "Encerrada e encaminhada ao tribunal"
+          : queixa.estado,
+    };
+  };
   React.useEffect(() => {
     Axios.get("http://localhost:3001/queixas_inspectores")
       .then(({ data }) => {
         setQueixas(data.queixas.reverse());
         console.log(data.queixas);
         setConflitos(data.queixas.reverse());
+        const dadosFormatados = data.queixas
+          .reverse()
+          .map(formatarQueixaParaExcel);
+        setMyDataExcel(dadosFormatados);
         let myQueixas = [];
+
         setMyData([
           {
             "Quantidade de queixas sem atendimento ou abertas":
@@ -390,15 +429,14 @@ const QueixasAdmin = ({ onSearch }) => {
   function pesquisarPorQualquerTermo(pesquisa) {
     setPesquisa(pesquisa);
 
-    setQueixas(
-      conflitos.filter((queixa_pesquisada) => {
-        // Transforma o objeto em uma string única
-        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+    const resultados = conflitos.filter((queixa_pesquisada) => {
+      const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+      return dadosQueixa.includes(pesquisa.toLowerCase());
+    });
 
-        // Verifica se a pesquisa está presente nos dados da queixa
-        return dadosQueixa.includes(pesquisa.toLowerCase());
-      })
-    );
+    setQueixas(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function formatarData(date) {
     const d = new Date(date);
@@ -413,14 +451,16 @@ const QueixasAdmin = ({ onSearch }) => {
     const inicio = formatarData(data_inicio);
     const fim = formatarData(data_fim);
 
-    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
-    setQueixas(
-      conflitos.filter((queixa) => {
+    const resultados = conflitos
+      .filter((queixa) => {
         const dataQueixa = formatarData(queixa.created_at);
         console.log("Data Queixa:", dataQueixa);
         return dataQueixa >= inicio && dataQueixa <= fim;
       })
-    );
+      .reverse();
+    setQueixas(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarPorEstado(estado_selecionado) {
     setEstadoSelecionado(estado_selecionado);
@@ -430,34 +470,43 @@ const QueixasAdmin = ({ onSearch }) => {
       return;
     } else {
       setEstadoSelecionado(estado_selecionado);
-      setQueixas(
-        conflitos.filter((queixa_pesquisada) =>
+      const resultados = conflitos
+        .filter((queixa_pesquisada) =>
           queixa_pesquisada.estado
             .toLowerCase()
             .includes(estado_selecionado.toLowerCase())
         )
-      ).reverse();
+        .reverse();
+      setQueixas(resultados);
+      const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+      setMyDataExcel(dadosFormatados);
     }
   }
   function persquisarPorMulta() {
-    setQueixas(
-      conflitos.filter(
+    const resultados = conflitos
+      .filter(
         (queixa_pesquisada) =>
           parseInt(queixa_pesquisada.multa) !== 0 &&
           queixa_pesquisada.multa != null &&
           queixa_pesquisada.multa !== " "
       )
-    ).reverse();
+      .reverse();
+    setQueixas(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarSemMulta(isMulta = 0) {
-    setQueixas(
-      conflitos.filter(
+    const resultados = conflitos
+      .filter(
         (queixa_pesquisada) =>
           parseFloat(queixa_pesquisada.multa) === 0 ||
           queixa_pesquisada.multa === "" ||
           queixa_pesquisada.multa === "null"
       )
-    );
+      .reverse();
+    setQueixas(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function buscaBI(bi_pesquisado) {
     setBI(bi_pesquisado);
@@ -2553,15 +2602,36 @@ const QueixasAdmin = ({ onSearch }) => {
             onChange={(e) => pesquisarPorQualquerTermo(e.target.value)}
           />
         </Col>
-        <Col md={1}>
-          <JsonToExcel
-            title="Exportar"
-            data={myData}
-            fileName={`queixa${new Date().toLocaleDateString(
-              "pt-BR"
-            )}${new Date().toLocaleTimeString("pt-BR", { hour12: false })}`}
-            btnClassName="btn btn-primary small-btn text-black"
-          />
+        <Col md={1} style={{ marginTop: 6 }}>
+          <Dropdown id="dropdown-basic-button">
+            <Dropdown.Toggle variant="warning">Relatório </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <JsonToExcel
+                  title="Gerar Estatística"
+                  data={myData}
+                  fileName={`queixa${new Date().toLocaleDateString(
+                    "pt-BR"
+                  )}${new Date().toLocaleTimeString("pt-BR", {
+                    hour12: false,
+                  })}`}
+                  btnClassName="btn-dropdown"
+                />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <JsonToExcel
+                  title="Exportar como excel"
+                  data={myDataExcel}
+                  fileName={`queixa${new Date().toLocaleDateString(
+                    "pt-BR"
+                  )}${new Date().toLocaleTimeString("pt-BR", {
+                    hour12: false,
+                  })}`}
+                  btnClassName="btn-dropdown"
+                />
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
         <Col md={3} style={{ marginTop: "25px", color: "#daa316" }}>
           <h1 style={{ fontSize: 24, fontWeight: "bold" }}>Queixas</h1>

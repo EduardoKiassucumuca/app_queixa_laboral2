@@ -78,6 +78,39 @@ const ContainerInspector = ({ onSearch }) => {
       prevDisplayStyle === "none" ? "block" : "none"
     );
   };
+  const formatarQueixaParaExcel = (queixa) => {
+    return {
+      "Data da queixa": new Date(queixa.created_at).toLocaleDateString("pt-BR"),
+      Trabalhador:
+        queixa.Trabalhador.Pessoa.nome +
+        " " +
+        queixa.Trabalhador.Pessoa.sobrenome +
+        " (" +
+        queixa.Trabalhador.tipo +
+        ")",
+      Empregador:
+        queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
+      Inspector:
+        queixa?.Inspector?.Trabalhador?.Pessoa?.nome +
+        " " +
+        queixa?.Inspector?.Trabalhador?.Pessoa?.sobrenome,
+      Testemunha:
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.nome +
+        " " +
+        queixa?.Testemunha?.Inspector?.Trabalhador?.Pessoa?.sobrenome,
+      Provincia: queixa.Trabalhador.localizacao_office,
+      Assunto: queixa.assunto,
+      Facto: queixa.facto,
+      Estado:
+        queixa.estado === "encaminhada_chefe"
+          ? "Encaminhada ao chefe dos serviços provinciais"
+          : queixa.estado === "encaminhada_inspector"
+          ? "Encaminhada ao Inspector"
+          : queixa.estado === "Tribunal"
+          ? "Encerrada e encaminhada ao tribunal"
+          : queixa.estado,
+    };
+  };
   React.useEffect(() => {
     if (
       sessionStorage?.getItem("email") &&
@@ -116,45 +149,10 @@ const ContainerInspector = ({ onSearch }) => {
           setQueixaSelecProv(data.queixas);
           setQueixas(data.queixas);
           setConflitos(data.queixas);
-          let myQueixas = [];
-
-          queixas_selecionadas.forEach((queixa) => {
-            const myQueixa = {
-              "Data da queixa": new Date(queixa.created_at).toLocaleDateString(
-                "pt-BR"
-              ),
-              Trabalhador:
-                queixa.Trabalhador.Pessoa.nome +
-                " " +
-                queixa.Trabalhador.Pessoa.sobrenome +
-                " (" +
-                queixa.Trabalhador.tipo +
-                ")",
-              Empregador:
-                queixa.Empresa.nome_empresa + " (" + queixa.Empresa.tipo + ")",
-              Inspector:
-                queixa.Inspector.Trabalhador.Pessoa.nome +
-                " " +
-                queixa.Inspector.Trabalhador.Pessoa.sobrenome,
-              Testemunha:
-                queixa.Testemunha.Inspector.Trabalhador.Pessoa.nome +
-                " " +
-                queixa.Testemunha.Inspector.Trabalhador.Pessoa.sobrenome,
-              Provincia: queixa.Trabalhador.localizacao_office,
-              Assunto: queixa.assunto,
-              Facto: queixa.facto,
-              Estado:
-                queixa.estado === "encaminhada_chefe"
-                  ? "Encaminhada ao chefe dos serviços provinciais"
-                  : queixa.estado === "encaminhada_inspector"
-                  ? "Encaminhada ao Inspector"
-                  : queixa.estado === "Tribunal"
-                  ? "Encerrada e encaminhada ao tribunal"
-                  : queixa.estado,
-            };
-            myQueixas.push(myQueixa);
-          });
-          setMyDataExcel(myQueixas);
+          const dadosFormatados = queixas_selecionadas.map(
+            formatarQueixaParaExcel
+          );
+          setMyDataExcel(dadosFormatados);
           setMyData([
             {
               "Quantidade de queixas sem atendimento ou abertas":
@@ -189,7 +187,7 @@ const ContainerInspector = ({ onSearch }) => {
           //console.log(lista_queixa.minha_queixa)
         })
         .catch((res) => {
-          console.log("res");
+          console.log("res", res);
         });
     } else {
       navigate("/Entrar");
@@ -249,15 +247,14 @@ const ContainerInspector = ({ onSearch }) => {
   function pesquisarPorQualquerTermo(pesquisa) {
     setPesquisa(pesquisa);
 
-    setConflitos(
-      queixas_selecprovincia.filter((queixa_pesquisada) => {
-        // Transforma o objeto em uma string única
-        const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+    const resultados = queixas_selecprovincia.filter((queixa_pesquisada) => {
+      const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
+      return dadosQueixa.includes(pesquisa.toLowerCase());
+    });
 
-        // Verifica se a pesquisa está presente nos dados da queixa
-        return dadosQueixa.includes(pesquisa.toLowerCase());
-      })
-    );
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function formatarData(date) {
     const d = new Date(date);
@@ -273,14 +270,16 @@ const ContainerInspector = ({ onSearch }) => {
     const inicio = formatarData(data_inicio);
     const fim = formatarData(data_fim);
 
-    console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
-    setConflitos(
-      queixas.filter((queixa) => {
+    const resultados = queixas_selecprovincia
+      .filter((queixa) => {
         const dataQueixa = formatarData(queixa.created_at);
         console.log("Data Queixa:", dataQueixa);
         return dataQueixa >= inicio && dataQueixa <= fim;
       })
-    );
+      .reverse();
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarPorEstado(estado_selecionado) {
     setEstadoSelecionado(estado_selecionado);
@@ -290,34 +289,43 @@ const ContainerInspector = ({ onSearch }) => {
       return;
     } else {
       setEstadoSelecionado(estado_selecionado);
-      setConflitos(
-        queixas_selecprovincia.filter((queixa_pesquisada) =>
+      const resultados = queixas_selecprovincia
+        .filter((queixa_pesquisada) =>
           queixa_pesquisada.estado
             .toLowerCase()
             .includes(estado_selecionado.toLowerCase())
         )
-      );
+        .reverse();
+      setConflitos(resultados);
+      const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+      setMyDataExcel(dadosFormatados);
     }
   }
   function persquisarPorMulta() {
-    setConflitos(
-      queixas_selecprovincia.filter(
+    const resultados = queixas_selecprovincia
+      .filter(
         (queixa_pesquisada) =>
           parseInt(queixa_pesquisada.multa) !== 0 &&
           queixa_pesquisada.multa != null &&
           queixa_pesquisada.multa !== " "
       )
-    );
+      .reverse();
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarSemMulta(isMulta = 0) {
-    setConflitos(
-      queixas_selecprovincia.filter(
+    const resultados = queixas_selecprovincia
+      .filter(
         (queixa_pesquisada) =>
           parseFloat(queixa_pesquisada.multa) === 0 ||
           queixa_pesquisada.multa === "" ||
           queixa_pesquisada.multa === "null"
       )
-    );
+      .reverse();
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function ver_inspectores(conflito_selecionado) {
     setConflitoSelec(conflito_selecionado);
