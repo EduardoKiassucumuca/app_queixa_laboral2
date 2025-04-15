@@ -13,11 +13,11 @@ Como rodar a aplicação
 Client:
 
     $ cd client
-    $ npm install
+    $ npm install --legacy-peer-deps
     $ npm start
 
 Server:
 
     $ cd server
-    $ yarn dev
+    $ npm run dev
 
