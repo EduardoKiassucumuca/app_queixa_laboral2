@@ -4,6 +4,7 @@ const Trabalhador = require("../models/Trabalhador");
 const BI = require("../models/bi");
 const Endereco = require("../models/endereco");
 const Pessoa = require("../models/pessoa");
+const EnderecoService = require("./EnderecoService");
 
 module.exports = {
   async index(req, res) {
@@ -26,20 +27,32 @@ module.exports = {
       console.log("Error", error);
     }
   },
-  async store(req, res) {
-    const { nome } = req.params;
-    const { sobrenome } = req.params;
-    const pessoa = await Pessoa.create({
-      nome: "nome",
-      sobrenome: "sobrenome",
-      createdAt: "2023-04-05 20:53:50",
-      updatedAt: "2023-04-05 20:53:50",
-    });
-    return res.status(200).send({
-      status: 1,
-      message: "Pessoa Registrada com sucesso!",
-      pessoa,
-    });
+  async store(_nome, _sobrenome, _nomePai, _nomeMae, _naturalidade, _altura, _estado_civil, _data_nascimento, _sexo,_biID, _enderecoID) {
+    try {
+      
+      if(_nome && _sobrenome && _nomePai && _nomeMae && _naturalidade && _altura && _estado_civil && _data_nascimento && _sexo){
+          const inserirPessoa = await Pessoa.create({
+            nome: _nome,
+            sobrenome: _sobrenome,
+            nome_pai: _nomePai,
+            nome_mae: _nomeMae,
+            naturalidade: _naturalidade,
+            altura: _altura,
+            estado_civil: _estado_civil,
+            data_nascimento: _data_nascimento,
+            sexo: _sexo,
+            biID: _biID,
+            enderecoID:_enderecoID
+          })
+          return inserirPessoa
+      }else{
+          return null
+      }
+      
+  } catch (error) {
+      console.error(error);
+      throw new Error("Erro ao registrar o endereco");
+  }
   },
   async update(req, res) {
     const {

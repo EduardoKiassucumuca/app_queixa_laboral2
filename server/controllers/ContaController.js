@@ -235,23 +235,13 @@ module.exports = {
         });
     }
   },
-  async store(req, res) {
+  async store(_email,_senha) {
     try {
-      const { email } = req.query;
-      //const senha = Math.random().toString(36).slice(-10);
-      const senha = "12345";
-      /*const userExist = await Conta.findOne({ where: { email: email } });
-            console.log(userExist);
-            if (userExist) {
-                return res.status(422).json({ msg: 'Por favor, utilize outro email' });
-            }*/
       const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(senha, salt);
-      const conta = await Conta.create({ email: email, senha: passwordHash });
-      const novaConta = { conta, senha };
-      return res
-        .status(200)
-        .json({ msg: "Conta criada com sucesso!", novaConta });
+      const passwordHash = await bcrypt.hash(_senha, salt);
+      const conta = await Conta.create({ email: _email, senha: passwordHash });
+      const novaConta = { conta, _senha };
+      return conta
     } catch (error) {
       console.log(error);
     }

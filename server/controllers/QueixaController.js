@@ -21,7 +21,9 @@ const funcionarioIGT = require("../models/FuncionarioIGT.js");
 const tentativa = 0;
 const mime = require("mime-types");
 var nodemailer = require("nodemailer");
-
+const BIservice = require("./BIservice.js");
+const EnderecoService = require("./EnderecoService.js");
+const PessoaController = require("./PessoaController.js");
 var transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -457,17 +459,17 @@ module.exports = {
     try {
       //dados do bilhete de identidade
       const { _emitidoEm } = req.body;
-
       const { _validoAte } = req.body;
       const _fileBI = req.files["fileBI"][0]?.path?.split("/")[1];
       const { _nBI } = req.body;
+      const novoBI = await BIservice.store(_nBI,_fileBI,_emitidoEm, _validoAte)
+      // const novoBI = await BI.create({
+      //   emitido_em: _emitidoEm,
+      //   valido_ate: _validoAte,
+      //   file: _fileBI,
+      //   numeroBI: _nBI,
+      // });
 
-      const novoBI = await BI.create({
-        emitido_em: _emitidoEm,
-        valido_ate: _validoAte,
-        file: _fileBI,
-        numeroBI: _nBI,
-      });
 
       // Dados da residência do trabalhador
 
@@ -477,15 +479,16 @@ module.exports = {
       const { _provincia } = req.body;
       const { _contacto_principal } = req.body;
       const { _contacto_alternativo } = req.body;
-
-      const novoEndereco = await Endereco.create({
-        bairro: _bairro,
-        rua: _rua,
-        casa: _casaEdificio,
-        provincia: _provincia,
-        telefone_principal: _contacto_principal,
-        telefone_alternativo: _contacto_alternativo,
-      });
+      const inserirEndereco = await EnderecoService.store(_bairro, _rua, _casaEdificio, _provincia, _contacto_principal, _contacto_alternativo)
+      
+      // const novoEndereco = await Endereco.create({
+      //   bairro: _bairro,
+      //   rua: _rua,
+      //   casa: _casaEdificio,
+      //   provincia: _provincia,
+      //   telefone_principal: _contacto_principal,
+      //   telefone_alternativo: _contacto_alternativo,
+      // });
 
       // dados da pessoa
 
@@ -499,19 +502,7 @@ module.exports = {
       const { _data_nascimento } = req.body;
       const { _sexo } = req.body;
 
-      const novaPessoa = await Pessoa.create({
-        nome: _nome,
-        sobrenome: _sobrenome,
-        nome_pai: _nomePai,
-        nome_mae: _nomeMae,
-        naturalidade: _naturalidade,
-        altura: _altura,
-        estado_civil: _estado_civil,
-        data_nascimento: _data_nascimento,
-        sexo: _sexo,
-        biID: novoBI.id,
-        enderecoID: novoEndereco.id,
-      });
+      const novoDadoPessoal = await PessoaController.store(_nome, _sobrenome, _nomePai, _nomeMae, _naturalidade, _altura, _estado_civil, _data_nascimento, _sexo, novoBI.id, inserirEndereco.id)
       // dados da conta
 
       //const senha = Math.random().toString(36).slice(-10);
@@ -542,13 +533,14 @@ module.exports = {
       const { _edificio } = req.body;
       const { _contacto_empresa } = req.body;
 
-      const novoEnderecoEmp = await Endereco.create({
-        bairro: _bairroEmp,
-        rua: _ruaEmp,
-        edificio: _edificio,
-        provincia: _provincia_empresa,
-        telefone_principal: _contacto_empresa,
-      });
+      // const novoEnderecoEmp = await Endereco.create({
+      //   bairro: _bairroEmp,
+      //   rua: _ruaEmp,
+      //   edificio: _edificio,
+      //   provincia: _provincia_empresa,
+      //   telefone_principal: _contacto_empresa,
+      // });
+      const inserirEnderecoEmpresa = await EnderecoService.store(_bairroEmp, _ruaEmp, _edificio, _contacto_empresa)
 
       //dados da empresa
       const { _empresa } = req.body;
@@ -570,21 +562,22 @@ module.exports = {
         _email = _email_pessoal;
         //console.log(_email);
 
-        const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(senha, salt);
-        const conta = await Conta.create({
-          email: _email,
-          senha: passwordHash,
-        });
-        novaConta = { conta, senha };
-
+        // const salt = await bcrypt.genSalt(12);
+        // const passwordHash = await bcrypt.hash(senha, salt);
+        // const conta = await Conta.create({
+        //   email: _email,
+        //   senha: passwordHash,
+        // });
+        // novaConta = { conta, senha };
+        const novaConta = await Conta.store(_email, senha)
+        
         novoTrabalhador = await Trabalhador.create({
           cargo: _cargo,
           area_departamento: _area_departamento,
           localizacao_office: _provincia_empresa,
           tipo: _tipoT,
-          pessoaID: novaPessoa.id,
-          contaID: conta.id,
+          pessoaID: novoDadoPessoal.id,
+          contaID: novaConta.id,
         });
         novaEmpresa = await Empresa.create({
           nome_empresa: _empresa,
