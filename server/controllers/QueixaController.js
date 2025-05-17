@@ -24,6 +24,8 @@ var nodemailer = require("nodemailer");
 const BIservice = require("./BIservice.js");
 const EnderecoService = require("./EnderecoService.js");
 const PessoaController = require("./PessoaController.js");
+const FuncionarioController = require("./FuncionarioController.js");
+const EmpresaController = require("./EmpresaController.js");
 var transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -462,14 +464,18 @@ module.exports = {
       const { _validoAte } = req.body;
       const _fileBI = req.files["fileBI"][0]?.path?.split("/")[1];
       const { _nBI } = req.body;
-      const novoBI = await BIservice.store(_nBI,_fileBI,_emitidoEm, _validoAte)
+      const novoBI = await BIservice.store(
+        _nBI,
+        _fileBI,
+        _emitidoEm,
+        _validoAte
+      );
       // const novoBI = await BI.create({
       //   emitido_em: _emitidoEm,
       //   valido_ate: _validoAte,
       //   file: _fileBI,
       //   numeroBI: _nBI,
       // });
-
 
       // Dados da residência do trabalhador
 
@@ -479,8 +485,15 @@ module.exports = {
       const { _provincia } = req.body;
       const { _contacto_principal } = req.body;
       const { _contacto_alternativo } = req.body;
-      const inserirEndereco = await EnderecoService.store(_bairro, _rua, _casaEdificio, _provincia, _contacto_principal, _contacto_alternativo)
-      
+      const inserirEndereco = await EnderecoService.store(
+        _bairro,
+        _rua,
+        _casaEdificio,
+        _provincia,
+        _contacto_principal,
+        _contacto_alternativo
+      );
+
       // const novoEndereco = await Endereco.create({
       //   bairro: _bairro,
       //   rua: _rua,
@@ -502,7 +515,19 @@ module.exports = {
       const { _data_nascimento } = req.body;
       const { _sexo } = req.body;
 
-      const novoDadoPessoal = await PessoaController.store(_nome, _sobrenome, _nomePai, _nomeMae, _naturalidade, _altura, _estado_civil, _data_nascimento, _sexo, novoBI.id, inserirEndereco.id)
+      const novoDadoPessoal = await PessoaController.store(
+        _nome,
+        _sobrenome,
+        _nomePai,
+        _nomeMae,
+        _naturalidade,
+        _altura,
+        _estado_civil,
+        _data_nascimento,
+        _sexo,
+        novoBI.id,
+        inserirEndereco.id
+      );
       // dados da conta
 
       //const senha = Math.random().toString(36).slice(-10);
@@ -540,7 +565,12 @@ module.exports = {
       //   provincia: _provincia_empresa,
       //   telefone_principal: _contacto_empresa,
       // });
-      const inserirEnderecoEmpresa = await EnderecoService.store(_bairroEmp, _ruaEmp, _edificio, _contacto_empresa)
+      const inserirEnderecoEmpresa = await EnderecoService.store(
+        _bairroEmp,
+        _ruaEmp,
+        _edificio,
+        _contacto_empresa
+      );
 
       //dados da empresa
       const { _empresa } = req.body;
@@ -569,26 +599,40 @@ module.exports = {
         //   senha: passwordHash,
         // });
         // novaConta = { conta, senha };
-        const novaConta = await Conta.store(_email, senha)
-        
-        novoTrabalhador = await Trabalhador.create({
-          cargo: _cargo,
-          area_departamento: _area_departamento,
-          localizacao_office: _provincia_empresa,
-          tipo: _tipoT,
-          pessoaID: novoDadoPessoal.id,
-          contaID: novaConta.id,
-        });
-        novaEmpresa = await Empresa.create({
-          nome_empresa: _empresa,
-          nif: _nif,
-          designacao: _designacao,
-          email: _email_empresa,
-          url_website: _website_empresa,
-          enderecoID: novoEnderecoEmp.id,
-          fk_conta: 0,
-          tipo: _tipoE,
-        });
+        const novaConta = await Conta.store(_email, senha);
+        const novoTrabalhador =
+          await FuncionarioController.registrarTrabalhador(
+            req.body,
+            novaConta.id
+          );
+        // novoTrabalhador = await Trabalhador.create({
+        //   cargo: _cargo,
+        //   area_departamento: _area_departamento,
+        //   localizacao_office: _provincia_empresa,
+        //   tipo: _tipoT,
+        //   pessoaID: novoDadoPessoal.id,
+        //   contaID: novaConta.id,
+        // });
+        // novaEmpresa = await Empresa.create({
+        //   nome_empresa: _empresa,
+        //   nif: _nif,
+        //   designacao: _designacao,
+        //   email: _email_empresa,
+        //   url_website: _website_empresa,
+        //   enderecoID: novoEnderecoEmp.id,
+        //   fk_conta: 0,
+        //   tipo: _tipoE,
+        // });
+        const novaEmpresa = await EmpresaController.store(
+          _empresa,
+          _nif,
+          _designacao,
+          _email_empresa,
+          _website_empresa,
+          novoEnderecoEmp.id,
+          0,
+          _tipoE
+        );
       } else if (queixoso === "Empregador") {
         _tipoE = "queixoso";
         _tipoT = "queixante";
@@ -596,33 +640,47 @@ module.exports = {
         _email = _email_empresa;
         const { senha } = req.body;
 
-        const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(senha, salt);
-        const conta = await Conta.create({
-          email: _email,
-          senha: passwordHash,
-          tentativa: tentativa,
-        });
-        novaConta = { conta, senha };
-        console.log("conta_empresa: " + conta.id);
-        novoTrabalhador = await Trabalhador.create({
-          cargo: _cargo,
-          area_departamento: _area_departamento,
-          localizacao_office: _provincia_empresa,
-          tipo: _tipoT,
-          pessoaID: novaPessoa.id,
-          contaID: 0,
-        });
-        novaEmpresa = await Empresa.create({
-          nome_empresa: _empresa,
-          nif: _nif,
-          designacao: _designacao,
-          email: _email_empresa,
-          url_website: _website_empresa,
-          enderecoID: novoEnderecoEmp.id,
-          fk_conta: conta.id,
-          tipo: _tipoE,
-        });
+        // const salt = await bcrypt.genSalt(12);
+        // const passwordHash = await bcrypt.hash(senha, salt);
+        // const conta = await Conta.create({
+        //   email: _email,
+        //   senha: passwordHash,
+        //   tentativa: tentativa,
+        // });
+        // novaConta = { conta, senha };
+        // console.log("conta_empresa: " + conta.id);
+        const conta = await Conta.store(_email, senha);
+
+        // novoTrabalhador = await Trabalhador.create({
+        //   cargo: _cargo,
+        //   area_departamento: _area_departamento,
+        //   localizacao_office: _provincia_empresa,
+        //   tipo: _tipoT,
+        //   pessoaID: novaPessoa.id,
+        //   contaID: 0,
+        // });
+        const novoTrabalhador =
+          await FuncionarioController.registrarTrabalhador(req.body, 0);
+        // novaEmpresa = await Empresa.create({
+        //   nome_empresa: _empresa,
+        //   nif: _nif,
+        //   designacao: _designacao,
+        //   email: _email_empresa,
+        //   url_website: _website_empresa,
+        //   enderecoID: novoEnderecoEmp.id,
+        //   fk_conta: conta.id,
+        //   tipo: _tipoE,
+        // });
+        const novaEmpresa = await EmpresaController.store(
+          _empresa,
+          _nif,
+          _designacao,
+          _email_empresa,
+          _website_empresa,
+          novoEnderecoEmp.id,
+          conta.id,
+          _tipoE
+        );
       }
 
       // dados da queixa

@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { password } = require("../config/db");
 const funcionarioIGT = require("../models/FuncionarioIGT");
 const Inspector = require("../models/Inspector");
-
+const ContaController = require("../controllers/ContaController");
 module.exports = {
   async index(req, res) {
     try {
@@ -74,41 +74,51 @@ module.exports = {
       console.log("Error", error);
     }
   },
-  async store(req, res) {
+
+  async registrarTrabalhador(dados, addConta) {
     try {
-      //Endereco
-      const { telefone_principal } = req.body;
-      const { telefone_alternativo } = req.body;
+      const {
+        telefone_principal,
+        telefone_alternativo,
+        _nome,
+        _sobrenome,
+        _email,
+        _senha,
+        _privilegio,
+        _cargo,
+        _departamento,
+        provincia,
+      } = dados;
 
-      const novoEndereco = await Endereco.create({
-        telefone_principal: telefone_principal,
-        telefone_alternativo: telefone_alternativo,
-      });
+      const novoEndereco = await EnderecoService.store(
+        "",
+        "",
+        "",
+        "",
+        telefone_principal,
+        telefone_alternativo
+      );
 
-      //Registrar Pessoa
-      const { _nome } = req.body;
-      const { _sobrenome } = req.body;
-      const novaPessoa = await Pessoa.create({
-        nome: _nome,
-        sobrenome: _sobrenome,
-        enderecoID: novoEndereco.id,
-      });
-      //Registrar Conta
-      const { _email } = req.body;
-      const { _senha } = req.body;
-      const { _privilegio } = req.body;
-      const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(_senha, salt);
-      const novaConta = await Conta.create({
-        email: _email,
-        senha: passwordHash,
-        tentativa: 0,
-        privilegio: _privilegio,
-      });
-      //Registrar Trabalhador
-      const { _cargo } = req.body;
-      const { _departamento } = req.body;
-      const { provincia } = req.body;
+      const novaPessoa = await PessoaController.store(
+        _nome,
+        _sobrenome,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        novoEndereco.id
+      );
+
+      const novaConta = await ContaController.store(
+        _email,
+        _senha,
+        _privilegio
+      );
+
       const tipo_func = "igt";
       const novoTrabalhador = await Trabalhador.create({
         cargo: _cargo,
@@ -116,26 +126,39 @@ module.exports = {
         localizacao_office: provincia,
         tipo: tipo_func,
         pessoaID: novaPessoa.id,
-        contaID: novaConta.id,
+        contaID: addConta,
       });
-      //Registrar FuncionarioIGT
 
-      const novoFuncionarioIGT = await funcionarioIGT.create({
+      await funcionarioIGT.create({
         trabalhadorID: novoTrabalhador.id,
         tipo: _cargo,
       });
+
       if (_cargo === "Inspector") {
-        const novoInspector = await Inspector.create({
-          trabalhadorID: novoTrabalhador.id,
-        });
+        await Inspector.create({ trabalhadorID: novoTrabalhador.id });
       }
 
-      return res.status(200).send({
+      return {
         status: 1,
-        message: "Funcionario Registrado com sucesso!",
+        message: "Funcionário registrado com sucesso!",
+        trabalhador: novoTrabalhador,
+      };
+    } catch (error) {
+      console.error("Erro ao registrar funcionário:", error);
+      throw error;
+    }
+  },
+  async store(req, res) {
+    try {
+      const resultado = await this.registrarTrabalhador(req.body);
+
+      return res.status(200).send({
+        status: resultado.status,
+        message: resultado.message,
+        trabalhador: resultado.trabalhador,
       });
     } catch (error) {
-      console.log("error", error);
+      return res.status(500).send({ status: 0, message: "Erro no registro." });
     }
   },
   async update(req, res) {

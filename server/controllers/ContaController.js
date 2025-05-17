@@ -235,13 +235,13 @@ module.exports = {
         });
     }
   },
-  async store(_email,_senha) {
+  async store(_email, _senha, previlegio) {
     try {
       const salt = await bcrypt.genSalt(12);
       const passwordHash = await bcrypt.hash(_senha, salt);
       const conta = await Conta.create({ email: _email, senha: passwordHash });
       const novaConta = { conta, _senha };
-      return conta
+      return conta;
     } catch (error) {
       console.log(error);
     }
