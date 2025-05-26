@@ -1,5 +1,5 @@
 const db = require("../../models");
-import { faker } from "@faker-js/faker";
+const { faker } = require('@faker-js/faker');
 
 beforeAll(async () => {
   await db.sequelize.authenticate(); // Apenas testa conexão
@@ -14,14 +14,19 @@ describe("Testando modelo BI com tabela já existente", () => {
   const dataNow = new Date();
 
   test("Registrar um BI com dados aleatórios", async () => {
+    try{
     const dataNow = new Date();
-    const novoBI = await BI.create({
+    const novoBI = await db.BI.create({
       emitido_em: faker.date.past({ years: 10 }), // Data de emissão (passada)
       valido_ate: faker.date.future({ years: 5 }), // Data de validade (futura)
       file: faker.system.fileName(), // Nome de um arquivo aleatório (simulando o BI)
       numeroBI: faker.string.alphanumeric({ length: 14, casing: "upper" }), // Número aleatório
     });
     expect(novoBI).toBeDefined();
+       } catch (error) {
+        console.error("Erro ao criar queixa:", error);
+        throw error; // re-lança para Jest saber que falhou
+      }
   });
 
   //   test('Buscar queixa criada', async () => {
