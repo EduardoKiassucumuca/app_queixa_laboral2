@@ -21,6 +21,7 @@ const funcionarioIGT = require("../models/FuncionarioIGT.js");
 const tentativa = 0;
 const mime = require("mime-types");
 var nodemailer = require("nodemailer");
+const Anexo = require("../models/anexo.js");
 
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -1195,6 +1196,8 @@ module.exports = {
         const { _ruaEmp } = req.body;
         const { _edificio } = req.body;
         const { _contacto_empresa } = req.body;
+        const { _latitude } = req.body;
+        const { _longitude } = req.body;
 
         const novoEnderecoEmp = await Endereco.create({
           bairro: _bairroEmp,
@@ -1202,6 +1205,8 @@ module.exports = {
           edificio: _edificio,
           provincia: _localizacaoEmp,
           telefone_principal: _contacto_empresa,
+          latitude: _latitude,
+          longitude: _longitude,
         });
 
         novaEmpresa = await Empresa.create({
@@ -1223,19 +1228,22 @@ module.exports = {
 
       const data_queixa = new Date();
       const data_alteracao_queixa = new Date();
-      const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-      const _file3 = req?.files["file3"]
-        ? req?.files["file3"][0].path.split("/")[1]
-        : null;
-      const _file4 = req?.files["file4"]
-        ? req?.files["file4"][0].path.split("/")[1]
-        : null;
-      const _file5 = req.files["file5"]
-        ? req?.files["file5"][0].path.split("/")[1]
-        : null;
-      const _file6 = req.files["file6"]
-        ? req?.files["file6"][0].path.split("/")[1]
-        : null;
+      // const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+      // const _file3 = req?.files["file3"]
+      //   ? req?.files["file3"][0].path.split("/")[1]
+      //   : null;
+      // const _file4 = req?.files["file4"]
+      //   ? req?.files["file4"][0].path.split("/")[1]
+      //   : null;
+      // const _file5 = req.files["file5"]
+      //   ? req?.files["file5"][0].path.split("/")[1]
+      //   : null;
+      // const _file6 = req.files["file6"]
+      //   ? req?.files["file6"][0].path.split("/")[1]
+      //   : null;
+
+      const { files } = req;
+
       if (queixante === "Trabalhador") {
         queixanteID = _trabalhadorID;
         queixosoID = novaEmpresa.id;
@@ -1257,11 +1265,49 @@ module.exports = {
         modo: _modo,
         inspectorID: 14,
         testemunhaID: 4,
-        file3: _file3,
-        file4: _file4,
-        file5: _file5,
-        file6: _file6,
+        // file3: _file3,
+        // file4: _file4,
+        // file5: _file5,
+        // file6: _file6,
       });
+      // Gravar todos os arquivos com Sequelize
+      const attachments = [];
+
+      if (files.audio) {
+        attachments.push({
+          filename: files.audio[0].originalname,
+          path: files.audio[0].path,
+          extensao: "mp3",
+          tipo: "audio",
+        });
+      }
+
+      if (files.video) {
+        attachments.push({
+          filename: files.video[0].originalname,
+          path: files.video[0].path,
+          extensao: "mp4",
+          tipo: "video",
+        });
+      }
+
+      if (files.documents) {
+        files.documents.forEach((doc) => {
+          attachments.push({
+            filename: doc.originalname,
+            path: doc.path,
+            extensao: doc.originalname.split(".").pop(),
+            tipo: "documento",
+          });
+        });
+      }
+
+      await Anexo.bulkCreate(
+        attachments.map((data) => ({
+          ...data,
+          fk_queixa: novaQueixa.id,
+        }))
+      );
       return res.status(200).send({
         status: 1,
         message:
