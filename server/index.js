@@ -61,6 +61,12 @@ var cpUpload2 = upload.fields([
   { name: "file5" },
   { name: "file6" },
 ]);
+var cpUploadBIApp = upload.fields([{ name: "fileBI" }]);
+const cpMultiUpload = upload.fields([
+  { name: "audio", maxCount: 1 },
+  { name: "video", maxCount: 1 },
+  { name: "documents", maxCount: 10 }, // até 10 documentos
+]);
 var upload_file_acta = upload.fields([{ name: "fileActa" }]);
 var upload_file_acta_final = upload.fields([{ name: "fileActaFinal" }]);
 
@@ -119,6 +125,12 @@ app.post("/validar_BI", QueixaController.validarBI);
 app.get("/empresas", QueixaController.getEmpresas);
 app.post("/add_queixa", cpUpload2, QueixaController.add_queixa);
 app.post("/add_empresa_queixa", cpUpload, QueixaController.add_empresa_queixa);
+app.post(
+  "/salvar_queixa",
+  cpUploadBIApp,
+  cpMultiUpload,
+  QueixaController.add_empresa_queixa
+);
 app.post("/validar_NIF", QueixaController.validarNIF);
 app.get("/trabalhadores", QueixaController.getTrabalhadores);
 app.get("/inspectores", InspectorController.index);

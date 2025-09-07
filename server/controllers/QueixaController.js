@@ -1242,7 +1242,11 @@ module.exports = {
       //   ? req?.files["file6"][0].path.split("/")[1]
       //   : null;
 
-      const { files } = req;
+      const files = req.files;
+
+      const audio = files.audio ? files.audio[0] : null;
+      const video = files.video ? files.video[0] : null;
+      const documents = files.documents || [];
 
       if (queixante === "Trabalhador") {
         queixanteID = _trabalhadorID;
