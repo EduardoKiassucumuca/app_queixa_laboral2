@@ -1039,290 +1039,497 @@ module.exports = {
       queixanteID = 0;
 
     try {
-      const { queixante } = req.body;
-      const { queixoso } = req.body;
+      console.log("Body recebido:", req.body);
+      console.log("Files recebidos:", req.files);
 
-      //dados do bilhete de identidade
-      const { _emitidoEm } = req.body;
+      const {
+        queixoso,
+        _nome,
+        _sobrenome,
+        _nomePai,
+        _nomeMae,
+        _nBI,
+        _bairro,
+        _casaEdificio,
+        _naturalidade,
+        _provincia,
+        _data_nascimento,
+        _contacto_principal,
+        _contacto_alternativo,
+        _sexo,
+        _altura,
+        _estado_civil,
+        _emitidoEm,
+        _validoAte,
+        _empresa,
+        _nif,
+        _designacao,
+        _email_empresa,
+        _contacto_empresa,
+        _latitude,
+        _longitude,
+        _assunto_queixa,
+        _descricao_queixa,
+        _modo,
+      } = req.body;
+
+      // 1. Salvar BI
       let fileBI = "";
-      const { _validoAte } = req.body;
-      if (queixoso === "Trabalhador") {
-        fileBI = req?.files["fileBI"]
-          ? req?.files["fileBI"][0].path.split("/")[1]
-          : null;
+      if (req.files && req.files["fileBI"]) {
+        fileBI =
+          req.files["fileBI"][0].filename ||
+          req.files["fileBI"][0].path.split("/").pop();
       }
-      const { _nBI } = req.body;
 
       const novoBI = await BI.create({
-        emitido_em: _emitidoEm,
-        valido_ate: _validoAte,
+        emitido_em: _emitidoEm || null,
+        valido_ate: _validoAte || null,
         file: fileBI,
-        numeroBI: _nBI,
+        numeroBI: _nBI || "",
       });
 
-      // Dados da residência do trabalhador
-
-      const { _bairro } = req.body;
-      const { _rua } = req.body;
-      const { _casaEdificio } = req.body;
-      const { _provincia } = req.body;
-      const { _contacto_principal } = req.body;
-      const { _contacto_alternativo } = req.body;
-
+      // 2. Salvar Endereço
       const novoEndereco = await Endereco.create({
-        bairro: _bairro,
-        rua: _rua,
-        casa: _casaEdificio,
-        provincia: _provincia,
-        telefone_principal: _contacto_principal,
-        telefone_alternativo: _contacto_alternativo,
+        bairro: _bairro || "",
+        rua: "", // Seu frontend não envia este campo
+        casa: _casaEdificio || "",
+        provincia: _provincia || "",
+        telefone_principal: _contacto_principal || "",
+        telefone_alternativo: _contacto_alternativo || "",
+        latitude: _latitude || null,
+        longitude: _longitude || null,
       });
 
-      // dados da pessoa
-
-      const { _nome } = req.body;
-      const { _sobrenome } = req.body;
-      const { _nomePai } = req.body;
-      const { _nomeMae } = req.body;
-      const { _naturalidade } = req.body;
-      const { _altura } = req.body;
-      const { _estado_civil } = req.body;
-      const { _data_nascimento } = req.body;
-      const { _sexo } = req.body;
-
+      // 3. Salvar Pessoa
       const novaPessoa = await Pessoa.create({
-        nome: _nome,
-        sobrenome: _sobrenome,
-        nome_pai: _nomePai,
-        nome_mae: _nomeMae,
-        naturalidade: _naturalidade,
-        altura: _altura,
-        estado_civil: _estado_civil,
-        data_nascimento: _data_nascimento,
-        sexo: _sexo,
+        nome: _nome || "",
+        sobrenome: _sobrenome || "",
+        nome_pai: _nomePai || "",
+        nome_mae: _nomeMae || "",
+        naturalidade: _naturalidade || "",
+        altura: _altura || "",
+        estado_civil: _estado_civil || "",
+        data_nascimento: _data_nascimento || null,
+        sexo: _sexo || "",
         biID: novoBI.id,
         enderecoID: novoEndereco.id,
       });
-      // dados da conta
 
-      //const senha = Math.random().toString(36).slice(-10);
-
-      /*const userExist = await Conta.findOne({ where: { email: email } });
-            console.log(userExist);
-            if (userExist) {
-                return res.status(422).json({ msg: 'Por favor, utilize outro email' });
-            }*/
-
-      //dados do trabalhador
-
-      let _email = "";
-      let _senha = "";
-      let _tipoE = "";
-      let _tipoT = "";
-
-      const { _cargo } = req.body;
-      const { _area_departamento } = req.body;
-      const { _provincia_empresa } = req.body;
-
-      // endereço da empresa
-
-      //dados da empresa
-      const { _empresa } = req.body;
-
-      let novoTrabalhador = "";
-      let _nome_empresa = "";
-      let novaConta = "";
-      let empresaEncontrada = {};
-      let enderecoEncontrado = {};
-
-      if (queixoso === "Trabalhador") {
-        _tipoT = "queixoso";
-        _tipoE = "queixante";
-        const { _email_pessoal } = req.body;
-        const { senha } = req.body;
-
-        _email = _email_pessoal;
-
-        _nome_empresa = _empresa?.split("-")[0].trimEnd();
+      // 4. Buscar ou criar Empresa
+      let empresaEncontrada = null;
+      if (_empresa) {
         empresaEncontrada = await Empresa.findOne({
-          attributes: ["id", "nome_empresa", "enderecoID"],
-          where: { nome_empresa: _nome_empresa },
-        });
-        enderecoEncontrado = await Endereco.findOne({
-          attributes: ["id", "provincia"],
-          where: { id: empresaEncontrada.enderecoID },
+          where: { nome_empresa: _empresa },
         });
 
-        //console.log(_email);
+        if (!empresaEncontrada) {
+          // Criar empresa se não existir
+          const novoEnderecoEmp = await Endereco.create({
+            bairro: "", // Adicione campos do endereço da empresa se necessário
+            provincia: _provincia || "",
+            telefone_principal: _contacto_empresa || "",
+          });
 
+          empresaEncontrada = await Empresa.create({
+            nome_empresa: _empresa || "",
+            nif: _nif || "",
+            designacao: _designacao || "",
+            email: _email_empresa || "",
+            enderecoID: novoEnderecoEmp.id,
+            tipo: "queixante",
+          });
+        }
+      }
+
+      // 5. Criar Trabalhador
+      let novoTrabalhador = null;
+      if (queixoso === "Trabalhador") {
+        // Criar conta básica para o trabalhador
         const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(senha, salt);
+        const passwordHash = await bcrypt.hash("temp123", salt); // Senha temporária
+
         const conta = await Conta.create({
-          email: _email,
+          email: _email_empresa || `${_nBI}@temp.com`,
           senha: passwordHash,
-          tentativa: tentativa,
+          tentativa: 0,
         });
-        novaConta = { conta, senha };
 
         novoTrabalhador = await Trabalhador.create({
-          cargo: _cargo,
-          area_departamento: _area_departamento,
-          localizacao_office: enderecoEncontrado.provincia,
-          tipo: _tipoT,
+          cargo: "", // Adicione este campo se necessário
+          area_departamento: "", // Adicione este campo se necessário
+          localizacao_office: _provincia || "",
+          tipo: "queixoso",
           pessoaID: novaPessoa.id,
           contaID: conta.id,
         });
+
         queixosoID = novoTrabalhador.id;
-        queixanteID = empresaEncontrada.id;
-      } else if (queixoso === "Empregador") {
-        _tipoE = "queixoso";
-        _tipoT = "queixante";
-        const { _trabalhadorID } = req.body;
-        const { _email_empresa } = req.body;
-        _email = _email_empresa;
-        const { senha } = req.body;
-
-        const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(senha, salt);
-        const conta = await Conta.create({
-          email: _email,
-          senha: passwordHash,
-          tentativa: tentativa,
-        });
-        novaConta = { conta, senha };
-
-        // novo Enderceo empresa
-        const { _bairroEmp } = req.body;
-        const { _ruaEmp } = req.body;
-        const { _edificio } = req.body;
-        const { _contacto_empresa } = req.body;
-        const { _latitude } = req.body;
-        const { _longitude } = req.body;
-
-        const novoEnderecoEmp = await Endereco.create({
-          bairro: _bairroEmp,
-          rua: _ruaEmp,
-          edificio: _edificio,
-          provincia: _localizacaoEmp,
-          telefone_principal: _contacto_empresa,
-          latitude: _latitude,
-          longitude: _longitude,
-        });
-
-        novaEmpresa = await Empresa.create({
-          nome_empresa: _empresa,
-          nif: _nif,
-          designacao: _designacao,
-          email: _email_empresa,
-          url_website: _website_empresa,
-          enderecoID: novoEnderecoEmp.id,
-          fk_conta: conta.id,
-          tipo: _tipoE,
-        });
+        queixanteID = empresaEncontrada ? empresaEncontrada.id : null;
       }
 
-      // dados da queixa
-      const { _assunto_queixa } = req.body;
-      const { _descricao_queixa } = req.body;
-      const { _modo } = req.body;
-
-      const data_queixa = new Date();
-      const data_alteracao_queixa = new Date();
-      // const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
-      // const _file3 = req?.files["file3"]
-      //   ? req?.files["file3"][0].path.split("/")[1]
-      //   : null;
-      // const _file4 = req?.files["file4"]
-      //   ? req?.files["file4"][0].path.split("/")[1]
-      //   : null;
-      // const _file5 = req.files["file5"]
-      //   ? req?.files["file5"][0].path.split("/")[1]
-      //   : null;
-      // const _file6 = req.files["file6"]
-      //   ? req?.files["file6"][0].path.split("/")[1]
-      //   : null;
-
-      const files = req.files;
-
-      const audio = files.audio ? files.audio[0] : null;
-      const video = files.video ? files.video[0] : null;
-      const documents = files.documents || [];
-
-      if (queixante === "Trabalhador") {
-        queixanteID = _trabalhadorID;
-        queixosoID = novaEmpresa.id;
-      } else if (queixante === "Empregador") {
-        queixanteID = novaEmpresa.id;
-        queixosoID = novoTrabalhador.id;
-      }
+      // 6. Criar Queixa
       const novaQueixa = await Queixa.create({
-        assunto: _assunto_queixa,
-        facto: _descricao_queixa,
-        created_at: data_queixa,
-        updated_at: data_alteracao_queixa,
+        assunto: _assunto_queixa || "",
+        facto: _descricao_queixa || "",
+        created_at: new Date(),
+        updated_at: new Date(),
         queixosoID: queixosoID,
         queixanteID: queixanteID,
-        empresaID: empresaEncontrada.id,
-        trabalhadorID: novoTrabalhador.id,
-        url_file_contrato: _fileContrato,
-        provincia: enderecoEncontrado.provincia,
-        modo: _modo,
-        inspectorID: 14,
-        testemunhaID: 4,
-        // file3: _file3,
-        // file4: _file4,
-        // file5: _file5,
-        // file6: _file6,
+        empresaID: empresaEncontrada ? empresaEncontrada.id : null,
+        trabalhadorID: novoTrabalhador ? novoTrabalhador.id : null,
+        provincia: _provincia || "",
+        modo: _modo || "normal",
+        inspectorID: 14, // Defina um valor padrão
+        testemunhaID: 4, // Defina um valor padrão
       });
-      // Gravar todos os arquivos com Sequelize
+
+      // 7. Salvar Anexos
       const attachments = [];
 
-      if (files.audio) {
+      // // Audio
+      if (req.files && req.files["audio"]) {
+        const audioFile = req.files["audio"][0];
         attachments.push({
-          filename: files.audio[0].originalname,
-          path: files.audio[0].path,
-          extensao: "mp3",
+          filename: audioFile.originalname,
+          path: audioFile.path,
+          extensao: audioFile.originalname.split(".").pop(),
           tipo: "audio",
+          fk_queixa: novaQueixa.id,
         });
       }
 
-      if (files.video) {
+      // Video
+      if (req.files && req.files["video"]) {
+        const videoFile = req.files["video"][0];
         attachments.push({
-          filename: files.video[0].originalname,
-          path: files.video[0].path,
-          extensao: "mp4",
+          filename: videoFile.originalname,
+          path: videoFile.path,
+          extensao: videoFile.originalname.split(".").pop(),
           tipo: "video",
+          fk_queixa: novaQueixa.id,
         });
       }
 
-      if (files.documents) {
-        files.documents.forEach((doc) => {
+      // Documentos
+      if (req.files && req.files["documents"]) {
+        req.files["documents"].forEach((doc) => {
           attachments.push({
             filename: doc.originalname,
             path: doc.path,
             extensao: doc.originalname.split(".").pop(),
             tipo: "documento",
+            fk_queixa: novaQueixa.id,
           });
         });
       }
 
-      await Anexo.bulkCreate(
-        attachments.map((data) => ({
-          ...data,
-          fk_queixa: novaQueixa.id,
-        }))
-      );
-      return res.status(200).send({
+      if (attachments.length > 0) {
+        await Anexo.bulkCreate(attachments);
+      }
+
+      return res.status(200).json({
         status: 1,
-        message:
-          "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
-        Queixa,
-        novaConta,
+        message: "Queixa salva com sucesso!",
+        queixaId: novaQueixa.id,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Erro ao salvar queixa:", error);
+      return res.status(500).json({
+        status: 0,
+        message: "Erro interno do servidor",
+        error: error.message,
+      });
     }
   },
+  // async add_queixoso_queixa(req, res) {
+  //   let queixosoID,
+  //     queixanteID = 0;
+
+  //   try {
+  //     const { queixante } = req.body;
+  //     const { queixoso } = req.body;
+  //     console.log(req.body);
+  //     //dados do bilhete de identidade
+  //     const { _emitidoEm } = req.body;
+  //     let fileBI = "";
+  //     const { _validoAte } = req.body;
+  //     if (queixoso === "Trabalhador") {
+  //       fileBI = req?.files["fileBI"]
+  //         ? req?.files["fileBI"][0].path.split("/")[1]
+  //         : null;
+  //     }
+  //     const { _nBI } = req.body;
+
+  //     const novoBI = await BI.create({
+  //       emitido_em: _emitidoEm,
+  //       valido_ate: _validoAte,
+  //       file: fileBI,
+  //       numeroBI: _nBI,
+  //     });
+
+  //     // Dados da residência do trabalhador
+
+  //     const { _bairro } = req.body;
+  //     const { _rua } = req.body;
+  //     const { _casaEdificio } = req.body;
+  //     const { _provincia } = req.body;
+  //     const { _contacto_principal } = req.body;
+  //     const { _contacto_alternativo } = req.body;
+
+  //     const novoEndereco = await Endereco.create({
+  //       bairro: _bairro,
+  //       rua: _rua,
+  //       casa: _casaEdificio,
+  //       provincia: _provincia,
+  //       telefone_principal: _contacto_principal,
+  //       telefone_alternativo: _contacto_alternativo,
+  //     });
+
+  //     // dados da pessoa
+
+  //     const { _nome } = req.body;
+  //     const { _sobrenome } = req.body;
+  //     const { _nomePai } = req.body;
+  //     const { _nomeMae } = req.body;
+  //     const { _naturalidade } = req.body;
+  //     const { _altura } = req.body;
+  //     const { _estado_civil } = req.body;
+  //     const { _data_nascimento } = req.body;
+  //     const { _sexo } = req.body;
+
+  //     const novaPessoa = await Pessoa.create({
+  //       nome: _nome,
+  //       sobrenome: _sobrenome,
+  //       nome_pai: _nomePai,
+  //       nome_mae: _nomeMae,
+  //       naturalidade: _naturalidade,
+  //       altura: _altura,
+  //       estado_civil: _estado_civil,
+  //       data_nascimento: _data_nascimento,
+  //       sexo: _sexo,
+  //       biID: novoBI.id,
+  //       enderecoID: novoEndereco.id,
+  //     });
+  //     // dados da conta
+
+  //     //const senha = Math.random().toString(36).slice(-10);
+
+  //     /*const userExist = await Conta.findOne({ where: { email: email } });
+  //           console.log(userExist);
+  //           if (userExist) {
+  //               return res.status(422).json({ msg: 'Por favor, utilize outro email' });
+  //           }*/
+
+  //     //dados do trabalhador
+
+  //     let _email = "";
+  //     let _senha = "";
+  //     let _tipoE = "";
+  //     let _tipoT = "";
+
+  //     const { _cargo } = req.body;
+  //     const { _area_departamento } = req.body;
+  //     const { _provincia_empresa } = req.body;
+
+  //     // endereço da empresa
+
+  //     //dados da empresa
+  //     const { _empresa } = req.body;
+
+  //     let novoTrabalhador = "";
+  //     let _nome_empresa = "";
+  //     let novaConta = "";
+  //     let empresaEncontrada = {};
+  //     let enderecoEncontrado = {};
+
+  //     if (queixoso === "Trabalhador") {
+  //       _tipoT = "queixoso";
+  //       _tipoE = "queixante";
+  //       const { _email_pessoal } = req.body;
+  //       const { senha } = req.body;
+
+  //       _email = _email_pessoal;
+
+  //       _nome_empresa = _empresa?.split("-")[0].trimEnd();
+  //       empresaEncontrada = await Empresa.findOne({
+  //         attributes: ["id", "nome_empresa", "enderecoID"],
+  //         where: { nome_empresa: _nome_empresa },
+  //       });
+  //       enderecoEncontrado = await Endereco.findOne({
+  //         attributes: ["id", "provincia"],
+  //         where: { id: empresaEncontrada.enderecoID },
+  //       });
+
+  //       //console.log(_email);
+
+  //       const salt = await bcrypt.genSalt(12);
+  //       const passwordHash = await bcrypt.hash(senha, salt);
+  //       const conta = await Conta.create({
+  //         email: _email,
+  //         senha: passwordHash,
+  //         tentativa: tentativa,
+  //       });
+  //       novaConta = { conta, senha };
+
+  //       novoTrabalhador = await Trabalhador.create({
+  //         cargo: _cargo,
+  //         area_departamento: _area_departamento,
+  //         localizacao_office: enderecoEncontrado.provincia,
+  //         tipo: _tipoT,
+  //         pessoaID: novaPessoa.id,
+  //         contaID: conta.id,
+  //       });
+  //       queixosoID = novoTrabalhador.id;
+  //       queixanteID = empresaEncontrada.id;
+  //     } else if (queixoso === "Empregador") {
+  //       _tipoE = "queixoso";
+  //       _tipoT = "queixante";
+  //       const { _trabalhadorID } = req.body;
+  //       const { _email_empresa } = req.body;
+  //       _email = _email_empresa;
+  //       const { senha } = req.body;
+
+  //       const salt = await bcrypt.genSalt(12);
+  //       const passwordHash = await bcrypt.hash(senha, salt);
+  //       const conta = await Conta.create({
+  //         email: _email,
+  //         senha: passwordHash,
+  //         tentativa: tentativa,
+  //       });
+  //       novaConta = { conta, senha };
+
+  //       // novo Enderceo empresa
+  //       const { _bairroEmp } = req.body;
+  //       const { _ruaEmp } = req.body;
+  //       const { _edificio } = req.body;
+  //       const { _contacto_empresa } = req.body;
+  //       const { _latitude } = req.body;
+  //       const { _longitude } = req.body;
+
+  //       const novoEnderecoEmp = await Endereco.create({
+  //         bairro: _bairroEmp,
+  //         rua: _ruaEmp,
+  //         edificio: _edificio,
+  //         provincia: _localizacaoEmp,
+  //         telefone_principal: _contacto_empresa,
+  //         latitude: _latitude,
+  //         longitude: _longitude,
+  //       });
+
+  //       novaEmpresa = await Empresa.create({
+  //         nome_empresa: _empresa,
+  //         nif: _nif,
+  //         designacao: _designacao,
+  //         email: _email_empresa,
+  //         url_website: _website_empresa,
+  //         enderecoID: novoEnderecoEmp.id,
+  //         fk_conta: conta.id,
+  //         tipo: _tipoE,
+  //       });
+  //     }
+
+  //     // dados da queixa
+  //     const { _assunto_queixa } = req.body;
+  //     const { _descricao_queixa } = req.body;
+  //     const { _modo } = req.body;
+
+  //     const data_queixa = new Date();
+  //     const data_alteracao_queixa = new Date();
+  //     // const _fileContrato = req.files["fileContrato"][0].path.split("/")[1];
+  //     // const _file3 = req?.files["file3"]
+  //     //   ? req?.files["file3"][0].path.split("/")[1]
+  //     //   : null;
+  //     // const _file4 = req?.files["file4"]
+  //     //   ? req?.files["file4"][0].path.split("/")[1]
+  //     //   : null;
+  //     // const _file5 = req.files["file5"]
+  //     //   ? req?.files["file5"][0].path.split("/")[1]
+  //     //   : null;
+  //     // const _file6 = req.files["file6"]
+  //     //   ? req?.files["file6"][0].path.split("/")[1]
+  //     //   : null;
+
+  //     // const files = req.files;
+
+  //     // const audio = files.audio ? files.audio[0] : null;
+  //     // const video = files.video ? files.video[0] : null;
+  //     // const documents = files.documents || [];
+
+  //     if (queixante === "Trabalhador") {
+  //       queixanteID = _trabalhadorID;
+  //       queixosoID = novaEmpresa.id;
+  //     } else if (queixante === "Empregador") {
+  //       queixanteID = novaEmpresa.id;
+  //       queixosoID = novoTrabalhador.id;
+  //     }
+  //     const novaQueixa = await Queixa.create({
+  //       assunto: _assunto_queixa,
+  //       facto: _descricao_queixa,
+  //       created_at: data_queixa,
+  //       updated_at: data_alteracao_queixa,
+  //       queixosoID: queixosoID,
+  //       queixanteID: queixanteID,
+  //       empresaID: empresaEncontrada.id,
+  //       trabalhadorID: novoTrabalhador.id,
+  //       url_file_contrato: _fileContrato,
+  //       provincia: enderecoEncontrado.provincia,
+  //       modo: _modo,
+  //       inspectorID: 14,
+  //       testemunhaID: 4,
+  //       // file3: _file3,
+  //       // file4: _file4,
+  //       // file5: _file5,
+  //       // file6: _file6,
+  //     });
+  //     // Gravar todos os arquivos com Sequelize
+  //     // const attachments = [];
+
+  //     // if (files.audio) {
+  //     //   attachments.push({
+  //     //     filename: files.audio[0].originalname,
+  //     //     path: files.audio[0].path,
+  //     //     extensao: "mp3",
+  //     //     tipo: "audio",
+  //     //   });
+  //     // }
+
+  //     // if (files.video) {
+  //     //   attachments.push({
+  //     //     filename: files.video[0].originalname,
+  //     //     path: files.video[0].path,
+  //     //     extensao: "mp4",
+  //     //     tipo: "video",
+  //     //   });
+  //     // }
+
+  //     // if (files.documents) {
+  //     //   files.documents.forEach((doc) => {
+  //     //     attachments.push({
+  //     //       filename: doc.originalname,
+  //     //       path: doc.path,
+  //     //       extensao: doc.originalname.split(".").pop(),
+  //     //       tipo: "documento",
+  //     //     });
+  //     //   });
+  //     // }
+
+  //     await Anexo.bulkCreate(
+  //       attachments.map((data) => ({
+  //         ...data,
+  //         fk_queixa: novaQueixa.id,
+  //       }))
+  //     );
+  //     return res.status(200).send({
+  //       status: 1,
+  //       message:
+  //         "Olá, notamos que a sua queixa foi encaminhada para a IGT. Por favor, aguarde o contato dos nossos inspetores ou clique em OK para acessar o nosso portal.",
+  //       Queixa,
+  //       novaConta,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   async add_empregador_queixa(req, res) {
     let queixosoID,
       queixanteID = 0;
