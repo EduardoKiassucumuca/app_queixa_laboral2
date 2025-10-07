@@ -26,6 +26,7 @@ import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
 import Search from "antd/es/transfer/search";
 import { Pagination } from "react-bootstrap";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const MaisDetalhes = () => {
   const umaSemanaAtras = new Date();
@@ -81,6 +82,7 @@ const MaisDetalhes = () => {
   const currentItems = reunioes.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const currentReunioes = reunioes.slice(indexOfFirstItem, indexOfLastItem);
+  const position = [-23.5505, -46.6333]; // São Paulo, Brasil
 
   // Função para mudar de página
   const paginateModal = (pageNumber) => setCurrentPage(pageNumber);
