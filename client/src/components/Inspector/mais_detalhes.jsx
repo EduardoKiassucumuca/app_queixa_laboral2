@@ -26,7 +26,10 @@ import FileDownload from "js-file-download";
 import { right } from "@popperjs/core";
 import Search from "antd/es/transfer/search";
 import { Pagination } from "react-bootstrap";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import SimpleMap from "./SimpleMap";
+import VideoQueixa from "./VideoQueixa";
+import AudioQueixa from "./AudioQueixa";
+
 
 const MaisDetalhes = () => {
   const umaSemanaAtras = new Date();
@@ -75,6 +78,7 @@ const MaisDetalhes = () => {
   const [dataFim, setDataFim] = useState(formatarData(new Date()));
   const [pesquisa, setPesquisa] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [mapPosition, setMapPosition] = useState([-8.7989, 13.2343]);
 
   const itemsPerPage = 8; // Número de itens por página
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -82,7 +86,7 @@ const MaisDetalhes = () => {
   const currentItems = reunioes.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const currentReunioes = reunioes.slice(indexOfFirstItem, indexOfLastItem);
-  const position = [-23.5505, -46.6333]; // São Paulo, Brasil
+ 
 
   // Função para mudar de página
   const paginateModal = (pageNumber) => setCurrentPage(pageNumber);
@@ -185,7 +189,7 @@ const MaisDetalhes = () => {
         console.error("Erro:", error);
       });
   };
-  const getQueixa = async () => {
+const getQueixa = async () => {
     await Axios.get("http://localhost:3001/mais_detalhes", {
       params: {
         id_queixa: id_queixa,
@@ -194,8 +198,16 @@ const MaisDetalhes = () => {
       .then(({ data }) => {
         setConflito(data.queixas[0]);
         setServerPath(data.serverPath);
-        console.log(conflito);
-        //console.log(lista_queixa.minha_queixa)
+        
+        // Atualiza as coordenadas com os dados da API
+        if (data.queixas[0]?.Empresa?.Endereco?.latitude && data.queixas[0]?.Empresa?.Endereco?.longitude) {
+          const newPosition = [
+            parseFloat(data.queixas[0].Empresa.Endereco.latitude),
+            parseFloat(data.queixas[0].Empresa.Endereco.longitude)
+          ];
+          setMapPosition(newPosition);
+          console.log('Novas coordenadas:', newPosition);
+        }
       })
       .catch(({ res }) => {
         console.log(res);
@@ -343,6 +355,7 @@ const MaisDetalhes = () => {
     getReunioes();
     console.log(dataInicio, dataFim);
   }, [id_queixa, dataInicio, dataFim]);
+
   let data = "";
   let nome = "";
   let sobrenome = "";
@@ -1003,7 +1016,19 @@ const MaisDetalhes = () => {
             </Button>
           )}
         </div>
-
+          <Col md={6} style={{ marginLeft: "5%" }}>
+          <Alert variant="secondary" style={{ width: "50%"}}>
+            Localização da queixa/empresa
+          </Alert>
+          <SimpleMap position={mapPosition}/>
+          </Col>
+          <Col md={5}>
+           <Alert variant="secondary" style={{ width: "50%"}}>
+            Video/Audio da queixa
+          </Alert>
+            <VideoQueixa/>
+            <AudioQueixa/>
+          </Col>
         <Col md={12} style={{ marginTop: 35 }}>
           <Card
             bg="dark"
@@ -1053,6 +1078,7 @@ const MaisDetalhes = () => {
             </Card.Body>
           </Card>
         </Col>
+
         {/* <Col md={5} style={{ marginLeft: "23px" }}>
           {notas.map((my_note) => (
             <>
