@@ -2638,7 +2638,10 @@ const QueixasAdmin = ({ onSearch }) => {
         </Col>
 
         <Col md={12} style={{ marginTop: 0 }}>
-          <table class="table table-striped table-responsive" ref={targetRef}>
+          <table
+            class="table table-striped table-responsive table-light"
+            ref={targetRef}
+          >
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -2650,6 +2653,7 @@ const QueixasAdmin = ({ onSearch }) => {
                 <th scope="col">Queixa</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Provincia</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>

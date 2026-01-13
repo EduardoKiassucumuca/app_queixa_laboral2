@@ -339,9 +339,11 @@ const ContainerChefeServicos = ({ onSearch }) => {
         setQueixas(queixas_selecionadas);
 
         setConflitos(queixas_selecionadas.reverse());
-        const dadosFormatados = queixas_selecionadas.map(formatarQueixaParaExcel);
+        const dadosFormatados = queixas_selecionadas.map(
+          formatarQueixaParaExcel
+        );
         setMyDataExcel(dadosFormatados);
-        
+
         //console.log(lista_queixa.minha_queixa)
         setMyData([
           {
@@ -465,7 +467,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
       const dadosQueixa = JSON.stringify(queixa_pesquisada).toLowerCase();
       return dadosQueixa.includes(pesquisa.toLowerCase());
     });
-    
+
     setConflitos(resultados);
     const dadosFormatados = resultados.map(formatarQueixaParaExcel);
     setMyDataExcel(dadosFormatados);
@@ -485,13 +487,13 @@ const ContainerChefeServicos = ({ onSearch }) => {
     const fim = formatarData(data_fim);
 
     console.log("Data Início:", inicio, "Data Fim:", fim, conflitos);
-    const resultados = 
-    queixas_selecprovincia.filter((queixa) => {
+    const resultados = queixas_selecprovincia
+      .filter((queixa) => {
         const dataQueixa = formatarData(queixa.created_at);
         console.log("Data Queixa:", dataQueixa);
         return dataQueixa >= inicio && dataQueixa <= fim;
       })
-    .reverse();
+      .reverse();
     setConflitos(resultados);
     const dadosFormatados = resultados.map(formatarQueixaParaExcel);
     setMyDataExcel(dadosFormatados);
@@ -504,40 +506,40 @@ const ContainerChefeServicos = ({ onSearch }) => {
       return;
     } else {
       setEstadoSelecionado(estado_selecionado);
-      const resultados = 
-      queixas_selecprovincia.filter((queixa_pesquisada) =>
-        queixa_pesquisada.estado
-          .toLowerCase()
-          .includes(estado_selecionado.toLowerCase())
-      )
-    .reverse();
-    setConflitos(resultados);
-    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
-    setMyDataExcel(dadosFormatados);
+      const resultados = queixas_selecprovincia
+        .filter((queixa_pesquisada) =>
+          queixa_pesquisada.estado
+            .toLowerCase()
+            .includes(estado_selecionado.toLowerCase())
+        )
+        .reverse();
+      setConflitos(resultados);
+      const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+      setMyDataExcel(dadosFormatados);
     }
   }
   function persquisarPorMulta() {
-    const resultados = 
-    queixas_selecprovincia.filter(
-      (queixa_pesquisada) =>
-        parseInt(queixa_pesquisada.multa) !== 0 &&
-        queixa_pesquisada.multa != null &&
-        queixa_pesquisada.multa !== " "
-    )
-  .reverse();
-  setConflitos(resultados);
-  const dadosFormatados = resultados.map(formatarQueixaParaExcel);
-  setMyDataExcel(dadosFormatados);
+    const resultados = queixas_selecprovincia
+      .filter(
+        (queixa_pesquisada) =>
+          parseInt(queixa_pesquisada.multa) !== 0 &&
+          queixa_pesquisada.multa != null &&
+          queixa_pesquisada.multa !== " "
+      )
+      .reverse();
+    setConflitos(resultados);
+    const dadosFormatados = resultados.map(formatarQueixaParaExcel);
+    setMyDataExcel(dadosFormatados);
   }
   function persquisarSemMulta(isMulta = 0) {
-    const resultados = 
-    queixas_selecprovincia.filter(
-      (queixa_pesquisada) =>
-        parseFloat(queixa_pesquisada.multa) === 0 ||
-        queixa_pesquisada.multa === "" ||
-        queixa_pesquisada.multa === "null"
-    )
-    .reverse();
+    const resultados = queixas_selecprovincia
+      .filter(
+        (queixa_pesquisada) =>
+          parseFloat(queixa_pesquisada.multa) === 0 ||
+          queixa_pesquisada.multa === "" ||
+          queixa_pesquisada.multa === "null"
+      )
+      .reverse();
     setConflitos(resultados);
     const dadosFormatados = resultados.map(formatarQueixaParaExcel);
     setMyDataExcel(dadosFormatados);
@@ -2350,7 +2352,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
           </Col>
         </Row>
         <Col md={12} style={{ marginTop: 25 }}>
-          <table class="table table-striped table-responsive">
+          <table class="table table-striped table-responsive table-light">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -2362,6 +2364,7 @@ const ContainerChefeServicos = ({ onSearch }) => {
                 <th scope="col">Assunto</th>
                 <th scope="col">Facto</th>
                 <th scope="col">Estado</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>

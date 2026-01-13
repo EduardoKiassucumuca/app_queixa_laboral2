@@ -156,8 +156,12 @@ function Duvidas() {
                   <div class="col-md-10">
                     <p>
                       <a
-                        class="float-left"
-                        href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
+                        className="float-left"
+                        href="/detalhesDuvidas" // Note: isso pode causar uma navegação full page, então talvez queira remover o href
+                        onClick={(e) => {
+                          e.preventDefault(); // Previne a navegação pelo href
+                          navigate(`/detalhesDuvidas/${duvida.id}`);
+                        }}
                       >
                         <strong style={{ fontSize: 22 }}>
                           {duvida.username}

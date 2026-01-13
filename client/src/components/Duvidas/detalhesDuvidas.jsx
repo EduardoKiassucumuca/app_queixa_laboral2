@@ -122,10 +122,7 @@ function DetalhesDuvidas() {
               </div>
               <div class="col-md-10">
                 <p>
-                  <a
-                    class="float-left"
-                    href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
-                  >
+                  <a class="float-left" href="#">
                     <strong>{MyDuvida.username}</strong>
                   </a>
                 </p>

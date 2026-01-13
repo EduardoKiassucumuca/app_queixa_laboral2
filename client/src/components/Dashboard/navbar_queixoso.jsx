@@ -404,27 +404,87 @@ const MyMenu = () => {
           </div>
         </div>
       </div>
-      <div id="myModal" className="modal" style={{ display: displayStyle3 }}>
-        <div className="modal-content" style={{ minWidth: "700px" }}>
-          <div className="modal-header">
-            <h5 className="modal-title">
-              <FaEdit /> Editar perfil
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle3,
+          paddingTop: "30px",
+          alignItems: "flex-start",
+        }}
+      >
+        <div
+          class="modal-content"
+          style={{
+            minWidth: "600px",
+            maxWidth: "700px",
+            marginTop: "0",
+            position: "relative",
+            maxHeight: "85vh",
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          }}
+        >
+          {/* Header com botão de fechar */}
+          <div
+            className="modal-header"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "15px 20px",
+              borderBottom: "1px solid #dee2e6",
+              backgroundColor: "#f8f9fa",
+              borderTopLeftRadius: "8px",
+              borderTopRightRadius: "8px",
+              flexShrink: 0,
+            }}
+          >
+            <h5 className="modal-title mb-0">
+              <FaEdit style={{ marginRight: "8px" }} />
+              Editar perfil
             </h5>
+            <button
+              type="button"
+              className="close"
+              onClick={toggleDisplay3}
+              style={{
+                background: "none",
+                border: "none",
+                fontSize: "24px",
+                cursor: "pointer",
+                padding: "0",
+                lineHeight: "1",
+                color: "#6c757d",
+              }}
+            >
+              &times;
+            </button>
           </div>
-          <br />
-          {errorMSG ? (
-            <Alert variant="danger" style={{ marginTop: 0 }}>
-              <Alert.Heading>Aviso</Alert.Heading>
-              {errorMSG}
-            </Alert>
-          ) : (
-            <></>
-          )}
-          {data.trabalhador ? (
-            <>
+
+          {/* Corpo do modal com scroll */}
+          <div
+            style={{
+              padding: "20px",
+              overflowY: "auto",
+              flexGrow: 1,
+              maxHeight: "calc(85vh - 130px)",
+            }}
+          >
+            {errorMSG ? (
+              <Alert variant="danger" style={{ marginBottom: "20px" }}>
+                <Alert.Heading>Aviso</Alert.Heading>
+                {errorMSG}
+              </Alert>
+            ) : null}
+
+            {data.trabalhador ? (
               <Form onSubmit={(e) => alterarPerfil(e)}>
-                <div className="modal-body">
-                  <Form.Group>
+                <div className="modal-body" style={{ padding: 0 }}>
+                  <Form.Group style={{ marginBottom: "15px" }}>
                     <Form.Label>Nome</Form.Label>
                     <Form.Control
                       type="name"
@@ -436,7 +496,8 @@ const MyMenu = () => {
                       onChange={(e) => setNomeU(e.target.value)}
                     />
                   </Form.Group>
-                  <Form.Group>
+
+                  <Form.Group style={{ marginBottom: "15px" }}>
                     <Form.Label>Sobrenome</Form.Label>
                     <Form.Control
                       type="text"
@@ -448,6 +509,7 @@ const MyMenu = () => {
                       onChange={(e) => setSobrenomeU(e.target.value)}
                     />
                   </Form.Group>
+
                   <Row className="mb-3">
                     <Col md={4}>
                       <Form.Group>
@@ -494,6 +556,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Row className="mb-3" id="ultima-row">
                     <Col md={6}>
                       <Form.Group>
@@ -529,8 +592,8 @@ const MyMenu = () => {
                         />
                       </Form.Group>
                     </Col>
+
                     <Col md={4}>
-                      {" "}
                       <Form.Group>
                         <Form.Label>BI</Form.Label>
                         <Form.Control
@@ -561,7 +624,6 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                     <Col md={4}>
-                      {" "}
                       <Form.Group>
                         <Form.Label>Valido até</Form.Label>
                         <Form.Control
@@ -574,6 +636,7 @@ const MyMenu = () => {
                         />
                       </Form.Group>
                     </Col>
+
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label>Estado Civil</Form.Label>
@@ -607,6 +670,7 @@ const MyMenu = () => {
                         />
                       </Form.Group>
                     </Col>
+
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label>Data de Nascimento</Form.Label>
@@ -653,6 +717,7 @@ const MyMenu = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
+
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label>Altura</Form.Label>
@@ -684,6 +749,7 @@ const MyMenu = () => {
                         />
                       </Form.Group>
                     </Col>
+
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label>Cargo</Form.Label>
@@ -713,6 +779,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Row className="mb-3">
                     <Col md={2}>
                       {genero == "Masculino" ? (
@@ -727,7 +794,6 @@ const MyMenu = () => {
                             required
                             onChange={(e) => setGenero(e.target.value)}
                           />
-
                           <label
                             class="form-check-label"
                             for="flexRadioDefault1"
@@ -745,7 +811,6 @@ const MyMenu = () => {
                             id="sexo-masculino"
                             onChange={(e) => setGenero(e.target.value)}
                           />
-
                           <label
                             class="form-check-label"
                             for="flexRadioDefault1"
@@ -796,49 +861,86 @@ const MyMenu = () => {
                       )}
                     </Col>
                   </Row>
-                  <Card>
-                    <Card.Body>
-                      <a
-                        href="#"
-                        style={{ color: "rgb(220, 195, 119)", fontSize: 13 }}
+
+                  {/* Seção do Anexo em LINHA */}
+                  <Card style={{ marginTop: "15px", marginBottom: "15px" }}>
+                    <Card.Body
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "12px 15px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          flexGrow: 1,
+                          minWidth: 0,
+                        }}
                       >
-                        <FaFileAlt style={{ marginLeft: 5, fontSize: 16 }} />
-                        {data?.bi?.file}
-                      </a>{" "}
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip2}
-                      >
-                        <Button
-                          variant="dark"
+                        <FaFileAlt
                           style={{
-                            float: "right",
-                            marginLeft: 3,
-                            color: "#ffc107",
+                            marginRight: "8px",
+                            fontSize: "16px",
+                            flexShrink: 0,
                           }}
-                          onClick={() => handleNavigate(data?.bi?.file)}
+                        />
+                        <span
+                          style={{
+                            color: "rgb(220, 195, 119)",
+                            fontSize: "13px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
                         >
-                          <FaEye />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 40 }}
-                        overlay={renderTooltip1}
+                          {data?.bi?.file || "Nenhum arquivo anexado"}
+                        </span>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          flexShrink: 0,
+                          marginLeft: "10px",
+                        }}
                       >
-                        <Button
-                          variant="warning"
-                          style={{ float: "right" }}
-                          onClick={showUploadInput}
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={renderTooltip2}
                         >
-                          <FaRegEdit />
-                        </Button>
-                      </OverlayTrigger>
+                          <Button
+                            variant="dark"
+                            size="sm"
+                            style={{ color: "#ffc107" }}
+                            onClick={() => handleNavigate(data?.bi?.file)}
+                          >
+                            <FaEye />
+                          </Button>
+                        </OverlayTrigger>
+
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={renderTooltip1}
+                        >
+                          <Button
+                            variant="warning"
+                            size="sm"
+                            onClick={showUploadInput}
+                          >
+                            <FaRegEdit />
+                          </Button>
+                        </OverlayTrigger>
+                      </div>
                     </Card.Body>
-                  </Card>{" "}
+                  </Card>
+
                   {showUploadBI ? (
-                    <>
+                    <div style={{ marginBottom: "15px" }}>
                       <Form.Label>Mudar o Bilhete de Identidade</Form.Label>
                       <Form.Control
                         type="file"
@@ -846,12 +948,20 @@ const MyMenu = () => {
                         id="file_BI"
                         required
                       />
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                    </div>
+                  ) : null}
                 </div>
-                <div class="modal-footer">
+
+                {/* Footer */}
+                <div
+                  className="modal-footer"
+                  style={{
+                    padding: "15px 0 0 0",
+                    borderTop: "1px solid #dee2e6",
+                    marginTop: "15px",
+                    flexShrink: 0,
+                  }}
+                >
                   <Button
                     variant="default"
                     type="button"
@@ -865,16 +975,12 @@ const MyMenu = () => {
                   </Button>
                 </div>
               </Form>
-            </>
-          ) : (
-            <>
-              {" "}
+            ) : (
               <Form onSubmit={(e) => alterarPerfilEmpresa(e)}>
-                <div className="modal-body">
+                <div className="modal-body" style={{ padding: 0 }}>
                   <Row className="mb-3">
                     <Col md={6}>
-                      {" "}
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Nome</Form.Label>
                         <Form.Control
                           type="name"
@@ -888,8 +994,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      {" "}
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>NIF</Form.Label>
                         <Form.Control
                           type="text"
@@ -903,6 +1008,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Row className="mb-3">
                     <Col md={12}>
                       <FloatingLabel
@@ -920,62 +1026,64 @@ const MyMenu = () => {
                         />
                       </FloatingLabel>
                     </Col>
-                    <Row className="mb-3">
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label>Bairro</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="bairroEmp"
-                            id="bairroEmp"
-                            pattern=".{3,}$"
-                            required
-                            placeholder="Diga-nos o bairro da empresa"
-                            value={bairroEmpresa}
-                            onChange={(e) => setBairroEmpresa(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group>
-                          <Form.Label>Localização da Empresa</Form.Label>
-                          <Form.Select
-                            defaultValue="Choose..."
-                            name="localizacaoEmp"
-                            id="provincia_emp"
-                            required
-                            value={localizacaoEmpresa}
-                            onChange={(e) =>
-                              setLocalizacaoEmpresa(e.target.value)
-                            }
-                          >
-                            <option>Choose...</option>
-                            <option>Bengo</option>
-                            <option>Benguela</option>
-                            <option>Bié</option>
-                            <option>Cabinda</option>
-                            <option>Cuando-Cubango</option>
-                            <option>Cuanza-Norte</option>
-                            <option>Cuanza-Sul</option>
-                            <option>Cunene</option>
-                            <option>Huambo</option>
-                            <option>Huíla</option>
-                            <option>Luanda</option>
-                            <option>Lunda-Norte</option>
-                            <option>Lunda-Sul</option>
-                            <option>Malanje</option>
-                            <option>Moxíco</option>
-                            <option>Namibe</option>
-                            <option>Uíge</option>
-                            <option>Zaire</option>
-                          </Form.Select>
-                        </Form.Group>
-                      </Col>
-                    </Row>
                   </Row>
+
                   <Row className="mb-3">
                     <Col md={6}>
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
+                        <Form.Label>Bairro</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="bairroEmp"
+                          id="bairroEmp"
+                          pattern=".{3,}$"
+                          required
+                          placeholder="Diga-nos o bairro da empresa"
+                          value={bairroEmpresa}
+                          onChange={(e) => setBairroEmpresa(e.target.value)}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group style={{ marginBottom: "15px" }}>
+                        <Form.Label>Localização da Empresa</Form.Label>
+                        <Form.Select
+                          defaultValue="Choose..."
+                          name="localizacaoEmp"
+                          id="provincia_emp"
+                          required
+                          value={localizacaoEmpresa}
+                          onChange={(e) =>
+                            setLocalizacaoEmpresa(e.target.value)
+                          }
+                        >
+                          <option>Choose...</option>
+                          <option>Bengo</option>
+                          <option>Benguela</option>
+                          <option>Bié</option>
+                          <option>Cabinda</option>
+                          <option>Cuando-Cubango</option>
+                          <option>Cuanza-Norte</option>
+                          <option>Cuanza-Sul</option>
+                          <option>Cunene</option>
+                          <option>Huambo</option>
+                          <option>Huíla</option>
+                          <option>Luanda</option>
+                          <option>Lunda-Norte</option>
+                          <option>Lunda-Sul</option>
+                          <option>Malanje</option>
+                          <option>Moxíco</option>
+                          <option>Namibe</option>
+                          <option>Uíge</option>
+                          <option>Zaire</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <Col md={6}>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Rua</Form.Label>
                         <Form.Control
                           type="text"
@@ -990,7 +1098,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Website</Form.Label>
                         <Form.Control
                           type="text"
@@ -1003,9 +1111,10 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Row className="mb-3">
                     <Col md={4}>
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Telefone</Form.Label>
                         <Form.Control
                           type="text"
@@ -1019,7 +1128,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                     <Col md={4}>
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                           type="email"
@@ -1033,7 +1142,7 @@ const MyMenu = () => {
                       </Form.Group>
                     </Col>
                     <Col md={4}>
-                      <Form.Group>
+                      <Form.Group style={{ marginBottom: "15px" }}>
                         <Form.Label>Edificio</Form.Label>
                         <Form.Control
                           type="text"
@@ -1047,7 +1156,17 @@ const MyMenu = () => {
                     </Col>
                   </Row>
                 </div>
-                <div class="modal-footer">
+
+                {/* Footer para empresa */}
+                <div
+                  className="modal-footer"
+                  style={{
+                    padding: "15px 0 0 0",
+                    borderTop: "1px solid #dee2e6",
+                    marginTop: "15px",
+                    flexShrink: 0,
+                  }}
+                >
                   <Button
                     variant="default"
                     type="button"
@@ -1061,8 +1180,8 @@ const MyMenu = () => {
                   </Button>
                 </div>
               </Form>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
       <Navbar className="bg-body-tertiary" bg="dark" expand="lg">

@@ -93,7 +93,7 @@ function ContainerAdmin(props) {
       >
         Novo Funcionario
       </Button>
-      <table class="table table-striped table-responsive table-white">
+      <table class="table table-striped table-responsive table-light">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -101,7 +101,8 @@ function ContainerAdmin(props) {
             <th scope="col">Localização do Office</th>
             <th scope="col">Cargo</th>
             <th scope="col">Departamento</th>
-            <th scope="col">Ações</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>

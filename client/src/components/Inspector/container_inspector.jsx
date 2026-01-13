@@ -540,7 +540,7 @@ const ContainerInspector = ({ onSearch }) => {
 
       {currentItems.length > 0 ? (
         currentItems
-          .slice() // Garante que a inversão não afeta o array original
+          .slice()
           .reverse()
           .map((conflito) => (
             <Card
@@ -585,15 +585,15 @@ const ContainerInspector = ({ onSearch }) => {
                 </Link>
               </Card.Body>
 
-              <Card.Footer>
-                <small className="text-muted" style={{ marginRight: 30 }}>
+              <Card.Footer className="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                {/* Data */}
+                <small className="text-muted d-flex align-items-center">
+                  <i className="bi bi-calendar me-1"></i>
                   {new Date(conflito?.created_at).toLocaleDateString()}
                 </small>
 
-                <small
-                  className="text-muted d-flex align-items-center text-muted-queixoso"
-                  style={{ marginRight: 30 }}
-                >
+                {/* Queixoso */}
+                <small className="text-muted d-flex align-items-center">
                   <FaUser className="me-2" />
                   <span className="me-1">Queixoso:</span>
                   {conflito.Empresa.tipo === "queixoso"
@@ -601,10 +601,8 @@ const ContainerInspector = ({ onSearch }) => {
                     : `${conflito.Trabalhador.Pessoa.nome} ${conflito.Trabalhador.Pessoa.sobrenome}`}
                 </small>
 
-                <small
-                  className="text-muted d-flex align-items-center text-muted-queixante"
-                  style={{ marginRight: 30 }}
-                >
+                {/* Queixante */}
+                <small className="text-muted d-flex align-items-center">
                   <FaUser className="me-2" />
                   <span className="me-1">Queixante:</span>
                   {conflito.Trabalhador.tipo === "queixante"
@@ -612,29 +610,32 @@ const ContainerInspector = ({ onSearch }) => {
                     : conflito.Empresa.nome_empresa}
                 </small>
 
-                <small
-                  className="text-muted text-muted-provincia"
-                  style={{ marginRight: 30 }}
-                >
+                {/* Província */}
+                <small className="text-muted d-flex align-items-center">
+                  <i className="bi bi-geo-alt me-1"></i>
                   {conflito.provincia}
                 </small>
 
-                <small className="text-muted d-flex align-items-center">
+                {/* Estado */}
+                <small className="text-muted d-flex align-items-center ms-md-auto">
                   <FaCircle
                     className="estado me-1"
                     color={
                       conflito.estado === "Encerrado" ||
                       conflito.estado === "Tribunal" ||
                       conflito.estado === "Desistente"
-                        ? "red"
+                        ? "#dc3545"
                         : conflito.estado === "encaminhada_inspector"
-                        ? "yellow"
-                        : "green"
+                        ? "#ffc107"
+                        : "#198754"
                     }
+                    size={10}
                   />
-                  {conflito.estado === "encaminhada_inspector"
-                    ? "Encaminhada ao Inspector"
-                    : conflito.estado}
+                  <span className="badge bg-secondary">
+                    {conflito.estado === "encaminhada_inspector"
+                      ? "Encaminhada ao Inspector"
+                      : conflito.estado}
+                  </span>
                 </small>
               </Card.Footer>
             </Card>

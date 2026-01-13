@@ -466,7 +466,7 @@ function NoticiasPanel() {
         Nova noticia
       </Button>
       <table
-        class="table table-striped table-responsive table-white"
+        class="table table-striped table-responsive table-light"
         style={{ width: "96%", marginLeft: "4%" }}
       >
         <thead>

@@ -8,24 +8,22 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Editor, EditorState, RichUtils } from "draft-js";
 import "draft-js/dist/Draft.css";
+import { Form, Modal } from "react-bootstrap";
 
 function FormDuvidas() {
   const [show, setShow] = useState(true);
-
   const [username, setUserName] = useState("");
-
   const [assunto, setAssunto] = useState("");
   const [descricao, setDescricao] = useState("");
   const [duvidas, setDuvidas] = useState([]);
-  const [displayStyle, setDisplayStyle] = useState("none");
-  const toggleDisplay = () => {
-    setDisplayStyle((prevDisplayStyle) =>
-      prevDisplayStyle === "none" ? "block" : "none"
-    );
-  };
+
+  // MUDEI: Agora usando boolean para controlar o modal
+  const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
+
   function detalhesDuvidas() {
-    navigate("/detalhesDuvidas");
+    window.location.href = "/detalhesDuvidas";
   }
 
   function novaQuestao(e) {
@@ -38,12 +36,14 @@ function FormDuvidas() {
       })
       .then((resposta) => {
         console.log(resposta);
-        toggleDisplay();
+        // MUDEI: Abre o modal
+        setShowModal(true);
       })
       .catch((resposta) => {
         console.log("error", resposta);
       });
   }
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const handleKeyCommand = (command, editorState) => {
@@ -58,6 +58,7 @@ function FormDuvidas() {
   const onBoldClick = () => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
   };
+
   useEffect(() => {
     sessionStorage.removeItem("data_inspector");
     axios
@@ -70,69 +71,77 @@ function FormDuvidas() {
         console.log("res");
       });
   }, []);
+
   function go_duvidas() {
-    window.location.href = "/duvidas";
+    // MUDEI: Usando navigate em vez de window.location
+    window.location.reload();
   }
+
   return (
     <>
-      <section className="" style={{ backgroundColor: "" }}>
-        <div class="col-sm-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title"></h5>
-              <p class="card-text">
-                <form onSubmit={novaQuestao}>
-                  <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                    <input
-                      type="text"
-                      placeholder="Nome"
-                      className="form-control"
-                      onChange={(e) => setUserName(e.target.value)}
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="Assunto"
-                      className="form-control"
-                      onChange={(e) => setAssunto(e.target.value)}
-                      required
-                    />
-                    <textarea
-                      id="newsletter1"
-                      type="text"
-                      rows="4"
-                      class="form-control"
-                      placeholder="Escreva aqui a sua questão ..."
-                      onChange={(e) => setDescricao(e.target.value)}
-                      required
-                    />
+      <section>
+        <div className="col-sm-12">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title"></h5>
+              <Form onSubmit={novaQuestao}>
+                <Form.Group className="mb-3">
+                  <Form.Control
+                    type="text"
+                    placeholder="Nome"
+                    onChange={(e) => setUserName(e.target.value)}
+                    required
+                  />
+                </Form.Group>
 
-                    <p></p>
-                  </div>
-                  <button
-                    class="btn btn-warning fw-bold btn-comentar"
-                    type="submit"
-                  >
-                    Submeter
-                  </button>
-                </form>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div id="myModal4" class="modal" style={{ display: displayStyle }}>
-          <div class="modal-content">
-            <p style={{ color: "#ffc107", fontSize: 20 }}>Confirmação</p>
-            <br />
-            <p>Duvida submetida com sucesso!</p>
-            <div class="modal-footer">
-              <Button variant="warning" onClick={(e) => go_duvidas()}>
-                OK
-              </Button>
+                <Form.Group className="mb-3">
+                  <Form.Control
+                    type="text"
+                    placeholder="Assunto"
+                    onChange={(e) => setAssunto(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Control
+                    as="textarea"
+                    rows={4}
+                    placeholder="Escreva aqui a sua questão ..."
+                    onChange={(e) => setDescricao(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button
+                  variant="warning"
+                  className="fw-bold btn-comentar"
+                  type="submit"
+                >
+                  Submeter
+                </Button>
+              </Form>
             </div>
           </div>
         </div>
       </section>
+
+      {/* MUDEI: Modal agora usando boolean */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ color: "#ffc107", fontSize: 20 }}>
+            Confirmação
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Dúvida submetida com sucesso!</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="warning" onClick={go_duvidas}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

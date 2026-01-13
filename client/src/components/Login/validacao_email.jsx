@@ -66,8 +66,8 @@ function ValidacaoEmail() {
     const savedResposta = sessionStorage.getItem("data_login");
     const data_login = JSON.parse(savedResposta);
     console.log(data_login);
-    email = data_login.conta.email;
-    code = data_login.code;
+    email = data_login?.conta?.email;
+    code = data_login?.code;
 
     //console.log(code);
   } else {

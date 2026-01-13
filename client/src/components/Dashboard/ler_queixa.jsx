@@ -377,53 +377,39 @@ const LerQueixa = () => {
               <p></p>
               <Card.Text className="text-queixa">{conflito.facto}</Card.Text>
             </Card.Body>
-            <Card.Footer>
-              <small
-                className="text-muted"
-                style={{ marginRight: 30, display: "inline-block" }}
-              >
-                {conflito.created_at}
+            <Card.Footer className="d-flex flex-wrap justify-content-between align-items-center gap-2">
+              {/* Data */}
+              <small className="text-muted d-flex align-items-center">
+                <i className="bi bi-calendar me-1"></i>
+                {new Date(conflito.created_at).toLocaleDateString("pt-PT")}
               </small>
 
-              {/*<small
-                className="text-muted d-flex align-items-center"
-                style={{ marginRight: 30, display: "inline-block" }}
-              >
-                <FaUser className="me-2" />
-                <span className="me-1">Queixante:</span>
-                {conflito.Empresa.tipo === "queixante"
-                  ? conflito.Empresa.nome_empresa
-                  : conflito.Trabalhador.tipo === "queixante"
-                  ? `${conflito.Trabalhador.Pessoa.nome} ${conflito.Trabalhador.Pessoa.sobrenome}`
-                  : ""}
-</small>*/}
-
-              <small
-                className="text-muted"
-                style={{ marginRight: 30, display: "inline-block" }}
-              >
+              {/* Província */}
+              <small className="text-muted d-flex align-items-center">
+                <i className="bi bi-geo-alt me-1"></i>
                 {conflito.provincia}
               </small>
 
-              <small
-                className="text-muted d-flex align-items-center"
-                style={{ textAlign: "right", display: "inline-block" }}
-              >
+              {/* Estado */}
+              <small className="text-muted d-flex align-items-center ms-md-auto">
                 <FaCircle
                   className="estado me-1"
                   color={
                     conflito.estado === "Encerrado" ||
                     conflito.estado === "Tribunal" ||
                     conflito.estado === "Desistente"
-                      ? "red"
+                      ? "#dc3545" // Vermelho
                       : conflito.estado === "encaminhada_inspector"
-                      ? "yellow"
-                      : ""
+                      ? "#ffc107" // Amarelo
+                      : "#198754" // Verde para outros estados
                   }
+                  size={10}
                 />
-                {conflito.estado === "encaminhada_inspector"
-                  ? "Encaminhada ao Inspector"
-                  : conflito.estado}
+                <span className="badge bg-secondary">
+                  {conflito.estado === "encaminhada_inspector"
+                    ? "Encaminhada ao Inspector"
+                    : conflito.estado}
+                </span>
               </small>
             </Card.Footer>
           </Card>
@@ -626,8 +612,23 @@ const LerQueixa = () => {
           </form>
         </div>
       </div>
-      <div id="myModal" class="modal" style={{ display: displayStyle }}>
-        <div class="modal-content" style={{ minWidth: "600px" }}>
+      <div
+        id="myModal"
+        class="modal"
+        style={{
+          display: displayStyle,
+          paddingTop: "20px", // Reduz o padding do topo
+          alignItems: "flex-start", // Alinha no topo em vez de centro
+        }}
+      >
+        <div
+          class="modal-content"
+          style={{
+            minWidth: "600px",
+            marginTop: "0", // Remove margem superior
+            position: "relative",
+          }}
+        >
           <span
             class="close"
             style={{ textAlign: "right" }}

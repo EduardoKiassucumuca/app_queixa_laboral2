@@ -184,7 +184,7 @@ module.exports = {
           service: "gmail",
           auth: {
             user: "marciocristiano105@gmail.com",
-            pass: "opmnzjabkdexosfe",
+            pass: "pomd nyym vfmv pgij",
           },
           tls: {
             rejectUnauthorized: false,
@@ -201,8 +201,9 @@ module.exports = {
         //res.status(200).send({ auth: true, token });
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
+            console.log(error);
             res.json({
-              msg: "Falha, Verifique sua conexao com a internet",
+              msg: "Falha, Verifique sua conexao com a interne" + error,
             });
           } else {
             res.status(200).json({
@@ -388,8 +389,10 @@ module.exports = {
         }
       });
     } catch (error) {
+      console.log(error);
       res.json({
         error: "Falha, Verifique sua conexao com a internet",
+        error,
       });
     }
   },

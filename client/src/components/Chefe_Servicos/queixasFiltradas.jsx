@@ -1845,7 +1845,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
           </Dropdown.Menu>
         </Dropdown>
         <Col md={12} style={{ marginTop: 5 }}>
-          <table class="table table-striped table-responsive">
+          <table class="table table-striped table-responsive table-light">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -1855,6 +1855,7 @@ const QueixasFiltradasChefe = ({ onSearch }) => {
 
                 <th scope="col">Facto</th>
                 <th scope="col">Estado</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
